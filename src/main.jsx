@@ -4,6 +4,7 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import Dashboard from './page/Dashboard.jsx'
+import ArtistGallery from './page/Artist/ArtistGallery.jsx'
 
 const router = createBrowserRouter([
   {
@@ -14,6 +15,10 @@ const router = createBrowserRouter([
         path: "/",
         element: <Dashboard/>,
       },
+      {
+        path:"/Artist",
+        element: <ArtistGallery/>
+      }
       
     ],
   },
