@@ -4,6 +4,7 @@ import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import Dashboard from './page/Dashboard.jsx'
+import Genre from './page/genre.jsx';
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Dashboard/>,
+      },
+      {
+        path: "/Genre",
+        element: <Genre/>,
       },
       
     ],
