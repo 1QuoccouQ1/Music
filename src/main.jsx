@@ -18,6 +18,7 @@ const router = createBrowserRouter([
         path: "/",
         element: <Dashboard/>,
       },
+      {
         path: "/Genre",
         element: <Genre/>,
       },
@@ -29,6 +30,7 @@ const router = createBrowserRouter([
         path: "/Albums",
         element: <Albums/>,
       },
+      {
         path:"/Artist",
         element: <ArtistGallery/>
       }
