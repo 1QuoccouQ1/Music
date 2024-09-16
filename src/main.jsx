@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import Dashboard from './page/Dashboard.jsx'
 import ArtistGallery from './page/Artist/ArtistGallery.jsx'
+import RankingBoard from './page/BXH/RankingBoard.jsx'
 
 const router = createBrowserRouter([
   {
@@ -18,6 +19,10 @@ const router = createBrowserRouter([
       {
         path:"/Artist",
         element: <ArtistGallery/>
+      },
+      {
+        path:"/BXH",
+        element: <RankingBoard/>
       }
       
     ],
