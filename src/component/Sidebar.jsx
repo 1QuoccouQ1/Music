@@ -5,7 +5,7 @@ import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 function Sidebar() {
   return (
     <>
-      <aside className="w-64 bg-sidebar px-6 py-3 h-full fixed ">
+      <aside className="w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed ">
         <div className="space-y-4 h-auto">
           <a href="/" className="flex justify-center">
             <img src="../imgs/Music Brand and App Logo 1.png" />

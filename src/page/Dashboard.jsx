@@ -1,4 +1,66 @@
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import React, { useState } from "react";
+
 function Dashboard() {
+
+    const [activeTab, setActiveTab] = useState("vietnam");
+
+  // Nội dung bảng xếp hạng của từng quốc gia
+  const chartData = {
+    vietnam: [
+      { id: 1, song: "Nép Vào Nghe Anh Hát VN", artist: "Hoàng Dũng", img: "../imgs/image (6).png" },
+      { id: 2, song: "Nép Vào Nghe Anh Hát VN", artist: "Hoàng Dũng", img: "../imgs/image (6).png" },
+      { id: 3, song: "Nép Vào Nghe Anh Hát VN", artist: "Hoàng Dũng", img: "../imgs/image (6).png" },
+      { id: 4, song: "Nép Vào Nghe Anh Hát VN", artist: "Hoàng Dũng", img: "../imgs/image (6).png" },
+      { id: 5, song: "Nép Vào Nghe Anh Hát VN", artist: "Hoàng Dũng", img: "../imgs/image (6).png" },
+      // Thêm dữ liệu khác nếu cần
+    ],
+    europe: [
+      { id: 1, song: "Song Europe 1 europe ", artist: "Artist Europe 1", img: "../imgs/image (6).png" },
+      { id: 2, song: "Song Europe 2 europe", artist: "Artist Europe 2", img: "../imgs/image (6).png" },
+      { id: 3, song: "Song Europe 2 europe", artist: "Artist Europe 2", img: "../imgs/image (6).png" },
+      { id: 4, song: "Song Europe 2 europe" , artist: "Artist Europe 2", img: "../imgs/image (6).png" },
+      { id: 5, song: "Song Europe 2 europe", artist: "Artist Europe 2", img: "../imgs/image (6).png" },
+      // Thêm dữ liệu khác nếu cần
+    ],
+    korea: [
+      { id: 1, song: "Song Korea 1korea", artist: "Artist Korea 1", img: "../imgs/image (6).png" },
+      { id: 2, song: "Song Korea 2 korea", artist: "Artist Korea 2", img: "../imgs/image (6).png" },
+      { id: 3, song: "Song Korea 2 korea", artist: "Artist Korea 2", img: "../imgs/image (6).png" },
+      { id: 4, song: "Song Korea 2 korea", artist: "Artist Korea 2", img: "../imgs/image (6).png" },
+      { id: 5, song: "Song Korea 2 korea", artist: "Artist Korea 2", img: "../imgs/image (6).png" },
+      { id: 6, song: "Song Korea 2 korea", artist: "Artist Korea 2", img: "../imgs/image (6).png" },
+      { id: 7, song: "Song Korea 2 korea", artist: "Artist Korea 2", img: "../imgs/image (6).png" },
+    ],
+    usa: [
+        { id: 1, song: "Song USA 1 usa", artist: "Artist USA 1", img: "../imgs/image (6).png" },
+      { id: 2, song: "Song USA 2 usa", artist: "Artist USA 2", img: "../imgs/image (6).png" },
+      { id: 3, song: "Song USA 2 usa", artist: "Artist USA 2", img: "../imgs/image (6).png" },
+      { id: 4, song: "Song USA 2 usa", artist: "Artist USA 2", img: "../imgs/image (6).png" },
+      { id: 5, song: "Song USA 2 usa", artist: "Artist USA 2", img: "../imgs/image (6).png" },
+      { id: 6, song: "Song USA 2 usa", artist: "Artist USA 2", img: "../imgs/image (6).png" },
+      { id: 7, song: "Song USA 2 usa", artist: "Artist USA 2", img: "../imgs/image (6).png" },
+    ],
+  };
+
+// Hàm render dữ liệu bảng xếp hạng theo quốc gia
+const renderChart = () => {
+    const data = chartData[activeTab] || [];
+    return data.map((item, index) => (
+      <div className="w-1/3 pr-10 mb-10" key={item.id}>
+        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer">
+          <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
+          <img src={item.img} alt={item.song} />
+          <p className="text-base ml-3">
+            {item.song}
+            <br />
+            <span className="text-xs text-slate-600">{item.artist}</span>
+          </p>
+        </div>
+      </div>
+    ));
+  };
     return ( <>
         <section className="bg-medium w-full h-[1000px] text-white "  >
             <div className="relative  ">
@@ -63,13 +125,33 @@ function Dashboard() {
             </div>
         </section>
         <section className=" bg-medium pt-24 text-white px-10 h-auto" >
-            <h1 className="text-3xl font-medium ">Bảng Xếp Hạng Hàng Tuần</h1>
+            <h1 className="text-3xl font-medium ">Bảng Xếp Hạng Hàng Tuần </h1>
             <div className="flex items-center justify-between my-7">
                 <div className="flex items-center text-sm tracking-wide ">
-                     <p className="cursor-pointer duration-300 py-2 px-8 rounded-full bg-gradient-to-r from-[#FF0065] to-[#FF553E] mr-10  ">Việt Nam</p>
-                     <p className="cursor-pointer duration-300 bg-slate-800 py-2 px-8 rounded-full hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] mr-10 ">Âu Mỹ</p>
-                     <p className="cursor-pointer duration-300 bg-slate-800 py-2 px-8 rounded-full hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] mr-10 ">Hàn Quốc</p>
-                     <p className="cursor-pointer duration-300 bg-slate-800 py-2 px-8 rounded-full hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] mr-10 ">Hoa Kỳ</p>
+                     <p
+            className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${activeTab === "vietnam" ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]" : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"}`}
+            onClick={() => setActiveTab("vietnam")}
+          >
+            Việt Nam
+          </p>
+          <p
+            className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${activeTab === "europe" ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]" : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"}`}
+            onClick={() => setActiveTab("europe")}
+          >
+            Âu Mỹ
+          </p>
+          <p
+            className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${activeTab === "korea" ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]" : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"}`}
+            onClick={() => setActiveTab("korea")}
+          >
+            Hàn Quốc
+          </p>
+          <p
+            className={`cursor-pointer duration-300 py-2 px-8 rounded-full ${activeTab === "usa" ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]" : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"}`}
+            onClick={() => setActiveTab("usa")}
+          >
+            Hoa Kỳ
+          </p>
                 </div>
                 <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
                         <p className="text-sm  ">Xem Thêm </p>
@@ -80,152 +162,182 @@ function Dashboard() {
                 </div>
             </div>
             <div className="flex items-center mt-16 flex-wrap ">
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                    <div className="w-1/3 pr-10 mb-10 ">
-                        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer ">
-                            <p className="text-xl text-slate-700 font-medium p-6">01</p>
-                            <img src="../imgs/image (6).png"/>
-                            <p className="text-base ml-3">Nép Vào Nghe Anh Hát <br/> <span className="text-xs text-slate-600">Hoàng Dũng</span></p>
-                        </div>
-                    </div>
-                   
-                 
-                   
+            {renderChart()}
             </div>
         </section>
         <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
              <h1 className="text-3xl font-medium mb-16">Nhạc Nghe Gần Đây</h1>
-             <div className="flex items-center ">
-                <div className="w-1/6 px-8">
-                    <img src="../imgs/image (7).png" className="rounded-full mb-7 "/>
-                    <p className="font-medium mb-2 text-base w-3/4 ">GOLDEN</p>
+             <Swiper
+                spaceBetween={30}
+                slidesPerView="auto" // Số item hiện trong 1 lần
+                className="mySwiper "
+                
+            >
+                <SwiperSlide style={{ width: 'auto' }} >
+                <div className="text-center flex flex-col  items-center">
+                    <img src="../imgs/image (7).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">GOLDEN</p>
                     <p className="text-sm text-slate-700">Jung Kook</p>
                 </div>
-                <div className="w-1/6 px-8">
-                    <img src="../imgs/image (8).png" className="rounded-full mb-7 "/>
-                    <p className="font-medium mb-2 text-base w-3/4 ">MUSE</p>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                     <img src="../imgs/image (8).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">MUSE</p>
                     <p className="text-sm text-slate-700">Jimin</p>
                 </div>
-                <div className="w-1/6 px-8">
-                    <img src="../imgs/image (9).png" className="rounded-full mb-7 "/>
-                    <p className="font-medium mb-2 text-base w-3/4 ">Ai Cũng Phải Bắt Đầu Từ Đâu Đó</p>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center ">
+                <img src="../imgs/image (9).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">Ai Cũng Phải Bắt Đầu Từ Đâu Đó</p>
                     <p className="text-sm text-slate-700">Hiếu Thứ Hai</p>
                 </div>
-                <div className="w-1/6 px-8">
-                    <img src="../imgs/image (10).png" className="rounded-full mb-7 "/>
-                    <p className="font-medium mb-2 text-base w-3/4 ">D-Day</p>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                <img src="../imgs/image (10).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">D-Day</p>
                     <p className="text-sm text-slate-700">Agust D</p>
                 </div>
-                <div className="w-1/6 px-8">
-                    <img src="../imgs/image (11).png" className="rounded-full mb-7 "/>
-                    <p className="font-medium mb-2 text-base w-3/4 ">99%</p>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                     <img src="../imgs/image (11).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">99%</p>
                     <p className="text-sm text-slate-700">MCK</p>
                 </div>
-                <div className="w-1/6 px-8">
-                    <img src="../imgs/image (12).png" className="rounded-full mb-7 "/>
-                    <p className="font-medium mb-2 text-base w-3/4 ">Anh Trai “Say HI”</p>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                     <img src="../imgs/image (12).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">Anh Trai “Say HI”</p>
                     <p className="text-sm text-slate-700">Anh Trai “Say HI”</p>
                 </div>
-             </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                     <img src="../imgs/image (12).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">Anh Trai “Say HI”</p>
+                    <p className="text-sm text-slate-700">Anh Trai “Say HI”</p>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                     <img src="../imgs/image (12).png" className="rounded-full mb-7 w-full "/>
+                    <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">Anh Trai “Say HI”</p>
+                    <p className="text-sm text-slate-700">Anh Trai “Say HI”</p>
+                </div>
+                </SwiperSlide>
+            
+            </Swiper>
+            
         </section>
-        <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
+        <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide w-full max-w-full">
             <div className="flex items-center justify-between">
                  <h1 className="text-3xl font-medium mb-16">Top Nghệ Sĩ Được Yêu Thích</h1>
                  <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
                         <p className="text-sm  ">Xem Thêm </p>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-            <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-            </svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
+                    </svg>
 
                 </div>
             </div>
-             <div className="flex items-center ">
-                <div className="w-1/6 px-2 text-center">
-                    <img src="../imgs/image (13).png" className="rounded-full mb-3 "/>
-                    <p className="font-medium mb-2 text-base  ">Sơn Tùng - MTP</p>
-                    <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                </div>
-                <div className="w-1/6 px-2 text-center">
-                    <img src="../imgs/image (14).png" className="rounded-full mb-3 "/>
-                    <p className="font-medium mb-2 text-base  ">RPT MCK</p>
-                    <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                </div>
-                <div className="w-1/6 px-2 text-center">
-                    <img src="../imgs/image (15).png" className="rounded-full mb-3 "/>
-                    <p className="font-medium mb-2 text-base  ">VŨ.</p>
-                    <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                </div>
-                <div  className="w-1/6 px-2 text-center">
-                    <img src="../imgs/image (16).png" className="rounded-full mb-3 "/>
-                    <p className="font-medium mb-2 text-base  ">KARIK</p>
-                    <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                </div>
-                <div className="w-1/6 px-2 text-center">
-                    <img src="../imgs/image (17).png" className="rounded-full mb-3 "/>
-                    <p className="font-medium mb-2 text-base  ">Bích Phương</p>
-                    <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                </div>
-                <div className="w-1/6 px-2 text-center">
-                    <img src="../imgs/image (18).png" className="rounded-full mb-3 "/>
-                    <p className="font-medium mb-2 text-base  ">Đen Vâu</p>
-                    <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                </div>
-             </div>
+            
+            <Swiper
+        spaceBetween={20}
+        slidesPerView="auto" // Số item hiện trong 1 lần
+        className="mySwiper "
+        
+      >
+        <SwiperSlide style={{ width: 'auto' }} >
+          <div className="text-center">
+            <img src="../imgs/image (13).png" className="rounded-full mb-3  w-full" />
+            <p className="font-medium mb-2 text-base">Sơn Tùng - MTP</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (14).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">RPT MCK</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (15).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">VŨ.</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (16).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">KARIK</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (17).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">Bích Phương</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (18).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">Đen Vâu</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }} >
+          <div className="text-center">
+            <img src="../imgs/image (13).png" className="rounded-full mb-3  w-full" />
+            <p className="font-medium mb-2 text-base">Sơn Tùng - MTP</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (14).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">RPT MCK</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (15).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">VŨ.</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (16).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">KARIK</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (17).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">Bích Phương</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+        <SwiperSlide style={{ width: 'auto' }}>
+          <div className="text-center">
+            <img src="../imgs/image (18).png" className="rounded-full mb-3 w-full" />
+            <p className="font-medium mb-2 text-base">Đen Vâu</p>
+            <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+          </div>
+        </SwiperSlide>
+       
+      </Swiper>
+            
         </section>
         <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
             <div className="flex items-center justify-between">
@@ -239,34 +351,15 @@ function Dashboard() {
                 </div>
             </div>
              <div className="flex items-center ">
-                <div className="w-1/4   " >
-                   <div className="w-full relative h-[245px] pr-3">
-                        <img src="../imgs/image 8.png" className=" mb-3 absolute left-0 rounded-l-lg z-10"/>
-                        <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png" className="absolute right-6 "/>
-                   </div>
-                    <p className="text-lg font-medium ml-24 mt-5 ">Wean</p>
+             {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean'].map((item, index) => (
+                <div className="w-1/6 mr-36 flex flex-col" key={index}>
+                    <div className="w-full relative flex    ">
+                        <img src="../imgs/image 8.png" className="  z-10" />
+                        <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png" className="absolute translate-x-1/2 w-full h-full" />
+                    </div>
+                    <p className="text-lg font-medium ml-24 mt-5 mt-3">{item}</p>
                 </div>
-                <div className="w-1/4   " >
-                   <div className="w-full relative h-[245px] pr-3">
-                        <img src="../imgs/image 7.png" className=" mb-3 absolute left-0 rounded-l-lg z-10"/>
-                        <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png" className="absolute right-6 "/>
-                   </div>
-                    <p className="text-lg font-medium ml-24 mt-5 ">Tăng Duy Tân</p>
-                </div>
-                <div className="w-1/4   " >
-                   <div className="w-full relative h-[245px] pr-3">
-                        <img src="../imgs/image 8.png" className=" mb-3 absolute left-0 rounded-l-lg z-10"/>
-                        <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png" className="absolute right-6 "/>
-                   </div>
-                    <p className="text-lg font-medium ml-24 mt-5 ">Wean</p>
-                </div>
-                <div className="w-1/4   " >
-                   <div className="w-full relative h-[245px] pr-3">
-                        <img src="../imgs/image .png" className=" mb-3 absolute left-0 rounded-l-lg z-10"/>
-                        <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png" className="absolute right-6 "/>
-                   </div>
-                    <p className="text-lg font-medium ml-24 mt-5 ">Tăng Duy Tân</p>
-                </div>
+            ))}
                 
                 
                 
@@ -283,27 +376,56 @@ function Dashboard() {
 
                 </div>
             </div>
-             <div className="flex items-center ">
-                <div className="w-1/6 pr-3 ">
-                    <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/>
-                </div>
-                <div className="w-1/6 pr-3 ">
-                    <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (3) 2.png" className=" mb-3 "/>
-                </div>
-                <div className="w-1/6 pr-3 ">
-                    <img src="../imgs/image 16.png" className=" mb-3 "/>
-                </div>
-                <div className="w-1/6 pr-3 ">
-                    <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/>
-                </div>
-                <div className="w-1/6 pr-3 ">
-                    <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (3) 2.png" className=" mb-3 "/>
-                </div>
-                <div className="w-1/6 pr-3 ">
-                    <img src="../imgs/image 16.png" className=" mb-3 "/>
-                </div>
+            <Swiper
+                spaceBetween={20}
+                slidesPerView="auto" // Số item hiện trong 1 lần
+                className="mySwiper "
                 
-             </div>
+            >
+                <SwiperSlide style={{ width: 'auto' }} >
+                <div className="text-center flex flex-col  items-center">
+                    <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                    <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (3) 2.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center ">
+                    <img src="../imgs/image 16.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                     <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                    <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (3) 2.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                  <img src="../imgs/image 16.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                  <img src="../imgs/image 16.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                <SwiperSlide style={{ width: 'auto' }}>
+                <div className="text-center flex flex-col  items-center">
+                  <img src="../imgs/image 16.png" className=" mb-3 "/>
+                </div>
+                </SwiperSlide>
+                
+            
+            </Swiper>
+             
         </section>
         <section className="bg-medium pt-20 text-white px-10 h-auto pb-48 tracking-wide">
             <div className="flex items-center justify-between">
