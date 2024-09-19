@@ -4,7 +4,7 @@ function ArtistCard({ artist }) {
     return (
         <div className='flex flex-col items-center transition-transform delay-50 duration-100 transform hover:scale-125'>
             <img
-                className='w-20 h-20 md:w-24 md:h-24 rounded-full ease-in duration-500 '
+                className='w-40 h-40 md:w-40 md:h-40 rounded-full ease-in duration-500 '
                 src={artist.imageUrl}
                 alt={artist.name}
             />

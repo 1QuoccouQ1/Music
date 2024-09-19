@@ -10,7 +10,9 @@ import Genre from './page/genre.jsx';
 import History from './page/History.jsx';
 import Albums from './page/Albums.jsx';
 import MusicLibrary from './page/Library/MusicLibrary.jsx'
-import ShowChart from './page/MeChart/ShowChart.jsx'
+import ShowChart from './page/MeChart/ShowChart.jsx';
+import ProfilePage from './page/information/Profile/ProfilePage.jsx';
+import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
 
 
 const router = createBrowserRouter([
@@ -49,6 +51,14 @@ const router = createBrowserRouter([
       {
         path: "/MeChart",
         element: <ShowChart/>,
+      },
+      {
+        path: "/info",
+        element: <ProfilePage />,
+      },
+      {
+        path: "/infoLibary",
+        element: <ProfileLibrary />,
       }
     ],
   },
