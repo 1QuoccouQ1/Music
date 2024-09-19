@@ -14,11 +14,31 @@ function ArtistRankingCard({ rank, artist, song }) {
             }`}
         >
             <div className='relative flex flex-col items-center mb-1'>
-                <img
+              
+                 <div className="relative group">
+                 <img
                     className='w-16 h-16 rounded-full duration-150 hover:scale-125'
                     src='https://i.pinimg.com/736x/bb/03/be/bb03be3373d101ad3e175fd10bb74afd.jpg'
                     alt={artist.name}
                 />
+                    {/* Nút Play chỉ hiện khi hover */}
+                    <button className="absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-125">
+                        <svg
+                            className="w-8 h-8"
+                            fill="none"
+                            stroke="currentColor"
+                            viewBox="0 0 24 24"
+                            xmlns="http://www.w3.org/2000/svg"
+                        >
+                            <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth="2"
+                                d="M14.752 11.168l-3.197-2.132a1 1 0 00-1.555.832v4.264a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z"
+                            />
+                        </svg>
+                    </button>
+                </div>
                 
                 {/* Thứ hạng nằm bên dưới hình ảnh */}
                 <span
