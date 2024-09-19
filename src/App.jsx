@@ -9,7 +9,7 @@ function App() {
     <>
       <div className="flex h-screen bg-[#f4f7fe]">
         <Sidebar></Sidebar>
-        <div className="w-full">
+        <div className="w-full ml-56 mb-[104px]">
           <Nav></Nav>
           <Outlet />
         </div>

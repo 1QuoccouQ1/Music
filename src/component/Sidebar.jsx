@@ -5,9 +5,9 @@ import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 function Sidebar() {
   return (
     <>
-      <aside className="w-64 bg-sidebar px-6 py-3 h-full">
+      <aside className="w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed ">
         <div className="space-y-4 h-auto">
-          <a href="#" className="flex justify-center">
+          <a href="/" className="flex justify-center">
             <img src="../imgs/Music Brand and App Logo 1.png" />
           </a>
           <nav className="space-y-1  h-auto tracking-wide">
@@ -15,7 +15,7 @@ function Sidebar() {
               <div className="text-sm ">
                 <a
                   className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
-                  href="Plan"
+                  href="/"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -58,7 +58,7 @@ function Sidebar() {
                 </a>
                 <a
                   className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
-                  href="Plan"
+                  href="/Genre"
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M9.348 14.652a3.75 3.75 0 0 1 0-5.304m5.304 0a3.75 3.75 0 0 1 0 5.304m-7.425 2.121a6.75 6.75 0 0 1 0-9.546m9.546 0a6.75 6.75 0 0 1 0 9.546M5.106 18.894c-3.808-3.807-3.808-9.98 0-13.788m13.788 0c3.808 3.807 3.808 9.98 0 13.788M12 12h.008v.008H12V12Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
@@ -69,7 +69,7 @@ function Sidebar() {
                 </a>
                 <a
                   className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
-                  href="Plan"
+                  href="/Albums"
                 >
                   
                   <QueueMusicIcon />
@@ -89,7 +89,7 @@ function Sidebar() {
                 </a>
                 <a
                   className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
-                  href="Plan"
+                  href="/History"
                 >
                   <ReplayIcon />
 

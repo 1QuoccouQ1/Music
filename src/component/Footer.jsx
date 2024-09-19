@@ -3,7 +3,7 @@ import MusicPlayer from "./MusicPlayer";
 function Footer() {
   return (
     <>
-      <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar">
+      <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50">
         <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white  w-[350px] rounded-r-lg">
           <div className="flex items-center ">
             <img className="inline-block" src="../imgs/Container.png" />
