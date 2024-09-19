@@ -9,11 +9,18 @@ import RankingBoard from './page/BXH/RankingBoard.jsx'
 import Genre from './page/genre.jsx';
 import History from './page/History.jsx';
 import Albums from './page/Albums.jsx';
+<<<<<<< HEAD
 import MusicLibrary from './page/Library/MusicLibrary.jsx'
 import ShowChart from './page/MeChart/ShowChart.jsx';
 import ProfilePage from './page/information/Profile/ProfilePage.jsx';
 import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
 
+=======
+import Login from './layouts/Login.jsx';
+import Register from './layouts/Register.jsx';
+import PasswordCode from './layouts/PasswordCode.jsx';
+import PasswordReset from './layouts/PasswordReset.jsx';
+>>>>>>> d7f1047971d03dcb4bad3ba4218b0b629020a9ce
 
 const router = createBrowserRouter([
   {
@@ -62,6 +69,23 @@ const router = createBrowserRouter([
       }
     ],
   },
+  {
+    path: "/login",
+    element: <Login/>
+  },
+  {
+    path: "/register",
+    element: <Register/>
+  },
+  {
+    path: "/PasswordCode",
+    element: <PasswordCode/>
+  },
+  {
+    path: "/PasswordReset",
+    element: <PasswordReset/>
+  },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
