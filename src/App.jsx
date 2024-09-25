@@ -6,16 +6,16 @@ import Footer from './component/Footer';
 import SettingSidebar from './component/SettingSidebar';
 
 function App() {
+  const isSetting = true;
   return (
     <>
       <div className="flex h-screen bg-[#f4f7fe]">
-        {/* <Sidebar></Sidebar> */}
-        <SettingSidebar></SettingSidebar>
+        {isSetting ? <Sidebar></Sidebar> :<SettingSidebar></SettingSidebar> }
         <div className="w-full ml-56 mb-[104px]">
           <Nav></Nav>
           <Outlet />
         </div>
-        {/* <Footer></Footer> */}
+        {isSetting ? <Footer></Footer> : <></>  }
       </div>
     </>
   )
