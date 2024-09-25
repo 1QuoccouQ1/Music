@@ -12,6 +12,10 @@ import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
 import PasswordReset from './layouts/PasswordReset.jsx';
+import PaySuccess from './page/Payment/PaySuccess.jsx';
+import PayFail from './page/Payment/PayFail.jsx';
+import PayError from './page/Payment/PayError.jsx';
+import Payment from './page/Payment/Payment.jsx';
 
 const router = createBrowserRouter([
   {
@@ -37,7 +41,23 @@ const router = createBrowserRouter([
       {
         path:"/Artist",
         element: <ArtistGallery/>
-      }
+      },
+      {
+        path: "/PaySuccess",
+        element: <PaySuccess/>
+      },
+      {
+        path: "/PayFail",
+        element: <PayFail/>
+      },
+      {
+        path: "/PayError",
+        element: <PayError/>
+      },
+      {
+        path: "/Payment",
+        element: <Payment/>
+      },
 
     ],
   },
@@ -57,6 +77,7 @@ const router = createBrowserRouter([
     path: "/PasswordReset",
     element: <PasswordReset/>
   },
+  
 
 ]);
 
