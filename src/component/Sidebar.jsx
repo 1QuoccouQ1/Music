@@ -3,36 +3,7 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 
 function Sidebar() {
-<<<<<<< HEAD
-    return (
-        <>
-            <aside className='w-64 bg-sidebar px-6 py-3 h-full fixed '>
-                <div className='space-y-4 h-auto'>
-                    <a href='/' className='flex justify-center'>
-                        <img src='../imgs/Music Brand and App Logo 1.png' />
-                    </a>
-                    <nav className='space-y-1  h-auto tracking-wide'>
-                        <div className='flex flex-col  justify-between h-auto'>
-                            <div className='text-sm '>
-                                <a
-                                    className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300'
-                                    href='/'
-                                >
-                                    <svg
-                                        xmlns='http://www.w3.org/2000/svg'
-                                        fill='none'
-                                        viewBox='0 0 24 24'
-                                        strokeWidth={1.5}
-                                        stroke='currentColor'
-                                        className='size-6'
-                                    >
-                                        <path
-                                            strokeLinecap='round'
-                                            strokeLinejoin='round'
-                                            d='m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25'
-                                        />
-                                    </svg>
-=======
+
   return (
     <>
       <aside className="w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed ">
@@ -61,7 +32,7 @@ function Sidebar() {
                       d="m2.25 12 8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"
                     />
                   </svg>
->>>>>>> d7f1047971d03dcb4bad3ba4218b0b629020a9ce
+
 
                                     <span className=' '>Trang Chủ</span>
                                 </a>
