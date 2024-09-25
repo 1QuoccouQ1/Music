@@ -5,6 +5,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ReactDOM from "react-dom/client";
 import Dashboard from './page/Dashboard.jsx'
 import ArtistGallery from './page/Artist/ArtistGallery.jsx'
+import RankingBoard from './page/BXH/RankingBoard.jsx'
 import Genre from './page/genre.jsx';
 import History from './page/History.jsx';
 import Albums from './page/Albums.jsx';
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
         path: "/Payment",
         element: <Payment/>
       },
+      {
+        path:"/BXH",
+        element: <RankingBoard/>
+      }
 
     ],
   },
