@@ -9,6 +9,12 @@ import RankingBoard from './page/BXH/RankingBoard.jsx'
 import Genre from './page/genre.jsx';
 import History from './page/History.jsx';
 import Albums from './page/Albums.jsx';
+import MusicLibrary from './page/Library/MusicLibrary.jsx'
+import ShowChart from './page/MeChart/ShowChart.jsx';
+import ProfilePage from './page/information/Profile/ProfilePage.jsx';
+import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
+
+import Information from './page/information/Profile/Information.jsx';
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
@@ -17,6 +23,7 @@ import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
 import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
+
 
 const router = createBrowserRouter([
   {
@@ -62,8 +69,25 @@ const router = createBrowserRouter([
       {
         path:"/BXH",
         element: <RankingBoard/>
+      },
+      {
+        path: "/Library",
+        element: <MusicLibrary/>,
+      },
+      {
+        path: "/MeChart",
+        element: <ShowChart/>,
+      },
+      {
+        path: "/info",
+        element: <ProfilePage />,
+      },
+    
+      {
+        path:"/Information",
+        element: <Information/>
       }
-
+     
     ],
   },
   {
@@ -82,6 +106,10 @@ const router = createBrowserRouter([
     path: "/PasswordReset",
     element: <PasswordReset/>
   },
+  {
+    path: "/ProfileLibrary",
+    element: <ProfileLibrary/>
+  }
   
 
 ]);
