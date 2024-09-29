@@ -134,23 +134,25 @@ function Sidebar() {
                                 >
                                     <ReplayIcon />
 
-                                    <span className=' '>Lịch Sử</span>
-                                </a>
-                                <a
-                                    className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300'
-                                    href='Plan'
-                                >
-                                    <PlaylistPlayIcon />
 
-                                    <span className=' '>Playlist</span>
-                                </a>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </aside>
-        </>
-    );
+                  <span className=" ">Album</span>
+                </a>
+                <a
+                  className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
+                  href="Plan"
+                >
+                  
+                  <PlaylistPlayIcon />
+
+                  <span className=" ">Nhạc của Tôi</span>
+                </a>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </aside>
+    </>
+  );
 }
 
 export default Sidebar;
