@@ -16,7 +16,7 @@ const ProfilePage = () => {
 
       {/* Thanh điều hướng */}
       <div className="flex space-x-8 text-gray-400 border-b border-gray-700 pb-2 mb-8">
-        <a href="/ProfileLibrary" className="text-white">thư viện</a>
+        <a href="/ProfileLibrary" className="text-white">Thư viện</a>
         <a href="#">Bài hát tải lên</a>
         <a href="#">Danh sách phát</a>
         <a href="#">Album</a>
