@@ -19,6 +19,7 @@ import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
 import PasswordReset from './layouts/PasswordReset.jsx';
+import ProfileEditPage from './layouts/ProfileEditPage.jsx';
 
 
 const router = createBrowserRouter([
@@ -89,6 +90,10 @@ const router = createBrowserRouter([
   {
     path: "/ProfileLibrary",
     element: <ProfileLibrary/>
+  },
+  {
+    path: "/ProfileEditPage",
+    element: <ProfileEditPage/>
   }
 
 ]);
