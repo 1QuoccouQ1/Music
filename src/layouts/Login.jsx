@@ -7,6 +7,38 @@ function Login() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
 
+  // State cho các trường và lỗi
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errors, setErrors] = useState({});
+
+  const texts = {
+    vi: {
+      title: "Đăng Nhập",
+      emailLabel: "Email hoặc số điện thoại",
+      passwordLabel: "Mật Khẩu",
+      forgotPassword: "Quên mật khẩu?",
+      loginButton: "Đăng Nhập",
+      noAccount: "Bạn chưa có tài khoản?",
+      register: "Đăng ký",
+      terms: "Điều khoản",
+      privacy: "Chính sách bảo mật",
+      footer: "SoundWave. Privacy by default.",
+    },
+    en: {
+      title: "Login",
+      emailLabel: "Email or Phone Number",
+      passwordLabel: "Password",
+      forgotPassword: "Forgot password?",
+      loginButton: "Login",
+      noAccount: "Don't have an account?",
+      register: "Register",
+      terms: "Terms",
+      privacy: "Privacy policy",
+      footer: "SoundWave. Privacy by default.",
+    },
+  };
+
   const toggleDropdown = () => setIsOpen(!isOpen);
 
   const selectLanguage = (lang) => {
@@ -24,6 +56,33 @@ function Login() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
+  // Hàm kiểm tra tính hợp lệ của form
+  const validate = () => {
+    let newErrors = {};
+    if (!email) {
+      newErrors.email = language === "vi" ? "Email hoặc số điện thoại không được để trống." : "Email or phone number cannot be empty.";
+    } else if (!/\S+@\S+\.\S+/.test(email)) {
+      newErrors.email = language === "vi" ? "Địa chỉ email không hợp lệ." : "Invalid email address.";
+    }
+
+    if (!password) {
+      newErrors.password = language === "vi" ? "Mật khẩu không được để trống." : "Password cannot be empty.";
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Nếu form hợp lệ thì submit
+    if (validate()) {
+      console.log("Form is valid. Submitting...");
+      // Thực hiện hành động gửi dữ liệu
+    }
+  };
 
   return (
     <>
@@ -63,51 +122,65 @@ function Login() {
           </div>
         </div>
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-          <h1 className="text-2xl font-bold text-center mb-6">Đăng Nhập</h1>
-          <form className="space-y-4">
+          <h1 className="text-2xl font-bold text-center mb-6">{texts[language].title}</h1>
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
               <label
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Email hoặc số điện thoại
+                {texts[language].emailLabel}
               </label>
               <input
                 id="email"
                 type="text"
-                className="w-full px-3 py-2 border border-pink-500 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                className={`w-full px-3 py-2 border ${
+                  errors.email ? "border-red-500" : "border-pink-500"
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500`}
               />
+              {errors.email && (
+                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+              )}
             </div>
             <div>
               <label
                 htmlFor="password"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                Mật Khẩu
+                {texts[language].passwordLabel}
               </label>
               <input
                 id="password"
                 type="password"
-                className="w-full px-3 py-2 border border-pink-500 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                className={`w-full px-3 py-2 border ${
+                  errors.password ? "border-red-500" : "border-pink-500"
+                } rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500`}
               />
+              {errors.password && (
+                <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
             </div>
             <div className="text-right">
               <a href="/PasswordReset" className="text-sm text-slate-700 ">
-                Quên mật khẩu?
+                {texts[language].forgotPassword}
               </a>
             </div>
             <button
               type="submit"
               className="w-full py-2 px-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold rounded-md transition duration-300 ease-in-out"
             >
-              Đăng Nhập
+              {texts[language].loginButton}
             </button>
           </form>
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
-              Bạn chưa có tài khoản?{" "}
+              {texts[language].noAccount}{" "}
               <a href="/register" className="text-pink-500 hover:underline">
-                Đăng ký
+                {texts[language].register}
               </a>
             </p>
           </div>
@@ -142,13 +215,13 @@ function Login() {
           </div>
         </div>
         <div className="mt-8 text-center text-sm text-gray-400">
-          <p>SoundWave. Privacy by default.</p>
+          <p>{texts[language].footer}</p>
           <div className="mt-2">
             <a href="#" className="text-pink-500 hover:underline mr-4">
-              Terms
+              {texts[language].terms}
             </a>
             <a href="#" className="text-pink-500 hover:underline mr-4">
-              Privacy policy
+              {texts[language].privacy}
             </a>
             <span>Version 5.0.163.5</span>
           </div>

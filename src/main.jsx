@@ -23,6 +23,7 @@ import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
 import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
+import Upgrade from './page/Upgrade.jsx';
 
 
 const router = createBrowserRouter([
@@ -86,6 +87,11 @@ const router = createBrowserRouter([
       {
         path:"/Information",
         element: <Information/>
+      },
+    
+      {
+        path:"/Upgrade",
+        element: <Upgrade/>
       }
      
     ],
