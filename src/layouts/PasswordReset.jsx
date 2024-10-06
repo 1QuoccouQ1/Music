@@ -70,8 +70,8 @@ export default function PasswordReset() {
             </button>
         </a>
         <h1 className="text-2xl font-bold text-center mb-6">Đặt lại mật khẩu</h1>
-        <p className="text-sm text-gray-600 text-left mb-6">
-          Nhập email hoặc số điện thoại của bạn
+        <p className="text-sm text-gray-600 text-left mb-6 pr-4">
+        Nhập địa chỉ email hoặc tên người dùng được liên kết với tài khoản SoundWave của bạn và chúng tôi sẽ gửi email cho bạn.
         </p>
         <form className="space-y-4">
           <div>
@@ -86,7 +86,7 @@ export default function PasswordReset() {
           </div>
             <button
                 type="submit"
-                className="w-full py-2 px-4 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-md transition duration-300 ease-in-out"
+                className="w-full py-2 px-4 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white font-semibold rounded-md transition duration-300 ease-in-out"
             >
                 Tiếp tục
             </button>
