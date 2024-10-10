@@ -13,7 +13,6 @@ import MusicLibrary from './page/Library/MusicLibrary.jsx'
 import ShowChart from './page/MeChart/ShowChart.jsx';
 import ProfilePage from './page/information/Profile/ProfilePage.jsx';
 import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
-
 import Information from './page/information/Profile/Information.jsx';
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';

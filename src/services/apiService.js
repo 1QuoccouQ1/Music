@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000';
+const API_URL = 'http://localhost:3000/API/Do-an-tot-nghiep';
 
 async function fetchAPI(endpoint, method = 'GET', body = null) {
     const response = await fetch(`${API_URL}${endpoint}`, {
