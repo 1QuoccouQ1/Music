@@ -1,12 +1,15 @@
 import { Facebook, Apple } from 'lucide-react';
 import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
+import 'react-toastify/dist/ReactToastify.css';
 function Register() {
+  const navigate = useNavigate();
   const [dateOfBirth, setDateOfBirth] = useState({ day: '', month: '', year: '' });
   const [formData, setFormData] = useState({
     email: '',
-    username: '',
     password: '',
     fullname: '',
     gender: '',
@@ -31,8 +34,8 @@ function Register() {
       day : "Ngày",
       month : "Tháng",
       year : "Năm",
-      boy : "Nam",
-      girl : "Nữ",
+      male : "Nam",
+      female : "Nữ",
       other : "Khác"
     },
     en: {
@@ -53,8 +56,8 @@ function Register() {
       day : "Day",
       month : "Month",
       year : "Year",
-      boy : "male",
-      girl : "female",
+      male : "male",
+      female : "female",
       other : "other"
     },
   };
@@ -92,10 +95,7 @@ function Register() {
       newErrors.email = language === "vi" ? "Địa chỉ email không hợp lệ." : "Invalid email address.";
     }
 
-    // Kiểm tra tên đăng nhập
-    if (!formData.username) {
-      newErrors.username = language === "vi" ? "Tên đăng nhập không được để trống." : "Usernames must not be left blank.";
-    }
+   
 
     // Kiểm tra mật khẩu
     if (!formData.password) {
@@ -131,11 +131,42 @@ function Register() {
     setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validate()) {
-      console.log("Form is valid. Submitting data...", { ...formData, dateOfBirth });
-      // Thực hiện submit dữ liệu
+      try {
+        const response = await fetch('https://soundwave.io.vn/admin/public/api/users/register', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+            name: formData.fullname,
+            gerder: formData.gender,
+            birthday : `${dateOfBirth.year}-${dateOfBirth.month}-${dateOfBirth.day}`
+          }),
+        });
+  
+        // Kiểm tra trạng thái của phản hồi
+        if (response.status === 200) {
+          toast.success("Đăng ký thành công !");
+
+
+          setTimeout(() => {
+            navigate('/login');
+          }, 3000);
+        } else {
+          setErrors({
+            form: language === 'vi' ? 'Đăng ký thất bại. Vui lòng kiểm tra lại.' : 'Login failed. Please try again.'
+          });
+          console.log(errors);
+        }
+      } catch (error) {
+        console.error('Error logging in:', error);
+        
+      }
     }
   };
 
@@ -193,20 +224,7 @@ function Register() {
               />
               {errors.email && <p className="text-red-500 text-sm mt-1">{errors.email}</p>}
             </div>
-            <div>
-              <label htmlFor="username" className="block text-sm font-medium text-gray-700 mb-1">
-              {texts[language].name}
-              </label>
-              <input
-                id="username"
-                name="username"
-                type="text"
-                value={formData.username}
-                onChange={handleInputChange}
-                className="w-full px-3 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-              />
-              {errors.username && <p className="text-red-500 text-sm mt-1">{errors.username}</p>}
-            </div>
+            
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               {texts[language].passwordLabel}
@@ -295,14 +313,16 @@ function Register() {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
               >
-                <option value=""></option>
+                {/* <option value=""></option> */}
                 <option value="male">{texts[language].male}</option>
                 <option value="female">{texts[language].female}</option>
                 <option value="other">{texts[language].other}</option>
               </select>
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
+              {errors.form && <p className="text-red-500 text-sm mt-1">{errors.form}</p>}
             </div>
             <button
+            
               type="submit"
               className="w-full py-2 px-4 bg-gradient-to-r from-pink-500 to-red-500 hover:from-pink-600 hover:to-red-600 text-white font-semibold rounded-md transition duration-300 ease-in-out"
             >
@@ -360,6 +380,19 @@ function Register() {
           </div>
         </div>
       </div>
+      <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+      />
+      <ToastContainer />
     </>
   );
 }

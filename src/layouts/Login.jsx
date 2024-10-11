@@ -1,12 +1,13 @@
 import { Facebook, Apple } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
   const [language, setLanguage] = useState("vi");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const navigate = useNavigate();
   // State cho các trường và lỗi
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -74,13 +75,35 @@ function Login() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Nếu form hợp lệ thì submit
     if (validate()) {
-      console.log("Form is valid. Submitting...");
-      // Thực hiện hành động gửi dữ liệu
+      try {
+        const response = await fetch('https://soundwave.io.vn/admin/public/api/users/login', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            email: email,
+            password: password,
+          }),
+        });
+  
+        // Kiểm tra trạng thái của phản hồi
+        if (response.status === 200) {
+          navigate('/');
+        } else {
+          setErrors({
+            form: language === 'vi' ? 'Đăng nhập thất bại. Vui lòng kiểm tra lại.' : 'Login failed. Please try again.'
+          });
+          console.log(errors);
+        }
+      } catch (error) {
+        console.error('Error logging in:', error);
+        
+      }
     }
   };
 
@@ -162,6 +185,9 @@ function Login() {
               />
               {errors.password && (
                 <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+              )}
+              {errors.form && (
+                <p className="text-red-500 text-sm mt-1">{errors.form}</p>
               )}
             </div>
             <div className="text-right">
