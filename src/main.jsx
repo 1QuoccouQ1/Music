@@ -23,12 +23,13 @@ import PasswordReset from './layouts/PasswordReset.jsx';
 import ProfileEditPage from './layouts/ProfileEditPage.jsx';
 import ChangePasswordPage from './layouts/ChangePasswordPage.jsx';
 import PurchaseHistoryPage from './layouts/PurchaseHistoryPage.jsx';
+import InvoiceDetail from './layouts/InvoiceDetail.jsx';
 
 import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
 import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
-import SettingSidebar from './component/SettingSidebar.jsx';
+
 
 const router = createBrowserRouter([
     {
@@ -92,7 +93,26 @@ const router = createBrowserRouter([
                 path: '/Information',
                 element: <Information />
             },
-           
+            {
+                path: '/ProfileEditPage',
+                element: <ProfileEditPage />
+            },
+            {
+                path: 'ProfileEditPage',
+                element: <ProfileEditPage />
+            },
+            {
+                path: 'ChangePasswordPage',
+                element: <ChangePasswordPage />
+            },
+            {
+                path: 'PurchaseHistoryPage',
+                element: <PurchaseHistoryPage />
+            },
+            {
+                path: '/InvoiceDetail',
+                element: <InvoiceDetail />
+            }
         ]
     },
     {
@@ -114,27 +134,30 @@ const router = createBrowserRouter([
     {
         path: '/ProfileLibrary',
         element: <ProfileLibrary />
-    },
-
-    {
-        path: '/SettingSidebar',
-        element: <SettingSidebar />,
-        children: [
-          { 
-            path: '/ProfileEditPage',
-           element: <ProfileEditPage /> 
-          },
-          {
-            path: '/ChangePasswordPage',
-            element: <ChangePasswordPage />
-          },
-          {
-            path: '/PurchaseHistoryPage',
-            element: <PurchaseHistoryPage />
-          }
-
-        ]
     }
+
+    // {
+    //     path: '/SettingSidebar',
+    //     element: <SettingSidebar />,
+    //     children: [
+    //         {
+    //             path: 'SettingSidebar',
+    //             element: <ProfileEditPage />
+    //         },
+    //         {
+    //             path: 'ProfileEditPage',
+    //             element: <ProfileEditPage />
+    //         },
+    //         {
+    //             path: 'ChangePasswordPage',
+    //             element: <ChangePasswordPage />
+    //         },
+    //         {
+    //             path: 'PurchaseHistoryPage',
+    //             element: <PurchaseHistoryPage />
+    //         }
+    //     ]
+    // }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

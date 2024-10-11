@@ -2,7 +2,7 @@ import React from 'react';
 
 function ChangePasswordPage() {
   return (
-    <div className="bg-gray-900 min-h-screen flex justify-center items-center py-10">
+    <div className="bg-gray-900 min-h-screen flex justify-center items-center py-5">
       <div className="bg-gray-800 p-8 rounded-lg w-full max-w-lg">
         <h1 className="text-3xl font-semibold text-white mb-6 text-center">Đổi mật khẩu của bạn</h1>
 
