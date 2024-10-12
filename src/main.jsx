@@ -13,7 +13,6 @@ import MusicLibrary from './page/Library/MusicLibrary.jsx'
 import ShowChart from './page/MeChart/ShowChart.jsx';
 import ProfilePage from './page/information/Profile/ProfilePage.jsx';
 import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
-
 import Information from './page/information/Profile/Information.jsx';
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
@@ -23,6 +22,8 @@ import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
 import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
+import Upgrade from './page/Upgrade.jsx';
+import NewPassword from './layouts/NewPassword.jsx';
 
 
 const router = createBrowserRouter([
@@ -86,6 +87,11 @@ const router = createBrowserRouter([
       {
         path:"/Information",
         element: <Information/>
+      },
+    
+      {
+        path:"/Upgrade",
+        element: <Upgrade/>
       }
      
     ],
@@ -105,6 +111,10 @@ const router = createBrowserRouter([
   {
     path: "/PasswordReset",
     element: <PasswordReset/>
+  },
+  {
+    path: "/NewPassword",
+    element: <NewPassword/>
   },
   {
     path: "/ProfileLibrary",

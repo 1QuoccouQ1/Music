@@ -69,27 +69,8 @@ export default function PasswordCode() {
             </button>
         </a>
         <h1 className="text-2xl font-bold text-center mb-4">Đặt lại mật khẩu</h1>
-        <p className="text-sm text-gray-600 text-left mb-6">
-          Để tiếp tục, hãy chọn phương thức khôi phục tài khoản để chúng tôi có thể xác minh yêu cầu.
-        </p>
-        <div className="flex justify-center font-medium  mb-4">
-          <button
-            className={`px-4 py-2 flex-1 border-b-2 text-black   ${
-              resetMethod === 'email' ? 'border-pink-500 ' : 'border-gray-200 '
-            }`}
-            onClick={() => setResetMethod('email')}
-          >
-            Email
-          </button>
-          <button
-            className={`px-4 py-2 flex-1 border-b-2  ${
-              resetMethod === 'phone' ? 'border-pink-500 ' : 'border-gray-200 '
-            }`}
-            onClick={() => setResetMethod('phone')}
-          >
-            Số điện thoại
-          </button>
-        </div>
+       
+        
         <p className="text-sm text-gray-600 mb-4">
           Chúng tôi sẽ gửi mã đặt lại đến {
               resetMethod === 'email' ? 'địa chỉ email ' : 'số điện thoại '
@@ -101,10 +82,8 @@ export default function PasswordCode() {
         </div>
         <form className="space-y-4">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
-               {
-              resetMethod === 'email' ? 'Địa chỉ email ' : 'Số điện thoại '
-            }  khôi phục
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 font-bold ">
+            Vui lòng nhập mã khôi phục
             </label>
             <div className="relative">
             {
@@ -113,8 +92,6 @@ export default function PasswordCode() {
                 id="email"
                 type="email"
                 className="w-full px-3 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 pr-20"
-                placeholder="Nhập email của bạn "
-                
               />
               ) : (
                 <input
@@ -129,7 +106,7 @@ export default function PasswordCode() {
               
               <button
                 type="button"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-pink-500 text-white rounded-md text-sm"
+                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white rounded-md text-sm"
               >
                 gửi mã
               </button>
@@ -137,7 +114,7 @@ export default function PasswordCode() {
           </div>
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-pink-500 hover:bg-pink-600 text-white font-semibold rounded-md transition duration-300 ease-in-out"
+            className="w-full py-2 px-4 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white font-semibold rounded-md transition duration-300 ease-in-out"
           >
             Gửi mã
           </button>
