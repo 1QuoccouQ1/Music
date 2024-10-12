@@ -13,7 +13,6 @@ import MusicLibrary from './page/Library/MusicLibrary.jsx';
 import ShowChart from './page/MeChart/ShowChart.jsx';
 import ProfilePage from './page/information/Profile/ProfilePage.jsx';
 import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
-
 import Information from './page/information/Profile/Information.jsx';
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
@@ -29,6 +28,8 @@ import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
 import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
+import Upgrade from './page/Upgrade.jsx';
+import NewPassword from './layouts/NewPassword.jsx';
 
 
 const router = createBrowserRouter([
@@ -112,7 +113,12 @@ const router = createBrowserRouter([
             {
                 path: '/InvoiceDetail',
                 element: <InvoiceDetail />
-            }
+            },
+              
+      {
+        path:"/Upgrade",
+        element: <Upgrade/>
+      }
         ]
     },
     {
@@ -136,28 +142,8 @@ const router = createBrowserRouter([
         element: <ProfileLibrary />
     }
 
-    // {
-    //     path: '/SettingSidebar',
-    //     element: <SettingSidebar />,
-    //     children: [
-    //         {
-    //             path: 'SettingSidebar',
-    //             element: <ProfileEditPage />
-    //         },
-    //         {
-    //             path: 'ProfileEditPage',
-    //             element: <ProfileEditPage />
-    //         },
-    //         {
-    //             path: 'ChangePasswordPage',
-    //             element: <ChangePasswordPage />
-    //         },
-    //         {
-    //             path: 'PurchaseHistoryPage',
-    //             element: <PurchaseHistoryPage />
-    //         }
-    //     ]
-    // }
+
+    
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
