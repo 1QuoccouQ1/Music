@@ -4,6 +4,9 @@ import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
 import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined';
 import PrivacyTipOutlinedIcon from '@mui/icons-material/PrivacyTipOutlined';
+import SettingsIcon from '@mui/icons-material/Settings';
+import HeadphonesIcon from '@mui/icons-material/Headphones';
+import GroupsIcon from '@mui/icons-material/Groups';
 import React from 'react';
 
 function SettingSidebar() {
@@ -57,6 +60,27 @@ function SettingSidebar() {
                                 >
                                     <PrivacyTipOutlinedIcon fontSize='small' />
                                     <span>Quyền Riêng tư</span>
+                                </a>
+                                <a
+                                    className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
+                                    href='/Genre'
+                                >
+                                    <SettingsIcon fontSize='small' />
+                                    <span>Cài Đặt</span>
+                                </a>
+                                <a
+                                    className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
+                                    href='/ContactForm'
+                                >
+                                    <HeadphonesIcon fontSize='small' />
+                                    <span>Liên Hệ</span>
+                                </a>
+                                <a
+                                    className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
+                                    href='/Genre'
+                                >
+                                    <GroupsIcon fontSize='small' />
+                                    <span>Về Chúng Tôi</span>
                                 </a>
                                 <div className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90'>
                                     Đăng Xuất

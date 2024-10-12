@@ -2,7 +2,7 @@ import React from 'react';
 
 function ArtistCard({ artist }) {
     return (
-        <div className='flex flex-col items-center transition-transform delay-50 duration-100 transform hover:scale-125'>
+        <div className='flex flex-col items-center transition-transform delay-50 duration-100 transform hover:scale-110 cursor-pointer'>
             <img
                 className='w-40 h-40 md:w-40 md:h-40 rounded-full ease-in duration-500 '
                 src={artist.imageUrl}
@@ -16,3 +16,4 @@ function ArtistCard({ artist }) {
     );
 }
 export default ArtistCard;
+ 

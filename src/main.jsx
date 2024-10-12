@@ -11,10 +11,17 @@ import History from './page/History.jsx';
 import Albums from './page/Albums.jsx';
 import MusicLibrary from './page/Library/MusicLibrary.jsx';
 import ShowChart from './page/MeChart/ShowChart.jsx';
-import ProfilePage from './page/information/Profile/ProfilePage.jsx';
-import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
 
-import Information from './page/information/Profile/Information.jsx';
+
+import Information from './page/information/Information.jsx';
+import InfoLibrary from './page/information/Profile/infoLibrary.jsx';
+import ListenedMusic from './page/information/Profile/ListenedMusic.jsx';
+import PlayLists from './page/information/Profile/Playlists.jsx';
+import Artist from './page/information/Profile/Artist.jsx';
+import Downloaded from './page/information/Profile/Downloaded.jsx';
+import Followed from './page/information/Profile/Followed.jsx';
+import InfoAlbums from './page/information/Profile/InfoAlbums.jsx';
+
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
@@ -24,11 +31,13 @@ import ProfileEditPage from './layouts/ProfileEditPage.jsx';
 import ChangePasswordPage from './layouts/ChangePasswordPage.jsx';
 import PurchaseHistoryPage from './layouts/PurchaseHistoryPage.jsx';
 import InvoiceDetail from './layouts/InvoiceDetail.jsx';
+import ContactForm from './layouts/ContactForm.jsx';
 
 import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
 import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
+
 
 
 const router = createBrowserRouter([
@@ -84,14 +93,43 @@ const router = createBrowserRouter([
                 path: '/MeChart',
                 element: <ShowChart />
             },
-            {
-                path: '/info',
-                element: <ProfilePage />
-            },
-
+            
             {
                 path: '/Information',
-                element: <Information />
+                element: <Information />,
+                children: [
+                
+                    {
+                        path: "InfoLibrary",
+                        element: <InfoLibrary />
+                    },
+                    {
+                        path: "ListenedMusic",
+                        element: <ListenedMusic />
+                    },
+                    {
+                        path: "PlayLists",
+                        element: <PlayLists />
+                    },
+                    {
+                        path: "InfoAlbums",
+                        element: <InfoAlbums />
+                    },
+                    {
+                        path: "Artist",
+                        element: <Artist />
+                    },
+                    {
+                        path: "Downloaded",
+                        element: <Downloaded />
+                    },
+                    {
+                        path: "Followed",
+                        element: <Followed />
+                    }
+                
+
+                ]
             },
             {
                 path: '/ProfileEditPage',
@@ -112,6 +150,10 @@ const router = createBrowserRouter([
             {
                 path: '/InvoiceDetail',
                 element: <InvoiceDetail />
+            },
+            {
+                path: '/ContactForm',
+                element: <ContactForm />
             }
         ]
     },
@@ -130,34 +172,7 @@ const router = createBrowserRouter([
     {
         path: '/PasswordReset',
         element: <PasswordReset />
-    },
-    {
-        path: '/ProfileLibrary',
-        element: <ProfileLibrary />
     }
-
-    // {
-    //     path: '/SettingSidebar',
-    //     element: <SettingSidebar />,
-    //     children: [
-    //         {
-    //             path: 'SettingSidebar',
-    //             element: <ProfileEditPage />
-    //         },
-    //         {
-    //             path: 'ProfileEditPage',
-    //             element: <ProfileEditPage />
-    //         },
-    //         {
-    //             path: 'ChangePasswordPage',
-    //             element: <ChangePasswordPage />
-    //         },
-    //         {
-    //             path: 'PurchaseHistoryPage',
-    //             element: <PurchaseHistoryPage />
-    //         }
-    //     ]
-    // }
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

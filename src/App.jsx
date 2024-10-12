@@ -6,7 +6,7 @@ import Footer from './component/Footer';
 import SettingSidebar from './component/SettingSidebar';
 
 function App() {
-  const isSetting = false;
+  const isSetting = true;
   return (
     <>
 
