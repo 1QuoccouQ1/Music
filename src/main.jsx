@@ -22,6 +22,7 @@ import Downloaded from './page/information/Profile/Downloaded.jsx';
 import Followed from './page/information/Profile/Followed.jsx';
 import InfoAlbums from './page/information/Profile/InfoAlbums.jsx';
 
+
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
@@ -37,6 +38,8 @@ import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
 import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
+import Upgrade from './page/Upgrade.jsx';
+import NewPassword from './layouts/NewPassword.jsx';
 
 
 
@@ -151,10 +154,18 @@ const router = createBrowserRouter([
                 path: '/InvoiceDetail',
                 element: <InvoiceDetail />
             },
+<<<<<<< HEAD
             {
                 path: '/ContactForm',
                 element: <ContactForm />
             }
+=======
+              
+      {
+        path:"/Upgrade",
+        element: <Upgrade/>
+      }
+>>>>>>> origin/linh
         ]
     },
     {
@@ -173,6 +184,12 @@ const router = createBrowserRouter([
         path: '/PasswordReset',
         element: <PasswordReset />
     }
+<<<<<<< HEAD
+=======
+
+
+    
+>>>>>>> origin/linh
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

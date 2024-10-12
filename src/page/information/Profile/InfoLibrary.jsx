@@ -28,7 +28,7 @@ function InfoLibrary({ title, items }) {
 
 const ArtistSection = ({ artists }) => {
   return (
-    <div className="mb-8">
+    <div className="mb-6">
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-semibold text-white">Nghệ Sĩ</h3>
         <button className="text-sm text-gray-400">Xem Tất Cả</button>
@@ -41,7 +41,7 @@ const ArtistSection = ({ artists }) => {
               alt={artist.name}
               className="w-[253.59px] h-[253.59px] rounded-full object-cover"
             />
-            <p className="text-sm text-white mt-2">{artist.name}</p>
+            <p className="text-sm text-white mt-9">{artist.name}</p>
           </div>
         ))}
       </div>
@@ -73,10 +73,10 @@ const LibraryPage = () => {
       {/* Artist Section */}
       <ArtistSection
         artists={[
-          { name: 'Nghệ Sĩ 1', img: 'https://via.placeholder.com/150' },
-          { name: 'Nghệ Sĩ 2', img: 'https://via.placeholder.com/150' },
-          { name: 'Nghệ Sĩ 3', img: 'https://via.placeholder.com/150' },
-          { name: 'Nghệ Sĩ 4', img: 'https://via.placeholder.com/150' },
+          { name: 'Nghệ Sĩ 1', img: 'https://i.pinimg.com/enabled/564x/12/fb/46/12fb46e27d649b3eab28bfa2777595f4.jpg' },
+          { name: 'Nghệ Sĩ 2', img: 'https://i.pinimg.com/enabled/564x/12/fb/46/12fb46e27d649b3eab28bfa2777595f4.jpg' },
+          { name: 'Nghệ Sĩ 3', img: 'https://i.pinimg.com/enabled/564x/12/fb/46/12fb46e27d649b3eab28bfa2777595f4.jpg' },
+          { name: 'Nghệ Sĩ 4', img: 'https://i.pinimg.com/enabled/564x/12/fb/46/12fb46e27d649b3eab28bfa2777595f4.jpg' },
         ]}
       />
     </div>
