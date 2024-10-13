@@ -11,18 +11,30 @@ import History from './page/History.jsx';
 import Albums from './page/Albums.jsx';
 import MusicLibrary from './page/Library/MusicLibrary.jsx';
 import ShowChart from './page/MeChart/ShowChart.jsx';
-import ProfilePage from './page/information/Profile/ProfilePage.jsx';
-import ProfileLibrary from './page/information/Profile/ProfileLibrary.jsx';
-import Information from './page/information/Profile/Information.jsx';
+
+
+import Information from './page/information/Information.jsx';
+import InfoLibrary from './page/information/Profile/infoLibrary.jsx';
+import ListenedMusic from './page/information/Profile/ListenedMusic.jsx';
+import PlayLists from './page/information/Profile/Playlists.jsx';
+import Artist from './page/information/Profile/Artist.jsx';
+import Downloaded from './page/information/Profile/Downloaded.jsx';
+import Followed from './page/information/Profile/Followed.jsx';
+import InfoAlbums from './page/information/Profile/InfoAlbums.jsx';
+
+
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
 import PasswordReset from './layouts/PasswordReset.jsx';
 
-import ProfileEditPage from './layouts/ProfileEditPage.jsx';
-import ChangePasswordPage from './layouts/ChangePasswordPage.jsx';
-import PurchaseHistoryPage from './layouts/PurchaseHistoryPage.jsx';
-import InvoiceDetail from './layouts/InvoiceDetail.jsx';
+import ProfileEditPage from './page/Setting/ProfileEditPage.jsx';
+import ChangePasswordPage from './page/Setting/ChangePasswordPage.jsx';
+import PurchaseHistoryPage from './page/Setting/PurchaseHistoryPage.jsx';
+import InvoiceDetail from './page/Setting/InvoiceDetail.jsx';
+import ContactForm from './page/Setting/ContactForm.jsx';
+import SettingsPage from './page/Setting/SettingsPage.jsx';
+import AboutUs from './page/Setting/AboutUs.jsx';
 
 import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
@@ -30,6 +42,7 @@ import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
 import Upgrade from './page/Upgrade.jsx';
 import NewPassword from './layouts/NewPassword.jsx';
+
 
 
 const router = createBrowserRouter([
@@ -85,21 +98,47 @@ const router = createBrowserRouter([
                 path: '/MeChart',
                 element: <ShowChart />
             },
-            {
-                path: '/info',
-                element: <ProfilePage />
-            },
-
+            
             {
                 path: '/Information',
-                element: <Information />
+                element: <Information />,
+                children: [
+                
+                    {
+                        path: "InfoLibrary",
+                        element: <InfoLibrary />
+                    },
+                    {
+                        path: "ListenedMusic",
+                        element: <ListenedMusic />
+                    },
+                    {
+                        path: "PlayLists",
+                        element: <PlayLists />
+                    },
+                    {
+                        path: "InfoAlbums",
+                        element: <InfoAlbums />
+                    },
+                    {
+                        path: "Artist",
+                        element: <Artist />
+                    },
+                    {
+                        path: "Downloaded",
+                        element: <Downloaded />
+                    },
+                    {
+                        path: "Followed",
+                        element: <Followed />
+                    }
+                
+
+                ]
             },
+            //Route for Setting
             {
                 path: '/ProfileEditPage',
-                element: <ProfileEditPage />
-            },
-            {
-                path: 'ProfileEditPage',
                 element: <ProfileEditPage />
             },
             {
@@ -114,11 +153,25 @@ const router = createBrowserRouter([
                 path: '/InvoiceDetail',
                 element: <InvoiceDetail />
             },
+            {
+                path: '/SettingsPage',
+                element: <SettingsPage />
+            },
+            {
+                path: '/ContactForm',
+                element: <ContactForm />
+            },
+            {
+                path: '/AboutUs',
+                element: <AboutUs />
+            },
+
               
       {
         path:"/Upgrade",
         element: <Upgrade/>
       }
+
         ]
     },
     {
@@ -136,13 +189,7 @@ const router = createBrowserRouter([
     {
         path: '/PasswordReset',
         element: <PasswordReset />
-    },
-    {
-        path: '/ProfileLibrary',
-        element: <ProfileLibrary />
     }
-
-
     
 ]);
 

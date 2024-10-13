@@ -53,7 +53,7 @@ function ChangePasswordPage() {
             <button className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-full">
               Hủy
             </button>
-            <button className="bg-pink-600 hover:bg-pink-700 text-white py-2 px-4 rounded-full">
+            <button className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 text-white py-2 px-4 rounded-full">
               Cập nhật mật khẩu mới
             </button>
           </div>
