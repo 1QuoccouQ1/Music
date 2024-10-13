@@ -28,11 +28,13 @@ import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
 import PasswordReset from './layouts/PasswordReset.jsx';
 
-import ProfileEditPage from './layouts/ProfileEditPage.jsx';
-import ChangePasswordPage from './layouts/ChangePasswordPage.jsx';
-import PurchaseHistoryPage from './layouts/PurchaseHistoryPage.jsx';
-import InvoiceDetail from './layouts/InvoiceDetail.jsx';
-import ContactForm from './layouts/ContactForm.jsx';
+import ProfileEditPage from './page/Setting/ProfileEditPage.jsx';
+import ChangePasswordPage from './page/Setting/ChangePasswordPage.jsx';
+import PurchaseHistoryPage from './page/Setting/PurchaseHistoryPage.jsx';
+import InvoiceDetail from './page/Setting/InvoiceDetail.jsx';
+import ContactForm from './page/Setting/ContactForm.jsx';
+import SettingsPage from './page/Setting/SettingsPage.jsx';
+import AboutUs from './page/Setting/AboutUs.jsx';
 
 import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
@@ -134,12 +136,9 @@ const router = createBrowserRouter([
 
                 ]
             },
+            //Route for Setting
             {
                 path: '/ProfileEditPage',
-                element: <ProfileEditPage />
-            },
-            {
-                path: 'ProfileEditPage',
                 element: <ProfileEditPage />
             },
             {
@@ -154,18 +153,25 @@ const router = createBrowserRouter([
                 path: '/InvoiceDetail',
                 element: <InvoiceDetail />
             },
-<<<<<<< HEAD
+            {
+                path: '/SettingsPage',
+                element: <SettingsPage />
+            },
             {
                 path: '/ContactForm',
                 element: <ContactForm />
-            }
-=======
+            },
+            {
+                path: '/AboutUs',
+                element: <AboutUs />
+            },
+
               
       {
         path:"/Upgrade",
         element: <Upgrade/>
       }
->>>>>>> origin/linh
+
         ]
     },
     {
@@ -184,12 +190,7 @@ const router = createBrowserRouter([
         path: '/PasswordReset',
         element: <PasswordReset />
     }
-<<<<<<< HEAD
-=======
-
-
     
->>>>>>> origin/linh
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(

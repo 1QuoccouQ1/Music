@@ -77,7 +77,7 @@ function SettingSidebar() {
                                 </a>
                                 <a
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/Genre'
+                                    href='/AboutUs'
                                 >
                                     <GroupsIcon fontSize='small' />
                                     <span>Về Chúng Tôi</span>
