@@ -15,8 +15,8 @@ function App() {
           <Nav></Nav>
           <Outlet />
         </div>
-        {isSetting ? <Footer></Footer> : <></>  }
       </div>
+        {isSetting ? <Footer></Footer> : <></>  }
     </>
   )
 }

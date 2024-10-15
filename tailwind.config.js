@@ -13,6 +13,20 @@ export default {
     },
   },
   plugins: [
+    function ({ addUtilities }) {
+      const newUtilities = {
+        // Ẩn thanh cuộn cho Chrome, Safari, Edge
+        '.no-scrollbar::-webkit-scrollbar': {
+          display: 'none',
+        },
+        // Ẩn thanh cuộn cho Firefox
+        '.no-scrollbar': {
+          '-ms-overflow-style': 'none',  // IE and Edge
+          'scrollbar-width': 'none',     // Firefox
+        },
+      };
+      addUtilities(newUtilities);
+    },
   ],
 }
 
