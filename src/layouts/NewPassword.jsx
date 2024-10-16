@@ -1,5 +1,6 @@
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
+import { useLocation ,useNavigate } from "react-router-dom";
 import { Globe, ChevronDown } from "lucide-react";
 
 function NewPassword() {
@@ -10,11 +11,14 @@ function NewPassword() {
   const [language, setLanguage] = useState("vi");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
-
+  const location = useLocation();
+  const { email } = location.state || {}; 
   const [hasLetter, setHasLetter] = useState(false);
   const [hasNumberOrSpecialChar, setHasNumberOrSpecialChar] = useState(false);
   const [isLongEnough, setIsLongEnough] = useState(false);
   const [isMatching, setIsMatching] = useState(true); // Check mật khẩu khớp
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -33,6 +37,40 @@ function NewPassword() {
     setIsMatching(password === confirmValue);
   };
 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(""); // Reset lỗi trước khi gửi
+    if (!hasLetter || !hasNumberOrSpecialChar || !isLongEnough || !isMatching) {
+      setError("Vui lòng đảm bảo mật khẩu thỏa mãn các điều kiện.");
+      return;
+    }
+
+    try {
+      // Gọi API bằng fetch
+      const response = await fetch("https://soundwave.io.vn/admin/public/api/newpassword", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email,
+          password,
+        }),
+      });
+
+      if (response.ok) {
+        // Nếu thành công, chuyển hướng về trang đăng nhập
+        navigate("/login");
+      } else {
+        const errorData = await response.json();
+        setError(errorData.message || "Đã có lỗi xảy ra. Vui lòng thử lại.");
+      }
+    } catch (err) {
+      setError("Không thể cập nhật mật khẩu. Vui lòng thử lại.");
+    }
+  };
+
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -43,6 +81,7 @@ function NewPassword() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
+
 
   return (
     <>
@@ -89,7 +128,7 @@ function NewPassword() {
         <p className="text-gray-600 mb-6">
           Vui lòng nhập mật khẩu mới của bạn dưới đây cho tài khoản Spotify của bạn.
         </p>
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="new-password" className="block text-sm font-bold text-gray-700 mb-1">
               Mật khẩu mới
@@ -161,7 +200,7 @@ function NewPassword() {
               <p className="text-sm text-red-500 mt-2">Mật khẩu không khớp. Vui lòng kiểm tra lại.</p>
             )}
           </div>
-          
+          {error && <p className="text-sm text-red-500 mb-4">{error}</p>} {/* Hiển thị lỗi */}
           <button
             type="submit"
             className="w-full bg-pink-500 text-white py-2 px-4 rounded-full font-semibold hover:bg-pink-600 transition duration-300"

@@ -17,7 +17,7 @@ function SettingSidebar() {
               <div className="text-sm ">
                 <a
                   className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
-                  href="/"
+                  href="/ProfileEditPage"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"

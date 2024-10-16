@@ -24,6 +24,7 @@ import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
 import Upgrade from './page/Upgrade.jsx';
 import NewPassword from './layouts/NewPassword.jsx';
+import { UserProvider } from './ContextAPI/UserContext.jsx';
 
 
 const router = createBrowserRouter([
@@ -126,6 +127,8 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-      <RouterProvider router={router} />
+      <UserProvider>
+         <RouterProvider router={router} />
+      </UserProvider>
   </React.StrictMode>
 );

@@ -2,11 +2,19 @@ import { ArrowLeft } from 'lucide-react'
 import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import ErrorIcon from '@mui/icons-material/Error';
+import { useLocation ,useNavigate } from "react-router-dom";
+
+
 export default function PasswordCode() {
   const [resetMethod, setResetMethod] = useState('email')
   const [language, setLanguage] = useState("vi");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
+  const location = useLocation();
+  const { email } = location.state || {}; 
+  const [otp, setOtp] = useState(""); // Trạng thái lưu mã OTP
+  const [errorMessage, setErrorMessage] = useState("");
+  const navigate = useNavigate();
 
   const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -26,6 +34,32 @@ export default function PasswordCode() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Ngăn hành vi mặc định của form
+    setErrorMessage(""); // Xóa lỗi trước khi gửi
+
+    try {
+      // Gửi request POST đến API check OTP
+      const response = await fetch('https://soundwave.io.vn/admin/public/api/check-otp', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, otp }), // Gửi email và OTP
+      });
+
+      if (response.status === 200) {
+        // Nếu OTP đúng, điều hướng đến trang /newpass
+        navigate('/NewPassword', { state: { email } });
+      } else {
+        const data = await response.json(); // Lấy thông báo lỗi từ API
+        setErrorMessage(data.message || "Mã OTP không đúng. Vui lòng thử lại.");
+      }
+    } catch (error) {
+      setErrorMessage("Lỗi kết nối. Vui lòng kiểm tra lại mạng của bạn.");
+    }
+  };
   return (
     <div className="min-h-screen bg-[#0a0e17] flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
@@ -80,7 +114,7 @@ export default function PasswordCode() {
           <strong className="font-medium text-red-500 flex inline-flex items-center "> <ErrorIcon sx={{ fontSize: 14 }}  /><span className='ml-1'>Cảnh báo:</span></strong>
           <span className="block sm:inline text-slate-500"> Bạn sẽ mất quyền truy cập vào tất cả dữ liệu được mã hóa hiện tại trong tài khoản của mình nếu bạn tiếp tục.</span>
         </div>
-        <form className="space-y-4">
+        <form className="space-y-4" onSubmit={handleSubmit}>
           <div>
             <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1 font-bold ">
             Vui lòng nhập mã khôi phục
@@ -89,8 +123,10 @@ export default function PasswordCode() {
             {
               resetMethod === 'email' ? (
                 <input
-                id="email"
-                type="email"
+                id="otp"
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
                 className="w-full px-3 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500 pr-20"
               />
               ) : (
@@ -112,6 +148,11 @@ export default function PasswordCode() {
               </button>
             </div>
           </div>
+          {errorMessage && (
+            <div className="text-red-500 text-sm mb-4">
+              {errorMessage} {/* Hiển thị thông báo lỗi nếu có */}
+            </div>
+          )}
           <button
             type="submit"
             className="w-full py-2 px-4 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white font-semibold rounded-md transition duration-300 ease-in-out"

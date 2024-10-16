@@ -1,5 +1,5 @@
 import InputSearch from "./InputSearch";
-import React, { useState } from "react";
+import  { useState } from "react";
 import {
   ChevronRight,
   CloudDownload,
@@ -9,11 +9,34 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
-
+import { useContext } from 'react';
+import { UserContext } from '../ContextAPI/UserContext';
+import { useNavigate } from "react-router-dom"; 
+''
 function Nav() {
+  const navigate = useNavigate();
+  // const { user ,isProfile } = useContext(UserContext);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const isProfile = true;
+  const user = JSON.parse(localStorage.getItem('user')) 
+  const isProfile = user ? true : false;
+  console.log(user);
 
+
+    // Hàm xử lý logout
+    const handleLogout = async () => {
+      try {
+        // Gửi yêu cầu logout tới API
+        // await fetch('https://soundwave.io.vn/admin/public/api/logout', { method: 'POST' }); 
+  
+        // Xóa user khỏi localStorage và cập nhật context
+        localStorage.removeItem('user');
+  
+        // Chuyển hướng tới trang /login
+        navigate('/login');
+      } catch (error) {
+        console.error('Logout failed:', error);
+      }
+    };
   return (
     <>
       <div className="flex justify-between  w-auto h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10">
@@ -46,7 +69,7 @@ function Nav() {
                   className="flex items-center space-x-2  rounded-full p-1 transition duration-300"
                 >
                   <img
-                    src="https://th.bing.com/th/id/OIP.jXI_zIdHAKX4NUOup0HSnQHaH2?w=203&h=216&c=7&r=0&o=5&pid=1.7"
+                    src={user.image}
                     alt="User"
                     className="w-8 h-8 rounded-full"
                   />
@@ -67,19 +90,21 @@ function Nav() {
                   </svg>
                 </button>
                 {isProfileOpen && (
-                  <div className="absolute z-10 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-lg ">
+                  <div className="absolute z-10 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
                     <div className="flex flex-col w-full max-w-md mx-auto bg-gray-900 text-white rounded-xl">
-                      <div className="flex items-center p-4 border-b border-gray-800">
+                      <div onClick={() => {
+                        navigate('/ProfileEditPage')
+                      }} className="flex items-center p-4 border-b border-gray-800">
                         <div className="w-12 h-12 mr-4 ">
                           <img
                             className="rounded-full"
-                            src="https://th.bing.com/th/id/OIP.jXI_zIdHAKX4NUOup0HSnQHaH2?w=203&h=216&c=7&r=0&o=5&pid=1.7"
+                            src={user.image}
                             alt="Profile"
                           />
                         </div>
                         <div className="flex-grow">
                           <h2 className="text-base font-semibold">
-                            Nguyễn Đỗ Thanh Nguyên
+                             {user.name}
                           </h2>
                           <p className="text-xs bg-gray-400 py-1 px-2 mt-2 text-white font-medium  w-fit rounded-full">
                             SoundWave Basic
@@ -89,12 +114,11 @@ function Nav() {
                       </div>
                       <nav className="flex flex-col">
                         {[
-                          { icon: Sparkles, label: "Nâng cấp tài khoản" },
-                          { icon: CloudDownload, label: "Nhạc đã tải xuống" },
-                          { icon: LockKeyhole, label: "Quyền riêng tư" },
-                          { icon: Settings, label: "Cài đặt" },
-                          { icon: Headset, label: "Liên hệ" },
-                          { icon: LogOut, label: "Đăng xuất" },
+                          { icon: Sparkles,href : "/Upgrade", label: "Nâng cấp tài khoản" },
+                          { icon: CloudDownload,href : "", label: "Nhạc đã tải xuống" },
+                          { icon: LockKeyhole,href : "", label: "Quyền riêng tư" },
+                          { icon: Settings,href : "/SettingsPage", label: "Cài đặt" },
+                          { icon: Headset,href : "/ContactForm", label: "Liên hệ" },
                         ].map((item, index) => (
                           <button
                             key={index}
@@ -108,11 +132,18 @@ function Nav() {
                               }`}
                             />
                             <span className="flex-grow text-left text-sm ">
+                            <a href={item.href}>
                               {item.label}
+                            </a>
                             </span>
                             <ChevronRight className="w-5 h-5 text-gray-400" />
                           </button>
                         ))}
+                        <button onClick={handleLogout} className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl">
+                          <LogOut className="w-5 h-5 mr-4 text-red-500" />
+                          <span className="flex-grow text-left text-sm">Đăng xuất</span>
+                          <ChevronRight className="w-5 h-5 text-gray-400" />
+                        </button>
                       </nav>
                     </div>
                   </div>
