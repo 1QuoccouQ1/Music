@@ -4,7 +4,7 @@ import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../ContextAPI/UserContext';
 function Login() {
-  const { setUser } = useContext(UserContext); 
+  // const { setUser } = useContext(UserContext); 
   const [language, setLanguage] = useState("vi");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
