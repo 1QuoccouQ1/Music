@@ -7,7 +7,7 @@ import SettingSidebar from './component/SettingSidebar';
 import { UserProvider } from './ContextAPI/UserContext';
 
 function App() {
-  const isSetting = true;
+  const isSetting = false;
   return (
     <>
     <UserProvider>
