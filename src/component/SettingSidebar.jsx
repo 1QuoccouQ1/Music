@@ -57,14 +57,14 @@ function SettingSidebar() {
                                 </a>
                                 <a
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/Genre'
+                                    href='/Privacy'
                                 >
                                     <PrivacyTipOutlinedIcon fontSize='small' />
                                     <span>Quyền Riêng tư</span>
                                 </a>
                                 <a
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/Genre'
+                                    href='/SettingsPage'
                                 >
                                     <SettingsIcon fontSize='small' />
                                     <span>Cài Đặt</span>

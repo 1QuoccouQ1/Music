@@ -24,15 +24,17 @@ const ContactForm = () => {
     };
 
     return (
-        <div className='bg-gray-900 min-h-screen flex items-center justify-center'>
+        <div className='bg-gray-900 min-h-screen flex items-center justify-center pt-3'>
             <div>
-                <div className='bg-gray-800 p-8 rounded-lg max-w-lg w-full'>
-                    <h1 className='text-3xl font-semibold text-white mb-6 text-center'>
-                        Liên hệ với chúng tôi
-                    </h1>
-                    <p className='text-gray-400 text-center mb-6'>
+                <h1 className='text-3xl font-semibold text-white mb-6 mt-16 '>
+                    Liên hệ với chúng tôi
+                </h1>
+                <div className='  py-14 px-[190px] rounded-lg max-w-4xl w-full border-4 border-indigo-500/5'>
+                    <p className='text-gray-400  mb-6'>
                         Chúng tôi luôn ghi nhận các đóng góp ý kiến của bạn để
-                        cải tiến và nâng cấp sản phẩm SoundWave.
+                        cải tiến và nâng cấp sản phẩm SoundWave ngày một hoàn
+                        thiện và hữu ích hơn. Đừng ngại chia sẻ ý tưởng cho
+                        chúng tôi.
                     </p>
 
                     <form onSubmit={handleSubmit}>
@@ -45,7 +47,7 @@ const ContactForm = () => {
                                 name='topic'
                                 value={formData.topic}
                                 onChange={handleInputChange}
-                                className='w-full p-3 bg-gray-700 text-gray-200 rounded border border-pink-500'
+                                className='w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500'
                                 required
                             >
                                 <option value=''>
@@ -59,7 +61,7 @@ const ContactForm = () => {
                             </select>
                         </div>
 
-                        <div className='mb-4'>
+                        <div className='mb-5'>
                             <label className='block mb-2 text-sm font-medium text-gray-400'>
                                 Email <span className='text-red-600'> *</span>
                             </label>
@@ -68,12 +70,12 @@ const ContactForm = () => {
                                 name='email'
                                 value={formData.email}
                                 onChange={handleInputChange}
-                                className='w-full p-3 bg-gray-700 text-gray-200 rounded border border-pink-500'
+                                className='w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500'
                                 required
                             />
                         </div>
 
-                        <div className='mb-4'>
+                        <div className='mb-5'>
                             <label className='block mb-2 text-sm font-medium text-gray-400'>
                                 Tên người dùng
                             </label>
@@ -82,7 +84,7 @@ const ContactForm = () => {
                                 name='username'
                                 value={formData.username}
                                 onChange={handleInputChange}
-                                className='w-full p-3 bg-gray-700 text-gray-200 rounded border border-pink-500'
+                                className='w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500'
                             />
                             <p className='text-sm text-gray-400 mt-2'>
                                 Có thể tìm thấy tên người dùng trên hồ sơ
@@ -99,7 +101,7 @@ const ContactForm = () => {
                                 name='message'
                                 value={formData.message}
                                 onChange={handleInputChange}
-                                className='w-full p-3 bg-gray-700 text-gray-200 rounded border border-pink-500'
+                                className='w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500'
                                 rows='4'
                                 required
                             />
@@ -142,7 +144,7 @@ const ContactForm = () => {
 
                         <button
                             type='submit'
-                            className='w-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-500 text-white py-3 rounded font-semibold text-center'
+                            className='w-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-500 text-white py-3 rounded-lg font-semibold text-center'
                         >
                             Xác Nhận
                         </button>
