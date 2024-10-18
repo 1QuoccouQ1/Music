@@ -35,6 +35,7 @@ import InvoiceDetail from './page/Setting/InvoiceDetail.jsx';
 import ContactForm from './page/Setting/ContactForm.jsx';
 import SettingsPage from './page/Setting/SettingsPage.jsx';
 import AboutUs from './page/Setting/AboutUs.jsx';
+import Privacy from './page/Setting/Privacy.jsx';
 
 import PaySuccess from './page/Payment/PaySuccess.jsx';
 import PayFail from './page/Payment/PayFail.jsx';
@@ -131,7 +132,8 @@ const router = createBrowserRouter([
                     {
                         path: "Followed",
                         element: <Followed />
-                    }
+                    },
+                    
                 
 
                 ]
@@ -164,6 +166,10 @@ const router = createBrowserRouter([
             {
                 path: '/AboutUs',
                 element: <AboutUs />
+            },
+            {
+                path: "Privacy",
+                element: <Privacy />
             },
 
               
