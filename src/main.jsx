@@ -40,6 +40,7 @@ import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
 import Upgrade from './page/Upgrade.jsx';
 import NewPassword from './layouts/NewPassword.jsx';
+import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 
 
 
@@ -164,6 +165,10 @@ const router = createBrowserRouter([
       {
         path: "/Upgrade",
         element: <Upgrade />,
+      },
+      {
+        path: "/ProfileArtist",
+        element: <ProfileArtist />,
       },
     ],
   },

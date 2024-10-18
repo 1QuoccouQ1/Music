@@ -159,6 +159,11 @@ function Footer() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isPlaying]);
+
+
+
+  const circumference = 2 * Math.PI * 17.5
+  const offset = circumference - (Number(volume)) * circumference
   return (
     <>
       <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50">
@@ -240,8 +245,35 @@ function Footer() {
         </div>
 
         <div className="flex items-center space-x-3">
-          <button className="p-3 hover:bg-gray-800 rounded-full relative" onClick={toggleVolume}>
-            <Volume2 size={20} className="text-red-500" />
+          <button className="p-3  rounded-full relative" onClick={toggleVolume}>
+          <svg
+            className="w-12 h-12 transform -rotate-90 cursor-pointer"  // Giảm từ w-16 h-16 xuống w-12 h-12
+          >
+            <circle
+              cx="24"  // Giảm từ cx=32 xuống cx=24
+              cy="24"
+              r="17.5"  // Giảm bán kính từ r=23.5 xuống r=17.5
+              stroke="#4B5563"
+              strokeWidth="4"  // Giảm độ dày đường viền từ strokeWidth=5 xuống strokeWidth=4
+              fill="none"
+            />
+            <circle
+              cx="24"
+              cy="24"
+              r="17.5"
+              stroke="#EF4444"
+              strokeWidth="4"
+              fill="none"
+              strokeDasharray={circumference}
+              strokeDashoffset={offset}
+              strokeLinecap="round"
+            />
+            <foreignObject x="12" y="12" width="24" height="24">  
+              <div className="flex items-center justify-center w-full h-full">
+                <Volume2 size={12} className="text-white rotate-90" />  
+              </div>
+            </foreignObject>
+          </svg>
             {isVolumeVisible && (
               <input
                 type="range"
@@ -254,6 +286,11 @@ function Footer() {
               />
             )}
           </button>
+          
+         
+
+
+   
 
           <button className={`p-3 hover:bg-gray-800 rounded-full ${isShuffling ? "text-blue-500" : ""}`} onClick={toggleShuffle}>
             <Shuffle size={20} />
