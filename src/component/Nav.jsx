@@ -9,8 +9,6 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
-import { useContext } from 'react';
-import { UserContext } from '../ContextAPI/UserContext';
 import { useNavigate } from "react-router-dom"; 
 ''
 function Nav() {
