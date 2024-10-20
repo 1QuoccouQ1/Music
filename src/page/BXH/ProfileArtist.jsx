@@ -784,23 +784,13 @@ function ProfileArtist() {
     </div>
     {isModal && (<div className=" fixed top-0 bottom-0 right-0 left-0 z-20">
       <div className="bg-black h-[608px] bg-opacity-50 text-white  rounded-xl max-w-4xl w-full flex absolute top-1/2 -translate-x-1/2 -translate-y-1/2 left-1/2">
-        <div className="w-1/3 pr-4  p-6 relative  " style={{
+        <div className="w-1/3 pr-4  p-6 relative flex flex-col  " style={{
                 backgroundImage: `url('../imgs/image (23).png')`, // Đặt đường dẫn tới ảnh nền
                 backgroundSize: 'cover',  // Để ảnh phủ kín
                 backgroundPosition: 'center',  // Ảnh được căn giữa
             }}>
-          <div className='bg-black w-full h-full absolute opacity-20 top-0 left-0 z-10'></div>
-          <h2 className="text-red-600 font-bold mb-1 ">Thành Phố Hồ Chí Minh</h2>
-          <p className="mb-1">600.744 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Hà Nội</h2>
-          <p className="mb-1">516.502 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Đà Nẵng</h2>
-          <p className="mb-1">69.175 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Biên Hòa</h2>
-          <p className="mb-1">35.280 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Cần Thơ</h2>
-          <p className="mb-1">23.378 Người Nghe</p>
-          <div className="flex flex-col gap-4 items-start mt-8 ">
+          <div className='bg-black w-full h-full absolute opacity-20 top-0 left-0 z-10 rounded-xl '></div>
+          <div className="flex flex-col gap-4 items-start mt-auto ">
             <Facebook size={16} className="w-6 h-6" />
             <Instagram size={16} className="w-6 h-6" />
             <Twitter size={16} className="w-6 h-6" />
