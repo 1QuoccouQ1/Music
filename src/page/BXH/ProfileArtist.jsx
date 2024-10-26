@@ -59,7 +59,7 @@ function ProfileArtist() {
                     </div>
                 </div>
             </div>
-            <div className='flex py-4 w-full px-72 gap-10 rounded-b-xl drop-shadow-2xl  bg-slate-900'>
+            <div className='flex py-4 w-full px-72 gap-10 rounded-b-xl shadow-medium-xl  bg-slate-900'>
                 <p onClick={() => handleSelect("1")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "1" ? "text-red-500" : " text-white"} `}>Nổi Bật</p>
                 <p onClick={() => handleSelect("2")}  className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "2" ? "text-red-500" : " text-white"} `}>Bài hát</p>
                 <p  onClick={() => handleSelect("3")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "3" ? "text-red-500" : " text-white"} `}>Single & EP</p>
@@ -157,8 +157,8 @@ function ProfileArtist() {
                
             </div>  
             <div className='flex w-1/3 '>
-                <div className='w-full h-full p-3 relative' >
-                    <img className='rounded-xl w-full h-full' src='../imgs/ab67618600001016bfff12c781d46c46b5268efb 1.png' />
+                <div className='w-full h-full p-3 relative ' >
+                    <img className='rounded-xl w-full h-full shadow-2xl' src='../imgs/ab67618600001016bfff12c781d46c46b5268efb 1.png' />
                     <p className='absolute bottom-7 left-7 text-sm w-80  '>Nguyễn Thanh Tùng, sinh năm 1994, được biết đến với nghệ danh Sơn Tùng M-TP, là một ca sĩ, nhạc sĩ, nhà sản xuất và diễn viên người Việt Nam. Anh không chỉ được biết đến là một trong những nghệ sĩ Việt Nam... <span onClick={handleModal} className='font-semibold text-red-600  cursor-pointer'>Xem Thêm </span></p>
                 </div>
             </div>
@@ -784,23 +784,13 @@ function ProfileArtist() {
     </div>
     {isModal && (<div className=" fixed top-0 bottom-0 right-0 left-0 z-20">
       <div className="bg-black h-[608px] bg-opacity-50 text-white  rounded-xl max-w-4xl w-full flex absolute top-1/2 -translate-x-1/2 -translate-y-1/2 left-1/2">
-        <div className="w-1/3 pr-4  p-6 relative  " style={{
+        <div className="w-1/3 pr-4  p-6 relative flex flex-col  " style={{
                 backgroundImage: `url('../imgs/image (23).png')`, // Đặt đường dẫn tới ảnh nền
                 backgroundSize: 'cover',  // Để ảnh phủ kín
                 backgroundPosition: 'center',  // Ảnh được căn giữa
             }}>
-          <div className='bg-black w-full h-full absolute opacity-20 top-0 left-0 z-10'></div>
-          <h2 className="text-red-600 font-bold mb-1 ">Thành Phố Hồ Chí Minh</h2>
-          <p className="mb-1">600.744 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Hà Nội</h2>
-          <p className="mb-1">516.502 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Đà Nẵng</h2>
-          <p className="mb-1">69.175 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Biên Hòa</h2>
-          <p className="mb-1">35.280 Người Nghe</p>
-          <h2 className="text-red-600 font-bold mb-1 mt-6">Thành Phố Cần Thơ</h2>
-          <p className="mb-1">23.378 Người Nghe</p>
-          <div className="flex flex-col gap-4 items-start mt-8 ">
+          <div className='bg-black w-full h-full absolute opacity-20 top-0 left-0 z-10 rounded-xl '></div>
+          <div className="flex flex-col gap-4 items-start mt-auto ">
             <Facebook size={16} className="w-6 h-6" />
             <Instagram size={16} className="w-6 h-6" />
             <Twitter size={16} className="w-6 h-6" />

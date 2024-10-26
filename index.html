@@ -6,10 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Sound Wave</title>
     <style>
-      
-  
-     
-  
+      @keyframes spin {
+        from {
+          transform: rotate(0deg);
+        }
+        to {
+          transform: rotate(360deg);
+        }
+      }
+      .animate-spin {
+        animation: spin 3s linear infinite;
+      }
       .slider::-ms-thumb {
         width: 10px;
         height: 10px;

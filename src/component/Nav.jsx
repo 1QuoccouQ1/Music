@@ -17,7 +17,7 @@ function Nav() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem('user')) 
   const isProfile = user ? true : false;
-  console.log(user);
+  // console.log(user);
 
 
     // Hàm xử lý logout
