@@ -5,20 +5,23 @@ import Nav from './component/Nav';
 import Footer from './component/Footer';
 import SettingSidebar from './component/SettingSidebar';
 import { UserProvider } from './ContextAPI/UserContext';
+import ModalListen from './component/ModalListen';
 
 function App() {
-  const isSetting = false;
+  const isSetting = true;
+
   return (
     <>
-    <UserProvider>
-      <div className="flex h-screen bg-[#f4f7fe]">
-        {isSetting ? <Sidebar></Sidebar> :<SettingSidebar></SettingSidebar> }
-        <div className="w-full ml-56 mb-[104px]">
-          <Nav></Nav>
-          <Outlet />
+      <UserProvider>
+        <div className="flex h-screen bg-[#f4f7fe]">
+          {isSetting ? <Sidebar></Sidebar> :<SettingSidebar></SettingSidebar> }
+          <div className="w-full ml-56 mb-[104px]">
+            <Nav></Nav>
+            <Outlet />
+          </div>
+          <ModalListen/>
+          {isSetting ? <Footer></Footer> : <></>  }
         </div>
-        {isSetting ? <Footer></Footer> : <></>  }
-      </div>
       </UserProvider>
     </>
   )

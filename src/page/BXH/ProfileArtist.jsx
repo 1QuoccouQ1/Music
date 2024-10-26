@@ -59,7 +59,7 @@ function ProfileArtist() {
                     </div>
                 </div>
             </div>
-            <div className='flex py-4 w-full px-72 gap-10 rounded-b-xl drop-shadow-2xl  bg-slate-900'>
+            <div className='flex py-4 w-full px-72 gap-10 rounded-b-xl shadow-medium-xl  bg-slate-900'>
                 <p onClick={() => handleSelect("1")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "1" ? "text-red-500" : " text-white"} `}>Nổi Bật</p>
                 <p onClick={() => handleSelect("2")}  className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "2" ? "text-red-500" : " text-white"} `}>Bài hát</p>
                 <p  onClick={() => handleSelect("3")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "3" ? "text-red-500" : " text-white"} `}>Single & EP</p>
@@ -157,8 +157,8 @@ function ProfileArtist() {
                
             </div>  
             <div className='flex w-1/3 '>
-                <div className='w-full h-full p-3 relative' >
-                    <img className='rounded-xl w-full h-full' src='../imgs/ab67618600001016bfff12c781d46c46b5268efb 1.png' />
+                <div className='w-full h-full p-3 relative ' >
+                    <img className='rounded-xl w-full h-full shadow-2xl' src='../imgs/ab67618600001016bfff12c781d46c46b5268efb 1.png' />
                     <p className='absolute bottom-7 left-7 text-sm w-80  '>Nguyễn Thanh Tùng, sinh năm 1994, được biết đến với nghệ danh Sơn Tùng M-TP, là một ca sĩ, nhạc sĩ, nhà sản xuất và diễn viên người Việt Nam. Anh không chỉ được biết đến là một trong những nghệ sĩ Việt Nam... <span onClick={handleModal} className='font-semibold text-red-600  cursor-pointer'>Xem Thêm </span></p>
                 </div>
             </div>
