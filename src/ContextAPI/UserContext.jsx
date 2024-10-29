@@ -33,6 +33,7 @@ export const UserProvider = ({ children }) => {
           song_image: "",
         };
   });
+  console.log(currentSong);
 
   // Lưu giá trị volume vào localStorage khi nó thay đổi
   useEffect(() => {
