@@ -1,4 +1,4 @@
-const API_URL = 'http://localhost:3000/API/Do-an-tot-nghiep';
+const API_URL = 'https://admin.soundwave.io.vn/api';
 
 async function fetchAPI(endpoint, method = 'GET', body = null) {
     const response = await fetch(`${API_URL}${endpoint}`, {
@@ -13,6 +13,9 @@ async function fetchAPI(endpoint, method = 'GET', body = null) {
 // Đăng ký và đăng nhập
 export const registerUser = (user) => fetchAPI('/users/register', 'POST', user);
 export const loginUser = (user) => fetchAPI('/users/login', 'POST', user);
+
+
+export const getMusics = () => fetchAPI('/rand-10');
 
 
 
