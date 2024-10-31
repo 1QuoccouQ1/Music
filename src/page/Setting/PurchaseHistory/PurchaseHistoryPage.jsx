@@ -127,7 +127,6 @@ const PurchaseHistoryPage = () => {
                                             {purchase.status}
                                         </p>
                                     </td>
-
                                     <td className='px-6 py-4'>
                                         <a
                                             href='/InvoiceDetail'

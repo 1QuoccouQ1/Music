@@ -1,9 +1,10 @@
 import { Facebook, Apple } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect,useContext } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-
+import { UserContext } from '../ContextAPI/UserContext';
 function Login() {
+  // const { setUser } = useContext(UserContext); 
   const [language, setLanguage] = useState("vi");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
@@ -93,6 +94,15 @@ function Login() {
   
         // Kiểm tra trạng thái của phản hồi
         if (response.status === 200) {
+          const data = await response.json();
+
+          // console.log(data.user);
+
+          localStorage.setItem('user',JSON.stringify(data.user) );
+          
+          // Lưu thông tin người dùng vào Context
+          // setUser(data.user);  // data.user là thông tin người dùng trả về từ API
+          
           navigate('/');
         } else {
           setErrors({

@@ -144,8 +144,8 @@ function Register() {
             email: formData.email,
             password: formData.password,
             name: formData.fullname,
-            gerder: formData.gender,
-            birthday : `${dateOfBirth.year}-${dateOfBirth.month}-${dateOfBirth.day}`
+            gender: formData.gender,
+            birthday : `${dateOfBirth.day}-${dateOfBirth.month}-${dateOfBirth.year}`
           }),
         });
   

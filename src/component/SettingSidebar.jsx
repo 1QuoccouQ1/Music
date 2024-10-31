@@ -10,6 +10,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import React from 'react';
 
 function SettingSidebar() {
+
     return (
         <>
             <aside className='w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed '>
