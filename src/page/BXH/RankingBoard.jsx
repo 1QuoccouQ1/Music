@@ -1,61 +1,32 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ArtistRankingCard from './ArtistRankingCard';
 
 function RankingBoard() {
-    const [rankings, setRankings] = useState([
-        {
-            rank: 1,
-            artist: {
-                name: 'Trung Tự',
-                imageUrl: 'https://via.placeholder.com/150'
-            },
-            song: { title: 'Vừa Hận Vừa Yêu', duration: '06:01' }
-        },
-        {
-            rank: 2,
-            artist: {
-                name: 'Châu Khải Phong',
-                imageUrl: 'https://via.placeholder.com/150'
-            },
-            song: { title: 'Nép Vào Nghe Anh Hát', duration: '06:01' }
-        },
-        {
-            rank: 3,
-            artist: {
-                name: 'Kiều Chi',
-                imageUrl: 'https://via.placeholder.com/150'
-            },
-            song: { title: 'Anh Thôi Nhân Nhượng', duration: '06:01' }
-        }
-    ]);
-    const songs = [
-      { 
-          title: "Gió Tầng Nào Gặp Mây Tầng Đó", 
-          artist: "Thành Đạt", 
-          album: "Gió Tầng Nào Gặp Mây Tầng Đó (Single)", 
-          duration: "05:01", 
-          plays: "1 Ngày Trước", 
-          cover: "https://i.pinimg.com/236x/1d/f1/43/1df143603c7a9f51f3e8348f0ede6277.jpg"
-      },
-      { 
-          title: "Bài Hát 2", 
-          artist: "RPT MCK", 
-          album: "99%", 
-          duration: "04:12", 
-          plays: "2 Ngày Trước", 
-          cover: "https://i.pinimg.com/236x/1d/f1/43/1df143603c7a9f51f3e8348f0ede6277.jpg"
-      },
-      
-     
-  ];
+    const [rankings, setRankings] = useState([]);
+    const [songs, setSongs] = useState([]);
+
+    useEffect(() => {
+        const fetchRankings = async () => {
+            try {
+                const response = await fetch('https://admin.soundwave.io.vn/api/bxh-100');
+                const data = await response.json();
+
+                // Assuming the API response structure contains rankings
+                setRankings(data.slice(0, 3)); // Get the top 3 songs for ranking
+                setSongs(data.slice(3)); // Get the rest of the songs
+            } catch (error) {
+                console.error('Error fetching rankings:', error);
+            }
+        };
+
+        fetchRankings();
+    }, []);
 
     return (
-        <div className='bg-gray-900 min-h-screen py-10'>
-            <h2 className='text-white ml-28 text-xl md:text-4xl font-bold mb-8 border-l-4 border-l-blue-400 pl-5 hover:t-gradient-to-r from-pink-700 to-sky-400'>
+        <div className='bg-gray-900 min-h-screen py-10 px-4'>
+            <h2 className='text-white text-xl md:text-4xl font-bold mb-8 border-l-4 border-l-blue-400 pl-5 hover:t-gradient-to-r from-pink-700 to-sky-400'>
                 Bảng Xếp Hạng Tuần
             </h2>
-
-            {/* Nút chọn quốc gia */}
             <div className='flex justify-center space-x-4 mb-8'>
                 <button className='bg-gray-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] text-white px-4 py-3 rounded-lg basis-1/6 hover:basis-1/5 duration-150'>
                     Việt Nam
@@ -71,78 +42,98 @@ function RankingBoard() {
                 </button>
             </div>
 
-            {/* Hiển thị bảng xếp hạng */}
-            <div className='flex justify-center items-start space-x-8'>
+            {/* Top 3 Ranking Cards */}
+            <div className='flex flex-col md:flex-row justify-center items-start space-y-4 md:space-y-0 md:space-x-8 mb-12'>
                 {/* Top 2 */}
-                <div className='transform translate-y-4'>
+                <div className='transform md:translate-y-4'>
                     <ArtistRankingCard
                         rank={2}
-                        artist={rankings[1].artist}
-                        song={rankings[1].song}
+                        artist={{
+                            name: rankings[1]?.singer_name,
+                            imageUrl: rankings[1]?.song_image
+                        }}
+                        song={{
+                            title: rankings[1]?.song_name,
+                            artist: rankings[1]?.provider,
+                            duration: '03:30', // Replace with actual duration if available
+                            coverImageUrl: rankings[1]?.song_image
+                        }}
                     />
                 </div>
 
-                {/* Top 1 (ở giữa và cao hơn) */}
-                <div className='transform translate-y-0'>
+                {/* Top 1 in the middle */}
+                <div className='transform md:translate-y-0'>
                     <ArtistRankingCard
                         rank={1}
-                        artist={rankings[0].artist}
-                        song={rankings[0].song}
+                        artist={{
+                            name: rankings[0]?.singer_name,
+                            imageUrl: rankings[0]?.song_image
+                        }}
+                        song={{
+                            title: rankings[0]?.song_name,
+                            artist: rankings[0]?.provider,
+                            duration: '03:30', // Replace with actual duration if available
+                            coverImageUrl: rankings[0]?.song_image
+                        }}
                     />
                 </div>
 
                 {/* Top 3 */}
-                <div className='transform translate-y-4'>
+                <div className='transform md:translate-y-4'>
                     <ArtistRankingCard
                         rank={3}
-                        artist={rankings[2].artist}
-                        song={rankings[2].song}
+                        artist={{
+                            name: rankings[2]?.singer_name,
+                            imageUrl: rankings[2]?.song_image
+                        }}
+                        song={{
+                            title: rankings[2]?.song_name,
+                            artist: rankings[2]?.provider,
+                            duration: '03:30', // Replace with actual duration if available
+                            coverImageUrl: rankings[2]?.song_image
+                        }}
                     />
                 </div>
             </div>
-            <div className="px-6 mt-10 mr-8">
-              {/* Danh sách bài hát */}
-            <table className='min-w-full text-white mt-4 ml-6'>
-                <thead>
-                    <tr className='text-left border-b border-gray-600 '>
-                        <th className='py-2 font-normal'>#</th>
-                        <th>Bài hát</th>
-                        <th>Album</th>
-                        <th>Lượt nghe</th>
-                        <th className='text-right'>Thời lượng</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {songs.map((song, index) => (
-                        <tr
-                            key={index}
-                            className='border-b-[10px] border-transparent  '
-                        >
-                            <td className='py-2'>{index + 1}</td>
-                            <td className='flex items-center space-x-4'>
-                                <img
-                                    src={song.cover}
-                                    alt={song.title}
-                                    className='w-12 h-12 rounded-md'
-                                />
-                                <div>
-                                    <p className='font-semibold'>
-                                        {song.title}
-                                    </p>
-                                    <p className='text-gray-400 text-sm'>
-                                        {song.artist}
-                                    </p>
-                                </div>
-                            </td>
-                            <td>{song.album}</td>
-                            <td>{song.plays}</td>
-                            <td className='text-right'>{song.duration}</td>
+
+            {/* Songs Table */}
+            <div className='overflow-x-auto mt-4 ml-4'>
+                <table className='min-w-full text-white'>
+                    <thead>
+                        <tr className='text-left border-b border-gray-600 mb-2'>
+                            <th className='py-2 font-normal'>#</th>
+                            <th>Bài hát</th>
+                            <th>Album</th>
+                            <th>Lượt nghe</th>
+                            <th className='text-right'>Thời lượng</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {songs.map((song, index) => (
+                            <tr
+                                key={index + 3} // Add 3 to start indexing from 4
+                                className='border-b-[10px] border-transparent'
+                            >
+                                <td className='py-2'>{index + 4}</td> {/* Start from 4 for songs */}
+                                <td className='flex items-center space-x-4 pt-2'>
+                                    <img
+                                        src={song.song_image} // Assuming song_image is used for cover image
+                                        alt={song.song_name}
+                                        className='w-12 h-12 rounded-md'
+                                    />
+                                    <div>
+                                        <p className='font-semibold'>{song.song_name}</p>
+                                        <p className='text-gray-400 text-sm'>{song.provider}</p>
+                                    </div>
+                                </td>
+                                <td>{song.album || 'N/A'}</td> {/* Add album info if available */}
+                                <td>{song.listen_count}</td> {/* Using listen_count from your data */}
+                                <td className='text-right'>{song.duration || 'N/A'}</td> {/* Add duration logic if available */}
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
-            
         </div>
     );
 }

@@ -12,7 +12,6 @@ import Albums from './page/Albums.jsx';
 import MusicLibrary from './page/Library/MusicLibrary.jsx';
 import ShowChart from './page/MeChart/ShowChart.jsx';
 
-
 import Information from './page/information/Information.jsx';
 import InfoLibrary from './page/information/Profile/infoLibrary.jsx';
 import ListenedMusic from './page/information/Profile/ListenedMusic.jsx';
@@ -22,7 +21,6 @@ import Downloaded from './page/information/Profile/Downloaded.jsx';
 import Followed from './page/information/Profile/Followed.jsx';
 import InfoAlbums from './page/information/Profile/InfoAlbums.jsx';
 
-
 import Login from './layouts/Login.jsx';
 import Register from './layouts/Register.jsx';
 import PasswordCode from './layouts/PasswordCode.jsx';
@@ -30,8 +28,12 @@ import PasswordReset from './layouts/PasswordReset.jsx';
 
 import ProfileEditPage from './page/Setting/ProfileEditPage.jsx';
 import ChangePasswordPage from './page/Setting/ChangePasswordPage.jsx';
-import PurchaseHistoryPage from './page/Setting/PurchaseHistoryPage.jsx';
-import InvoiceDetail from './page/Setting/InvoiceDetail.jsx';
+
+import PurchaseHistoryPage from './page/Setting/PurchaseHistory/PurchaseHistoryPage.jsx';
+import ManagePayment from './page/Setting/PurchaseHistory/ManagePayment.jsx';
+import ManagerHistory from './page/Setting/PurchaseHistory/ManagerHistory.jsx';
+
+import InvoiceDetail from './page/Setting/PurchaseHistory/InvoiceDetail.jsx';
 import ContactForm from './page/Setting/ContactForm.jsx';
 import SettingsPage from './page/Setting/SettingsPage.jsx';
 import AboutUs from './page/Setting/AboutUs.jsx';
@@ -43,8 +45,7 @@ import PayError from './page/Payment/PayError.jsx';
 import Payment from './page/Payment/Payment.jsx';
 import Upgrade from './page/Upgrade.jsx';
 import NewPassword from './layouts/NewPassword.jsx';
-
-
+import MusicPlayer from './page/MusicPlayer.jsx';
 
 const router = createBrowserRouter([
     {
@@ -99,43 +100,47 @@ const router = createBrowserRouter([
                 path: '/MeChart',
                 element: <ShowChart />
             },
-            
+            {
+                path: '/MusicPlayer',
+                element: <MusicPlayer />
+            },
+
             {
                 path: '/Information',
                 element: <Information />,
                 children: [
-                
                     {
-                        path: "InfoLibrary",
+                        index: true, // Default route
                         element: <InfoLibrary />
                     },
                     {
-                        path: "ListenedMusic",
+                        path: 'InfoLibrary',
+                        element: <InfoLibrary />
+                    },
+                    {
+                        path: 'ListenedMusic',
                         element: <ListenedMusic />
                     },
                     {
-                        path: "PlayLists",
+                        path: 'PlayLists',
                         element: <PlayLists />
                     },
                     {
-                        path: "InfoAlbums",
+                        path: 'InfoAlbums',
                         element: <InfoAlbums />
                     },
                     {
-                        path: "Artist",
+                        path: 'Artist',
                         element: <Artist />
                     },
                     {
-                        path: "Downloaded",
+                        path: 'Downloaded',
                         element: <Downloaded />
                     },
                     {
-                        path: "Followed",
+                        path: 'Followed',
                         element: <Followed />
-                    },
-                    
-                
-
+                    }
                 ]
             },
             //Route for Setting
@@ -144,12 +149,26 @@ const router = createBrowserRouter([
                 element: <ProfileEditPage />
             },
             {
-                path: 'ChangePasswordPage',
+                path: '/ChangePasswordPage',
                 element: <ChangePasswordPage />
             },
             {
-                path: 'PurchaseHistoryPage',
-                element: <PurchaseHistoryPage />
+                path: '/ManagerHistory',
+                element: <ManagerHistory />,
+                children: [
+                    {
+                        index: true, // Default route
+                        element: <ManagePayment />
+                    },
+                    {
+                        path: 'PurchaseHistoryPage',
+                        element: <PurchaseHistoryPage />
+                    },
+                    {
+                        path: 'ManagePayment',
+                        element: <ManagePayment />
+                    }
+                ]
             },
             {
                 path: '/InvoiceDetail',
@@ -168,16 +187,14 @@ const router = createBrowserRouter([
                 element: <AboutUs />
             },
             {
-                path: "Privacy",
+                path: 'Privacy',
                 element: <Privacy />
             },
 
-              
-      {
-        path:"/Upgrade",
-        element: <Upgrade/>
-      }
-
+            {
+                path: '/Upgrade',
+                element: <Upgrade />
+            }
         ]
     },
     {
@@ -196,7 +213,6 @@ const router = createBrowserRouter([
         path: '/PasswordReset',
         element: <PasswordReset />
     }
-    
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
