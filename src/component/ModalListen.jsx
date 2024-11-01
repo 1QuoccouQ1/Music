@@ -67,7 +67,7 @@ function ModalListen() {
       if (currentItem) {
         currentItem.scrollIntoView({ behavior: "smooth", block: "center" });
       }
-    }
+    } 
   }, [currentSongIndex]);
 
   if (!isModal) return null;

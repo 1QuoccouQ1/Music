@@ -38,7 +38,7 @@ function Footer() {
       } catch (error) {
         console.error("Error fetching data:", error);
         setIsLoading(false);
-      }
+      } 
     };
 
     fetchData();
@@ -79,7 +79,10 @@ function Footer() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(() => {
+    const savedIsPlay = localStorage.getItem("isPlaying");
+    return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
+  });
   const [duration, setDuration] = useState(0);
   const [isLooping, setIsLooping] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -227,7 +230,7 @@ function Footer() {
     setVolume(volume); // Cập nhật giá trị volume
   }, [volume]); // Chạy khi volume thay đổi
 
-  // Sử dụng useEffect để cập nhật currentTime vào Context
+  // // Sử dụng useEffect để cập nhật currentTime vào Context
   useEffect(() => {
     setCurrentTime(currentTime); // Cập nhật giá trị currentTime
   }, [currentTime]);
@@ -235,7 +238,7 @@ function Footer() {
   useEffect(() => {
     // Khi currentSongIndex thay đổi, cập nhật thông tin bài hát vào UserContext
     if (listsongs.length === 0) return; 
-    
+
     const song = listsongs[currentSongIndex];
     setCurrentSong({
       song_name: song.song_name,
@@ -261,6 +264,7 @@ function Footer() {
       }
     };
     // Thêm sự kiện khi nhấn phím
+    localStorage.setItem("isPlaying", JSON.stringify(isPlaying));
     window.addEventListener("keydown", handleKeyDown);
 
     // Gỡ sự kiện khi component bị unmount
@@ -268,6 +272,9 @@ function Footer() {
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isPlaying]);
+
+  console.log("isPlaying", isPlaying);
+  // console.log("isPlay",isPlay);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -277,6 +284,15 @@ function Footer() {
   const offset = circumference - Number(volume) * circumference;
   return (
     <>
+     {/* Audio Element */}
+     <audio
+                ref={audioRef}
+                onLoadedMetadata={onLoadedMetadata}
+                onTimeUpdate={(e) =>
+                  !isSeeking && setCurrentTime(e.target.currentTime)
+                }
+                onEnded={handleSongEnd}
+              />
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white  w-[350px] rounded-r-lg">
@@ -469,15 +485,7 @@ function Footer() {
                 </div>
               </div>
 
-              {/* Audio Element */}
-              <audio
-                ref={audioRef}
-                onLoadedMetadata={onLoadedMetadata}
-                onTimeUpdate={(e) =>
-                  !isSeeking && setCurrentTime(e.target.currentTime)
-                }
-                onEnded={handleSongEnd}
-              />
+             
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
@@ -672,15 +680,7 @@ function Footer() {
                 </div>
               </div>
 
-              {/* Audio Element */}
-              <audio
-                ref={audioRef}
-                onLoadedMetadata={onLoadedMetadata}
-                onTimeUpdate={(e) =>
-                  !isSeeking && setCurrentTime(e.target.currentTime)
-                }
-                onEnded={handleSongEnd}
-              />
+             
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (

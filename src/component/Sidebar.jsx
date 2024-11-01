@@ -3,7 +3,6 @@ import ReplayIcon from '@mui/icons-material/Replay';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 
 function Sidebar() {
-
   return (
     <>
       <aside className="w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed ">
