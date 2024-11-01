@@ -25,172 +25,86 @@ import Login from "./layouts/Login.jsx";
 import Register from "./layouts/Register.jsx";
 import PasswordCode from "./layouts/PasswordCode.jsx";
 import PasswordReset from "./layouts/PasswordReset.jsx";
+import NewPassword from "./layouts/NewPassword.jsx";
 
 import ProfileEditPage from "./page/Setting/ProfileEditPage.jsx";
 import ChangePasswordPage from "./page/Setting/ChangePasswordPage.jsx";
-import PurchaseHistoryPage from "./page/Setting/PurchaseHistoryPage.jsx";
-import InvoiceDetail from "./page/Setting/InvoiceDetail.jsx";
+import PurchaseHistoryPage from "./page/Setting/PurchaseHistory/PurchaseHistoryPage.jsx";
+import ManagePayment from "./page/Setting/PurchaseHistory/ManagePayment.jsx";
+import ManagerHistory from "./page/Setting/PurchaseHistory/ManagerHistory.jsx";
+import InvoiceDetail from "./page/Setting/PurchaseHistory/InvoiceDetail.jsx";
 import ContactForm from "./page/Setting/ContactForm.jsx";
 import SettingsPage from "./page/Setting/SettingsPage.jsx";
 import AboutUs from "./page/Setting/AboutUs.jsx";
+import Privacy from "./page/Setting/Privacy.jsx";
 
-import PaySuccess from './page/Payment/PaySuccess.jsx';
-import PayFail from './page/Payment/PayFail.jsx';
-import PayError from './page/Payment/PayError.jsx';
-import Payment from './page/Payment/Payment.jsx';
-import Upgrade from './page/Upgrade.jsx';
-import NewPassword from './layouts/NewPassword.jsx';
+import PaySuccess from "./page/Payment/PaySuccess.jsx";
+import PayFail from "./page/Payment/PayFail.jsx";
+import PayError from "./page/Payment/PayError.jsx";
+import Payment from "./page/Payment/Payment.jsx";
+import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
-
-
+import MusicPlayer from "./page/MusicPlayer.jsx";
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
+    {
         path: "/",
-        element: <Dashboard />,
-      },
-      {
-        path: "/Genre",
-        element: <Genre />,
-      },
-      {
-        path: "/History",
-        element: <History />,
-      },
-      {
-        path: "/Albums",
-        element: <Albums />,
-      },
-      {
-        path: "/Artist",
-        element: <ArtistGallery />,
-      },
-      {
-        path: "/PaySuccess",
-        element: <PaySuccess />,
-      },
-      {
-        path: "/PayFail",
-        element: <PayFail />,
-      },
-      {
-        path: "/PayError",
-        element: <PayError />,
-      },
-      {
-        path: "/Payment",
-        element: <Payment />,
-      },
-      {
-        path: "/BXH",
-        element: <RankingBoard />,
-      },
-      {
-        path: "/Library",
-        element: <MusicLibrary />,
-      },
-      {
-        path: "/MeChart",
-        element: <ShowChart />,
-      },
-
-      {
-        path: "/Information",
-        element: <Information />,
+        element: <App />,
         children: [
-          {
-            path: "InfoLibrary",
-            element: <InfoLibrary />,
-          },
-          {
-            path: "ListenedMusic",
-            element: <ListenedMusic />,
-          },
-          {
-            path: "PlayLists",
-            element: <PlayLists />,
-          },
-          {
-            path: "InfoAlbums",
-            element: <InfoAlbums />,
-          },
-          {
-            path: "Artist",
-            element: <Artist />,
-          },
-          {
-            path: "Downloaded",
-            element: <Downloaded />,
-          },
-          {
-            path: "Followed",
-            element: <Followed />,
-          },
-        ],
-      },
-      //Route for Setting
-      {
-        path: "/ProfileEditPage",
-        element: <ProfileEditPage />,
-      },
-      {
-        path: "ChangePasswordPage",
-        element: <ChangePasswordPage />,
-      },
-      {
-        path: "PurchaseHistoryPage",
-        element: <PurchaseHistoryPage />,
-      },
-      {
-        path: "/InvoiceDetail",
-        element: <InvoiceDetail />,
-      },
-      {
-        path: "/SettingsPage",
-        element: <SettingsPage />,
-      },
-      {
-        path: "/ContactForm",
-        element: <ContactForm />,
-      },
-      {
-        path: "/AboutUs",
-        element: <AboutUs />,
-      },
-
-      {
-        path: "/Upgrade",
-        element: <Upgrade />,
-      },
-      {
-        path: "/ProfileArtist",
-        element: <ProfileArtist />,
-      },
-    ],
-  },
-  {
-    path: "/login",
-    element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
-  },
-  {
-    path: "/PasswordCode",
-    element: <PasswordCode />,
-  },
-  {
-    path: "/PasswordReset",
-    element: <PasswordReset />,
-  },
+            { path: "/", element: <Dashboard /> },
+            { path: "/Genre", element: <Genre /> },
+            { path: "/History", element: <History /> },
+            { path: "/Albums", element: <Albums /> },
+            { path: "/Artist", element: <ArtistGallery /> },
+            { path: "/PaySuccess", element: <PaySuccess /> },
+            { path: "/PayFail", element: <PayFail /> },
+            { path: "/PayError", element: <PayError /> },
+            { path: "/Payment", element: <Payment /> },
+            { path: "/BXH", element: <RankingBoard /> },
+            { path: "/Library", element: <MusicLibrary /> },
+            { path: "/MeChart", element: <ShowChart /> },
+            { path: "/MusicPlayer", element: <MusicPlayer /> },
+            {
+                path: "/Information",
+                element: <Information />,
+                children: [
+                    { index: true, element: <InfoLibrary /> },
+                    { path: "InfoLibrary", element: <InfoLibrary /> },
+                    { path: "ListenedMusic", element: <ListenedMusic /> },
+                    { path: "PlayLists", element: <PlayLists /> },
+                    { path: "InfoAlbums", element: <InfoAlbums /> },
+                    { path: "Artist", element: <Artist /> },
+                    { path: "Downloaded", element: <Downloaded /> },
+                    { path: "Followed", element: <Followed /> }
+                ]
+            },
+            {
+                path: "/ManagerHistory",
+                element: <ManagerHistory />,
+                children: [
+                    { index: true, element: <ManagePayment /> },
+                    { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
+                    { path: "ManagePayment", element: <ManagePayment /> }
+                ]
+            },
+            { path: "/ProfileEditPage", element: <ProfileEditPage /> },
+            { path: "/ChangePasswordPage", element: <ChangePasswordPage /> },
+            { path: "/InvoiceDetail", element: <InvoiceDetail /> },
+            { path: "/SettingsPage", element: <SettingsPage /> },
+            { path: "/ContactForm", element: <ContactForm /> },
+            { path: "/AboutUs", element: <AboutUs /> },
+            { path: "/Privacy", element: <Privacy /> },
+            { path: "/Upgrade", element: <Upgrade /> },
+            { path: "/ProfileArtist", element: <ProfileArtist /> }
+        ]
+    },
+    { path: "/login", element: <Login /> },
+    { path: "/register", element: <Register /> },
+    { path: "/PasswordCode", element: <PasswordCode /> },
+    { path: "/PasswordReset", element: <PasswordReset /> },
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <RouterProvider router={router} />
     </React.StrictMode>

@@ -1,4 +1,5 @@
 import React from 'react';
+import { NavLink, Outlet } from 'react-router-dom';
 
 const PurchaseHistoryPage = () => {
     // Dữ liệu mẫu về sản phẩm đã mua
@@ -84,9 +85,8 @@ const PurchaseHistoryPage = () => {
             {purchases.length > 0 ? (
                 // Bảng lịch sử mua hàng
                 <div className='overflow-x-auto max-w-[808px] mb-[550px]'>
-                    <h1 className='text-3xl font-semibold text-white mb-6'>
-                        Lịch sử mua hàng
-                    </h1>
+                  
+                  
 
                     <table className='min-w-full table-auto text-left text-gray-300 text-[14px]'>
                         <thead>
