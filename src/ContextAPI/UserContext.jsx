@@ -5,7 +5,10 @@ export const UserContext = createContext();
 
 // Tạo Provider để cung cấp giá trị cho Context
 export const UserProvider = ({ children }) => {
-  const [isPlay, setIsPlay] = useState(false);
+  const [isPlay, setIsPlay] = useState(() => {
+    const savedIsPlay = localStorage.getItem("isPlay");
+    return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
+  });
   const [volume, setVolume] = useState(() => {
     const savedVolume = localStorage.getItem("volume");
     return savedVolume ? JSON.parse(savedVolume) : 1; // Giá trị mặc định là 1
@@ -33,11 +36,14 @@ export const UserProvider = ({ children }) => {
           song_image: "",
         };
   });
-  console.log(currentSong);
 
+  useEffect(() => {
+    localStorage.setItem("isPlay", JSON.stringify(isPlay));
+  }, [isPlay]);
   // Lưu giá trị volume vào localStorage khi nó thay đổi
   useEffect(() => {
     localStorage.setItem("volume", JSON.stringify(volume));
+
   }, [volume]);
 
   // Lưu giá trị currentTime vào localStorage khi nó thay đổi
@@ -49,9 +55,12 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
+
     } else {
       localStorage.removeItem("user");
+
     }
+
   }, [user]);
   // console.log(user);
 
@@ -71,6 +80,7 @@ export const UserProvider = ({ children }) => {
     return () => {
       window.removeEventListener("beforeunload", handleBeforeUnload);
     };
+    
   }, [currentSong]);
 
   return (
