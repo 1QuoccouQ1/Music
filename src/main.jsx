@@ -165,6 +165,15 @@ const router = createBrowserRouter([
           },
         ],
       },
+      {
+                path: "/ManagerHistory",
+                element: <ManagerHistory />,
+                children: [
+                    { index: true, element: <ManagePayment /> },
+                    { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
+                    { path: "ManagePayment", element: <ManagePayment /> }
+                ]
+            },
       //Route for Setting
       {
         path: "/ProfileEditPage",
