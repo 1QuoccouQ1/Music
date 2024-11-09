@@ -61,11 +61,14 @@ function changeLogo() {
   localStorage.setItem("isSetting", false);
   return null
 }
-=======
-import MusicPlayer from "./page/MusicPlayer.jsx";
+
 
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
     {
         path: "/",
         loader: changeLogo,
