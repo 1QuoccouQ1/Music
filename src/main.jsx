@@ -25,22 +25,26 @@ import Login from "./layouts/Login.jsx";
 import Register from "./layouts/Register.jsx";
 import PasswordCode from "./layouts/PasswordCode.jsx";
 import PasswordReset from "./layouts/PasswordReset.jsx";
+import NewPassword from "./layouts/NewPassword.jsx";
 
 import ProfileEditPage from "./page/Setting/ProfileEditPage.jsx";
 import ChangePasswordPage from "./page/Setting/ChangePasswordPage.jsx";
-import PurchaseHistoryPage from "./page/Setting/PurchaseHistoryPage.jsx";
-import InvoiceDetail from "./page/Setting/InvoiceDetail.jsx";
+import PurchaseHistoryPage from "./page/Setting/PurchaseHistory/PurchaseHistoryPage.jsx";
+import ManagePayment from "./page/Setting/PurchaseHistory/ManagePayment.jsx";
+import ManagerHistory from "./page/Setting/PurchaseHistory/ManagerHistory.jsx";
+import InvoiceDetail from "./page/Setting/PurchaseHistory/InvoiceDetail.jsx";
 import ContactForm from "./page/Setting/ContactForm.jsx";
 import SettingsPage from "./page/Setting/SettingsPage.jsx";
 import AboutUs from "./page/Setting/AboutUs.jsx";
+import Privacy from "./page/Setting/Privacy.jsx";
 
-import PaySuccess from './page/Payment/PaySuccess.jsx';
-import PayFail from './page/Payment/PayFail.jsx';
-import PayError from './page/Payment/PayError.jsx';
-import Payment from './page/Payment/Payment.jsx';
-import Upgrade from './page/Upgrade.jsx';
-import NewPassword from './layouts/NewPassword.jsx';
+import PaySuccess from "./page/Payment/PaySuccess.jsx";
+import PayFail from "./page/Payment/PayFail.jsx";
+import PayError from "./page/Payment/PayError.jsx";
+import Payment from "./page/Payment/Payment.jsx";
+import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
+
 
 
 function changeIsSetting() {
@@ -57,13 +61,12 @@ function changeLogo() {
   localStorage.setItem("isSetting", false);
   return null
 }
+=======
+import MusicPlayer from "./page/MusicPlayer.jsx";
+
 
 const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <App />,
-    children: [
-      {
+    {
         path: "/",
         loader: changeLogo,
         element: <Dashboard />,
@@ -224,9 +227,10 @@ const router = createBrowserRouter([
     path: "/PasswordReset",
     element: <PasswordReset />,
   },
+
 ]);
 
-ReactDOM.createRoot(document.getElementById('root')).render(
+ReactDOM.createRoot(document.getElementById("root")).render(
     <React.StrictMode>
         <RouterProvider router={router} />
     </React.StrictMode>

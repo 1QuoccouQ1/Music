@@ -24,7 +24,7 @@ const ContactForm = () => {
     };
 
     return (
-        <div className='bg-gray-900 min-h-screen flex items-center justify-center pt-3'>
+        <div className='bg-gray-900 min-h-screen flex items-center justify-center pt-3 '>
             <div>
                 <h1 className='text-3xl font-semibold text-white mb-6 mt-16 '>
                     Liên hệ với chúng tôi
