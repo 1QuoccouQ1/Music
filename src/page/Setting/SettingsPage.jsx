@@ -1,6 +1,8 @@
-import React, {useState} from 'react';
-
+import React, {useState , useEffect} from 'react';
+import { useContext } from "react";
+import { UserContext } from "../../ContextAPI/UserContext";
 const SettingsPage = () => {
+
     const [quality, setQuality] = useState('128kbps');
     const [isOpen, setIsOpen] = useState(false);
   

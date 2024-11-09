@@ -43,6 +43,20 @@ import NewPassword from './layouts/NewPassword.jsx';
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 
 
+function changeIsSetting() {
+  localStorage.setItem("isSetting", true);
+  sessionStorage.removeItem("reloaded");
+  return null
+}
+
+function changeDashboard() {
+  localStorage.setItem("isSetting", false);
+  return null
+}
+function changeLogo() {
+  localStorage.setItem("isSetting", false);
+  return null
+}
 
 const router = createBrowserRouter([
   {
@@ -51,55 +65,68 @@ const router = createBrowserRouter([
     children: [
       {
         path: "/",
+        loader: changeLogo,
         element: <Dashboard />,
       },
       {
         path: "/Genre",
+        loader: changeDashboard,
         element: <Genre />,
       },
       {
         path: "/History",
+        loader: changeDashboard,
         element: <History />,
       },
       {
         path: "/Albums",
+        loader: changeDashboard,
         element: <Albums />,
       },
       {
         path: "/Artist",
+        loader: changeDashboard,
         element: <ArtistGallery />,
       },
       {
         path: "/PaySuccess",
+        loader: changeIsSetting,
         element: <PaySuccess />,
       },
       {
         path: "/PayFail",
+        loader: changeIsSetting,
         element: <PayFail />,
       },
       {
         path: "/PayError",
+        loader: changeIsSetting,
         element: <PayError />,
       },
       {
         path: "/Payment",
+        loader: changeIsSetting,
         element: <Payment />,
       },
       {
         path: "/BXH",
+        loader: changeDashboard,
         element: <RankingBoard />,
       },
       {
         path: "/Library",
+        loader: changeDashboard,
         element: <MusicLibrary />,
       },
       {
         path: "/MeChart",
+        loader: changeDashboard,
         element: <ShowChart />,
       },
 
       {
         path: "/Information",
+        loader: changeDashboard,
         element: <Information />,
         children: [
           {
@@ -135,39 +162,48 @@ const router = createBrowserRouter([
       //Route for Setting
       {
         path: "/ProfileEditPage",
+        loader: changeIsSetting,
         element: <ProfileEditPage />,
       },
       {
         path: "ChangePasswordPage",
+        loader: changeIsSetting,
         element: <ChangePasswordPage />,
       },
       {
         path: "PurchaseHistoryPage",
+        loader: changeIsSetting,
         element: <PurchaseHistoryPage />,
       },
       {
         path: "/InvoiceDetail",
+        loader: changeIsSetting,
         element: <InvoiceDetail />,
       },
       {
         path: "/SettingsPage",
+        loader: changeIsSetting,
         element: <SettingsPage />,
       },
       {
         path: "/ContactForm",
+        loader: changeIsSetting,
         element: <ContactForm />,
       },
       {
         path: "/AboutUs",
+        loader: changeIsSetting,
         element: <AboutUs />,
       },
 
       {
         path: "/Upgrade",
+        loader: changeDashboard,
         element: <Upgrade />,
       },
       {
         path: "/ProfileArtist",
+        loader: changeDashboard,
         element: <ProfileArtist />,
       },
     ],

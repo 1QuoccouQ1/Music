@@ -5,6 +5,10 @@ export const UserContext = createContext();
 
 // Tạo Provider để cung cấp giá trị cho Context
 export const UserProvider = ({ children }) => {
+  const [isSetting, setIsSetting] = useState(() => {
+    const savedIsSetting = localStorage.getItem("isSetting");
+    return savedIsSetting ? JSON.parse(savedIsSetting) : false; // Mặc định là false
+  });
   const [isPlay, setIsPlay] = useState(() => {
     const savedIsPlay = localStorage.getItem("isPlay");
     return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
@@ -15,7 +19,7 @@ export const UserProvider = ({ children }) => {
   });
   const [currentTime, setCurrentTime] = useState(() => {
     const savedTime = localStorage.getItem("currentTime");
-    return savedTime ? JSON.parse(savedTime) : 0; // Giá trị mặc định là 0
+    return savedTime ? JSON.parse(savedTime) : 10; // Giá trị mặc định là 0
   });
   const [isModal, setIsModal] = useState(false);
   const [user, setUser] = useState(() => {
@@ -40,6 +44,9 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     localStorage.setItem("isPlay", JSON.stringify(isPlay));
   }, [isPlay]);
+  useEffect(() => {
+    localStorage.setItem("isSetting", JSON.stringify(isSetting));
+  }, [isSetting]);
   // Lưu giá trị volume vào localStorage khi nó thay đổi
   useEffect(() => {
     localStorage.setItem("volume", JSON.stringify(volume));
@@ -96,7 +103,8 @@ export const UserProvider = ({ children }) => {
         setVolume,
         currentTime,
         setCurrentTime,
-        isPlay, setIsPlay
+        isPlay, setIsPlay,
+        isSetting, setIsSetting
       }}
     >
       {children}

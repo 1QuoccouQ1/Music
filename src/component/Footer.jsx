@@ -14,8 +14,9 @@ import {
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { getMusics } from "../services/apiService";
+import React from 'react';
 
-function Footer() {
+const Footer = React.memo(function FooterComponent() {
   const {
     currentSong,
     setCurrentSong,
@@ -23,10 +24,11 @@ function Footer() {
     setVolume,
     currentTime,
     setCurrentTime,
-    isPlay,
     setIsPlay,
+    isModal, setIsModal,isSetting
   } = useContext(UserContext);
-  const { isModal, setIsModal } = useContext(UserContext);
+
+  
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -92,7 +94,8 @@ function Footer() {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [isTimerModalVisible, setIsTimerModalVisible] = useState(false); // Trạng thái hiển thị modal hẹn giờ
 
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [currentSongIndex, setCurrentSongIndex] = useState(1);
+  const [optionSongIndex, setOptionSongIndex] = useState(null);
   const audioRef = useRef(null);
 
   const formatTime = (time) => {
@@ -110,7 +113,7 @@ function Footer() {
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
-    setIsPlay(!isPlay);
+    setIsPlay(!isPlaying);
   };
 
   const onLoadedMetadata = () => {
@@ -128,6 +131,7 @@ function Footer() {
       setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
     }
     setIsPlaying(true);
+    setIsPlay(true);
   };
 
   const handlePreviousSong = () => {
@@ -135,6 +139,7 @@ function Footer() {
       (prev) => (prev - 1 + listsongs.length) % listsongs.length
     );
     setIsPlaying(true);
+    setIsPlay(true);
   };
 
   const handleSongEnd = () => {
@@ -156,6 +161,7 @@ function Footer() {
     setTimer(
       setTimeout(() => {
         setIsPlaying(false);
+        setIsPlay(false);
         audioRef.current.pause();
         setIsTimerActive(false);
         alert("Đã hết thời gian nghe nhạc!");
@@ -211,6 +217,7 @@ function Footer() {
       );
       if (index !== -1) {
         setCurrentSongIndex(index);
+        setOptionSongIndex(index);
       }
     } else {
       // Nếu không có currentSong, đặt currentSongIndex về 0
@@ -230,10 +237,7 @@ function Footer() {
     setVolume(volume); // Cập nhật giá trị volume
   }, [volume]); // Chạy khi volume thay đổi
 
-  // // Sử dụng useEffect để cập nhật currentTime vào Context
-  useEffect(() => {
-    setCurrentTime(currentTime); // Cập nhật giá trị currentTime
-  }, [currentTime]);
+  
 
   useEffect(() => {
     // Khi currentSongIndex thay đổi, cập nhật thông tin bài hát vào UserContext
@@ -249,6 +253,11 @@ function Footer() {
     if (audioRef.current) {
       audioRef.current.src =
         song.file_paths && song.file_paths[selectedQuality];
+      // audioRef.current.currentTime = currentTime;
+
+      if (optionSongIndex == currentSongIndex) {
+        audioRef.current.currentTime = currentTime;
+      }
       if (isPlaying) {
         audioRef.current.play();
       }
@@ -273,12 +282,13 @@ function Footer() {
     };
   }, [isPlaying]);
 
-  console.log("isPlaying", isPlaying);
+  // console.log("isPlaying", isPlaying);
   // console.log("isPlay",isPlay);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return null;
   }
+  if (isSetting) return null;
 
   const circumference = 2 * Math.PI * 17.5;
   const offset = circumference - Number(volume) * circumference;
@@ -392,6 +402,7 @@ function Footer() {
                 <div className="flex-grow mx-4 w-[660px]">
                   <div className="relative">
                     <input
+
                       type="range"
                       min="0"
                       max={duration}
@@ -399,7 +410,7 @@ function Footer() {
                       onChange={(e) =>
                         handleSliderChange(Number(e.target.value))
                       }
-                      className="w-full h-1 bg-slate-400 rounded-lg appearance-none cursor-pointer slider"
+                      className="hi w-full h-1 bg-slate-400 rounded-lg appearance-none cursor-pointer slider"
                     />
                     <div className="flex justify-between text-xs text-gray-400 mt-1">
                       <span>{formatTime(currentTime)}</span>
@@ -870,6 +881,6 @@ function Footer() {
       )}
     </>
   );
-}
+})
 
 export default Footer;

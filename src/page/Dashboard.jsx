@@ -1,9 +1,18 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 
 function Dashboard() {
-
+    useEffect(() => {
+      const isSetting = localStorage.getItem("isSetting");
+      if (isSetting === 'false') {
+        localStorage.removeItem("isSetting"); // Remove it to prevent repeated reloads
+        if (!sessionStorage.getItem("reloaded")) {
+          sessionStorage.setItem("reloaded", true); // Flag that reload has occurred
+          window.location.reload(); // Reload the page
+        }
+      }
+    }, []);
     const [activeTab, setActiveTab] = useState("vietnam");
 
   // Nội dung bảng xếp hạng của từng quốc gia
