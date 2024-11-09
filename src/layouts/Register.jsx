@@ -135,7 +135,7 @@ function Register() {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('https://soundwave.io.vn/admin/public/api/users/register', {
+        const response = await fetch('https://admin.soundwave.io.vn/api/users/register', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

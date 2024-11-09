@@ -205,7 +205,6 @@ function ModalListen() {
           </div>
         </div>
         <div>
-          <Footer />
         </div>
       </section>
     </>

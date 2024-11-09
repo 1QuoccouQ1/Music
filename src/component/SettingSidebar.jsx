@@ -8,22 +8,31 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import GroupsIcon from '@mui/icons-material/Groups';
 import React from 'react';
+import { useContext } from "react";
+import { UserContext } from "../ContextAPI/UserContext";
+import { Link } from 'react-router-dom';
 
 function SettingSidebar() {
+    
+    const {
+        isSetting
+      } = useContext(UserContext);
+
+    if (!isSetting) return null;
 
     return (
         <>
             <aside className='w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed '>
                 <div className='space-y-4 h-auto'>
-                    <a href='/' className='flex justify-center'>
+                    <Link to='/' className='flex justify-center'>
                         <img src='../imgs/Music Brand and App Logo 1.png' alt='Music Brand Logo' />
-                    </a>
+                    </Link>
                     <nav className='space-y-1 h-auto tracking-wide'>
                         <div className='flex flex-col justify-between h-auto'>
                             <div className='text-sm'>
-                                <a
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/ProfileEditPage'
+                                    to='/ProfileEditPage'
                                 >
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
@@ -40,49 +49,49 @@ function SettingSidebar() {
                                         />
                                     </svg>
                                     <span>Chỉnh sửa Hồ Sơ</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/ChangePasswordPage'
+                                    to='/ChangePasswordPage'
                                 >
                                     <LockPersonOutlinedIcon fontSize='small' />
                                     <span>Đổi Mật Khẩu</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/ManagerHistory'
+                                   to='/PurchaseHistoryPage'
                                 >
                                     <ReceiptLongOutlinedIcon fontSize='small' />
                                     <span>Lịch sử Mua Hàng</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/Privacy'
+                                    to='/Privacy'
                                 >
                                     <PrivacyTipOutlinedIcon fontSize='small' />
                                     <span>Quyền Riêng tư</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/SettingsPage'
+                                    to='/SettingsPage'
                                 >
                                     <SettingsIcon fontSize='small' />
                                     <span>Cài Đặt</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/ContactForm'
+                                    to='/ContactForm'
                                 >
                                     <HeadphonesIcon fontSize='small' />
                                     <span>Liên Hệ</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                    href='/AboutUs'
+                                    to='/AboutUs'
                                 >
                                     <GroupsIcon fontSize='small' />
                                     <span>Về Chúng Tôi</span>
-                                </a>
+                                </Link>
                                 <div className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90'>
                                     Đăng Xuất
                                 </div>
