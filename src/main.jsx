@@ -166,14 +166,14 @@ const router = createBrowserRouter([
         ],
       },
       {
-                path: "/ManagerHistory",
-                element: <ManagerHistory />,
-                children: [
-                    { index: true, element: <ManagePayment /> },
-                    { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
-                    { path: "ManagePayment", element: <ManagePayment /> }
-                ]
-            },
+        path: "/ManagerHistory",
+        element: <ManagerHistory />,
+        children: [
+            { index: true, element: <ManagePayment /> },
+            { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
+            { path: "ManagePayment", element: <ManagePayment /> }
+        ]
+      },
       //Route for Setting
       {
         path: "/ProfileEditPage",
@@ -221,6 +221,11 @@ const router = createBrowserRouter([
         loader: changeDashboard,
         element: <ProfileArtist />,
       },
+      {
+        path: "/Privacy",
+        loader: changeIsSetting,
+        element: <Privacy />,
+      },
     ],
   },
   {
@@ -238,6 +243,10 @@ const router = createBrowserRouter([
   {
     path: "/PasswordReset",
     element: <PasswordReset />,
+  },
+  {
+    path: "/NewPassword",
+    element: <NewPassword />,
   },
 
 ]);
