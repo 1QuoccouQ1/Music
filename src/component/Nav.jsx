@@ -43,9 +43,9 @@ function Nav() {
         <div className=" flex  text-left items-center">
           {isProfile ? (
             <>
-              <button className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10">
+              <Link to='/Upgrade' className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10">
                 Trải nghiệm Premium
-              </button>
+              </Link>
               <button className="relative size-9 flex items-center justify-center bg-gray-800 rounded-full transition duration-300 mr-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -112,32 +112,33 @@ function Nav() {
                         <ChevronRight className="w-5 h-5 text-gray-400" />
                       </div>
                       <nav className="flex flex-col">
-                        {[
-                          { icon: Sparkles,href : "/Upgrade", label: "Nâng cấp tài khoản" },
-                          { icon: CloudDownload,href : "", label: "Nhạc đã tải xuống" },
-                          { icon: LockKeyhole,href : "", label: "Quyền riêng tư" },
-                          { icon: Settings,href : "/SettingsPage", label: "Cài đặt" },
-                          { icon: Headset,href : "/ContactForm", label: "Liên hệ" },
-                        ].map((item, index) => (
-                          <button
-                            key={index}
-                            className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl"
-                          >
-                            <item.icon
-                              className={`w-5 h-5 mr-4 ${
-                                index === 0
-                                  ? "text-yellow-500"
-                                  : "text-gray-400"
-                              }`}
-                            />
-                            <span className="flex-grow text-left text-sm ">
-                            <a href={item.href}>
-                              {item.label}
-                            </a>
-                            </span>
-                            <ChevronRight className="w-5 h-5 text-gray-400" />
-                          </button>
-                        ))}
+                      {[
+                        { icon: Sparkles, href: "/Upgrade", label: "Nâng cấp tài khoản" },
+                        { icon: CloudDownload, href: "https://example.com", label: "Nhạc đã tải xuống" }, // Ví dụ link ngoại vi
+                        { icon: LockKeyhole, href: "Privacy", label: "Quyền riêng tư" },
+                        { icon: Settings, href: "SettingsPage", label: "Cài đặt" },
+                        { icon: Headset, href: "ContactForm", label: "Liên hệ" },
+                      ].map((item, index) => (
+                        <button
+                          key={index}
+                          className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl"
+                        >
+                          <item.icon
+                            className={`w-5 h-5 mr-4 ${
+                              index === 0 ? "text-yellow-500" : "text-gray-400"
+                            }`}
+                          />
+                          <span className="flex-grow text-left text-sm">
+                            {/* Kiểm tra href có phải là đường dẫn nội bộ */}
+                            {item.href && item.href.startsWith('/') ? (
+                              <Link to={item.href}>{item.label}</Link> // Dùng Link cho đường dẫn nội bộ
+                            ) : (
+                              <a href={item.href} >{item.label}</a> // Dùng thẻ a cho liên kết ngoại vi
+                            )}
+                          </span>
+                          <ChevronRight className="w-5 h-5 text-gray-400" />
+                        </button>
+                      ))}
                         <button onClick={handleLogout} className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl">
                           <LogOut className="w-5 h-5 mr-4 text-red-500" />
                           <span className="flex-grow text-left text-sm">Đăng xuất</span>
