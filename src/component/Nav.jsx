@@ -1,5 +1,5 @@
 import InputSearch from "./InputSearch";
-import  { useState } from "react";
+import  { useState ,useRef ,useEffect } from "react";
 import {
   ChevronRight,
   CloudDownload,
@@ -19,6 +19,7 @@ function Nav() {
   const user = JSON.parse(localStorage.getItem('user')) 
   const isProfile = user ? true : false;
   // console.log(user);
+  const profileRef = useRef(null);
 
 
     // Hàm xử lý logout
@@ -36,6 +37,20 @@ function Nav() {
         console.error('Logout failed:', error);
       }
     };
+
+    useEffect(() => {
+      const handleClickOutside = (event) => {
+        if (profileRef.current && !profileRef.current.contains(event.target)) {
+          setIsProfileOpen(false);
+        }
+      };
+  
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+  
   return (
     <>
       <div className="flex justify-between  w-auto h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10">
@@ -62,7 +77,7 @@ function Nav() {
                   />
                 </svg>
               </button>
-              <div className="relative">
+              <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
                   className="flex items-center space-x-2  rounded-full p-1 transition duration-300"
