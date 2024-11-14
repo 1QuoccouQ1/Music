@@ -61,15 +61,19 @@ function Genre() {
       <h1 className="text-3xl font-medium mb-10">Thể Loại Được Nghe Nhiều Nhất</h1>
       <div className="flex items-center">
         {countries.map((country, index) => (
-          <div key={index} className="w-1/4 px-2">
-            <div className={`w-full h-60 flex items-center justify-center rounded-lg cursor-pointer`}
+          <div key={index} className="w-1/4 px-2 relative">
+            <div className={`w-full h-60 flex items-center justify-center rounded-lg cursor-pointer  opacity-60  `}
             style={{
-    background: `linear-gradient(to right, ${generateRandomColor()}, ${generateRandomColor()})`
+              backgroundImage: `url(${country.background})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              backgroundRepeat: 'no-repeat',
+            
   }}
             >
-              <p className="text-3xl font-bold tracking-wide">{country.name_country
-              }</p>
             </div>
+              <p className="text-3xl font-bold tracking-wide absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">{country.name_country
+              }</p>
           </div>
         ))}
       </div>
@@ -89,12 +93,12 @@ function Genre() {
           <div className="flex items-center">
             {Array.isArray(songs[category.id]) && songs[category.id].length > 0 ? (
               songs[category.id] .slice(0, 5).map(song => (
-                <div key={song.id} className="w-1/5 h-[300px] px-3">
+                <div key={song.id} className="w-1/5 h-[300px] px-3 rounded-md">
                   <div style={{backgroundImage: `url(${song.song_image})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat',
-                   }} className='w-full h-full cursor-pointer' />
+                   }} className='w-full h-full cursor-pointer rounded-md' />
                 </div>
               ))
             ) : (
