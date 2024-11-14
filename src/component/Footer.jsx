@@ -97,6 +97,7 @@ const Footer = React.memo(function FooterComponent() {
   const [currentSongIndex, setCurrentSongIndex] = useState(1);
   const [optionSongIndex, setOptionSongIndex] = useState(null);
   const audioRef = useRef(null);
+  const Playlist = useRef(null);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -265,10 +266,19 @@ const Footer = React.memo(function FooterComponent() {
   }, [currentSongIndex, selectedQuality]);
 
  
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (Playlist.current && !Playlist.current.contains(event.target)) {
+        setIsAlbum(false);
+      }
+    };
 
-  // console.log("isPlaying", isPlaying);
-  // console.log("isPlay",isPlay);
-
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  
   if (isLoading) {
     return null;
   }
@@ -558,7 +568,7 @@ const Footer = React.memo(function FooterComponent() {
 
             <p>Bài Tiếp Theo</p>
             {isAlbum && (
-              <div className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute bottom-0 -translate-y-[15%] right-0 overflow-hidden">
+              <div ref={Playlist} className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute bottom-0 -translate-y-[15%] right-0 overflow-hidden">
                 <h2 className="text-lg ml-2 mb-4">Danh sách phát</h2>
                 <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4">
                   <div className="w-12 h-12 mr-3 relative">
