@@ -2,9 +2,9 @@ import React from 'react';
 
 const ProfileEditPage = () => {
     return (
-        <div className='bg-gray-900 min-h-screen flex justify-center items-center pb-10'>
-            <div className='bg-gray-900 p-8 rounded-lg w-full max-w-[777px]'>
-                <h1 className='text-3xl font-semibold text-white mb-9 '>
+        <div className='bg-gray-900 min-h-screen flex justify-center items-center pb-10 px-4 sm:px-6'>
+            <div className='bg-gray-900 p-6 sm:p-8 rounded-lg w-full max-w-[777px]'>
+                <h1 className='text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-9'>
                     Chỉnh Sửa Hồ Sơ
                 </h1>
 
@@ -48,8 +48,8 @@ const ProfileEditPage = () => {
                     </div>
 
                     {/* Ngày sinh */}
-                    <div className='mb-4 flex space-x-4'>
-                        <div className='w-1/3'>
+                    <div className='mb-4 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4'>
+                        <div className='w-full sm:w-1/3'>
                             <label className='block text-sm font-medium text-gray-400 mb-2'>
                                 Ngày sinh
                             </label>
@@ -58,7 +58,7 @@ const ProfileEditPage = () => {
                                 {/* Các option khác */}
                             </select>
                         </div>
-                        <div className='w-1/3'>
+                        <div className='w-full sm:w-1/3'>
                             <label className='block text-sm font-medium text-gray-400 mb-2'>
                                 Tháng
                             </label>
@@ -67,7 +67,7 @@ const ProfileEditPage = () => {
                                 {/* Các option khác */}
                             </select>
                         </div>
-                        <div className='w-1/3'>
+                        <div className='w-full sm:w-1/3'>
                             <label className='block text-sm font-medium text-gray-400 mb-2'>
                                 Năm
                             </label>
@@ -102,16 +102,17 @@ const ProfileEditPage = () => {
                             </span>
                         </label>
                     </div>
-                    <div className='mb-6 tex'>
-                    <hr />
+
+                    <div className='mb-6'>
+                        <hr />
                     </div>
 
                     {/* Nút lưu */}
-                    <div className='flex justify-end space-x-4'>
-                        <button className='bg-gray-900 hover:bg-gray-600 text-white py-2 px-4 rounded-full'>
+                    <div className='flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4'>
+                        <button className='bg-gray-900 hover:bg-gray-600 text-white py-2 px-4 rounded-full w-full sm:w-auto'>
                             Hủy
                         </button>
-                        <button className='bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 transition duration-700 text-white py-3 px-6 rounded-full'>
+                        <button className='bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 transition duration-700 text-white py-3 px-6 rounded-full w-full sm:w-auto'>
                             Lưu hồ sơ
                         </button>
                     </div>

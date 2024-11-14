@@ -11,11 +11,28 @@ function RankingBoard() {
                 const response = await fetch('https://admin.soundwave.io.vn/api/bxh-100');
                 const data = await response.json();
 
-                // Assuming the API response structure contains rankings
-                setRankings(data.slice(0, 3)); // Get the top 3 songs for ranking
-                setSongs(data.slice(3)); // Get the rest of the songs
+                // Get top 3 for ranking and rest for songs
+                setRankings(data.slice(0, 3));
+                const remainingSongs = data.slice(3);
+                setSongs(remainingSongs);
+
+                // Fetch listen counts for each song
+                const listenCounts = await Promise.all(
+                    remainingSongs.map(async (song) => {
+                        const listenResponse = await fetch(`https://admin.soundwave.io.vn/api/luot-nghe/${song.id}`);
+                        const listenData = await listenResponse.json();
+                        return { id: song.id, listenCount: listenData.listen_count };
+                    })
+                );
+
+                // Update each song’s listen count in state
+                const songsWithListenCount = remainingSongs.map(song => ({
+                    ...song,
+                    listen_count: listenCounts.find(item => item.id === song.id)?.listenCount || 0,
+                }));
+                setSongs(songsWithListenCount);
             } catch (error) {
-                console.error('Error fetching rankings:', error);
+                console.error('Error fetching rankings or listen counts:', error);
             }
         };
 
@@ -55,7 +72,7 @@ function RankingBoard() {
                         song={{
                             title: rankings[1]?.song_name,
                             artist: rankings[1]?.provider,
-                            duration: '03:30', // Replace with actual duration if available
+                            duration: '03:30',
                             coverImageUrl: rankings[1]?.song_image
                         }}
                     />
@@ -72,7 +89,7 @@ function RankingBoard() {
                         song={{
                             title: rankings[0]?.song_name,
                             artist: rankings[0]?.provider,
-                            duration: '03:30', // Replace with actual duration if available
+                            duration: '03:30',
                             coverImageUrl: rankings[0]?.song_image
                         }}
                     />
@@ -89,7 +106,7 @@ function RankingBoard() {
                         song={{
                             title: rankings[2]?.song_name,
                             artist: rankings[2]?.provider,
-                            duration: '03:30', // Replace with actual duration if available
+                            duration: '03:30',
                             coverImageUrl: rankings[2]?.song_image
                         }}
                     />
@@ -111,13 +128,13 @@ function RankingBoard() {
                     <tbody>
                         {songs.map((song, index) => (
                             <tr
-                                key={index + 3} // Add 3 to start indexing from 4
+                                key={index + 3}
                                 className='border-b-[10px] border-transparent'
                             >
-                                <td className='py-2'>{index + 4}</td> {/* Start from 4 for songs */}
+                                <td className='py-2'>{index + 4}</td>
                                 <td className='flex items-center space-x-4 pt-2'>
                                     <img
-                                        src={song.song_image} // Assuming song_image is used for cover image
+                                        src={song.song_image}
                                         alt={song.song_name}
                                         className='w-12 h-12 rounded-md'
                                     />
@@ -126,9 +143,9 @@ function RankingBoard() {
                                         <p className='text-gray-400 text-sm'>{song.provider}</p>
                                     </div>
                                 </td>
-                                <td>{song.album || 'N/A'}</td> {/* Add album info if available */}
-                                <td>{song.listen_count}</td> {/* Using listen_count from your data */}
-                                <td className='text-right'>{song.duration || 'N/A'}</td> {/* Add duration logic if available */}
+                                <td>{song.album || 'N/A'}</td>
+                                <td>{song.listen_count}</td>
+                                <td className='text-right'>{song.duration || 'N/A'}</td>
                             </tr>
                         ))}
                     </tbody>

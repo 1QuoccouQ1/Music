@@ -38,9 +38,9 @@ function ChangePasswordPage() {
   };
 
   return (
-    <div className="bg-gray-900 min-h-full flex justify-center items-center py-5">
-      <div className="bg-gray-900 p-8 rounded-lg w-full max-w-[777px] pb-80">
-        <h1 className="text-3xl font-semibold text-white mb-9 ">Đổi mật khẩu của bạn</h1>
+    <div className="bg-gray-900 min-h-screen flex justify-center items-center px-4 sm:px-6 py-5">
+      <div className="bg-gray-900 p-6 sm:p-8 rounded-lg w-full max-w-[777px]">
+        <h1 className="text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-9">Đổi mật khẩu của bạn</h1>
 
         {/* Form */}
         <form onSubmit={handleSubmit}>
@@ -74,12 +74,12 @@ function ChangePasswordPage() {
           {/* Điều kiện mật khẩu */}
           <div className="mb-5">
             <p className="text-gray-400 text-sm mb-2">Mật khẩu của bạn phải có ít nhất:</p>
-            <ul className="text-gray-400 text-sm list-disc ml-6">
+            <ul className="text-gray-400 text-sm list-disc ml-6 space-y-1">
               <li>{/[a-zA-Z]/.test(newPassword) ? '✔' : '✘'} 1 chữ cái</li>
               <li>{/[0-9!@#$%^&*]/.test(newPassword) ? '✔' : '✘'} 1 chữ số hoặc ký tự đặc biệt (vd: # ? ! &)</li>
               <li>{newPassword.length >= 10 ? '✔' : '✘'} 10 ký tự</li>
             </ul>
-            <p className="text-pink-600">{validationMessage}</p>
+            <p className="text-pink-600 mt-2">{validationMessage}</p>
           </div>
 
           {/* Lặp lại mật khẩu mới */}
@@ -95,10 +95,10 @@ function ChangePasswordPage() {
           </div>
 
           {/* Nút */}
-          <div className="flex justify-end space-x-4">
+          <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
             <button
               type="button"
-              className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-full"
+              className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-full w-full sm:w-auto"
               onClick={() => {
                 setCurrentPassword('');
                 setNewPassword('');
@@ -111,7 +111,7 @@ function ChangePasswordPage() {
             </button>
             <button
               type="submit"
-              className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 text-white py-2 px-4 rounded-full"
+              className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 text-white py-2 px-4 rounded-full w-full sm:w-auto"
               disabled={!isValid}
             >
               Cập nhật mật khẩu mới
