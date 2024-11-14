@@ -56,7 +56,7 @@ function Genre() {
     }
 
 
-    return ( <div className='bg-medium h-screen'>
+    return ( <div className='bg-medium h-auto'>
         <section className="bg-medium w-full h-auto pt-16 text-white px-10">
       <h1 className="text-3xl font-medium mb-10">Thể Loại Được Nghe Nhiều Nhất</h1>
       <div className="flex items-center">
@@ -89,7 +89,7 @@ function Genre() {
           <div className="flex items-center">
             {Array.isArray(songs[category.id]) && songs[category.id].length > 0 ? (
               songs[category.id] .slice(0, 5).map(song => (
-                <div key={song.id} className="w-1/5 h-44 px-3">
+                <div key={song.id} className="w-1/5 h-[300px] px-3">
                   <div style={{backgroundImage: `url(${song.song_image})`,
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
