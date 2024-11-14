@@ -1,45 +1,36 @@
-import React, {useState} from "react";
+import React, { useState, useEffect } from "react";
 import ArtistCard from "./ArtistCard";
 
-
-
 function ArtistGallery() {
-    const [artists, setArtists] = useState([
-            { name: "Đen Vâu", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "Sơn Tùng - MTP", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
-            { name: "RPT MCK", profession: "Nghệ Sĩ", imageUrl: "https://i.pinimg.com/736x/3d/ab/91/3dab91223b7880e03837376e5d5c7c96.jpg" },
+  const [artists, setArtists] = useState([]);
 
-        
-        
-    ]);
-
-    // Lấy dữ liệu từ API mẫu 
-    // useEffect(() => {
-    //     fetch('http://localhost:5000/api/artists')
-    //       .then(response => response.json())
-    //       .then(data => setArtists(data))
-    //       .catch(error => console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error));
-    //   }, []);
+  useEffect(() => {
+    fetch('https://admin.soundwave.io.vn/api/ca-si')
+      .then(response => response.json())
+      .then(data => {
+        // Mapping the fetched data to match the format needed for ArtistCard
+        const formattedArtists = data.map(artist => ({
+          name: artist.singer_name || "Unknown Artist",
+          profession: "Nghệ Sĩ",
+          imageUrl: artist.singer_image || "https://via.placeholder.com/150",
+        }));
+        setArtists(formattedArtists);
+      })
+      .catch(error => console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error));
+  }, []);
 
   return (
-    <div className="bg-gray-900 min-h-screen py-10">
-    <h2 className="text-white text-xl md:text-4xl font-bold mb-8 pl-16">Top Nghệ Sĩ Phổ Biến</h2>
-    <div className="grid grid-cols-2 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-8 justify-items-center mx-8">
-      {artists.map((artist, index) => (
-        <ArtistCard key={index} artist={artist} />
-      ))}
+    <div className="bg-gray-900 min-h-screen py-10 px-4 sm:px-8">
+      <h2 className="text-white text-2xl sm:text-3xl md:text-4xl font-bold mb-8 pl-4 sm:pl-16">
+        Top Nghệ Sĩ Phổ Biến
+      </h2>
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 sm:gap-6 md:gap-8 justify-items-center">
+        {artists.map((artist, index) => (
+          <ArtistCard key={index} artist={artist} />
+        ))}
+      </div>
     </div>
-  </div>
   );
 }
+
 export default ArtistGallery;
