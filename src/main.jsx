@@ -132,39 +132,19 @@ const router = createBrowserRouter([
 
       {
         path: "/Information",
-        loader: changeDashboard,
         element: <Information />,
         children: [
-          {
-            path: "InfoLibrary",
-            element: <InfoLibrary />,
-          },
-          {
-            path: "ListenedMusic",
-            element: <ListenedMusic />,
-          },
-          {
-            path: "PlayLists",
-            element: <PlayLists />,
-          },
-          {
-            path: "InfoAlbums",
-            element: <InfoAlbums />,
-          },
-          {
-            path: "Artist",
-            element: <Artist />,
-          },
-          {
-            path: "Downloaded",
-            element: <Downloaded />,
-          },
-          {
-            path: "Followed",
-            element: <Followed />,
-          },
-        ],
-      },
+            { index: true, element: <InfoLibrary /> },
+            { path: "InfoLibrary", element: <InfoLibrary /> },
+            { path: "ListenedMusic", element: <ListenedMusic /> },
+            { path: "PlayLists", element: <PlayLists /> },
+            { path: "InfoAlbums", element: <InfoAlbums /> },
+            { path: "Artist", element: <Artist /> },
+            { path: "Downloaded", element: <Downloaded /> },
+            { path: "Followed", element: <Followed /> }
+        ]
+    },
+
       {
         path: "/ManagerHistory",
         element: <ManagerHistory />,
