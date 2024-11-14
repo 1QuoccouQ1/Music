@@ -41,23 +41,10 @@ function RankingBoard() {
 
     return (
         <div className='bg-gray-900 min-h-screen py-10 px-4'>
-            <h2 className='text-white text-xl md:text-4xl font-bold mb-8 border-l-4 border-l-blue-400 pl-5 hover:t-gradient-to-r from-pink-700 to-sky-400'>
+            <h2 className='text-white text-xl md:text-4xl font-bold mb-20 border-l-4 border-l-blue-400 pl-5 hover:t-gradient-to-r from-pink-700 to-sky-400'>
                 Bảng Xếp Hạng Tuần
             </h2>
-            <div className='flex justify-center space-x-4 mb-8'>
-                <button className='bg-gray-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] text-white px-4 py-3 rounded-lg basis-1/6 hover:basis-1/5 duration-150'>
-                    Việt Nam
-                </button>
-                <button className='bg-gray-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] text-white px-4 py-2 rounded-lg basis-1/6 hover:basis-1/5 duration-150'>
-                    Âu Mỹ
-                </button>
-                <button className='bg-gray-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] text-white px-4 py-2 rounded-lg basis-1/6 hover:basis-1/5 duration-150'>
-                    Hàn Quốc
-                </button>
-                <button className='bg-gray-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E] text-white px-4 py-2 rounded-lg basis-1/6 hover:basis-1/5 duration-150'>
-                    Hoa Kỳ
-                </button>
-            </div>
+            
 
             {/* Top 3 Ranking Cards */}
             <div className='flex flex-col md:flex-row justify-center items-start space-y-4 md:space-y-0 md:space-x-8 mb-12'>

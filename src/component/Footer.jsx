@@ -264,23 +264,7 @@ const Footer = React.memo(function FooterComponent() {
     }
   }, [currentSongIndex, selectedQuality]);
 
-  // Thêm sự kiện lắng nghe phím Space
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.code === "Space") {
-        event.preventDefault(); // Ngăn hành động mặc định của phím Space
-        togglePlayPause(); // Phát hoặc dừng nhạc
-      }
-    };
-    // Thêm sự kiện khi nhấn phím
-    localStorage.setItem("isPlaying", JSON.stringify(isPlaying));
-    window.addEventListener("keydown", handleKeyDown);
-
-    // Gỡ sự kiện khi component bị unmount
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isPlaying]);
+ 
 
   // console.log("isPlaying", isPlaying);
   // console.log("isPlay",isPlay);
