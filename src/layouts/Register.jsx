@@ -3,6 +3,8 @@ import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
+import { Undo2 } from 'lucide-react';
+
 
 import 'react-toastify/dist/ReactToastify.css';
 function Register() {
@@ -208,6 +210,7 @@ function Register() {
           </div>
         </div>
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <a href="/" className="cursor-pointer mb-4"><Undo2 /></a>
           <h1 className="text-2xl font-bold text-center mb-6">{texts[language].title}</h1>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
