@@ -3,6 +3,7 @@ import { useState, useRef, useEffect,useContext } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../ContextAPI/UserContext';
+import { Undo2 } from 'lucide-react';
 function Login() {
   // const { setUser } = useContext(UserContext); 
   const [language, setLanguage] = useState("vi");
@@ -156,6 +157,7 @@ function Login() {
           </div>
         </div>
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+          <a href="/" className="cursor-pointer mb-4"><Undo2 /></a>
           <h1 className="text-2xl font-bold text-center mb-6">{texts[language].title}</h1>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
