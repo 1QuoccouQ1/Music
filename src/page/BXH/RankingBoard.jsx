@@ -120,7 +120,7 @@ function RankingBoard() {
                         <tr className='text-left border-b border-gray-600 mb-2'>
                             <th className='py-2 font-normal'>#</th>
                             <th>Bài hát</th>
-                            <th>Album</th>
+                            <th>Tên Ca Sĩ</th>
                             <th>Lượt nghe</th>
                             <th className='text-right'>Thời lượng</th>
                         </tr>
@@ -140,10 +140,9 @@ function RankingBoard() {
                                     />
                                     <div>
                                         <p className='font-semibold'>{song.song_name}</p>
-                                        <p className='text-gray-400 text-sm'>{song.provider}</p>
                                     </div>
                                 </td>
-                                <td>{song.album || 'N/A'}</td>
+                                <td>{song.provider}</td>
                                 <td>{song.listen_count}</td>
                                 <td className='text-right'>{song.duration || 'N/A'}</td>
                             </tr>
