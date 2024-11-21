@@ -1,22 +1,31 @@
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import ReplayIcon from '@mui/icons-material/Replay';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
+import { useContext } from "react";
+import { UserContext } from "../ContextAPI/UserContext";
+import { Link } from 'react-router-dom';
+
 
 function Sidebar() {
+  const {
+    isSetting
+  } = useContext(UserContext);
 
+
+if (isSetting) return null;
   return (
     <>
       <aside className="w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed ">
         <div className="space-y-4 h-auto">
-          <a href="/" className="flex justify-center">
+          <Link to="/" className="flex justify-center">
             <img src="../imgs/Music Brand and App Logo 1.png" />
-          </a>
+          </Link>
           <nav className="space-y-1  h-auto tracking-wide">
             <div className="flex flex-col  justify-between h-auto">
               <div className="text-sm ">
-                <a
+                <Link
                   className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
-                  href="/"
+                  to="/"
                 >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -35,10 +44,10 @@ function Sidebar() {
 
 
                                     <span className=' '>Trang Chủ</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300'
-                                    href='/BXH'
+                                    to='/BXH'
                                 >
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
@@ -56,10 +65,10 @@ function Sidebar() {
                                     </svg>
 
                                     <span className=' '>BXH Hàng Tuần</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300'
-                                    href='/Artist'
+                                    to='/Artist'
                                 >
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
@@ -77,10 +86,10 @@ function Sidebar() {
                                     </svg>
 
                                     <span className=' '>Top Nghệ Sĩ </span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300'
-                                    href='/Genre'
+                                    to='/Genre'
                                 >
                                     <svg
                                         xmlns='http://www.w3.org/2000/svg'
@@ -98,25 +107,25 @@ function Sidebar() {
                                     </svg>
 
                                     <span className=' '>Thể Loại</span>
-                                </a>
-                                <a
+                                </Link>
+                                <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300'
-                                    href='/Albums'
+                                    to='/Albums'
                                 >
                                     <QueueMusicIcon />
 
                                     <span className=' '>Album</span>
-                                </a>
+                                </Link>
                                
-                <a
+                <Link
                   className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3  hover:shadow-lg rounded-lg duration-300"
-                  href="Information"
+                  to="Information"
                 >
                   
                   <PlaylistPlayIcon />
 
                   <span className=" ">Nhạc của Tôi</span>
-                </a>
+                </Link>
               </div>
             </div>
           </nav>

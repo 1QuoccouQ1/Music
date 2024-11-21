@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import AppleIcon from '@mui/icons-material/Apple';
@@ -8,6 +9,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import NavigateNextIcon from '@mui/icons-material/NavigateNext';
 
 const SettingsPage = () => {
+
     const [quality, setQuality] = useState('128kbps');
     const [isFullScreen, setIsFullScreen] = useState(false);
     const [isQualityOpen, setIsQualityOpen] = useState(false);

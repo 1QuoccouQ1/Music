@@ -14,8 +14,9 @@ import {
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { getMusics } from "../services/apiService";
+import React from 'react';
 
-function Footer() {
+const Footer = React.memo(function FooterComponent() {
   const {
     currentSong,
     setCurrentSong,
@@ -23,10 +24,11 @@ function Footer() {
     setVolume,
     currentTime,
     setCurrentTime,
-    isPlay,
     setIsPlay,
+    isModal, setIsModal,isSetting
   } = useContext(UserContext);
-  const { isModal, setIsModal } = useContext(UserContext);
+
+  
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -38,7 +40,7 @@ function Footer() {
       } catch (error) {
         console.error("Error fetching data:", error);
         setIsLoading(false);
-      }
+      } 
     };
 
     fetchData();
@@ -79,7 +81,10 @@ function Footer() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
-  const [isPlaying, setIsPlaying] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(() => {
+    const savedIsPlay = localStorage.getItem("isPlaying");
+    return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
+  });
   const [duration, setDuration] = useState(0);
   const [isLooping, setIsLooping] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -89,8 +94,10 @@ function Footer() {
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [isTimerModalVisible, setIsTimerModalVisible] = useState(false); // Trạng thái hiển thị modal hẹn giờ
 
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [currentSongIndex, setCurrentSongIndex] = useState(1);
+  const [optionSongIndex, setOptionSongIndex] = useState(null);
   const audioRef = useRef(null);
+  const Playlist = useRef(null);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -107,7 +114,7 @@ function Footer() {
       audioRef.current.play();
     }
     setIsPlaying(!isPlaying);
-    setIsPlay(!isPlay);
+    setIsPlay(!isPlaying);
   };
 
   const onLoadedMetadata = () => {
@@ -125,6 +132,7 @@ function Footer() {
       setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
     }
     setIsPlaying(true);
+    setIsPlay(true);
   };
 
   const handlePreviousSong = () => {
@@ -132,6 +140,7 @@ function Footer() {
       (prev) => (prev - 1 + listsongs.length) % listsongs.length
     );
     setIsPlaying(true);
+    setIsPlay(true);
   };
 
   const handleSongEnd = () => {
@@ -153,6 +162,7 @@ function Footer() {
     setTimer(
       setTimeout(() => {
         setIsPlaying(false);
+        setIsPlay(false);
         audioRef.current.pause();
         setIsTimerActive(false);
         alert("Đã hết thời gian nghe nhạc!");
@@ -208,6 +218,7 @@ function Footer() {
       );
       if (index !== -1) {
         setCurrentSongIndex(index);
+        setOptionSongIndex(index);
       }
     } else {
       // Nếu không có currentSong, đặt currentSongIndex về 0
@@ -227,15 +238,12 @@ function Footer() {
     setVolume(volume); // Cập nhật giá trị volume
   }, [volume]); // Chạy khi volume thay đổi
 
-  // Sử dụng useEffect để cập nhật currentTime vào Context
-  useEffect(() => {
-    setCurrentTime(currentTime); // Cập nhật giá trị currentTime
-  }, [currentTime]);
+  
 
   useEffect(() => {
     // Khi currentSongIndex thay đổi, cập nhật thông tin bài hát vào UserContext
     if (listsongs.length === 0) return; 
-    
+
     const song = listsongs[currentSongIndex];
     setCurrentSong({
       song_name: song.song_name,
@@ -246,37 +254,49 @@ function Footer() {
     if (audioRef.current) {
       audioRef.current.src =
         song.file_paths && song.file_paths[selectedQuality];
+      // audioRef.current.currentTime = currentTime;
+
+      if (optionSongIndex == currentSongIndex) {
+        audioRef.current.currentTime = currentTime;
+      }
       if (isPlaying) {
         audioRef.current.play();
       }
     }
   }, [currentSongIndex, selectedQuality]);
 
-  // Thêm sự kiện lắng nghe phím Space
+ 
   useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.code === "Space") {
-        event.preventDefault(); // Ngăn hành động mặc định của phím Space
-        togglePlayPause(); // Phát hoặc dừng nhạc
+    const handleClickOutside = (event) => {
+      if (Playlist.current && !Playlist.current.contains(event.target)) {
+        setIsAlbum(false);
       }
     };
-    // Thêm sự kiện khi nhấn phím
-    window.addEventListener("keydown", handleKeyDown);
 
-    // Gỡ sự kiện khi component bị unmount
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      window.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [isPlaying]);
-
+  }, []);
+  
   if (isLoading) {
-    return <div>Loading...</div>;
+    return null;
   }
+  if (isSetting) return null;
 
   const circumference = 2 * Math.PI * 17.5;
   const offset = circumference - Number(volume) * circumference;
   return (
     <>
+     {/* Audio Element */}
+     <audio
+                ref={audioRef}
+                onLoadedMetadata={onLoadedMetadata}
+                onTimeUpdate={(e) =>
+                  !isSeeking && setCurrentTime(e.target.currentTime)
+                }
+                onEnded={handleSongEnd}
+              />
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white  w-[350px] rounded-r-lg">
@@ -376,6 +396,7 @@ function Footer() {
                 <div className="flex-grow mx-4 w-[660px]">
                   <div className="relative">
                     <input
+
                       type="range"
                       min="0"
                       max={duration}
@@ -383,7 +404,7 @@ function Footer() {
                       onChange={(e) =>
                         handleSliderChange(Number(e.target.value))
                       }
-                      className="w-full h-1 bg-slate-400 rounded-lg appearance-none cursor-pointer slider"
+                      className="hi w-full h-1 bg-slate-400 rounded-lg appearance-none cursor-pointer slider"
                     />
                     <div className="flex justify-between text-xs text-gray-400 mt-1">
                       <span>{formatTime(currentTime)}</span>
@@ -469,15 +490,7 @@ function Footer() {
                 </div>
               </div>
 
-              {/* Audio Element */}
-              <audio
-                ref={audioRef}
-                onLoadedMetadata={onLoadedMetadata}
-                onTimeUpdate={(e) =>
-                  !isSeeking && setCurrentTime(e.target.currentTime)
-                }
-                onEnded={handleSongEnd}
-              />
+             
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
@@ -555,7 +568,7 @@ function Footer() {
 
             <p>Bài Tiếp Theo</p>
             {isAlbum && (
-              <div className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute bottom-0 -translate-y-[15%] right-0 overflow-hidden">
+              <div ref={Playlist} className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute bottom-0 -translate-y-[15%] right-0 overflow-hidden">
                 <h2 className="text-lg ml-2 mb-4">Danh sách phát</h2>
                 <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4">
                   <div className="w-12 h-12 mr-3 relative">
@@ -672,15 +685,7 @@ function Footer() {
                 </div>
               </div>
 
-              {/* Audio Element */}
-              <audio
-                ref={audioRef}
-                onLoadedMetadata={onLoadedMetadata}
-                onTimeUpdate={(e) =>
-                  !isSeeking && setCurrentTime(e.target.currentTime)
-                }
-                onEnded={handleSongEnd}
-              />
+             
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
@@ -870,6 +875,6 @@ function Footer() {
       )}
     </>
   );
-}
+})
 
 export default Footer;

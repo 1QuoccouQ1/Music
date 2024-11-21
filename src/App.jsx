@@ -8,19 +8,20 @@ import { UserProvider } from './ContextAPI/UserContext';
 import ModalListen from './component/ModalListen';
 
 function App() {
-  const isSetting = true;
+  const isSetting = false;
 
   return (
     <>
       <UserProvider>
-        <div className="flex h-screen bg-[#f4f7fe]">
-          {isSetting ? <Sidebar></Sidebar> :<SettingSidebar></SettingSidebar> }
-          <div className="w-full ml-56 mb-[104px]">
+        <div className="flex h-auto bg-[#f4f7fe]">
+          <Sidebar></Sidebar> 
+          <SettingSidebar></SettingSidebar> 
+          <div className="w-full ml-56 pb-[204px] bg-medium">
             <Nav></Nav>
-            <Outlet />
+            <Outlet   />
           </div>
           <ModalListen/>
-          {isSetting ? <Footer></Footer> : <></>  }
+         <Footer></Footer> 
         </div>
       </UserProvider>
     </>

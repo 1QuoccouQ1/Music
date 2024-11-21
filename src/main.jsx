@@ -44,64 +44,191 @@ import PayError from "./page/Payment/PayError.jsx";
 import Payment from "./page/Payment/Payment.jsx";
 import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
-import MusicPlayer from "./page/MusicPlayer.jsx";
+
+
+
+function changeIsSetting() {
+  localStorage.setItem("isSetting", true);
+  sessionStorage.removeItem("reloaded");
+  return null
+}
+
+function changeDashboard() {
+  localStorage.setItem("isSetting", false);
+  return null
+}
+function changeLogo() {
+  localStorage.setItem("isSetting", false);
+  return null
+}
+
+
 
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <App />,
+    children: [
     {
         path: "/",
-        element: <App />,
+        loader: changeLogo,
+        element: <Dashboard />,
+      },
+      {
+        path: "/Genre",
+        loader: changeDashboard,
+        element: <Genre />,
+      },
+      {
+        path: "/History",
+        loader: changeDashboard,
+        element: <History />,
+      },
+      {
+        path: "/Albums",
+        loader: changeDashboard,
+        element: <Albums />,
+      },
+      {
+        path: "/Artist",
+        loader: changeDashboard,
+        element: <ArtistGallery />,
+      },
+      {
+        path: "/PaySuccess",
+        loader: changeIsSetting,
+        element: <PaySuccess />,
+      },
+      {
+        path: "/PayFail",
+        loader: changeIsSetting,
+        element: <PayFail />,
+      },
+      {
+        path: "/PayError",
+        loader: changeIsSetting,
+        element: <PayError />,
+      },
+      {
+        path: "/Payment",
+        loader: changeIsSetting,
+        element: <Payment />,
+      },
+      {
+        path: "/BXH",
+        loader: changeDashboard,
+        element: <RankingBoard />,
+      },
+      {
+        path: "/Library",
+        loader: changeDashboard,
+        element: <MusicLibrary />,
+      },
+      {
+        path: "/MeChart",
+        loader: changeDashboard,
+        element: <ShowChart />,
+      },
+
+      {
+        path: "/Information",
+        element: <Information />,
         children: [
-            { path: "/", element: <Dashboard /> },
-            { path: "/Genre", element: <Genre /> },
-            { path: "/History", element: <History /> },
-            { path: "/Albums", element: <Albums /> },
-            { path: "/Artist", element: <ArtistGallery /> },
-            { path: "/PaySuccess", element: <PaySuccess /> },
-            { path: "/PayFail", element: <PayFail /> },
-            { path: "/PayError", element: <PayError /> },
-            { path: "/Payment", element: <Payment /> },
-            { path: "/BXH", element: <RankingBoard /> },
-            { path: "/Library", element: <MusicLibrary /> },
-            { path: "/MeChart", element: <ShowChart /> },
-            { path: "/MusicPlayer", element: <MusicPlayer /> },
-            {
-                path: "/Information",
-                element: <Information />,
-                children: [
-                    { index: true, element: <InfoLibrary /> },
-                    { path: "InfoLibrary", element: <InfoLibrary /> },
-                    { path: "ListenedMusic", element: <ListenedMusic /> },
-                    { path: "PlayLists", element: <PlayLists /> },
-                    { path: "InfoAlbums", element: <InfoAlbums /> },
-                    { path: "Artist", element: <Artist /> },
-                    { path: "Downloaded", element: <Downloaded /> },
-                    { path: "Followed", element: <Followed /> }
-                ]
-            },
-            {
-                path: "/ManagerHistory",
-                element: <ManagerHistory />,
-                children: [
-                    { index: true, element: <ManagePayment /> },
-                    { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
-                    { path: "ManagePayment", element: <ManagePayment /> }
-                ]
-            },
-            { path: "/ProfileEditPage", element: <ProfileEditPage /> },
-            { path: "/ChangePasswordPage", element: <ChangePasswordPage /> },
-            { path: "/InvoiceDetail", element: <InvoiceDetail /> },
-            { path: "/SettingsPage", element: <SettingsPage /> },
-            { path: "/ContactForm", element: <ContactForm /> },
-            { path: "/AboutUs", element: <AboutUs /> },
-            { path: "/Privacy", element: <Privacy /> },
-            { path: "/Upgrade", element: <Upgrade /> },
-            { path: "/ProfileArtist", element: <ProfileArtist /> }
+            { index: true, element: <InfoLibrary /> },
+            { path: "InfoLibrary", element: <InfoLibrary /> },
+            { path: "ListenedMusic", element: <ListenedMusic /> },
+            { path: "PlayLists", element: <PlayLists /> },
+            { path: "InfoAlbums", element: <InfoAlbums /> },
+            { path: "Artist", element: <Artist /> },
+            { path: "Downloaded", element: <Downloaded /> },
+            { path: "Followed", element: <Followed /> }
         ]
     },
-    { path: "/login", element: <Login /> },
-    { path: "/register", element: <Register /> },
-    { path: "/PasswordCode", element: <PasswordCode /> },
-    { path: "/PasswordReset", element: <PasswordReset /> },
+
+      {
+        path: "/ManagerHistory",
+        element: <ManagerHistory />,
+        children: [
+            { index: true, element: <ManagePayment /> },
+            { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
+            { path: "ManagePayment", element: <ManagePayment /> }
+        ]
+      },
+      //Route for Setting
+      {
+        path: "/ProfileEditPage",
+        loader: changeIsSetting,
+        element: <ProfileEditPage />,
+      },
+      {
+        path: "ChangePasswordPage",
+        loader: changeIsSetting,
+        element: <ChangePasswordPage />,
+      },
+      {
+        path: "PurchaseHistoryPage",
+        loader: changeIsSetting,
+        element: <PurchaseHistoryPage />,
+      },
+      {
+        path: "/InvoiceDetail",
+        loader: changeIsSetting,
+        element: <InvoiceDetail />,
+      },
+      {
+        path: "/SettingsPage",
+        loader: changeIsSetting,
+        element: <SettingsPage />,
+      },
+      {
+        path: "/ContactForm",
+        loader: changeIsSetting,
+        element: <ContactForm />,
+      },
+      {
+        path: "/AboutUs",
+        loader: changeIsSetting,
+        element: <AboutUs />,
+      },
+
+      {
+        path: "/Upgrade",
+        loader: changeDashboard,
+        element: <Upgrade />,
+      },
+      {
+        path: "/ProfileArtist",
+        loader: changeDashboard,
+        element: <ProfileArtist />,
+      },
+      {
+        path: "/Privacy",
+        loader: changeIsSetting,
+        element: <Privacy />,
+      },
+    ],
+  },
+  {
+    path: "/login",
+    element: <Login />,
+  },
+  {
+    path: "/register",
+    element: <Register />,
+  },
+  {
+    path: "/PasswordCode",
+    element: <PasswordCode />,
+  },
+  {
+    path: "/PasswordReset",
+    element: <PasswordReset />,
+  },
+  {
+    path: "/NewPassword",
+    element: <NewPassword />,
+  },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(

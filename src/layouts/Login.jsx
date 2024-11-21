@@ -3,6 +3,7 @@ import { useState, useRef, useEffect,useContext } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../ContextAPI/UserContext';
+import { Undo2 } from 'lucide-react';
 function Login() {
   // const { setUser } = useContext(UserContext); 
   const [language, setLanguage] = useState("vi");
@@ -15,7 +16,7 @@ function Login() {
   const [errors, setErrors] = useState({});
 
   const texts = {
-    vi: {
+    vi: { 
       title: "Đăng Nhập",
       emailLabel: "Email hoặc số điện thoại",
       passwordLabel: "Mật Khẩu",
@@ -81,7 +82,7 @@ function Login() {
 
     if (validate()) {
       try {
-        const response = await fetch('https://soundwave.io.vn/admin/public/api/users/login', {
+        const response = await fetch('https://admin.soundwave.io.vn/api/users/login', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -102,7 +103,8 @@ function Login() {
           
           // Lưu thông tin người dùng vào Context
           // setUser(data.user);  // data.user là thông tin người dùng trả về từ API
-          
+          localStorage.setItem('isSetting',false );
+
           navigate('/');
         } else {
           setErrors({
@@ -155,6 +157,7 @@ function Login() {
           </div>
         </div>
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+          <a href="/" className="cursor-pointer mb-4"><Undo2 /></a>
           <h1 className="text-2xl font-bold text-center mb-6">{texts[language].title}</h1>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
