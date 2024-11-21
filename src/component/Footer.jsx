@@ -14,7 +14,7 @@ import {
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { getMusics } from "../services/apiService";
-import React from 'react';
+import React from "react";
 
 const Footer = React.memo(function FooterComponent() {
   const {
@@ -25,10 +25,11 @@ const Footer = React.memo(function FooterComponent() {
     currentTime,
     setCurrentTime,
     setIsPlay,
-    isModal, setIsModal,isSetting
+    isModal,
+    setIsModal,
+    isSetting,
   } = useContext(UserContext);
 
-  
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
@@ -40,7 +41,7 @@ const Footer = React.memo(function FooterComponent() {
       } catch (error) {
         console.error("Error fetching data:", error);
         setIsLoading(false);
-      } 
+      }
     };
 
     fetchData();
@@ -238,11 +239,9 @@ const Footer = React.memo(function FooterComponent() {
     setVolume(volume); // Cập nhật giá trị volume
   }, [volume]); // Chạy khi volume thay đổi
 
-  
-
   useEffect(() => {
     // Khi currentSongIndex thay đổi, cập nhật thông tin bài hát vào UserContext
-    if (listsongs.length === 0) return; 
+    if (listsongs.length === 0) return;
 
     const song = listsongs[currentSongIndex];
     setCurrentSong({
@@ -265,7 +264,6 @@ const Footer = React.memo(function FooterComponent() {
     }
   }, [currentSongIndex, selectedQuality]);
 
- 
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (Playlist.current && !Playlist.current.contains(event.target)) {
@@ -273,12 +271,12 @@ const Footer = React.memo(function FooterComponent() {
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
     return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+      document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-  
+
   if (isLoading) {
     return null;
   }
@@ -288,22 +286,20 @@ const Footer = React.memo(function FooterComponent() {
   const offset = circumference - Number(volume) * circumference;
   return (
     <>
-     {/* Audio Element */}
-     <audio
-                ref={audioRef}
-                onLoadedMetadata={onLoadedMetadata}
-                onTimeUpdate={(e) =>
-                  !isSeeking && setCurrentTime(e.target.currentTime)
-                }
-                onEnded={handleSongEnd}
-              />
+      {/* Audio Element */}
+      <audio
+        ref={audioRef}
+        onLoadedMetadata={onLoadedMetadata}
+        onTimeUpdate={(e) => !isSeeking && setCurrentTime(e.target.currentTime)}
+        onEnded={handleSongEnd}
+      />
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white  w-[350px] rounded-r-lg">
             <div className="flex items-center ">
               <div className="relative">
                 <img
-                  className="inline-block size-20"
+                  className="inline-block size-20 max-xl:size-14 "
                   src={listsongs[currentSongIndex].song_image}
                 />
                 {isPlaying && (
@@ -334,7 +330,7 @@ const Footer = React.memo(function FooterComponent() {
               onClick={() => {
                 setIsModal(!isModal);
               }}
-              className="size-6 cursor-pointer border border-white  rounded-full flex items-center justify-center"
+              className="size-6 max-xl:size-4 cursor-pointer border border-white  rounded-full flex items-center justify-center"
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -396,7 +392,6 @@ const Footer = React.memo(function FooterComponent() {
                 <div className="flex-grow mx-4 w-[660px]">
                   <div className="relative">
                     <input
-
                       type="range"
                       min="0"
                       max={duration}
@@ -490,8 +485,6 @@ const Footer = React.memo(function FooterComponent() {
                 </div>
               </div>
 
-             
-
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
@@ -554,7 +547,7 @@ const Footer = React.memo(function FooterComponent() {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                strokeWidth={1.5}
+                strokeWidth={1.5}  
                 stroke="currentColor"
                 className="size-3"
               >
@@ -568,7 +561,10 @@ const Footer = React.memo(function FooterComponent() {
 
             <p>Bài Tiếp Theo</p>
             {isAlbum && (
-              <div ref={Playlist} className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute bottom-0 -translate-y-[15%] right-0 overflow-hidden">
+              <div
+                ref={Playlist}
+                className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute bottom-0 -translate-y-[15%] right-0 overflow-hidden"
+              >
                 <h2 className="text-lg ml-2 mb-4">Danh sách phát</h2>
                 <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4">
                   <div className="w-12 h-12 mr-3 relative">
@@ -577,10 +573,23 @@ const Footer = React.memo(function FooterComponent() {
                       alt="Song thumbnail"
                       className="w-full h-full rounded  "
                     />
-                    <PlayArrowIcon
-                      className="w-7 h-7 mr-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
-                      fontSize="large"
-                    />
+                    {isPlaying ? (
+                      <i
+                        style={{
+                          backgroundImage: `url("https://zmp3-static.zmdcdn.me/skins/zmp3-v6.1/images/icons/icon-playing.gif")`,
+                          backgroundPosition: "center",
+                          backgroundSize: "cover",
+                        }}
+                        className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 size-5 "
+                      >
+                        {" "}
+                      </i>
+                    ) : (
+                      <PlayArrowIcon
+                        className="w-7 h-7 mr-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
+                        fontSize="large"
+                      />
+                    )}
                   </div>
                   <div>
                     <h3 className="font-medium">
@@ -684,8 +693,6 @@ const Footer = React.memo(function FooterComponent() {
                   </div>
                 </div>
               </div>
-
-             
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
@@ -875,6 +882,6 @@ const Footer = React.memo(function FooterComponent() {
       )}
     </>
   );
-})
+});
 
 export default Footer;
