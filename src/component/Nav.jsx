@@ -24,9 +24,18 @@ function Nav() {
 
     // Hàm xử lý logout
     const handleLogout = async () => {
+
       try {
+        const token = localStorage.getItem('access_token');
+        const access_token = token.slice(1, -1);
         // Gửi yêu cầu logout tới API
-        // await fetch('https://soundwave.io.vn/admin/public/api/logout', { method: 'POST' }); 
+        await fetch('https://admin.soundwave.io.vn/api/logout', { 
+          method: 'POST',
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${access_token}`
+          }
+        }); 
   
         // Xóa user khỏi localStorage và cập nhật context
         localStorage.removeItem('user');
