@@ -1,29 +1,82 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import React, { useState, useEffect } from "react";
+import axios from "axios";
+
 
 function Dashboard() {
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
   const [topLike, setTopLike] = useState([]);
+  const [countries, setCountries] = useState([]); // Dữ liệu quốc gia từ API /quoc-gia
+  const [activeTab, setActiveTab] = useState(1); // Quốc gia đang được chọn
+  const [songs, setSongs] = useState([]); // Danh sách bài hát của quốc gia đang chọn
+  const [loading, setLoading] = useState(false); // Trạng thái tải dữ liệu
+  const [artists, setArtists] = useState([]);
+  const [genres, setGenres] = useState([]);
 
   const fetchData = async () => {
     try {
       const trendingResponse = await fetch("https://admin.soundwave.io.vn/api/trending");
       const topListenResponse = await fetch("https://admin.soundwave.io.vn/api/top-listen");
       const topLikeResponse = await fetch("https://admin.soundwave.io.vn/api/top-like");
+      const artistList = await fetch("https://admin.soundwave.io.vn/api/ca-si");
+      const genresList = await fetch("https://admin.soundwave.io.vn/api/the-loai");
 
       const trendingData = await trendingResponse.json();
       const topListenData = await topListenResponse.json();
       const topLikeData = await topLikeResponse.json();
+      const artistData = await artistList.json();
+      const genresData = await genresList.json();
 
       setTrending(trendingData);
       setTopListen(topListenData);
       setTopLike(topLikeData);
+      setArtists(artistData);
+      setGenres(genresData);
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
     }
   };
+
+   // Lấy danh sách quốc gia khi component được render lần đầu
+   useEffect(() => {
+    const fetchCountries = async () => {
+      try {
+        const response = await axios.get("https://admin.soundwave.io.vn/api/quoc-gia"); // Gọi API /quoc-gia
+        setCountries(response.data); // Lưu danh sách quốc gia vào state
+        if (response.data.length > 0) {
+          setActiveTab(response.data[0].id); // Đặt quốc gia đầu tiên làm mặc định
+        }
+      } catch (error) {
+        console.error("Error fetching countries:", error);
+      }
+    };
+    fetchCountries();
+  }, []);
+
+  // Lấy danh sách bài hát khi activeTab thay đổi
+  useEffect(() => {
+    if (activeTab) {
+      const fetchSongs = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(`https://admin.soundwave.io.vn/api/quoc-gia/${activeTab}/bai-hat`); // Gọi API /bai-hat với ID quốc gia
+          
+         if (response.status === 200) {
+           setSongs(response.data); // Lưu danh sách bài hát vào state
+         } else {
+           setSongs([]); // Nếu không có bài hát nào thì set state rỗng
+          }
+        } catch (error) {
+          console.error("Error fetching songs:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchSongs();
+    }
+  }, [activeTab]);
 
   useEffect(() => {
     const isSetting = localStorage.getItem("isSetting");
@@ -36,178 +89,41 @@ function Dashboard() {
     }
     fetchData();
   }, []);
-  const [activeTab, setActiveTab] = useState("vietnam");
 
-  // Nội dung bảng xếp hạng của từng quốc gia
-  const chartData = {
-    vietnam: [
-      {
-        id: 1,
-        song: "Nép Vào Nghe Anh Hát VN",
-        artist: "Hoàng Dũng",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 2,
-        song: "Nép Vào Nghe Anh Hát VN",
-        artist: "Hoàng Dũng",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 3,
-        song: "Nép Vào Nghe Anh Hát VN",
-        artist: "Hoàng Dũng",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 4,
-        song: "Nép Vào Nghe Anh Hát VN",
-        artist: "Hoàng Dũng",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 5,
-        song: "Nép Vào Nghe Anh Hát VN",
-        artist: "Hoàng Dũng",
-        img: "../imgs/image (6).png",
-      },
-      // Thêm dữ liệu khác nếu cần
-    ],
-    europe: [
-      {
-        id: 1,
-        song: "Song Europe 1 europe ",
-        artist: "Artist Europe 1",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 2,
-        song: "Song Europe 2 europe",
-        artist: "Artist Europe 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 3,
-        song: "Song Europe 2 europe",
-        artist: "Artist Europe 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 4,
-        song: "Song Europe 2 europe",
-        artist: "Artist Europe 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 5,
-        song: "Song Europe 2 europe",
-        artist: "Artist Europe 2",
-        img: "../imgs/image (6).png",
-      },
-      // Thêm dữ liệu khác nếu cần
-    ],
-    korea: [
-      {
-        id: 1,
-        song: "Song Korea 1korea",
-        artist: "Artist Korea 1",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 2,
-        song: "Song Korea 2 korea",
-        artist: "Artist Korea 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 3,
-        song: "Song Korea 2 korea",
-        artist: "Artist Korea 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 4,
-        song: "Song Korea 2 korea",
-        artist: "Artist Korea 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 5,
-        song: "Song Korea 2 korea",
-        artist: "Artist Korea 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 6,
-        song: "Song Korea 2 korea",
-        artist: "Artist Korea 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 7,
-        song: "Song Korea 2 korea",
-        artist: "Artist Korea 2",
-        img: "../imgs/image (6).png",
-      },
-    ],
-    usa: [
-      {
-        id: 1,
-        song: "Song USA 1 usa",
-        artist: "Artist USA 1",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 2,
-        song: "Song USA 2 usa",
-        artist: "Artist USA 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 3,
-        song: "Song USA 2 usa",
-        artist: "Artist USA 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 4,
-        song: "Song USA 2 usa",
-        artist: "Artist USA 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 5,
-        song: "Song USA 2 usa",
-        artist: "Artist USA 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 6,
-        song: "Song USA 2 usa",
-        artist: "Artist USA 2",
-        img: "../imgs/image (6).png",
-      },
-      {
-        id: 7,
-        song: "Song USA 2 usa",
-        artist: "Artist USA 2",
-        img: "../imgs/image (6).png",
-      },
-    ],
+  // Hàm render danh sách quốc gia
+  const renderCountries = () => {
+    return countries.map((country) => (
+      <p
+        key={country.id}
+        className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
+          activeTab === country.id
+            ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
+            : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
+        }`}
+        onClick={() => setActiveTab(country.id)} // Đổi quốc gia khi nhấn vào tab
+      >
+        {country.name_country}
+      </p>
+    ));
   };
 
-  // Hàm render dữ liệu bảng xếp hạng theo quốc gia
-  const renderChart = () => {
-    const data = chartData[activeTab] || [];
-    return data.map((item, index) => (
-      <div className="w-1/3 pr-10 mb-10" key={item.id}>
+  // Hàm render danh sách bài hát
+  const renderSongs = () => {
+    if (loading) {
+      return <p>Đang tải dữ liệu...</p>;
+    }
+    if (songs.length === 0) {
+      return <p>Không có bài hát nào được tìm thấy.</p>;
+    }
+    return songs.map((song, index) => (
+      <div className="w-1/3 pr-10 mb-10" key={song.id}>
         <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer">
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
-          <img src={item.img} alt={item.song} />
+          <img className="size-16 rounded-md" src={song.song_image} alt={song.description} />
           <p className="text-base ml-3">
-            {item.song}
+            {song.song_name}
             <br />
-            <span className="text-xs text-slate-600">{item.artist}</span>
+            <span className="text-xs text-slate-600">{song.composer}</span>
           </p>
         </div>
       </div>
@@ -302,46 +218,7 @@ function Dashboard() {
         <h1 className="text-3xl font-medium ">Bảng Xếp Hạng Hàng Tuần </h1>
         <div className="flex items-center justify-between my-7">
           <div className="flex items-center text-sm tracking-wide ">
-            <p
-              className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
-                activeTab === "vietnam"
-                  ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-                  : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-              }`}
-              onClick={() => setActiveTab("vietnam")}
-            >
-              Việt Nam
-            </p>
-            <p
-              className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
-                activeTab === "europe"
-                  ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-                  : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-              }`}
-              onClick={() => setActiveTab("europe")}
-            >
-              Âu Mỹ
-            </p>
-            <p
-              className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
-                activeTab === "korea"
-                  ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-                  : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-              }`}
-              onClick={() => setActiveTab("korea")}
-            >
-              Hàn Quốc
-            </p>
-            <p
-              className={`cursor-pointer duration-300 py-2 px-8 rounded-full ${
-                activeTab === "usa"
-                  ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-                  : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-              }`}
-              onClick={() => setActiveTab("usa")}
-            >
-              Hoa Kỳ
-            </p>
+          {renderCountries()} 
           </div>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
             <p className="text-sm  ">Xem Thêm </p>
@@ -362,7 +239,7 @@ function Dashboard() {
           </div>
         </div>
         <div className="flex items-center mt-16 flex-wrap ">
-          {renderChart()}
+          {renderSongs()}
         </div>
       </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
@@ -499,126 +376,19 @@ function Dashboard() {
           slidesPerView="auto" // Số item hiện trong 1 lần
           className="mySwiper "
         >
-          <SwiperSlide style={{ width: "auto" }}>
+        {artists.map((artist) => (
+          <SwiperSlide key={artist.id} style={{ width: "auto" }}>
             <div className="text-center">
               <img
-                src="../imgs/image (13).png"
-                className="rounded-full mb-3  w-full"
+                src={artist.singer_image} // URL hình ảnh của nghệ sĩ
+                alt={artist.singer_name}
+                className="rounded-full mb-3 w-full size-64"
               />
-              <p className="font-medium mb-2 text-base">Sơn Tùng - MTP</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+              <p className="font-medium mb-2 text-base">{artist.singer_name}</p>
+              <p className="text-sm text-slate-700">Ca Sĩ</p>
             </div>
           </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (14).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">RPT MCK</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (15).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">VŨ.</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (16).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">KARIK</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (17).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">Bích Phương</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (18).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">Đen Vâu</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (13).png"
-                className="rounded-full mb-3  w-full"
-              />
-              <p className="font-medium mb-2 text-base">Sơn Tùng - MTP</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (14).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">RPT MCK</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (15).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">VŨ.</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (16).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">KARIK</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (17).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">Bích Phương</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src="../imgs/image (18).png"
-                className="rounded-full mb-3 w-full"
-              />
-              <p className="font-medium mb-2 text-base">Đen Vâu</p>
-              <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-            </div>
-          </SwiperSlide>
+        ))}
         </Swiper>
       </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
@@ -657,86 +427,6 @@ function Dashboard() {
           ))}
         </div>
       </section>
-      <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
-        <div className="flex items-center justify-between">
-          <h1 className="text-3xl font-medium mb-16">Chill</h1>
-          <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <p className="text-sm  ">Xem Thêm </p>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </div>
-        </div>
-        <Swiper
-          spaceBetween={20}
-          slidesPerView="auto" // Số item hiện trong 1 lần
-          className="mySwiper "
-        >
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png"
-                className=" mb-3 "
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (3) 2.png"
-                className=" mb-3 "
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center ">
-              <img src="../imgs/image 16.png" className=" mb-3 " />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png"
-                className=" mb-3 "
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (3) 2.png"
-                className=" mb-3 "
-              />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img src="../imgs/image 16.png" className=" mb-3 " />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img src="../imgs/image 16.png" className=" mb-3 " />
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img src="../imgs/image 16.png" className=" mb-3 " />
-            </div>
-          </SwiperSlide>
-        </Swiper>
-      </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto pb-48 tracking-wide">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-medium mb-16">Thể Loại</h1>
@@ -759,79 +449,20 @@ function Dashboard() {
           </div>
         </div>
         <div className="flex items-center  flex-wrap ">
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">WORLD MUSIC</p>
+        {genres.map((genre) => (
+          <div key={genre.id} className="w-1/6 pr-3 pb-3">
+            <div
+              className="w-full h-64 rounded-xl flex items-center justify-center bg-cover bg-center"
+              style={{
+                backgroundImage: `url(${genre.background})`,
+              }}
+            >
+              <p className="font-bold text-2xl  p-2 rounded-lg">
+                {genre.categorie_name}
+              </p>
             </div>
           </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#91ed86] to-[#f7458c] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">VIỆT NAM </p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#ad83f0] to-[#16de3e] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">ÂU MỸ</p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#d6e785] to-[#d62f72] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">HOA KỲ</p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#a3cc7e] to-[#1fe3f5] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">TRUNG QUỐC</p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#75c17d] to-[#c12424] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">K-POP</p>
-            </div>
-          </div>
-
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#63b278] to-[#d92f73] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">LO-FI</p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#e4e78c] to-[#235bdf] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">TRỮ TÌNH</p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#6db0b1] to-[#e7da22] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">RAP VIỆT </p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#e59085] to-[#23c479] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">REMIX</p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#539c62] to-[#4a0c25] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">ROCK</p>
-            </div>
-          </div>
-          <div className="w-1/6 pr-3 pb-3">
-            <div className="w-full bg-gradient-to-r from-[#79cdc3] to-[#f118df] h-64 rounded-xl flex items-center justify-center">
-              {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 "/> */}
-              <p className="font-bold text-2xl ">THƯ GIÃN</p>
-            </div>
-          </div>
+        ))}
         </div>
       </section>
     </>
