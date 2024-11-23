@@ -18,7 +18,7 @@ function ArtistRankingCard({ rank, artist, song }) {
                  <div className="relative group">
                  <img
                     className='w-16 h-16 rounded-full duration-150 hover:scale-125'
-                    src='https://i.pinimg.com/736x/bb/03/be/bb03be3373d101ad3e175fd10bb74afd.jpg'
+                    src={artist.imageUrl}
                     alt={artist.name}
                 />
                     {/* Nút Play chỉ hiện khi hover */}
