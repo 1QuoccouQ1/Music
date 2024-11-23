@@ -190,7 +190,7 @@ const Footer = React.memo(function FooterComponent() {
       } else {
         setSongPlayCount(songPlayCount + 1);
        
-        if (songPlayCount >= 1) {
+        if (songPlayCount >= 3) {
           setIsPlayingAd(true);
           fetchAd();
         } else {
