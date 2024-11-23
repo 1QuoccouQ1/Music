@@ -1,5 +1,5 @@
 import MusicPlayer from "./MusicPlayer";
-import { Heart, MoreHorizontal, Play } from "lucide-react";
+import { FastForward, Heart, MoreHorizontal, Play } from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
@@ -79,6 +79,7 @@ const Footer = React.memo(function FooterComponent() {
     },
   ];
 
+  
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
@@ -101,7 +102,7 @@ const Footer = React.memo(function FooterComponent() {
   const [songPlayCount, setSongPlayCount] = useState(0); // Đếm số bài hát đã nghe
   const [isPlayingAd, setIsPlayingAd] = useState(false); // Trạng thái phát quảng cáo
 
-
+  console.log("isPlayingAd", isPlayingAd);
    // Hàm gọi API nhạc quảng cáo
   const fetchAd = async () => {
     try {
@@ -109,7 +110,8 @@ const Footer = React.memo(function FooterComponent() {
       const data = await response.json();
       console.log("Quảng cáo:", data);
       if (data && data.file_path) {
-        setIsPlayingAd(true); // Bật trạng thái phát quảng cáo
+       // Bật trạng thái phát quảng cáo
+        console.log("trang thai" ,isPlayingAd);
         audioRef.current.src = data.file_path; // Cập nhật src của audio
         audioRef.current.play(); // Phát quảng cáo
       }
@@ -143,10 +145,6 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   const handleNextSong = () => {
-    console.log(songPlayCount);
-    console.log("songPlayCount" ,isPlayingAd);
-
-    if (isPlayingAd) return;
     if (isShuffling) {
       let randomIndex;
       do {
@@ -175,21 +173,27 @@ const Footer = React.memo(function FooterComponent() {
       audioRef.current.play(); // Lặp lại bài hát hiện tại
     } else {
       if (isPlayingAd) {
-        console.log("Đã phát quảng cáo xong");
         setIsPlayingAd(false);
-        setTimeout(() => {
-        console.log("isPlayingAd" ,isPlayingAd);
-
-        handleNextSong();
-        }, 3000);
         setSongPlayCount(0);
+        if (isShuffling) {
+          let randomIndex;
+          do {
+            randomIndex = Math.floor(Math.random() * listsongs.length);
+          } while (randomIndex === currentSongIndex);
+          setCurrentSongIndex(randomIndex);
+        } else {
+          setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
+        }
+        setIsPlaying(true);
+        setIsPlay(true);
+        
       } else {
-        const newCount = songPlayCount + 1;
-        // console.log("newCount", newCount);
-        if (newCount >= 3) {
+        setSongPlayCount(songPlayCount + 1);
+       
+        if (songPlayCount >= 1) {
+          setIsPlayingAd(true);
           fetchAd();
         } else {
-          setSongPlayCount(newCount);
           handleNextSong();
         }
       }
@@ -432,6 +436,7 @@ const Footer = React.memo(function FooterComponent() {
                   <button
                     className="p-3 bg-gray-800 rounded-full"
                     onClick={handleNextSong}
+                    
                   >
                     <SkipForward size={24} />
                   </button>
