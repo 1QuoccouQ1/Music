@@ -23,20 +23,19 @@ function SettingSidebar() {
     const handleLogout = async () => {
 
         try {
-          const token = localStorage.getItem('access_token');
-          const access_token = token.slice(1, -1);
           // Gửi yêu cầu logout tới API
           await fetch('https://admin.soundwave.io.vn/api/logout', { 
             method: 'POST',
             headers: {
               "Content-Type": "application/json",
-              'Authorization': `Bearer ${access_token}`
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
             }
           }); 
     
           // Xóa user khỏi localStorage và cập nhật context
           localStorage.removeItem('user');
-    
+          localStorage.removeItem('access_token');
+
           // Chuyển hướng tới trang /login
           navigate('/login');
         } catch (error) {
