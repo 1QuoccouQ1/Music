@@ -152,7 +152,7 @@ function Register() {
         });
   
         // Kiểm tra trạng thái của phản hồi
-        if (response.status === 200) {
+        if (response.status === 200 || response.status === 201) {
           toast.success("Đăng ký thành công !");
 
 
@@ -316,10 +316,9 @@ function Register() {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
               >
-                {/* <option value=""></option> */}
-                <option value="male">{texts[language].male}</option>
-                <option value="female">{texts[language].female}</option>
-                <option value="other">{texts[language].other}</option>
+                <option value="Khac">{texts[language].other}</option>
+                <option value="Nam">{texts[language].male}</option>ß
+                <option value="Nu">{texts[language].female}</option>ß
               </select>
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
               {errors.form && <p className="text-red-500 text-sm mt-1">{errors.form}</p>}

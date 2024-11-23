@@ -11,12 +11,37 @@ import React from 'react';
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom"; 
 
 function SettingSidebar() {
-    
+    const navigate = useNavigate();
     const {
         isSetting
       } = useContext(UserContext);
+
+
+    const handleLogout = async () => {
+
+        try {
+          // Gửi yêu cầu logout tới API
+          await fetch('https://admin.soundwave.io.vn/api/logout', { 
+            method: 'POST',
+            headers: {
+              "Content-Type": "application/json",
+              'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            }
+          }); 
+    
+          // Xóa user khỏi localStorage và cập nhật context
+          localStorage.removeItem('user');
+          localStorage.removeItem('access_token');
+
+          // Chuyển hướng tới trang /login
+          navigate('/login');
+        } catch (error) {
+          console.error('Logout failed:', error);
+        }
+      };
 
     if (!isSetting) return null;
 
@@ -92,7 +117,7 @@ function SettingSidebar() {
                                     <GroupsIcon fontSize='small' />
                                     <span>Về Chúng Tôi</span>
                                 </Link>
-                                <div className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90'>
+                                <div onClick={handleLogout}  className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90'>
                                     Đăng Xuất
                                 </div>
                             </div>
