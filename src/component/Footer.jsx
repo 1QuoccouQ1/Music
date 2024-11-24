@@ -102,7 +102,6 @@ const Footer = React.memo(function FooterComponent() {
   const [songPlayCount, setSongPlayCount] = useState(0); // Đếm số bài hát đã nghe
   const [isPlayingAd, setIsPlayingAd] = useState(false); // Trạng thái phát quảng cáo
 
-  console.log("isPlayingAd", isPlayingAd);
    // Hàm gọi API nhạc quảng cáo
   const fetchAd = async () => {
     try {
