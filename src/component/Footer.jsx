@@ -407,6 +407,7 @@ const Footer = React.memo(function FooterComponent() {
                   <button
                     className="p-3 bg-gray-800 rounded-full "
                     onClick={handlePreviousSong}
+                    disabled={isPlayingAd}
                   >
                     <SkipBack size={24} />
                   </button>
@@ -436,6 +437,7 @@ const Footer = React.memo(function FooterComponent() {
                   <button
                     className="p-3 bg-gray-800 rounded-full"
                     onClick={handleNextSong}
+                    disabled={isPlayingAd}
                     
                   >
                     <SkipForward size={24} />
