@@ -59,7 +59,7 @@ function SettingSidebar() {
                                 </Link>
                                 <Link
                                     className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300'
-                                   to='/PurchaseHistoryPage'
+                                   to='/ManagerHistory'
                                 >
                                     <ReceiptLongOutlinedIcon fontSize='small' />
                                     <span>Lịch sử Mua Hàng</span>

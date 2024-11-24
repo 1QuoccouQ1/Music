@@ -6,6 +6,8 @@ function ChangePasswordPage() {
   const [repeatPassword, setRepeatPassword] = useState('');
   const [validationMessage, setValidationMessage] = useState('');
   const [isValid, setIsValid] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const validatePassword = () => {
     const hasLetter = /[a-zA-Z]/.test(newPassword);
@@ -26,14 +28,50 @@ function ChangePasswordPage() {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (isValid && newPassword === repeatPassword) {
-      alert('Mật khẩu đã được cập nhật thành công!');
-    } else if (newPassword !== repeatPassword) {
+
+    // Check if passwords match
+    if (newPassword !== repeatPassword) {
       alert('Mật khẩu mới và mật khẩu lặp lại không trùng khớp.');
-    } else {
+      return;
+    }
+
+    if (!isValid) {
       alert('Vui lòng đảm bảo mật khẩu của bạn đáp ứng các điều kiện.');
+      return;
+    }
+
+    setIsSubmitting(true);
+    setErrorMessage('');
+
+    try {
+      // Make API call to update password
+      const response = await fetch('/api/{id}/newpass-member', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          password: currentPassword,
+          new_password: newPassword,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        // Handle success
+        alert('Mật khẩu đã được cập nhật thành công!');
+      } else {
+        // Handle error response
+        setErrorMessage(data.message || 'Có lỗi xảy ra khi cập nhật mật khẩu.');
+      }
+    } catch (error) {
+      // Handle network error
+      setErrorMessage('Lỗi kết nối với máy chủ.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -94,6 +132,9 @@ function ChangePasswordPage() {
             />
           </div>
 
+          {/* Error message */}
+          {errorMessage && <p className="text-red-600 text-sm mt-3">{errorMessage}</p>}
+
           {/* Nút */}
           <div className="flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4">
             <button
@@ -112,9 +153,9 @@ function ChangePasswordPage() {
             <button
               type="submit"
               className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 text-white py-2 px-4 rounded-full w-full sm:w-auto"
-              disabled={!isValid}
+              disabled={isSubmitting || !isValid}
             >
-              Cập nhật mật khẩu mới
+              {isSubmitting ? 'Đang cập nhật...' : 'Cập nhật mật khẩu mới'}
             </button>
           </div>
         </form>

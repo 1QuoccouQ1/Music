@@ -34,7 +34,6 @@ const SettingsPage = () => {
         { name: 'Chương trình khuyến mãi' },
         { name: 'Album và Single mới' },
         { name: 'Cập nhật ứng dụng/Web' },
-        { name: 'SoundWave Wrapped' }
     ];
 
     return (
@@ -121,75 +120,6 @@ const SettingsPage = () => {
                                 )}
                             </div>
                         </div>
-
-                        {/* Phát Nhạc - Nút bật/tắt */}
-                        <div className='flex items-center justify-between mb-6'>
-                            <span className='text-lg font-bold'>Phát Nhạc</span>
-                            <button
-                                onClick={toggleFullScreen}
-                                className={`relative w-12 h-6 rounded-full transition-colors duration-200 ${
-                                    isFullScreen ? 'bg-pink-500' : 'bg-gray-600'
-                                }`}
-                            >
-                                <span
-                                    className={`absolute left-0 top-0.5 w-5 h-5 bg-white rounded-full transition-transform duration-200 transform ${
-                                        isFullScreen
-                                            ? 'translate-x-6'
-                                            : 'translate-x-1'
-                                    }`}
-                                ></span>
-                            </button>
-                        </div>
-
-                        {/* Lựa chọn giao diện */}
-                        <div className='flex items-center justify-between mb-6 relative'>
-                            <label className='text-lg font-bold'>
-                                Lựa chọn giao diện
-                            </label>
-                            <div className='relative w-32 text-left'>
-                                <div
-                                    onClick={() =>
-                                        setIsInterfaceOpen(!isInterfaceOpen)
-                                    }
-                                    className='cursor-pointer bg-gray-800 text-white px-4 py-2 rounded-lg flex justify-between items-center'
-                                >
-                                    <span>{interfaceOption}</span>
-                                    <span className='ml-2'>&#x25BC;</span>
-                                </div>
-                                {isInterfaceOpen && (
-                                    <div className='absolute left-0 mt-2 w-full bg-gray-900 text-white rounded-lg shadow-lg z-20'>
-                                        <ul className='py-2'>
-                                            <li
-                                                onClick={() =>
-                                                    handleInterfaceOptionChange(
-                                                        'Tối'
-                                                    )
-                                                }
-                                                className='flex justify-between items-center px-4 py-2 hover:bg-gray-700 cursor-pointer'
-                                            >
-                                                <span>Tối</span>
-                                                {interfaceOption === 'Tối' && (
-                                                    <span className='ml-2 w-2 h-2 bg-pink-500 rounded-full'></span>
-                                                )}
-                                            </li>
-                                            <li
-                                                onClick={() =>
-                                                    handleInterfaceOptionChange(
-                                                        'Sáng'
-                                                    )
-                                                }
-                                                className='flex justify-between items-center px-4 py-2 hover:bg-gray-700 cursor-pointer'
-                                            >
-                                                <span>Sáng</span>
-                                                {interfaceOption === 'Sáng' && (
-                                                    <span className='ml-2 w-2 h-2 bg-pink-500 rounded-full'></span>
-                                                )}
-                                            </li>
-                                        </ul>
-                                    </div>
-                                )}
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -205,7 +135,7 @@ const SettingsPage = () => {
             <div className='w-full max-w-[912px] mb-10'>
                 <div className='flex items-center justify-between mb-4'>
                     <h2 className='text-lg font-semibold text-gray-300'>
-                        Phương thức đăng nhập hiện tại
+                        Đăng nhập hiện tại
                     </h2>
                     <a
                         href='#'
@@ -260,76 +190,10 @@ const SettingsPage = () => {
                             20/09/2024 lúc 02:53:14
                         </p>
                     </div>
-
-                    <div className='space-y-4'>
-                        {/* Chrome */}
-                        <div className='bg-gray-800 rounded-lg p-3 flex flex-col justify-between shadow-lg hover:shadow-xl transition-shadow duration-200 ease-in-out'>
-                            <div>
-                                <div className='flex items-center justify-between mb-4 border-b-2 border-[#7C8EA5] pb-2'>
-                                    <div className='text-sm font-semibold flex items-center space-x-3'>
-                                        <GoogleIcon
-                                            className='text-gray-400'
-                                            fontSize='medium'
-                                        />
-                                        <span>Chrome</span>
-                                    </div>
-                                    <span className='text-red-500 font-semibold text-sm'>
-                                        Đã đăng xuất
-                                    </span>
-                                </div>
-                            </div>
-                            <p className='text-sm text-white '>
-                                <CalendarMonthIcon fontSize='medium' /> Hôm nay,
-                                20/09/2024 lúc 02:53:14
-                            </p>
-                        </div>
-
-                        {/* Facebook */}
-                        <div className='bg-gray-800 rounded-lg p-2 flex flex-col justify-between shadow-lg hover:shadow-xl transition-shadow duration-200 ease-in-out'>
-                            <div>
-                                <div className='flex items-center justify-between mb-4 border-b-2 border-[#7C8EA5]'>
-                                    <div className='text-lg font-semibold flex items-center space-x-3'>
-                                        <FacebookIcon
-                                            className='text-blue-500'
-                                            fontSize='medium'
-                                        />
-                                        <span>Facebook</span>
-                                    </div>
-                                    <span className='text-red-500 font-semibold text-sm'>
-                                        Đã đăng xuất
-                                    </span>
-                                </div>
-                            </div>
-                            <p className='text-sm text-white '>
-                                <CalendarMonthIcon fontSize='medium' /> Hôm nay,
-                                20/09/2024 lúc 02:53:14
-                            </p>
-                        </div>
-                    </div>
                 </div>
             </div>
 
-            {/* Phương thức đăng nhập có sẵn */}
-            <div className='w-full max-w-[912px]'>
-                <h2 className='text-lg font-semibold mb-4 text-gray-300'>
-                    Phương thức đăng nhập có sẵn
-                </h2>
-                <div className='bg-gray-800 rounded-lg p-2 flex items-center justify-between shadow-lg hover:shadow-xl transition-shadow duration-200 ease-in-out max-w-[444px]'>
-                    <div className='flex items-center space-x-3'>
-                        <AppleIcon
-                            className='text-gray-900 bg-white rounded-md '
-                            fontSize='medium'
-                        />
-                        <span className='text-sm font-semibold'>Apple</span>
-                    </div>
-                    <a
-                        href='#'
-                        className='text-pink-500 rounded-full px-6 py-2 font-semibold hover:bg-pink-500 hover:text-white transition-colors duration-200 ease-in-out'
-                    >
-                        Thêm <NavigateNextIcon />
-                    </a>
-                </div>
-            </div>
+            
 
             <div className='bg-[#0f172a]  p-10 flex flex-col items-start'>
                 {/* Title */}
@@ -350,7 +214,7 @@ const SettingsPage = () => {
                             {/* Dropdown Button and Indicator */}
                             <div className='flex items-center space-x-2'>
                                 {/* Dropdown Button */}
-                                <button className='bg-[#1a1f2e] text-white text-sm font-medium px-4 py-2 rounded-md flex items-center justify-between w-28 shadow-md'>
+                                <button className='bg-[#1a1f2e] text-white text-sm font-medium px-4 py-2 rounded-md flex items-center justify-between w-32 shadow-md'>
                                     Mặc định
                                     <svg
                                         className='w-4 h-4 ml-2'

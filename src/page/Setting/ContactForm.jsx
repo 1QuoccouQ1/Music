@@ -24,24 +24,20 @@ const ContactForm = () => {
     };
 
     return (
-        <div className='bg-gray-900 min-h-screen flex items-center justify-center pt-3 '>
-            <div>
-                <h1 className='text-3xl font-semibold text-white mb-6 mt-16 '>
+        <div className='bg-gray-900 min-h-screen flex items-center justify-center px-4 sm:px-6 md:px-8'>
+            <div className='w-full max-w-3xl'>
+                <h1 className='text-3xl font-semibold text-white mb-6 mt-6 text-center'>
                     Liên hệ với chúng tôi
                 </h1>
-                <div className='  py-14 px-[190px] rounded-lg max-w-4xl w-full border-4 border-indigo-500/5'>
-                    <p className='text-gray-400  mb-6'>
-                        Chúng tôi luôn ghi nhận các đóng góp ý kiến của bạn để
-                        cải tiến và nâng cấp sản phẩm SoundWave ngày một hoàn
-                        thiện và hữu ích hơn. Đừng ngại chia sẻ ý tưởng cho
-                        chúng tôi.
+                <div className='bg-gray-900 py-10 px-8 sm:px-8 lg:px-12 rounded-lg border-4 border-indigo-500/5 shadow-lg '>
+                    <p className='text-gray-400 mb-6 text-center'>
+                        Chúng tôi luôn ghi nhận các đóng góp ý kiến của bạn để cải tiến và nâng cấp sản phẩm SoundWave ngày một hoàn thiện và hữu ích hơn. Đừng ngại chia sẻ ý tưởng cho chúng tôi.
                     </p>
 
                     <form onSubmit={handleSubmit}>
                         <div className='mb-4'>
                             <label className='block mb-2 text-sm font-medium text-gray-400'>
-                                Chọn vấn đề mà bạn cần hỗ trợ{' '}
-                                <span className='text-red-600'> *</span>
+                                Chọn vấn đề mà bạn cần hỗ trợ <span className='text-red-600'>*</span>
                             </label>
                             <select
                                 name='topic'
@@ -50,12 +46,8 @@ const ContactForm = () => {
                                 className='w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500'
                                 required
                             >
-                                <option value=''>
-                                    Chọn vấn đề cần liên hệ
-                                </option>
-                                <option value='technical'>
-                                    Hỗ trợ kỹ thuật
-                                </option>
+                                <option value=''>Chọn vấn đề cần liên hệ</option>
+                                <option value='technical'>Hỗ trợ kỹ thuật</option>
                                 <option value='billing'>Hóa đơn</option>
                                 <option value='general'>Câu hỏi chung</option>
                             </select>
@@ -63,7 +55,7 @@ const ContactForm = () => {
 
                         <div className='mb-5'>
                             <label className='block mb-2 text-sm font-medium text-gray-400'>
-                                Email <span className='text-red-600'> *</span>
+                                Email <span className='text-red-600'>*</span>
                             </label>
                             <input
                                 type='email'
@@ -87,15 +79,13 @@ const ContactForm = () => {
                                 className='w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500'
                             />
                             <p className='text-sm text-gray-400 mt-2'>
-                                Có thể tìm thấy tên người dùng trên hồ sơ
-                                SoundWave của tài khoản.
+                                Có thể tìm thấy tên người dùng trên hồ sơ SoundWave của tài khoản.
                             </p>
                         </div>
 
                         <div className='mb-4'>
                             <label className='block mb-2 text-sm font-medium text-gray-400'>
-                                Nội dung cần giúp đỡ{' '}
-                                <span className='text-red-600'> *</span>
+                                Nội dung cần giúp đỡ <span className='text-red-600'>*</span>
                             </label>
                             <textarea
                                 name='message'
@@ -109,8 +99,7 @@ const ContactForm = () => {
 
                         <div className='mb-4'>
                             <p className='text-sm text-gray-400 mb-2'>
-                                Xác nhận rằng nội dung trình bày là thật trước
-                                khi gửi
+                                Xác nhận rằng nội dung trình bày là thật trước khi gửi
                             </p>
                             <div className='flex items-center mb-2'>
                                 <input
@@ -122,8 +111,7 @@ const ContactForm = () => {
                                     required
                                 />
                                 <label className='text-gray-400 text-sm'>
-                                    Tôi đảm bảo rằng tất cả thông tin là đúng và
-                                    chính xác.
+                                    Tôi đảm bảo rằng tất cả thông tin là đúng và chính xác.
                                 </label>
                             </div>
                             <div className='flex items-center'>
@@ -136,8 +124,7 @@ const ContactForm = () => {
                                     required
                                 />
                                 <label className='text-gray-400 text-sm'>
-                                    Tôi đồng ý với chính sách xử lý dữ liệu của
-                                    SoundWave.
+                                    Tôi đồng ý với chính sách xử lý dữ liệu của SoundWave.
                                 </label>
                             </div>
                         </div>
