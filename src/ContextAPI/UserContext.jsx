@@ -9,10 +9,7 @@ export const UserProvider = ({ children }) => {
     const savedIsSetting = localStorage.getItem("isSetting");
     return savedIsSetting ? JSON.parse(savedIsSetting) : false; // Mặc định là false
   });
-  const [isPlay, setIsPlay] = useState(() => {
-    const savedIsPlay = localStorage.getItem("isPlay");
-    return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
-  });
+  const [isPlay, setIsPlay] = useState(false);
   const [volume, setVolume] = useState(() => {
     const savedVolume = localStorage.getItem("volume");
     return savedVolume ? JSON.parse(savedVolume) : 1; // Giá trị mặc định là 1
@@ -41,9 +38,9 @@ export const UserProvider = ({ children }) => {
         };
   });
 
-  useEffect(() => {
-    localStorage.setItem("isPlay", JSON.stringify(isPlay));
-  }, [isPlay]);
+  // useEffect(() => {
+  //   localStorage.setItem("isPlay", JSON.stringify(isPlay));
+  // }, [isPlay]);
   useEffect(() => {
     localStorage.setItem("isSetting", JSON.stringify(isSetting));
   }, [isSetting]);

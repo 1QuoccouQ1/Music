@@ -97,8 +97,7 @@ function Login() {
         if (response.status === 200) {
           const data = await response.json();
 
-          // console.log(data.user);
-
+          localStorage.setItem('access_token',JSON.stringify(data.access_token) );
           localStorage.setItem('user',JSON.stringify(data.user) );
           
           // Lưu thông tin người dùng vào Context
