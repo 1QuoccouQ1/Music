@@ -2,8 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import {  Play } from "lucide-react";
-
+import { Play } from "lucide-react";
 
 function Dashboard() {
   const [trending, setTrending] = useState([]);
@@ -18,11 +17,19 @@ function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const trendingResponse = await fetch("https://admin.soundwave.io.vn/api/trending");
-      const topListenResponse = await fetch("https://admin.soundwave.io.vn/api/top-listen");
-      const topLikeResponse = await fetch("https://admin.soundwave.io.vn/api/top-like");
+      const trendingResponse = await fetch(
+        "https://admin.soundwave.io.vn/api/trending"
+      );
+      const topListenResponse = await fetch(
+        "https://admin.soundwave.io.vn/api/top-listen"
+      );
+      const topLikeResponse = await fetch(
+        "https://admin.soundwave.io.vn/api/top-like"
+      );
       const artistList = await fetch("https://admin.soundwave.io.vn/api/ca-si");
-      const genresList = await fetch("https://admin.soundwave.io.vn/api/the-loai");
+      const genresList = await fetch(
+        "https://admin.soundwave.io.vn/api/the-loai"
+      );
 
       const trendingData = await trendingResponse.json();
       const topListenData = await topListenResponse.json();
@@ -40,11 +47,19 @@ function Dashboard() {
     }
   };
 
-   // Lấy danh sách quốc gia khi component được render lần đầu
-   useEffect(() => {
+  const [songHistory, setSongHistory] = useState(
+    JSON.parse(localStorage.getItem("songHistory")) || []
+  );
+
+  // Hàm để load lịch sử từ localStorage mỗi khi nó thay đổi
+
+  // Lấy danh sách quốc gia khi component được render lần đầu
+  useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await axios.get("https://admin.soundwave.io.vn/api/quoc-gia"); // Gọi API /quoc-gia
+        const response = await axios.get(
+          "https://admin.soundwave.io.vn/api/quoc-gia"
+        ); // Gọi API /quoc-gia
         setCountries(response.data); // Lưu danh sách quốc gia vào state
         if (response.data.length > 0) {
           setActiveTab(response.data[0].id); // Đặt quốc gia đầu tiên làm mặc định
@@ -62,12 +77,14 @@ function Dashboard() {
       const fetchSongs = async () => {
         setLoading(true);
         try {
-          const response = await axios.get(`https://admin.soundwave.io.vn/api/quoc-gia/${activeTab}/bai-hat`); // Gọi API /bai-hat với ID quốc gia
-          
-         if (response.status === 200) {
-           setSongs(response.data); // Lưu danh sách bài hát vào state
-         } else {
-           setSongs([]); // Nếu không có bài hát nào thì set state rỗng
+          const response = await axios.get(
+            `https://admin.soundwave.io.vn/api/quoc-gia/${activeTab}/bai-hat`
+          ); // Gọi API /bai-hat với ID quốc gia
+
+          if (response.status === 200) {
+            setSongs(response.data); // Lưu danh sách bài hát vào state
+          } else {
+            setSongs([]); // Nếu không có bài hát nào thì set state rỗng
           }
         } catch (error) {
           console.error("Error fetching songs:", error);
@@ -120,7 +137,11 @@ function Dashboard() {
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
         <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer">
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
-          <img className="size-16 rounded-md" src={song.song_image} alt={song.description} />
+          <img
+            className="size-16 rounded-md"
+            src={song.song_image}
+            alt={song.description}
+          />
           <p className="text-base ml-3">
             {song.song_name}
             <br />
@@ -146,84 +167,85 @@ function Dashboard() {
             </div>
             <div className="flex items-center ">
               <div className="w-1/3 px-5 relative ">
-              {trending.length > 0 && (
-               <>
-                <img className=" w-full" src="../imgs/image.png" />
+                {trending.length > 0 && (
+                  <>
+                    <img className=" w-full" src="../imgs/image.png" />
                     <p className="absolute top-2 left-7 text-black bg-yellow-500 py-1 rounded-md font-bold text-sm  px-4">
                       Top Thịnh Hành{" "}
                     </p>
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
-                    <div className=" flex  items-center">
-                      <img className=" size-16 rounded-lg" src={trending[0].song_image} />
-                      <p className="mx-3 font-medium tracking-wide">
-                      {trending[0].song_name
-                      } <br />{" "}
-                        <span className="text-sm font-light">
-                        {trending[0].composer
-                        }
-                        </span>
-                      </p>  
+                      <div className=" flex  items-center">
+                        <img
+                          className=" size-16 rounded-lg"
+                          src={trending[0].song_image}
+                        />
+                        <p className="mx-3 font-medium tracking-wide">
+                          {trending[0].song_name} <br />{" "}
+                          <span className="text-sm font-light">
+                            {trending[0].composer}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                        <Play size={18} />
+                      </div>
                     </div>
-                    <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
-                      <Play size={18} />
-                    </div>
-                  </div>
-               </>
-              )}
-                
+                  </>
+                )}
               </div>
               <div className="w-1/3 px-5 relative ">
-              {topListen.length > 0 && (
-                <>
-                  <img className="" src="../imgs/image (4).png" />
-                  <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
-                    Top Lượt Nghe{" "}
-                  </p>
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
-                    <div className=" flex  items-center">
-                      <img className=" size-16 rounded-lg" src={topListen[0].song_image} />
-                      <p className="mx-3 font-medium tracking-wide">
-                      {topListen[0].song_name
-                      } <br />{" "}
-                        <span className="text-sm font-light">
-                        {topListen[0].composer
-                        }
-                        </span>
-                      </p>  
+                {topListen.length > 0 && (
+                  <>
+                    <img className="" src="../imgs/image (4).png" />
+                    <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
+                      Top Lượt Nghe{" "}
+                    </p>
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
+                      <div className=" flex  items-center">
+                        <img
+                          className=" size-16 rounded-lg"
+                          src={topListen[0].song_image}
+                        />
+                        <p className="mx-3 font-medium tracking-wide">
+                          {topListen[0].song_name} <br />{" "}
+                          <span className="text-sm font-light">
+                            {topListen[0].composer}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                        <Play size={18} />
+                      </div>
                     </div>
-                    <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
-                      <Play size={18} />
-                    </div>
-                  </div>
-                </>
-              )}
-                
+                  </>
+                )}
               </div>
               <div className="w-1/3 px-5 relative ">
-              {topLike.length > 0 && (
-                <>
-                  <img className="" src="../imgs/image (1).png" />
-                  <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
-                  Top Yêu Thích{" "}
-                  </p>
-                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
-                    <div className=" flex  items-center">
-                      <img className=" size-16 rounded-lg" src={topLike[0].song_image} />
-                      <p className="mx-3 font-medium tracking-wide">
-                      {topLike[0].song_name
-                      } <br />{" "}
-                        <span className="text-sm font-light">
-                        {topLike[0].composer
-                        }
-                        </span>
-                      </p>  
+                {topLike.length > 0 && (
+                  <>
+                    <img className="" src="../imgs/image (1).png" />
+                    <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
+                      Top Yêu Thích{" "}
+                    </p>
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
+                      <div className=" flex  items-center">
+                        <img
+                          className=" size-16 rounded-lg"
+                          src={topLike[0].song_image}
+                        />
+                        <p className="mx-3 font-medium tracking-wide">
+                          {topLike[0].song_name} <br />{" "}
+                          <span className="text-sm font-light">
+                            {topLike[0].composer}
+                          </span>
+                        </p>
+                      </div>
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                        <Play size={18} />
+                      </div>
                     </div>
-                    <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" >
-                      <Play size={18} />
-                    </div>
-                  </div>
-                </>
-              )}
+                  </>
+                )}
               </div>
             </div>
           </div>
@@ -233,7 +255,7 @@ function Dashboard() {
         <h1 className="text-3xl font-medium ">Bảng Xếp Hạng Hàng Tuần </h1>
         <div className="flex items-center justify-between my-7">
           <div className="flex items-center text-sm tracking-wide ">
-          {renderCountries()} 
+            {renderCountries()}
           </div>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
             <p className="text-sm  ">Xem Thêm </p>
@@ -259,108 +281,32 @@ function Dashboard() {
       </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
         <h1 className="text-3xl font-medium mb-16">Nhạc Nghe Gần Đây</h1>
-        <Swiper
-          spaceBetween={30}
-          slidesPerView="auto" // Số item hiện trong 1 lần
-          className="mySwiper "
-        >
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/image (7).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
-                GOLDEN
-              </p>
-              <p className="text-sm text-slate-700">Jung Kook</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/image (8).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
-                MUSE
-              </p>
-              <p className="text-sm text-slate-700">Jimin</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center ">
-              <img
-                src="../imgs/image (9).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
-                Ai Cũng Phải Bắt Đầu Từ Đâu Đó
-              </p>
-              <p className="text-sm text-slate-700">Hiếu Thứ Hai</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/image (10).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
-                D-Day
-              </p>
-              <p className="text-sm text-slate-700">Agust D</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/image (11).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
-                99%
-              </p>
-              <p className="text-sm text-slate-700">MCK</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/image (12).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
-                Anh Trai “Say HI”
-              </p>
-              <p className="text-sm text-slate-700">Anh Trai “Say HI”</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/image (12).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
-                Anh Trai “Say HI”
-              </p>
-              <p className="text-sm text-slate-700">Anh Trai “Say HI”</p>
-            </div>
-          </SwiperSlide>
-          <SwiperSlide style={{ width: "auto" }}>
-            <div className="text-center flex flex-col  items-center">
-              <img
-                src="../imgs/image (12).png"
-                className="rounded-full mb-7 w-full size-52 "
-              />
-              <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
-                Anh Trai “Say HI”
-              </p>
-              <p className="text-sm text-slate-700">Anh Trai “Say HI”</p>
-            </div>
-          </SwiperSlide>
-        </Swiper>
+        {songHistory.length > 0 ? (
+          <Swiper
+            spaceBetween={30}
+            slidesPerView="auto" // Số item hiện trong 1 lần
+            className="mySwiper "
+          >
+            {songHistory.map((song, index) => (
+              <SwiperSlide key={index} style={{ width: "auto" }}>
+                <div className="text-center flex flex-col  items-center">
+                  <img
+                    src={song.song_image} // URL hình ảnh của bài hát
+                    className="rounded-full mb-7  size-52 "
+                  />
+                  <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
+                    {song.song_name}
+                  </p>
+                  <p className="text-sm text-slate-700">{song.composer}</p>
+                </div>
+              </SwiperSlide>
+            ))}
+          </Swiper>
+        ) : (
+          <p className="text-center text-lg text-slate-400">
+            Không có bài hát nào trong lịch sử nghe.
+          </p>
+        )}
       </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide w-full max-w-full">
         <div className="flex items-center justify-between">
@@ -391,19 +337,21 @@ function Dashboard() {
           slidesPerView="auto" // Số item hiện trong 1 lần
           className="mySwiper "
         >
-        {artists.map((artist) => (
-          <SwiperSlide key={artist.id} style={{ width: "auto" }}>
-            <div className="text-center">
-              <img
-                src={artist.singer_image} // URL hình ảnh của nghệ sĩ
-                alt={artist.singer_name}
-                className="rounded-full mb-3 w-full size-64"
-              />
-              <p className="font-medium mb-2 text-base">{artist.singer_name}</p>
-              <p className="text-sm text-slate-700">Ca Sĩ</p>
-            </div>
-          </SwiperSlide>
-        ))}
+          {artists.map((artist) => (
+            <SwiperSlide key={artist.id} style={{ width: "auto" }}>
+              <div className="text-center">
+                <img
+                  src={artist.singer_image} // URL hình ảnh của nghệ sĩ
+                  alt={artist.singer_name}
+                  className="rounded-full mb-3 w-full size-64"
+                />
+                <p className="font-medium mb-2 text-base">
+                  {artist.singer_name}
+                </p>
+                <p className="text-sm text-slate-700">Ca Sĩ</p>
+              </div>
+            </SwiperSlide>
+          ))}
         </Swiper>
       </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide">
@@ -464,20 +412,20 @@ function Dashboard() {
           </div>
         </div>
         <div className="flex items-center  flex-wrap ">
-        {genres.map((genre) => (
-          <div key={genre.id} className="w-1/6 pr-3 pb-3">
-            <div
-              className="w-full h-64 rounded-xl flex items-center justify-center bg-cover bg-center"
-              style={{
-                backgroundImage: `url(${genre.background})`,
-              }}
-            >
-              <p className="font-bold text-2xl  p-2 rounded-lg">
-                {genre.categorie_name}
-              </p>
+          {genres.map((genre) => (
+            <div key={genre.id} className="w-1/6 pr-3 pb-3">
+              <div
+                className="w-full h-64 rounded-xl flex items-center justify-center bg-cover bg-center"
+                style={{
+                  backgroundImage: `url(${genre.background})`,
+                }}
+              >
+                <p className="font-bold text-2xl  p-2 rounded-lg">
+                  {genre.categorie_name}
+                </p>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
         </div>
       </section>
     </>

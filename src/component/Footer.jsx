@@ -103,7 +103,6 @@ const Footer = React.memo(function FooterComponent() {
   const [isPlayingAd, setIsPlayingAd] = useState(false); // Trạng thái phát quảng cáo
   const [favoriteSongs, setFavoriteSongs] = useState([]);
 
-
   // Hàm gọi API nhạc quảng cáo
   const fetchAd = async () => {
     try {
@@ -135,7 +134,6 @@ const Footer = React.memo(function FooterComponent() {
         const data = await response.json();
         const favoriteSongs = data;
         setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
-        console.log("Danh sách yêu thích:", favoriteSongs);
       } else {
         console.error("Không thể lấy danh sách yêu thích:", response.status);
       }
@@ -163,7 +161,11 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   const onLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    if (isPlayingAd) {
+      setDuration(audioRef.current.duration);
+    } else {
+      setDuration(listsongs[currentSongIndex].time);
+    }
   };
 
   const handleNextSong = () => {
@@ -193,6 +195,14 @@ const Footer = React.memo(function FooterComponent() {
     if (isLooping) {
       audioRef.current.play(); // Lặp lại bài hát hiện tại
     } else {
+      const currentSong = listsongs[currentSongIndex];
+      saveSongToHistory({
+        song_name: currentSong.song_name,
+        composer: currentSong.composer,
+        song_image: currentSong.song_image,
+        id: currentSong.id, // Thời lượng bài hát
+      });
+
       if (isPlayingAd) {
         setIsPlayingAd(false);
         setSongPlayCount(0);
@@ -219,6 +229,28 @@ const Footer = React.memo(function FooterComponent() {
       }
     }
   };
+
+  const saveSongToHistory = (song) => {
+    // Lấy danh sách lịch sử hiện tại từ localStorage
+    let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
+    
+    // Kiểm tra nếu bài hát đã tồn tại trong lịch sử
+    const isAlreadyInHistory = songHistory.some(
+      (historySong) => historySong.song_name === song.song_name
+    );
+  
+    if (!isAlreadyInHistory) {
+      if (songHistory.length >= 20) {
+        songHistory = []; // Xóa hết danh sách
+      }
+      // Thêm bài hát mới vào danh sách lịch sử
+      songHistory.unshift(song);
+  
+      // Lưu danh sách cập nhật vào localStorage
+      localStorage.setItem("songHistory", JSON.stringify(songHistory));
+    }
+  };
+  
 
   const toggleFavorite = async (songId) => {
     try {
@@ -368,7 +400,6 @@ const Footer = React.memo(function FooterComponent() {
       composer: song.composer,
       song_image: song.song_image,
     });
-
     if (audioRef.current) {
       audioRef.current.src =
         song.file_paths && song.file_paths[selectedQuality];
