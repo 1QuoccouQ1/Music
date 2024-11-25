@@ -1,155 +1,39 @@
 function Downloaded() {
-    return ( 
+    return (
         <>
-         <section className="bg-medium w-full h-auto pb-32  pt-16  text-white px-10 ">
-             <div className="flex  w-full flex-wrap">
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
+            <section className='bg-medium w-full h-auto pb-16 pt-10 text-white px-6'>
+                <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
+                    {[...Array(12)].map((_, index) => (
+                        <div key={index} className='cursor-pointer'>
+                            <img
+                                src='../imgs/image (19).png'
+                                className='rounded mb-2 w-full object-cover'
+                                alt='Album cover'
+                            />
+                            <div className='flex items-start justify-between'>
+                                <div className='w-full'>
+                                    <p className='text-lg font-bold truncate'>
+                                        1
+                                    </p>
+                                    <p className='text-sm truncate'>
+                                        Short n' Sweet
+                                    </p>
+                                    <p className='text-xs text-slate-500 truncate'>
+                                        Sabrina Carpenter
+                                    </p>
+                                </div>
+                                <img
+                                    className='w-5 h-5 ml-2'
+                                    src='../imgs/Img - Explicit → SVG.png'
+                                    alt='Explicit'
+                                />
+                            </div>
                         </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
+                    ))}
                 </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-                <div className="w-1/6 px-2 mb-10  cursor-pointer">
-                    <img src="../imgs/image (19).png" className=" rounded mb-2 "/>
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <p className="text-lg font-bold w-10/12  ">1</p>
-                            <p className="text-sm  ">Short n' Sweet</p>
-                            <p className="text-xs text-slate-700 ">Sabrina Carpenter</p>
-                        </div>
-                        <img className="size-4" src="../imgs/Img - Explicit → SVG.png"/>
-                    </div>
-                </div>
-            </div>
-        </section>
+            </section>
         </>
-     );
+    );
 }
 
 export default Downloaded;

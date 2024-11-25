@@ -8,31 +8,16 @@ function RankingBoard() {
     useEffect(() => {
         const fetchRankings = async () => {
             try {
-                const response = await fetch('https://admin.soundwave.io.vn/api/bxh-100');
+                const response = await fetch(
+                    'https://admin.soundwave.io.vn/api/bxh-100'
+                );
                 const data = await response.json();
 
                 // Get top 3 for ranking and rest for songs
                 setRankings(data.slice(0, 3));
-                const remainingSongs = data.slice(3);
-                setSongs(remainingSongs);
-
-                // Fetch listen counts for each song
-                const listenCounts = await Promise.all(
-                    remainingSongs.map(async (song) => {
-                        const listenResponse = await fetch(`https://admin.soundwave.io.vn/api/luot-nghe/${song.id}`);
-                        const listenData = await listenResponse.json();
-                        return { id: song.id, listenCount: listenData.listen_count };
-                    })
-                );
-
-                // Update each song’s listen count in state
-                const songsWithListenCount = remainingSongs.map(song => ({
-                    ...song,
-                    listen_count: listenCounts.find(item => item.id === song.id)?.listenCount || 0,
-                }));
-                setSongs(songsWithListenCount);
+                setSongs(data.slice(3)); // Dùng dữ liệu sẵn có, không fetch thêm
             } catch (error) {
-                console.error('Error fetching rankings or listen counts:', error);
+                console.error('Error fetching rankings:', error);
             }
         };
 
@@ -44,7 +29,6 @@ function RankingBoard() {
             <h2 className='text-white text-xl md:text-4xl font-bold mb-20 border-l-4 border-l-blue-400 pl-5 hover:t-gradient-to-r from-pink-700 to-sky-400'>
                 Bảng Xếp Hạng Tuần
             </h2>
-            
 
             {/* Top 3 Ranking Cards */}
             <div className='flex flex-col md:flex-row justify-center items-start space-y-4 md:space-y-0 md:space-x-8 mb-12'>
@@ -59,7 +43,7 @@ function RankingBoard() {
                         song={{
                             title: rankings[1]?.song_name,
                             artist: rankings[1]?.provider,
-                            duration: '03:30',
+                            duration: rankings[1]?.time,
                             coverImageUrl: rankings[1]?.song_image
                         }}
                     />
@@ -76,7 +60,7 @@ function RankingBoard() {
                         song={{
                             title: rankings[0]?.song_name,
                             artist: rankings[0]?.provider,
-                            duration: '03:30',
+                            duration: rankings[1]?.time,
                             coverImageUrl: rankings[0]?.song_image
                         }}
                     />
@@ -126,12 +110,19 @@ function RankingBoard() {
                                         className='w-12 h-12 rounded-md'
                                     />
                                     <div>
-                                        <p className='font-semibold'>{song.song_name}</p>
+
+                                        <p className='font-semibold'>
+                                            {song.song_name}
+                                        </p>
                                     </div>
                                 </td>
                                 <td>{song.provider}</td>
-                                <td>{song.listen_count}</td>
-                                <td className='text-right'>{song.duration || 'N/A'}</td>
+                                {/* Giữ thông tin lượt nghe */}
+                                <td>{song.listen_count || 'N/A'}</td>
+                                <td className='text-right'>
+                                    {song.time || 'N/A'}
+                                </td>
+
                             </tr>
                         ))}
                     </tbody>
