@@ -1,20 +1,35 @@
 // components/InputSearch.js
-import  { useState } from 'react';
+import  { useState ,useCallback } from 'react';
+import { debounce } from "lodash";
 
-function InputSearch({ onSearch }) {
+function InputSearch({ onSearch ,onFocus, onBlur }) {
   const [query, setQuery] = useState('');
+  const [lastQuery, setLastQuery] = useState("");
 
-  const handleSearch = () => {
-    onSearch({ query });
-  };
+  
+  const handleSearch = useCallback(
+    debounce(() => {
+      if (query.trim() !== "" && query !== lastQuery) {
+        onSearch(query); 
+        setLastQuery(query); 
+      }
+    }, 2000),
+    [query, lastQuery, onSearch]
+  );
+
 
   const handleChange = (e) => {
     setQuery(e.target.value);
+    handleSearch(); 
   };
 
   const handleKeyDown = (e) => {
-    if (e.key === 'Enter') {
-      handleSearch();
+    if (e.key === "Enter") {
+      handleSearch.cancel(); 
+      if (query.trim() !== "" && query !== lastQuery) {
+        onSearch(query); 
+        setLastQuery(query); 
+      }
     }
   };
 
@@ -26,12 +41,20 @@ function InputSearch({ onSearch }) {
         value={query}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
+        onFocus={onFocus} 
+        onBlur={onBlur} 
         className="border-none mx-2 w-[300px] bg-transparent focus:outline-none text-white text-sm placeholder-gray-600"
         placeholder="Tìm kiếm....."
       />
       <div
         className="absolute right-5 rounded-xl p-[7px] text-white cursor-pointer  duration-300"
-        onClick={handleSearch}
+        onClick={() => {
+          handleSearch.cancel(); 
+          if (query.trim() !== "" && query !== lastQuery) {
+            onSearch(query); 
+            setLastQuery(query); 
+          }
+        }}
       >
         <svg
         xmlns="http://www.w3.org/2000/svg"

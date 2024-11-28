@@ -343,7 +343,7 @@ function Dashboard() {
                 <img
                   src={artist.singer_image} // URL hình ảnh của nghệ sĩ
                   alt={artist.singer_name}
-                  className="rounded-full mb-3 w-full size-64"
+                  className="rounded-full mb-3  size-64"
                 />
                 <p className="font-medium mb-2 text-base">
                   {artist.singer_name}
