@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
+
+
 function Information() {
+    const [userName, setUserName] = useState('');
+    const [userImage, setUserImage] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            setUserName(user.name);
+            setUserImage(user.image);
+        }
+    }, []);
+
     return (
         <div>
             <div className='bg-gray-900 min-h-screen p-4 md:p-8'>
@@ -11,14 +24,16 @@ function Information() {
                         <div className='flex flex-col md:flex-row items-center mb-8'>
                             <img
                                 className='h-32 w-32 md:h-[318px] md:w-[318px] rounded-full mx-auto md:mx-0'
-                                src='https://i.pinimg.com/enabled/564x/95/08/31/950831f8f677e4aa2e8e3bddaed0d3cf.jpg'
+                                src={userImage || 'https://i.pinimg.com/enabled/564x/95/08/31/950831f8f677e4aa2e8e3bddaed0d3cf.jpg'}
                                 alt='User Avatar'
                             />
                             <div className='mt-4 md:mt-0 md:ml-6 text-center md:text-left'>
                                 <h2 className='text-xl md:text-3xl text-white font-semibold mb-4'>
-                                    Nguyễn Đỗ Thanh Nguyên
+                                {userName}
                                 </h2>
-                                <p className='text-gray-400'>123 bài hát yêu thích</p>
+                                <p className='text-gray-400'>
+                                    123 bài hát yêu thích
+                                </p>
                             </div>
                         </div>
                     </div>
@@ -165,7 +180,6 @@ function Information() {
                                     )}
                                 </NavLink>
                             </li>
-                           
                         </ul>
                     </nav>
                 </div>

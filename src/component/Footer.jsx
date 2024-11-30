@@ -1,5 +1,5 @@
 import MusicPlayer from "./MusicPlayer";
-import { Heart, MoreHorizontal, Play } from "lucide-react";
+import { FastForward, Heart, MoreHorizontal, Play } from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
@@ -79,6 +79,7 @@ const Footer = React.memo(function FooterComponent() {
     },
   ];
 
+  
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
@@ -94,11 +95,32 @@ const Footer = React.memo(function FooterComponent() {
   const [timer, setTimer] = useState(null);
   const [isTimerActive, setIsTimerActive] = useState(false);
   const [isTimerModalVisible, setIsTimerModalVisible] = useState(false); // Trạng thái hiển thị modal hẹn giờ
-
   const [currentSongIndex, setCurrentSongIndex] = useState(1);
   const [optionSongIndex, setOptionSongIndex] = useState(null);
   const audioRef = useRef(null);
   const Playlist = useRef(null);
+  const [songPlayCount, setSongPlayCount] = useState(0); // Đếm số bài hát đã nghe
+  const [isPlayingAd, setIsPlayingAd] = useState(false); // Trạng thái phát quảng cáo
+
+  console.log("isPlayingAd", isPlayingAd);
+   // Hàm gọi API nhạc quảng cáo
+  const fetchAd = async () => {
+    try {
+      const response = await fetch("https://admin.soundwave.io.vn/api/quang-cao"); // Gọi API để lấy quảng cáo
+      const data = await response.json();
+      console.log("Quảng cáo:", data);
+      if (data && data.file_path) {
+       // Bật trạng thái phát quảng cáo
+        console.log("trang thai" ,isPlayingAd);
+        audioRef.current.src = data.file_path; // Cập nhật src của audio
+        audioRef.current.play(); // Phát quảng cáo
+      }
+    } catch (error) {
+      console.error("Lỗi khi lấy quảng cáo:", error);
+      // Nếu không có quảng cáo, tiếp tục phát nhạc
+      handleNextSong();
+    }
+  };
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -137,6 +159,7 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   const handlePreviousSong = () => {
+    if (isPlayingAd) return;
     setCurrentSongIndex(
       (prev) => (prev - 1 + listsongs.length) % listsongs.length
     );
@@ -144,12 +167,38 @@ const Footer = React.memo(function FooterComponent() {
     setIsPlay(true);
   };
 
+
   const handleSongEnd = () => {
     if (isLooping) {
       audioRef.current.play(); // Lặp lại bài hát hiện tại
     } else {
-      handleNextSong(); // Chuyển sang bài hát tiếp theo nếu không lặp
+      if (isPlayingAd) {
+        setIsPlayingAd(false);
+        setSongPlayCount(0);
+        if (isShuffling) {
+          let randomIndex;
+          do {
+            randomIndex = Math.floor(Math.random() * listsongs.length);
+          } while (randomIndex === currentSongIndex);
+          setCurrentSongIndex(randomIndex);
+        } else {
+          setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
+        }
+        setIsPlaying(true);
+        setIsPlay(true);
+        
+      } else {
+        setSongPlayCount(songPlayCount + 1);
+       
+        if (songPlayCount >= 3) {
+          setIsPlayingAd(true);
+          fetchAd();
+        } else {
+          handleNextSong();
+        }
+      }
     }
+    
   };
 
   // Hiển thị modal hẹn giờ
@@ -187,6 +236,7 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   const handleSliderChange = (value) => {
+    if (isPlayingAd) return;
     setCurrentTime(value);
     audioRef.current.currentTime = value;
   };
@@ -277,6 +327,9 @@ const Footer = React.memo(function FooterComponent() {
     };
   }, []);
 
+ 
+
+
   if (isLoading) {
     return null;
   }
@@ -286,7 +339,6 @@ const Footer = React.memo(function FooterComponent() {
   const offset = circumference - Number(volume) * circumference;
   return (
     <>
-      {/* Audio Element */}
       <audio
         ref={audioRef}
         onLoadedMetadata={onLoadedMetadata}
@@ -384,6 +436,7 @@ const Footer = React.memo(function FooterComponent() {
                   <button
                     className="p-3 bg-gray-800 rounded-full"
                     onClick={handleNextSong}
+                    
                   >
                     <SkipForward size={24} />
                   </button>
