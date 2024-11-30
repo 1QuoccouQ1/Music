@@ -1,5 +1,4 @@
-import MusicPlayer from "./MusicPlayer";
-import { FastForward, Heart, MoreHorizontal, Play } from "lucide-react";
+import { Heart, MoreHorizontal, Play } from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
@@ -15,6 +14,7 @@ import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { getMusics } from "../services/apiService";
 import React from "react";
+import { toast } from "react-toastify";
 
 const Footer = React.memo(function FooterComponent() {
   const {
@@ -45,6 +45,7 @@ const Footer = React.memo(function FooterComponent() {
     };
 
     fetchData();
+    fetchFavoriteSongs();
   }, []);
 
   const [listsongs, setListSongs] = useState([]);
@@ -79,7 +80,6 @@ const Footer = React.memo(function FooterComponent() {
     },
   ];
 
-  
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
@@ -101,17 +101,20 @@ const Footer = React.memo(function FooterComponent() {
   const Playlist = useRef(null);
   const [songPlayCount, setSongPlayCount] = useState(0); // Đếm số bài hát đã nghe
   const [isPlayingAd, setIsPlayingAd] = useState(false); // Trạng thái phát quảng cáo
+  const [favoriteSongs, setFavoriteSongs] = useState([]);
 
-  console.log("isPlayingAd", isPlayingAd);
-   // Hàm gọi API nhạc quảng cáo
+
+  // Hàm gọi API nhạc quảng cáo
   const fetchAd = async () => {
     try {
-      const response = await fetch("https://admin.soundwave.io.vn/api/quang-cao"); // Gọi API để lấy quảng cáo
+      const response = await fetch(
+        "https://admin.soundwave.io.vn/api/quang-cao"
+      ); // Gọi API để lấy quảng cáo
       const data = await response.json();
       console.log("Quảng cáo:", data);
       if (data && data.file_path) {
-       // Bật trạng thái phát quảng cáo
-        console.log("trang thai" ,isPlayingAd);
+        // Bật trạng thái phát quảng cáo
+        console.log("trang thai", isPlayingAd);
         audioRef.current.src = data.file_path; // Cập nhật src của audio
         audioRef.current.play(); // Phát quảng cáo
       }
@@ -119,6 +122,25 @@ const Footer = React.memo(function FooterComponent() {
       console.error("Lỗi khi lấy quảng cáo:", error);
       // Nếu không có quảng cáo, tiếp tục phát nhạc
       handleNextSong();
+    }
+  };
+
+  const fetchFavoriteSongs = async () => {
+    try {
+      const userId = JSON.parse(localStorage.getItem("user")).id;
+      const response = await fetch(
+        `https://admin.soundwave.io.vn/api/${userId}/bai-hat-yeu-thich`
+      );
+      if (response.ok) {
+        const data = await response.json();
+        const favoriteSongs = data;
+        setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
+        console.log("Danh sách yêu thích:", favoriteSongs);
+      } else {
+        console.error("Không thể lấy danh sách yêu thích:", response.status);
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
     }
   };
 
@@ -167,7 +189,6 @@ const Footer = React.memo(function FooterComponent() {
     setIsPlay(true);
   };
 
-
   const handleSongEnd = () => {
     if (isLooping) {
       audioRef.current.play(); // Lặp lại bài hát hiện tại
@@ -186,10 +207,9 @@ const Footer = React.memo(function FooterComponent() {
         }
         setIsPlaying(true);
         setIsPlay(true);
-        
       } else {
         setSongPlayCount(songPlayCount + 1);
-       
+
         if (songPlayCount >= 3) {
           setIsPlayingAd(true);
           fetchAd();
@@ -198,7 +218,56 @@ const Footer = React.memo(function FooterComponent() {
         }
       }
     }
-    
+  };
+
+  const toggleFavorite = async (songId) => {
+    try {
+      if (favoriteSongs.includes(songId)) {
+        // Nếu bài hát đã yêu thích, xóa khỏi danh sách yêu thích
+        const response = await fetch(
+          "https://admin.soundwave.io.vn/api/xoa-bai-hat-yeu-thich",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              song_id: songId,
+              user_id: JSON.parse(localStorage.getItem("user")).id,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          setFavoriteSongs((prev) => prev.filter((id) => id !== songId)); // Loại bỏ id khỏi danh sách
+        } else {
+          console.error("Lỗi khi xóa yêu thích:", response.status);
+        }
+      } else {
+        // Nếu bài hát chưa được yêu thích, thêm vào danh sách yêu thích
+        const response = await fetch(
+          "https://admin.soundwave.io.vn/api/bai-hat-yeu-thich",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              song_id: songId,
+              user_id: JSON.parse(localStorage.getItem("user")).id,
+            }),
+          }
+        );
+
+        if (response.ok) {
+          setFavoriteSongs((prev) => [...prev, songId]); // Thêm id vào danh sách
+        } else {
+          console.error("Lỗi khi thêm yêu thích:", response.status);
+        }
+      }
+    } catch (error) {
+      console.error("Lỗi khi gọi API:", error);
+    }
   };
 
   // Hiển thị modal hẹn giờ
@@ -327,9 +396,6 @@ const Footer = React.memo(function FooterComponent() {
     };
   }, []);
 
- 
-
-
   if (isLoading) {
     return null;
   }
@@ -407,6 +473,7 @@ const Footer = React.memo(function FooterComponent() {
                   <button
                     className="p-3 bg-gray-800 rounded-full "
                     onClick={handlePreviousSong}
+                    disabled={isPlayingAd}
                   >
                     <SkipBack size={24} />
                   </button>
@@ -436,7 +503,7 @@ const Footer = React.memo(function FooterComponent() {
                   <button
                     className="p-3 bg-gray-800 rounded-full"
                     onClick={handleNextSong}
-                    
+                    disabled={isPlayingAd}
                   >
                     <SkipForward size={24} />
                   </button>
@@ -600,7 +667,7 @@ const Footer = React.memo(function FooterComponent() {
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
-                strokeWidth={1.5}  
+                strokeWidth={1.5}
                 stroke="currentColor"
                 className="size-3"
               >
@@ -653,7 +720,16 @@ const Footer = React.memo(function FooterComponent() {
                     </p>
                   </div>
                   <div className="ml-auto flex items-center space-x-3">
-                    <Heart className="w-4 h-4 cursor-pointer" />
+                    <Heart
+                      className={`size-5 cursor-pointer ${
+                        favoriteSongs.includes(listsongs[currentSongIndex].id)
+                          ? "text-blue-500"
+                          : ""
+                      }`}
+                      onClick={() =>
+                        toggleFavorite(listsongs[currentSongIndex].id)
+                      }
+                    />
                     <MoreHorizontal className="w-4 h-4 cursor-pointer" />
                   </div>
                 </div>

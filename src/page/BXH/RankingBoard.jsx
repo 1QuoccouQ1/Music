@@ -137,6 +137,7 @@ function RankingBoard() {
                                         className='w-10 h-10 sm:w-12 sm:h-12 rounded-md'
                                     />
                                     <div>
+
                                         <p className='font-semibold'>
                                             {song.song_name}
                                         </p>
@@ -148,6 +149,7 @@ function RankingBoard() {
                                 <td className='text-right'>
                                     {formatTime(song.time) || 'N/A'}
                                 </td>
+
                             </tr>
                         ))}
                     </tbody>

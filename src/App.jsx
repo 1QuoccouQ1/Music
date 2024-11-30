@@ -6,6 +6,8 @@ import Footer from './component/Footer';
 import SettingSidebar from './component/SettingSidebar';
 import { UserProvider } from './ContextAPI/UserContext';
 import ModalListen from './component/ModalListen';
+import { ToastContainer } from 'react-toastify';
+
 
 function App() {
   const isSetting = false;
@@ -23,6 +25,19 @@ function App() {
           <ModalListen/>
          <Footer></Footer> 
         </div>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+            theme="light"
+            />
+        <ToastContainer />
       </UserProvider>
     </>
   )

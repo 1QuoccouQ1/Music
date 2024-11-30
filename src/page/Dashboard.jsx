@@ -2,6 +2,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import {  Play } from "lucide-react";
 
 
 function Dashboard() {
@@ -151,16 +152,22 @@ function Dashboard() {
                     <p className="absolute top-2 left-7 text-black bg-yellow-500 py-1 rounded-md font-bold text-sm  px-4">
                       Top Thịnh Hành{" "}
                     </p>
-                    <div className="absolute bottom-2 left-7 bg-stone-950/65 p-1 flex items-center w-2/3">
-                      <img className=" size-16 rounded-lg" src={trending[0].song_image
-}  />
+                    <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
+                    <div className=" flex  items-center">
+                      <img className=" size-16 rounded-lg" src={trending[0].song_image} />
                       <p className="mx-3 font-medium tracking-wide">
                       {trending[0].song_name
                       } <br />{" "}
-                        <span className="text-sm font-light"> {trending[0].composer
-                        }</span>
-                      </p>
+                        <span className="text-sm font-light">
+                        {trending[0].composer
+                        }
+                        </span>
+                      </p>  
                     </div>
+                    <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                      <Play size={18} />
+                    </div>
+                  </div>
                </>
               )}
                 
@@ -172,17 +179,21 @@ function Dashboard() {
                   <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
                     Top Lượt Nghe{" "}
                   </p>
-                  <div className="absolute bottom-2 left-7 bg-stone-950/65 p-1 flex items-center w-2/3">
-                    <img className=" size-16 rounded-lg" src={topListen[0].song_image
-} />
-                    <p className="mx-3 font-medium tracking-wide">
-                    {topListen[0].song_name
-                    } <br />{" "}
-                      <span className="text-sm font-light">
-                      {topListen[0].composer
-                      }
-                      </span>
-                    </p>
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
+                    <div className=" flex  items-center">
+                      <img className=" size-16 rounded-lg" src={topListen[0].song_image} />
+                      <p className="mx-3 font-medium tracking-wide">
+                      {topListen[0].song_name
+                      } <br />{" "}
+                        <span className="text-sm font-light">
+                        {topListen[0].composer
+                        }
+                        </span>
+                      </p>  
+                    </div>
+                    <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                      <Play size={18} />
+                    </div>
                   </div>
                 </>
               )}
@@ -195,17 +206,21 @@ function Dashboard() {
                   <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
                   Top Yêu Thích{" "}
                   </p>
-                  <div className="absolute bottom-2 left-7 bg-stone-950/65 p-1 flex items-center w-2/3">
-                    <img className=" size-16 rounded-lg" src={topLike[0].song_image
-} />
-                    <p className="mx-3 font-medium tracking-wide">
-                    {topLike[0].song_name
-                    } <br />{" "}
-                      <span className="text-sm font-light">
-                      {topLike[0].composer
-                      }
-                      </span>
-                    </p>
+                  <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
+                    <div className=" flex  items-center">
+                      <img className=" size-16 rounded-lg" src={topLike[0].song_image} />
+                      <p className="mx-3 font-medium tracking-wide">
+                      {topLike[0].song_name
+                      } <br />{" "}
+                        <span className="text-sm font-light">
+                        {topLike[0].composer
+                        }
+                        </span>
+                      </p>  
+                    </div>
+                    <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" >
+                      <Play size={18} />
+                    </div>
                   </div>
                 </>
               )}
@@ -253,7 +268,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center">
               <img
                 src="../imgs/image (7).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
                 GOLDEN
@@ -265,7 +280,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center">
               <img
                 src="../imgs/image (8).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
                 MUSE
@@ -277,7 +292,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center ">
               <img
                 src="../imgs/image (9).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
                 Ai Cũng Phải Bắt Đầu Từ Đâu Đó
@@ -289,7 +304,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center">
               <img
                 src="../imgs/image (10).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
                 D-Day
@@ -301,7 +316,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center">
               <img
                 src="../imgs/image (11).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
                 99%
@@ -313,7 +328,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center">
               <img
                 src="../imgs/image (12).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
                 Anh Trai “Say HI”
@@ -325,7 +340,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center">
               <img
                 src="../imgs/image (12).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
                 Anh Trai “Say HI”
@@ -337,7 +352,7 @@ function Dashboard() {
             <div className="text-center flex flex-col  items-center">
               <img
                 src="../imgs/image (12).png"
-                className="rounded-full mb-7 w-full "
+                className="rounded-full mb-7 w-full size-52 "
               />
               <p className="font-medium mb-2 text-base  text-center w-[150px] truncate ">
                 Anh Trai “Say HI”
