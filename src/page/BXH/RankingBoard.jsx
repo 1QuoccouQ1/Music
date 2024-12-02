@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ArtistRankingCard from './ArtistRankingCard';
 import { CiHeart } from 'react-icons/ci';
+import { Link } from 'react-router-dom';
 
-function RankingBoard() {
+function RankingBoard({ artist }) {
     const [rankings, setRankings] = useState([]);
     const [songs, setSongs] = useState([]);
     const [error, setError] = useState(null);
@@ -111,7 +112,6 @@ function RankingBoard() {
                 )}
             </div>
 
-            {/* Songs Table */}
             <div className='overflow-x-auto mt-4'>
                 <table className='min-w-full text-white text-sm sm:text-base'>
                     <thead>
@@ -137,19 +137,22 @@ function RankingBoard() {
                                         className='w-10 h-10 sm:w-12 sm:h-12 rounded-md'
                                     />
                                     <div>
-
                                         <p className='font-semibold'>
                                             {song.song_name}
                                         </p>
                                     </div>
-                                    <CiHeart className='cursor-pointer hover:text-pink-600' />
                                 </td>
-                                <td>{song.provider}</td>
+                                <td>
+                                    <Link
+                                        to={`/ProfileArtist/${song.artist_id}`}
+                                    >
+                                        {song.provider}
+                                    </Link>
+                                </td>
                                 <td>{song.listen_count || 'N/A'}</td>
                                 <td className='text-right'>
                                     {formatTime(song.time) || 'N/A'}
                                 </td>
-
                             </tr>
                         ))}
                     </tbody>

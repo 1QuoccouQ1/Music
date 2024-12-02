@@ -1,44 +1,64 @@
 import React, { useState, useEffect } from 'react';
+import { FaEdit } from 'react-icons/fa';
 
-const ProfileEditPage = () => {
+function ProfileEditPage() {
     const [profileData, setProfileData] = useState({
-        username: '',
+        name: '',
         email: '',
-        gender: '',
         birthDay: '',
         birthMonth: '',
         birthYear: '',
-        country: '',
-        shareData: false
+        gender: '',
+        image: ''
     });
-
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [successMessage, setSuccessMessage] = useState('');
-    const [isSubmitting, setIsSubmitting] = useState(false);
 
-    // Get saved profile data from localStorage when component mounts
     useEffect(() => {
-        const savedData = localStorage.getItem('profileData');
-        if (savedData) {
-            setProfileData(JSON.parse(savedData));
-        } else {
-            // If there's no profile data in localStorage, handle the case accordingly
-            console.log('No profile data found in localStorage');
+        try {
+            const user = JSON.parse(localStorage.getItem('user'));
+            if (user && user.birthday) {
+                const [day, month, year] = user.birthday.split('-').map(Number);
+                setProfileData({
+                    ...user,
+                    birthDay: day || '',
+                    birthMonth: month || '',
+                    birthYear: year || '',
+                    image: user.image || ''
+                });
+            }
+        } catch (err) {
+            console.error('Error parsing user data:', err);
         }
     }, []);
 
-    // Handle input changes
+    const handleImageChange = e => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setProfileData(prevData => ({
+                    ...prevData,
+                    image: reader.result
+                }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
     const handleChange = e => {
-        const { name, value, type, checked } = e.target;
-        setProfileData(prev => ({
-            ...prev,
-            [name]: type === 'checkbox' ? checked : value
+        const { name, value } = e.target;
+        setProfileData(prevData => ({
+            ...prevData,
+            [name]: value
         }));
     };
 
-    // Save data to localStorage (and optionally update via API)
-    const handleSave = async () => {
-        const user = JSON.parse(localStorage.getItem('user')); // Assuming user data is stored in localStorage
+    const handleSubmit = async event => {
+        event.preventDefault();
+
+        const user = JSON.parse(localStorage.getItem('user'));
         const userId = user ? user.id : null;
 
         if (!userId) {
@@ -46,13 +66,9 @@ const ProfileEditPage = () => {
             return;
         }
 
-        const profileData = {
-            // Default profile data structure
-            name: '',
-            email: '',
-            phone: '',
-            // Add other fields as necessary
-            ...JSON.parse(localStorage.getItem('profileData')) // Merge with existing profile data if available
+        const updatedProfileData = {
+            ...profileData,
+            birthday: `${profileData.birthDay}-${profileData.birthMonth}-${profileData.birthYear}`
         };
 
         setIsSubmitting(true);
@@ -60,7 +76,6 @@ const ProfileEditPage = () => {
         setSuccessMessage('');
 
         try {
-            // Make the API call to update the user's profile
             const response = await fetch(
                 `https://your-api-url.com/api/${userId}/update-member`,
                 {
@@ -71,25 +86,25 @@ const ProfileEditPage = () => {
                             'access_token'
                         )}`
                     },
-                    body: JSON.stringify(profileData)
+                    body: JSON.stringify(updatedProfileData)
                 }
             );
 
+            if (!response.ok) {
+                const errorData = await response.text();
+                setErrorMessage(`API error: ${response.status} - ${errorData}`);
+                return;
+            }
+
             const data = await response.json();
 
-            if (response.ok) {
-                setSuccessMessage('Hồ sơ đã được lưu thành công!');
-                // Optionally save updated data to localStorage
-                localStorage.setItem(
-                    'profileData',
-                    JSON.stringify(profileData)
-                );
-            } else {
-                setErrorMessage(
-                    data.message || 'Có lỗi xảy ra khi cập nhật hồ sơ.'
-                );
-            }
+            setSuccessMessage('Hồ sơ đã được lưu thành công!');
+            localStorage.setItem(
+                'profileData',
+                JSON.stringify(updatedProfileData)
+            );
         } catch (error) {
+            console.error('Error while saving profile:', error);
             setErrorMessage('Đã xảy ra lỗi. Vui lòng thử lại.');
         } finally {
             setIsSubmitting(false);
@@ -97,13 +112,40 @@ const ProfileEditPage = () => {
     };
 
     return (
-        <div className='bg-gray-900 min-h-screen flex justify-center items-center pb-10 px-4 sm:px-6'>
-            <div className='bg-gray-900 p-6 sm:p-8 rounded-lg w-full max-w-[777px]'>
+        <div className='bg-gray-900 min-h-screen flex justify-center pt-6 pb-10 px-4 sm:px-6'>
+            <div className='bg-gray-900 p-6 sm:p-8 rounded-lg w-full max-w-[777px] shadow-lg'>
                 <h1 className='text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-9'>
                     Chỉnh Sửa Hồ Sơ
                 </h1>
+                <form onSubmit={handleSubmit}>
+                    <div className='mb-4'>
+                        <div className='flex flex-col items-center'>
+                            <div className='relative'>
+                                <img
+                                    src={
+                                        profileData.image ||
+                                        '/default-avatar.png'
+                                    }
+                                    alt='Profile'
+                                    className='rounded-full w-[255px] h-[255px] border-4 border-pink-600 object-cover'
+                                />
+                                <label
+                                    htmlFor='abc'
+                                    className='absolute bottom-2 right-2 cursor-pointer w-10 h-10 flex items-center justify-center bg-gray-800 hover:bg-gray-700 rounded-full shadow-lg'
+                                >
+                                    <FaEdit className='text-white text-4xl' />
+                                </label>
+                                <input
+                                    id='abc'
+                                    type='file'
+                                    accept='image/*'
+                                    onChange={handleImageChange}
+                                    hidden
+                                />
+                            </div>
+                        </div>
+                    </div>
 
-                <form>
                     <div className='mb-4'>
                         <label className='block text-sm font-medium text-gray-400 mb-2'>
                             Tên người dùng
@@ -111,9 +153,9 @@ const ProfileEditPage = () => {
                         <input
                             type='text'
                             className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
-                            value={profileData.username}
-                            name='username'
-                            disabled
+                            value={profileData.name}
+                            name='name'
+                            onChange={handleChange}
                         />
                     </div>
 
@@ -128,22 +170,6 @@ const ProfileEditPage = () => {
                             name='email'
                             onChange={handleChange}
                         />
-                    </div>
-
-                    <div className='mb-4'>
-                        <label className='block text-sm font-medium text-gray-400 mb-2'>
-                            Giới tính
-                        </label>
-                        <select
-                            className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
-                            value={profileData.gender}
-                            name='gender'
-                            onChange={handleChange}
-                        >
-                            <option value='Nam'>Nam</option>
-                            <option value='Nữ'>Nữ</option>
-                            <option value='Khác'>Khác</option>
-                        </select>
                     </div>
 
                     <div className='mb-4 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4'>
@@ -204,34 +230,18 @@ const ProfileEditPage = () => {
 
                     <div className='mb-4'>
                         <label className='block text-sm font-medium text-gray-400 mb-2'>
-                            Quốc gia và Khu Vực
+                            Giới tính
                         </label>
                         <select
                             className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
-                            value={profileData.country}
-                            name='country'
+                            value={profileData.gender}
+                            name='gender'
                             onChange={handleChange}
                         >
-                            <option value='Vietnam'>Việt Nam</option>
-                            <option value='USA'>Hoa Kỳ</option>
-                            <option value='Japan'>Nhật Bản</option>
+                            <option value='Nam'>Nam</option>
+                            <option value='Nữ'>Nữ</option>
+                            <option value='Khác'>Khác</option>
                         </select>
-                    </div>
-
-                    <div className='mb-6'>
-                        <label className='inline-flex items-center'>
-                            <input
-                                type='checkbox'
-                                className='form-checkbox h-5 w-5 text-pink-600 rounded bg-[7C7C7C] border-pink-600'
-                                name='shareData'
-                                checked={profileData.shareData}
-                                onChange={handleChange}
-                            />
-                            <span className='ml-2 text-gray-400 text-sm'>
-                                Chia sẻ dữ liệu đăng ký của tôi với các nhà cung
-                                cấp nội dung SoundWave cho mục đích tiếp thị.
-                            </span>
-                        </label>
                     </div>
 
                     {errorMessage && (
@@ -254,8 +264,7 @@ const ProfileEditPage = () => {
                             Hủy
                         </button>
                         <button
-                            type='button'
-                            onClick={handleSave}
+                            type='submit'
                             disabled={isSubmitting}
                             className='bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 transition duration-700 text-white py-3 px-6 rounded-full w-full sm:w-auto'
                         >
@@ -266,6 +275,6 @@ const ProfileEditPage = () => {
             </div>
         </div>
     );
-};
+}
 
 export default ProfileEditPage;

@@ -3,14 +3,20 @@ import { useState,useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Facebook, Instagram, Twitter, Music } from "lucide-react"
+import { useParams } from 'react-router-dom'; 
+
 function ProfileArtist() {
     const [isFlowwing, setIsFlowwing] = useState(false);
     const [isModal, setIsModal] = useState(false);
     const [isSelect, setIsSelect] = useState("1");
+    const [artistData, setArtistData] = useState(null);
+
+    const { id } = useParams(); 
 
     const handleFlowwing = () => {
         setIsFlowwing(!isFlowwing);
     }
+   
 
     const handleModal  = () => {
         setIsModal(!isModal);
@@ -33,6 +39,25 @@ function ProfileArtist() {
         };
     }, [isModal]);
 
+    useEffect(() => {
+        console.log(`Fetching data for artist with ID: ${id}`);
+    }, [id]);
+    useEffect(() => {
+        const fetchArtistData = async () => {
+            try {
+                const response = await fetch(`https://admin.soundwave.io.vn/api/ca-si/${id}`);
+                
+                const data = await response.json();
+                console.log(data)
+                setArtistData(data);
+            } catch (error) {
+                console.error('Error fetching artist data:', error);
+            }
+        };
+
+        fetchArtistData();
+    }, [id]);
+
     return ( <>
     <div className='bg-medium w-full h-auto pb-40'>
         <section className='w-full   pt-16  text-white px-5'>
@@ -43,7 +68,7 @@ function ProfileArtist() {
                     <div >
                         <p>Nghệ Sĩ Của Công Chúng</p>
                         <div className="flex items-center my-5">
-                            <p className='text-7xl font-semibold '>Sơn Tùng MTP</p>
+                            <p className='text-7xl font-semibold '> Sơn Tùng MTP</p>
                             <img className='size-10 ml-5 ' src='../imgs/pepicons-pop_checkmark-filled.png'/>
                         </div>
                         <div className="flex items-center gap-7">

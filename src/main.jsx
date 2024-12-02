@@ -197,7 +197,7 @@ const router = createBrowserRouter([
         element: <Upgrade />,
       },
       {
-        path: "/ProfileArtist",
+        path: "/ProfileArtist/:id",
         loader: changeDashboard,
         element: <ProfileArtist />,
       },
