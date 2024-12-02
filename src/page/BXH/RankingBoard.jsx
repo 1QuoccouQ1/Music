@@ -141,7 +141,6 @@ function RankingBoard({ artist }) {
                                             {song.song_name}
                                         </p>
                                     </div>
-                                    <CiHeart className='cursor-pointer hover:text-pink-600' />
                                 </td>
                                 <td>
                                     <Link

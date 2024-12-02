@@ -5,7 +5,6 @@ import axios from 'axios';
 import { Play } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-
 function Dashboard() {
     const [trending, setTrending] = useState([]);
     const [topListen, setTopListen] = useState([]);
@@ -456,17 +455,17 @@ function Dashboard() {
 
                 <Swiper
                     spaceBetween={20}
-                    slidesPerView='auto' // Số item hiện trong 1 lần
-                    className='mySwiper '
+                    slidesPerView='auto'
+                    className='mySwiper'
                 >
                     {artists.map(artist => (
                         <SwiperSlide key={artist.id} style={{ width: 'auto' }}>
                             <Link to={`/ProfileArtist/${artist.id}`}>
-                                <div className='text-center '>
+                                <div className='text-center w-[250px] h-[250px] rounded-lg'>
                                     <img
-                                        src={artist.singer_image} // URL hình ảnh của nghệ sĩ
+                                        src={artist.singer_image}
                                         alt={artist.singer_name}
-                                        className='rounded-full mb-3 w-full size-64'
+                                        className='rounded-full mb-3 w-[250px] h-[250px] items-center'
                                     />
                                     <p className='font-medium mb-2 text-base'>
                                         {artist.singer_name}
