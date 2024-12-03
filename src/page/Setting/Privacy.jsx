@@ -2,18 +2,18 @@ import React from 'react';
 
 function Privacy() {
     return (
-        <div className='bg-gray-900 min-h-screen flex justify-center items-center text-gray-900'>
-            <div className='bg-white w-full max-w-4xl p-10 px-28 shadow-md  border-solid border-2 border-[#FF0065]'>
-                <h1 className='text-4xl font-bold mb-10 text-center text-[#FF0065]'>
+        <div className='bg-gray-900 min-h-screen flex justify-center items-center text-gray-900 px-4 md:px-0'>
+            <div className='bg-white w-full max-w-4xl p-6 md:p-10 md:px-28 shadow-md border-solid border-2 border-[#FF0065]'>
+                <h1 className='text-3xl md:text-4xl font-bold mb-8 md:mb-10 text-center text-[#FF0065]'>
                     SoundWave & Quyền riêng tư
                 </h1>
 
                 <div className='text-sm leading-relaxed text-gray-700 space-y-6'>
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
                             1. Thu thập thông tin cá nhân
                         </h2>
-                        <p className='text-sm'>
+                        <p>
                             Tại SoundWave, chúng tôi cam kết bảo vệ quyền riêng
                             tư của người dùng. Khi bạn tạo tài khoản hoặc sử
                             dụng dịch vụ, chúng tôi có thể thu thập các thông
@@ -27,7 +27,7 @@ function Privacy() {
                     </div>
 
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
                             2. Sử dụng thông tin cá nhân
                         </h2>
                         <p>
@@ -47,7 +47,7 @@ function Privacy() {
                     </div>
 
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
                             3. Chia sẻ thông tin với bên thứ ba
                         </h2>
                         <p>
@@ -66,7 +66,7 @@ function Privacy() {
                     </div>
 
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
                             4. Cookies và công nghệ theo dõi
                         </h2>
                         <p>
@@ -87,7 +87,7 @@ function Privacy() {
                     </div>
 
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
                             5. Quyền của người dùng
                         </h2>
                         <p>
@@ -103,10 +103,26 @@ function Privacy() {
                             theo các quy định về bảo vệ dữ liệu hiện hành.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
-                            6. Chuyển giao dữ liệu quốc tế
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            6. Bảo mật thông tin
+                        </h2>
+                        <p>
+                            Chúng tôi coi trọng việc bảo mật thông tin cá nhân
+                            của bạn và áp dụng các biện pháp kỹ thuật và tổ chức
+                            cần thiết để bảo vệ dữ liệu khỏi truy cập trái phép,
+                            mất mát, hoặc lạm dụng. Dữ liệu cá nhân của bạn được
+                            mã hóa trong quá trình truyền tải và lưu trữ. Chúng
+                            tôi sử dụng công nghệ bảo mật tiên tiến để đảm bảo
+                            rằng chỉ những nhân viên có thẩm quyền mới có quyền
+                            truy cập vào thông tin của bạn. SoundWave thường
+                            xuyên rà soát và nâng cấp các biện pháp bảo mật để
+                            đảm bảo mức độ an toàn cao nhất cho người dùng.
+                        </p>
+                    </div>
+                    <div>
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            7. Chuyển giao dữ liệu quốc tế
                         </h2>
                         <p>
                             Trong một số trường hợp, thông tin cá nhân của bạn
@@ -123,10 +139,9 @@ function Privacy() {
                             của bạn.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
-                            7. Lưu trữ thông tin
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            8. Lưu trữ thông tin
                         </h2>
                         <p>
                             Chúng tôi chỉ lưu trữ thông tin cá nhân của bạn
@@ -142,10 +157,9 @@ function Privacy() {
                             quy định về bảo mật.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
-                            8. Chính sách đối với trẻ em
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            9. Chính sách đối với trẻ em
                         </h2>
                         <p>
                             SoundWave không cung cấp dịch vụ cho người dùng dưới
@@ -160,10 +174,9 @@ function Privacy() {
                             không truy cập vào các dịch vụ không phù hợp.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pb-2'>
-                            9. Thay đổi chính sách quyền riêng tư
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            10. Thay đổi chính sách quyền riêng tư
                         </h2>
                         <p>
                             SoundWave có quyền thay đổi hoặc cập nhật chính sách
@@ -178,10 +191,9 @@ function Privacy() {
                             nhân.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pd-2'>
-                            10. Quyền hủy bỏ
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            11. Quyền hủy bỏ
                         </h2>
                         <p>
                             Bạn có quyền hủy bỏ sự đồng ý đối với việc thu thập
@@ -196,10 +208,9 @@ function Privacy() {
                             năng hoặc dịch vụ của chúng tôi.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pd-2'>
-                            11. Sử dụng thông tin phi cá nhân
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            12. Sử dụng thông tin phi cá nhân
                         </h2>
                         <p>
                             Bên cạnh việc thu thập thông tin cá nhân, chúng tôi
@@ -215,10 +226,9 @@ function Privacy() {
                             thông tin này hoàn toàn ẩn danh.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pd-2'>
-                            12. Quảng cáo và tiếp thị
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            13. Sử dụng thông tin phi cá nhân
                         </h2>
                         <p>
                             Bên cạnh việc thu thập thông tin cá nhân, chúng tôi
@@ -234,10 +244,26 @@ function Privacy() {
                             thông tin này hoàn toàn ẩn danh.
                         </p>
                     </div>
-
                     <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pd-2'>
-                            13. Liên hệ
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            14. Quảng cáo và tiếp thị
+                        </h2>
+                        <p>
+                            Chúng tôi có thể sử dụng thông tin cá nhân của bạn
+                            để gửi các thông báo quảng cáo về sản phẩm, dịch vụ
+                            hoặc các sự kiện âm nhạc liên quan đến SoundWave mà
+                            chúng tôi tin rằng bạn sẽ quan tâm. Các thông báo
+                            này có thể được gửi qua email, tin nhắn văn bản,
+                            hoặc hiển thị trực tiếp trên nền tảng. Nếu bạn không
+                            muốn nhận các thông báo tiếp thị này, bạn có thể từ
+                            chối bất cứ lúc nào thông qua cài đặt tài khoản hoặc
+                            bằng cách nhấp vào liên kết "hủy đăng ký" trong các
+                            email quảng cáo mà chúng tôi gửi.
+                        </p>
+                    </div>
+                    <div>
+                        <h2 className='font-semibold text-xl md:text-2xl text-[#FF0065] pb-2'>
+                            15. Liên hệ
                         </h2>
                         <p>
                             Nếu bạn có bất kỳ câu hỏi, thắc mắc, hoặc yêu cầu
@@ -251,24 +277,6 @@ function Privacy() {
                             quyền riêng tư của bạn.
                         </p>
                     </div>
-                    <div>
-                        <h2 className='font-semibold text-2xl text-[#FF0065] pd-2'>
-                            14. Bảo mật thông tin
-                        </h2>
-                        <p>
-                            Chúng tôi coi trọng việc bảo mật thông tin cá nhân
-                            của bạn và áp dụng các biện pháp kỹ thuật và tổ chức
-                            cần thiết để bảo vệ dữ liệu khỏi truy cập trái phép,
-                            mất mát, hoặc lạm dụng. Dữ liệu cá nhân của bạn được
-                            mã hóa trong quá trình truyền tải và lưu trữ. Chúng
-                            tôi sử dụng công nghệ bảo mật tiên tiến để đảm bảo
-                            rằng chỉ những nhân viên có thẩm quyền mới có quyền
-                            truy cập vào thông tin của bạn. SoundWave thường
-                            xuyên rà soát và nâng cấp các biện pháp bảo mật để
-                            đảm bảo mức độ an toàn cao nhất cho người dùng.
-                        </p>
-                    </div>
-                    
                 </div>
             </div>
         </div>

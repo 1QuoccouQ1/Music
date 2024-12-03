@@ -40,7 +40,7 @@ const InvoiceDetail = () => {
                 </p>
 
                 <div className="flex justify-end mt-10">
-                    <NavLink to="PurchaseHistoryPage" className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-6 rounded-lg mr-4">
+                    <NavLink to="/PurchaseHistoryPage" className="bg-gray-700 hover:bg-gray-600 text-white py-2 px-6 rounded-lg mr-4">
                         Quay lại
                     </NavLink>
                     <button className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-700 text-white py-2 px-9 rounded-lg">

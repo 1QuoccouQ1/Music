@@ -5,6 +5,7 @@ import { API_URL } from "../../services/apiService";
 function ArtistGallery() {
   const [artists, setArtists] = useState([]);
 
+  
   useEffect(() => {
     fetch(`${API_URL}/ca-si`)
       .then(response => response.json())
@@ -13,12 +14,15 @@ function ArtistGallery() {
         const formattedArtists = data.map(artist => ({
           name: artist.singer_name || "Unknown Artist",
           profession: "Nghệ Sĩ",
+          id: artist.id,
           imageUrl: artist.singer_image || "https://via.placeholder.com/150",
         }));
         setArtists(formattedArtists);
       })
       .catch(error => console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error));
   }, []);
+
+ 
 
   return (
     <div className="bg-gray-900 min-h-screen py-10 px-4 sm:px-8">

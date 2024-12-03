@@ -43,92 +43,109 @@ function Dashboard() {
       const artistData = await artistList.json();
       const genresData = await genresList.json();
 
-      setTrending(trendingData);
-      setTopListen(topListenData);
-      setTopLike(topLikeData);
-      setArtists(artistData);
-      setGenres(genresData);
-    } catch (error) {
-      console.error("Lỗi khi gọi API:", error);
-    }
-  };
+            setTrending(trendingData);
+            setTopListen(topListenData);
+            setTopLike(topLikeData);
+            setArtists(artistData);
+            setGenres(genresData);
+        } catch (error) {
+            console.error('Lỗi khi gọi API:', error);
+        }
+    };
 
   const [songHistory, setSongHistory] = useState(
     JSON.parse(localStorage.getItem("songHistory")) || []
   );
-
-  // Hàm để load lịch sử từ localStorage mỗi khi nó thay đổi
+    
+  useEffect(() => {
+      fetch(`${API_URL}/ca-si`)
+          .then(response => response.json())
+          .then(data => {
+              // Mapping the fetched data to match the format needed for ArtistCard
+              const formattedArtists = data.map(artist => ({
+                  name: artist.singer_name || 'Unknown Artist',
+                  profession: 'Nghệ Sĩ',
+                  id: artist.id,
+                  imageUrl:
+                      artist.singer_image || 'https://via.placeholder.com/150'
+              }));
+              setArtists(formattedArtists);
+          })
+          .catch(error =>
+              console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error)
+          );
+  }, []);
 
   // Lấy danh sách quốc gia khi component được render lần đầu
   useEffect(() => {
-    const fetchCountries = async () => {
-      try {
-        const response = await axios.get(
-          `${API_URL}/quoc-gia`
-        ); // Gọi API /quoc-gia
-        setCountries(response.data); // Lưu danh sách quốc gia vào state
-        if (response.data.length > 0) {
-          setActiveTab(response.data[0].id); // Đặt quốc gia đầu tiên làm mặc định
-        }
-      } catch (error) {
-        console.error("Error fetching countries:", error);
-      }
-    };
-    fetchCountries();
+      const fetchCountries = async () => {
+          try {
+              const response = await axios.get(
+                  `${API_URL}/quoc-gia`
+              ); // Gọi API /quoc-gia
+              setCountries(response.data); // Lưu danh sách quốc gia vào state
+              if (response.data.length > 0) {
+                  setActiveTab(response.data[0].id); // Đặt quốc gia đầu tiên làm mặc định
+              }
+          } catch (error) {
+              console.error('Error fetching countries:', error);
+          }
+      };
+      fetchCountries();
   }, []);
 
   // Lấy danh sách bài hát khi activeTab thay đổi
   useEffect(() => {
-    if (activeTab) {
-      const fetchSongs = async () => {
-        setLoading(true);
-        try {
-          const response = await axios.get(
-            `${API_URL}/quoc-gia/${activeTab}/bai-hat`
-          ); // Gọi API /bai-hat với ID quốc gia
+      if (activeTab) {
+          const fetchSongs = async () => {
+              setLoading(true);
+              try {
+                  const response = await axios.get(
+                      `${API_URL}/quoc-gia/${activeTab}/bai-hat`
+                  ); // Gọi API /bai-hat với ID quốc gia
 
-          if (response.status === 200) {
-            setSongs(response.data); // Lưu danh sách bài hát vào state
-          } else {
-            setSongs([]); // Nếu không có bài hát nào thì set state rỗng
-          }
-        } catch (error) {
-          console.error("Error fetching songs:", error);
-        } finally {
-          setLoading(false);
-        }
-      };
-      fetchSongs();
-    }
+                  if (response.status === 200) {
+                      setSongs(response.data); // Lưu danh sách bài hát vào state
+                  } else {
+                      setSongs([]); // Nếu không có bài hát nào thì set state rỗng
+                  }
+              } catch (error) {
+                  console.error('Error fetching songs:', error);
+              } finally {
+                  setLoading(false);
+              }
+          };
+          fetchSongs();
+      }
   }, [activeTab]);
 
   useEffect(() => {
-    const isSetting = localStorage.getItem("isSetting");
-    if (isSetting === "false") {
-      localStorage.removeItem("isSetting"); // Remove it to prevent repeated reloads
-      if (!sessionStorage.getItem("reloaded")) {
-        sessionStorage.setItem("reloaded", true); // Flag that reload has occurred
-        window.location.reload(); // Reload the page
+      const isSetting = localStorage.getItem('isSetting');
+      if (isSetting === 'false') {
+          localStorage.removeItem('isSetting'); // Remove it to prevent repeated reloads
+          if (!sessionStorage.getItem('reloaded')) {
+              sessionStorage.setItem('reloaded', true); // Flag that reload has occurred
+              window.location.reload(); // Reload the page
+          }
       }
-    }
-    fetchData();
+      fetchData();
   }, []);
 
   // Hàm render danh sách quốc gia
   const renderCountries = () => {
-    return countries.map((country) => (
-      <p
-        key={country.id}
-        className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
-          activeTab === country.id
-            ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-            : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
-        }`}
-        onClick={() => setActiveTab(country.id)} // Đổi quốc gia khi nhấn vào tab
-      >
-        {country.name_country}
-      </p>
-    ));
+      return countries.map(country => (
+          <p
+              key={country.id}
+              className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
+                  activeTab === country.id
+                      ? 'bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
+                      : 'bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
+              }`}
+              onClick={() => setActiveTab(country.id)} // Đổi quốc gia khi nhấn vào tab
+          >
+              {country.name_country}
+          </p>
+      ));
   };
 
   // Hàm render danh sách bài hát

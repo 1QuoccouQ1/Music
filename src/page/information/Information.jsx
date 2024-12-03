@@ -1,21 +1,35 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 
+
+
 function Information() {
+    const [userName, setUserName] = useState('');
+    const [userImage, setUserImage] = useState('');
+
+    useEffect(() => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            setUserName(user.name);
+            setUserImage(user.image);
+        }
+    }, []);
+
     return (
         <div>
-            <div className='bg-gray-900 min-h-screen p-8'>
+            <div className='bg-gray-900 min-h-screen p-4 md:p-8'>
                 {/* User information section */}
-                <div className='ml-5'>
+                <div className='ml-0 md:ml-5'>
                     <div>
-                        <div className='flex items-center mb-8'>
+                        <div className='flex flex-col md:flex-row items-center mb-8'>
                             <img
-                                className=' h-[318px] rounded-full'
-                                src='https://i.pinimg.com/enabled/564x/95/08/31/950831f8f677e4aa2e8e3bddaed0d3cf.jpg'
-                            ></img>
-                            <div className='ml-6'>
-                                <h2 className='text-3xl text-white font-semibold mb-6'>
-                                    Nguyễn Đỗ Thanh Nguyên
+                                className='h-32 w-32 md:h-[318px] md:w-[318px] rounded-full mx-auto md:mx-0'
+                                src={userImage || 'https://i.pinimg.com/enabled/564x/95/08/31/950831f8f677e4aa2e8e3bddaed0d3cf.jpg'}
+                                alt='User Avatar'
+                            />
+                            <div className='mt-4 md:mt-0 md:ml-6 text-center md:text-left'>
+                                <h2 className='text-xl md:text-3xl text-white font-semibold mb-4'>
+                                {userName}
                                 </h2>
                                 <p className='text-gray-400'>
                                     123 bài hát yêu thích
@@ -26,7 +40,7 @@ function Information() {
 
                     {/* Navigation Links */}
                     <nav className='mb-4 border-b border-gray-500'>
-                        <ul className='flex space-x-8 text-sm font-medium'>
+                        <ul className='flex flex-wrap md:flex-nowrap flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-8 text-sm font-medium'>
                             <li className='relative group'>
                                 <NavLink
                                     to='InfoLibrary'
@@ -39,7 +53,6 @@ function Information() {
                                     {({ isActive }) => (
                                         <>
                                             Thư Viện
-                                            {/* Pink underline */}
                                             <span
                                                 className={`absolute bottom-0 left-0 w-full h-[0.4px] bg-pink-500 ${
                                                     isActive
@@ -74,6 +87,7 @@ function Information() {
                                     )}
                                 </NavLink>
                             </li>
+                            {/* Other Links */}
                             <li className='relative group'>
                                 <NavLink
                                     to='PlayLists'
@@ -131,7 +145,7 @@ function Information() {
                                 >
                                     {({ isActive }) => (
                                         <>
-                                            Nghệ sĩ 
+                                            Nghệ sĩ
                                             <span
                                                 className={`absolute bottom-0 left-0 w-full h-[0.4px] bg-pink-500 ${
                                                     isActive
@@ -166,30 +180,6 @@ function Information() {
                                     )}
                                 </NavLink>
                             </li>
-                            <li className='relative group'>
-                                <NavLink
-                                    to='Followed'
-                                    className={({ isActive }) =>
-                                        `text-gray-400 hover:text-white pb-2 ${
-                                            isActive ? 'active' : ''
-                                        }`
-                                    }
-                                >
-                                    {({ isActive }) => (
-                                        <>
-                                            Đã Theo Dõi
-                                            <span
-                                                className={`absolute bottom-0 left-0 w-full h-[0.4px] bg-pink-500 ${
-                                                    isActive
-                                                        ? 'scale-x-100'
-                                                        : 'scale-x-0'
-                                                } group-hover:scale-x-100 transition-transform duration-300 origin-left`}
-                                            ></span>
-                                        </>
-                                    )}
-                                </NavLink>
-                            </li>
-                           
                         </ul>
                     </nav>
                 </div>

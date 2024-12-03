@@ -20,15 +20,12 @@ const ContactForm = () => {
     });
   };
 
-  // Hàm validate form
   const validateForm = () => {
     const newErrors = {};
 
     if (!formData.topic) newErrors.topic = "Vui lòng chọn vấn đề cần liên hệ.";
     if (!formData.email) newErrors.email = "Email không được để trống.";
-    else if (
-      !/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email) // Kiểm tra định dạng email
-    )
+    else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
       newErrors.email = "Email không đúng định dạng.";
     if (!formData.message)
       newErrors.message = "Vui lòng nhập nội dung cần hỗ trợ.";
@@ -39,14 +36,13 @@ const ContactForm = () => {
       newErrors.dataProcessing = "Bạn cần đồng ý với chính sách xử lý dữ liệu.";
 
     setErrors(newErrors);
-    return Object.keys(newErrors).length === 0; // Trả về true nếu không có lỗi
+    return Object.keys(newErrors).length === 0;
   };
 
-  // Hàm xử lý gửi form
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!validateForm()) return; // Nếu lỗi thì không tiếp tục
+    if (!validateForm()) return;
 
     try {
       const response = await fetch("/Contact", {
@@ -67,33 +63,31 @@ const ContactForm = () => {
           acknowledge: false,
           dataProcessing: false,
         });
-        setErrors({}); // Xóa lỗi nếu có
+        setErrors({});
       } else {
-        console.error("Gửi dữ liệu thất bại.");
+        console.error("Có lỗi xảy ra khi gửi dữ liệu.");
       }
     } catch (error) {
-      console.error("Lỗi khi gửi dữ liệu:", error);
+      console.error("Lỗi kết nối:", error);
     }
   };
 
   return (
-    <div className="bg-gray-900 min-h-screen flex items-center justify-center pt-3 ">
+    <div className="bg-gray-900 min-h-screen flex items-center justify-center pt-3">
       <div>
-        <h1 className="text-3xl font-semibold text-white mb-6 mt-16 ">
+        <h1 className="text-3xl font-semibold text-white mb-6 mt-16">
           Liên hệ với chúng tôi
         </h1>
-        <div className="  py-14 px-[190px] rounded-lg max-w-4xl w-full border-4 border-indigo-500/5">
-          <p className="text-gray-400  mb-6">
+        <div className="py-14 px-[190px] rounded-lg max-w-4xl w-full border-4 border-indigo-500/5">
+          <p className="text-gray-400 mb-6">
             Chúng tôi luôn ghi nhận các đóng góp ý kiến của bạn để cải tiến và
-            nâng cấp sản phẩm SoundWave ngày một hoàn thiện và hữu ích hơn. Đừng
-            ngại chia sẻ ý tưởng cho chúng tôi.
+            nâng cấp sản phẩm SoundWave ngày một hoàn thiện và hữu ích hơn.
           </p>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label className="block mb-2 text-sm font-medium text-gray-400">
-                Chọn vấn đề mà bạn cần hỗ trợ{" "}
-                <span className="text-red-600"> *</span>
+                Chọn vấn đề mà bạn cần hỗ trợ <span className="text-red-600"> *</span>
               </label>
               <select
                 name="topic"
@@ -102,15 +96,14 @@ const ContactForm = () => {
                 className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
                   errors.topic ? "border-red-500" : "border-pink-500"
                 }`}
+                required
               >
                 <option value="">Chọn vấn đề cần liên hệ</option>
                 <option value="technical">Hỗ trợ kỹ thuật</option>
                 <option value="billing">Hóa đơn</option>
                 <option value="general">Câu hỏi chung</option>
               </select>
-              {errors.topic && (
-                <p className="text-red-500 text-sm mt-1">{errors.topic}</p>
-              )}
+              {errors.topic && <p className="text-red-500 text-sm">{errors.topic}</p>}
             </div>
 
             <div className="mb-5">
@@ -125,10 +118,9 @@ const ContactForm = () => {
                 className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
                   errors.email ? "border-red-500" : "border-pink-500"
                 }`}
+                required
               />
-              {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-              )}
+              {errors.email && <p className="text-red-500 text-sm">{errors.email}</p>}
             </div>
 
             <div className="mb-5">
@@ -143,8 +135,7 @@ const ContactForm = () => {
                 className="w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500"
               />
               <p className="text-sm text-gray-400 mt-2">
-                Có thể tìm thấy tên người dùng trên hồ sơ SoundWave của tài
-                khoản.
+                Có thể tìm thấy tên người dùng trên hồ sơ SoundWave của tài khoản.
               </p>
             </div>
 
@@ -161,9 +152,7 @@ const ContactForm = () => {
                 }`}
                 rows="4"
               />
-              {errors.message && (
-                <p className="text-red-500 text-sm mt-1">{errors.message}</p>
-              )}
+              {errors.message && <p className="text-red-500 text-sm">{errors.message}</p>}
             </div>
 
             <div className="mb-4">
