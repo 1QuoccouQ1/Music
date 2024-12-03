@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import ArtistCard from "./ArtistCard";
+import { API_URL } from "../../services/apiService";
 
 function ArtistGallery() {
   const [artists, setArtists] = useState([]);
 
   useEffect(() => {
-    fetch('https://admin.soundwave.io.vn/api/ca-si')
+    fetch(`${API_URL}/ca-si`)
       .then(response => response.json())
       .then(data => {
         // Mapping the fetched data to match the format needed for ArtistCard

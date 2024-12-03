@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ArtistRankingCard from './ArtistRankingCard';
+import { API_URL } from '../../services/apiService';
 
 function RankingBoard() {
     const [rankings, setRankings] = useState([]);
@@ -8,7 +9,7 @@ function RankingBoard() {
     useEffect(() => {
         const fetchRankings = async () => {
             try {
-                const response = await fetch('https://admin.soundwave.io.vn/api/bxh-100');
+                const response = await fetch(`${API_URL}/bxh-100`);
                 const data = await response.json();
 
                 // Get top 3 for ranking and rest for songs
@@ -19,7 +20,7 @@ function RankingBoard() {
                 // Fetch listen counts for each song
                 const listenCounts = await Promise.all(
                     remainingSongs.map(async (song) => {
-                        const listenResponse = await fetch(`https://admin.soundwave.io.vn/api/luot-nghe/${song.id}`);
+                        const listenResponse = await fetch(`${API_URL}/luot-nghe/${song.id}`);
                         const listenData = await listenResponse.json();
                         return { id: song.id, listenCount: listenData.listen_count };
                     })

@@ -7,6 +7,7 @@ import { Undo2 } from 'lucide-react';
 
 
 import 'react-toastify/dist/ReactToastify.css';
+import { API_URL } from '../services/apiService';
 function Register() {
   const navigate = useNavigate();
   const [dateOfBirth, setDateOfBirth] = useState({ day: '', month: '', year: '' });
@@ -137,7 +138,7 @@ function Register() {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await fetch('https://admin.soundwave.io.vn/api/users/register', {
+        const response = await fetch(`${API_URL}/users/register`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

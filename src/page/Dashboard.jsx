@@ -1,10 +1,16 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import axios from "axios";
 import { Play } from "lucide-react";
+import { useContext } from "react";
+import { UserContext } from "../ContextAPI/UserContext";
+import { API_URL } from "../services/apiService";
 
 function Dashboard() {
+  const {
+    handleFetchSongs
+  } = useContext(UserContext);
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
   const [topLike, setTopLike] = useState([]);
@@ -18,17 +24,17 @@ function Dashboard() {
   const fetchData = async () => {
     try {
       const trendingResponse = await fetch(
-        "https://admin.soundwave.io.vn/api/trending"
+        `${API_URL}/trending`
       );
       const topListenResponse = await fetch(
-        "https://admin.soundwave.io.vn/api/top-listen"
+        `${API_URL}/top-listen`
       );
       const topLikeResponse = await fetch(
-        "https://admin.soundwave.io.vn/api/top-like"
+        `${API_URL}/top-like`
       );
-      const artistList = await fetch("https://admin.soundwave.io.vn/api/ca-si");
+      const artistList = await fetch(`${API_URL}/ca-si`);
       const genresList = await fetch(
-        "https://admin.soundwave.io.vn/api/the-loai"
+        `${API_URL}/the-loai`
       );
 
       const trendingData = await trendingResponse.json();
@@ -58,7 +64,7 @@ function Dashboard() {
     const fetchCountries = async () => {
       try {
         const response = await axios.get(
-          "https://admin.soundwave.io.vn/api/quoc-gia"
+          `${API_URL}/quoc-gia`
         ); // Gọi API /quoc-gia
         setCountries(response.data); // Lưu danh sách quốc gia vào state
         if (response.data.length > 0) {
@@ -78,7 +84,7 @@ function Dashboard() {
         setLoading(true);
         try {
           const response = await axios.get(
-            `https://admin.soundwave.io.vn/api/quoc-gia/${activeTab}/bai-hat`
+            `${API_URL}/quoc-gia/${activeTab}/bai-hat`
           ); // Gọi API /bai-hat với ID quốc gia
 
           if (response.status === 200) {
@@ -135,7 +141,7 @@ function Dashboard() {
     }
     return songs.map((song, index) => (
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
-        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer">
+        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onClick={() => {handleFetchSongs("song",song.id)}} >
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
           <img
             className="size-16 rounded-md"
@@ -186,7 +192,7 @@ function Dashboard() {
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => {handleFetchSongs("trending")}}>
                         <Play size={18} />
                       </div>
                     </div>
@@ -213,7 +219,7 @@ function Dashboard() {
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => {handleFetchSongs("toplisten")}}>
                         <Play size={18} />
                       </div>
                     </div>
@@ -240,7 +246,7 @@ function Dashboard() {
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer">
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer " onClick={() => {handleFetchSongs("yeuthich")}}>
                         <Play size={18} />
                       </div>
                     </div>

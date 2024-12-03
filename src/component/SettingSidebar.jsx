@@ -7,11 +7,11 @@ import PrivacyTipOutlinedIcon from '@mui/icons-material/PrivacyTipOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import GroupsIcon from '@mui/icons-material/Groups';
-import React from 'react';
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom"; 
+import { API_URL } from '../services/apiService';
 
 function SettingSidebar() {
     const navigate = useNavigate();
@@ -24,7 +24,7 @@ function SettingSidebar() {
 
         try {
           // Gửi yêu cầu logout tới API
-          await fetch('https://admin.soundwave.io.vn/api/logout', { 
+          await fetch(`${API_URL}/logout`, { 
             method: 'POST',
             headers: {
               "Content-Type": "application/json",

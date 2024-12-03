@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { API_URL } from '../services/apiService';
 
 function Genre() {
 
@@ -16,7 +17,7 @@ function Genre() {
     useEffect(() => {
         const fetchCountries = async () => {
           try {
-            const response = await fetch('https://admin.soundwave.io.vn/api/quoc-gia');
+            const response = await fetch(`${API_URL}/quoc-gia`);
             const data = await response.json();
             setCountries(data); // Assuming the data is in an array format
             setLoading(false);
@@ -32,13 +33,13 @@ function Genre() {
 
     useEffect(() => {
         // Gọi API để lấy danh sách thể loại
-        fetch('https://admin.soundwave.io.vn/api/the-loai')
+        fetch(`${API_URL}/the-loai`)
         .then(response => response.json())
         .then(data => {
             setCategories(data);
             // Gọi API để lấy bài hát của từng thể loại
             data.forEach(category => {
-            fetch(`https://admin.soundwave.io.vn/api/the-loai/${category.id}/bai-hat`)
+            fetch(`${API_URL}/the-loai/${category.id}/bai-hat`)
                 .then(response => response.json())
                 .then(songData => {
                 setSongs(prevSongs => ({

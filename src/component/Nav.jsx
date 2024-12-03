@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom"; 
 import { Link } from 'react-router-dom';
+import { API_URL } from "../services/apiService";
 
 
 function Nav() {
@@ -38,7 +39,7 @@ function Nav() {
     setError("");
 
     try {
-      const response = await fetch(`https://admin.soundwave.io.vn/api/tim-kiem` , {
+      const response = await fetch(`${API_URL}/tim-kiem` , {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -64,7 +65,7 @@ function Nav() {
     const handleLogout = async () => {
 
       try {
-        await fetch('https://admin.soundwave.io.vn/api/logout', { 
+        await fetch(`${API_URL}/logout`, { 
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
