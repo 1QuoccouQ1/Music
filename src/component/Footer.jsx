@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
-import { API_URL, getMusics } from "../services/apiService";
+import { API_URL } from "../services/apiService";
 import React from "react";
 
 const Footer = React.memo(function FooterComponent() {
@@ -78,6 +78,7 @@ const Footer = React.memo(function FooterComponent() {
   const [isTimerModalVisible, setIsTimerModalVisible] = useState(false); 
   const [optionSongIndex, setOptionSongIndex] = useState(null);
   const Playlist = useRef(null);
+  const Divlist = useRef(null);
   const [songPlayCount, setSongPlayCount] = useState(0); 
   const [isPlayingAd, setIsPlayingAd] = useState(false); 
   const [favoriteSongs, setFavoriteSongs] = useState([]);
@@ -120,6 +121,7 @@ const Footer = React.memo(function FooterComponent() {
         console.error("Không thể lấy danh sách yêu thích:", response.status);
       }
     } catch (error) {
+      console.error("Không thể lấy danh sách yêu thích:", error);
     }
   };
 
@@ -294,6 +296,7 @@ const Footer = React.memo(function FooterComponent() {
         }
       }
     } catch (error) {
+      console.error("Lỗi khi thêm yêu thích:", error);
     }
   };
 
@@ -365,7 +368,7 @@ const Footer = React.memo(function FooterComponent() {
 
 
     const handleClickOutside = (event) => {
-      if (Playlist.current && !Playlist.current.contains(event.target)) {
+      if (Playlist.current && !Playlist.current.contains(event.target) && !Divlist.current.contains(event.target)) {
         setIsAlbum(false);
       }
     };
@@ -704,8 +707,9 @@ const Footer = React.memo(function FooterComponent() {
           </div>
           <div
             onClick={() => {
-              setIsAlbum(!isAlbum);
+                setIsAlbum(true);
             }}
+            ref = {Divlist}
             className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  h-[40px] px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
           >
             <div className="border border-white size-4 flex items-center justify-center rounded-full mr-2 rotate-90">
