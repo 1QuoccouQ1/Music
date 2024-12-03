@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ArtistRankingCard from './ArtistRankingCard';
+import { API_URL } from '../../services/apiService';
 import { CiHeart } from 'react-icons/ci';
 import { Link } from 'react-router-dom';
 
@@ -19,7 +20,7 @@ function RankingBoard({ artist }) {
         const fetchRankings = async () => {
             try {
                 const response = await fetch(
-                    'https://admin.soundwave.io.vn/api/bxh-100'
+                    `${API_URL}/bxh-100`
                 );
                 const data = await response.json();
 

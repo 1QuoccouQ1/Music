@@ -12,9 +12,8 @@ import {
 } from "lucide-react";
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
-import { getMusics } from "../services/apiService";
+import { API_URL } from "../services/apiService";
 import React from "react";
-import { toast } from "react-toastify";
 
 const Footer = React.memo(function FooterComponent() {
   const {
@@ -28,28 +27,15 @@ const Footer = React.memo(function FooterComponent() {
     isModal,
     setIsModal,
     isSetting,
+    audioRef,
+    listsongs, setListSongs,
+    currentSongIndex, setCurrentSongIndex,
+    isPlaying, setIsPlaying,
+    handleFetchSongs,
+    isListUpdated, setIsListUpdated
   } = useContext(UserContext);
-
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const [musicData] = await Promise.all([getMusics()]);
-        setListSongs(musicData);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-    fetchFavoriteSongs();
-  }, []);
-
-  const [listsongs, setListSongs] = useState([]);
-
   // Thêm hàm để lọc các chất lượng dựa trên file_paths của bài hát hiện tại
   const getAvailableQualities = () => {
     const currentSong = listsongs[currentSongIndex];
@@ -58,8 +44,7 @@ const Footer = React.memo(function FooterComponent() {
     // Lọc các quality mà có giá trị trùng với file_paths của bài hát hiện tại
     return qualities.filter((quality) => currentSong.file_paths[quality.value]);
   };
-
-  const qualities = [
+  const qualities = [ 
     {
       name: "Thường (128kbps)",
       label: "128kbps",
@@ -79,14 +64,10 @@ const Footer = React.memo(function FooterComponent() {
       labelColor: "bg-gradient-to-r from-[#FF553E] to-[#FF0065] ",
     },
   ];
-
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
-  const [isPlaying, setIsPlaying] = useState(() => {
-    const savedIsPlay = localStorage.getItem("isPlaying");
-    return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
-  });
+  
   const [duration, setDuration] = useState(0);
   const [isLooping, setIsLooping] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -94,27 +75,28 @@ const Footer = React.memo(function FooterComponent() {
   const [isShuffling, setIsShuffling] = useState(false);
   const [timer, setTimer] = useState(null);
   const [isTimerActive, setIsTimerActive] = useState(false);
-  const [isTimerModalVisible, setIsTimerModalVisible] = useState(false); // Trạng thái hiển thị modal hẹn giờ
-  const [currentSongIndex, setCurrentSongIndex] = useState(1);
+  const [isTimerModalVisible, setIsTimerModalVisible] = useState(false); 
   const [optionSongIndex, setOptionSongIndex] = useState(null);
-  const audioRef = useRef(null);
   const Playlist = useRef(null);
-  const [songPlayCount, setSongPlayCount] = useState(0); // Đếm số bài hát đã nghe
-  const [isPlayingAd, setIsPlayingAd] = useState(false); // Trạng thái phát quảng cáo
+  const Divlist = useRef(null);
+  const [songPlayCount, setSongPlayCount] = useState(0); 
+  const [isPlayingAd, setIsPlayingAd] = useState(false); 
   const [favoriteSongs, setFavoriteSongs] = useState([]);
 
-
-  // Hàm gọi API nhạc quảng cáo
   const fetchAd = async () => {
     try {
       const response = await fetch(
-        "https://admin.soundwave.io.vn/api/quang-cao"
+        `${API_URL}/quang-cao`,{ 
+          method: 'GET',
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          }
+        }
       ); // Gọi API để lấy quảng cáo
       const data = await response.json();
-      console.log("Quảng cáo:", data);
       if (data && data.file_path) {
         // Bật trạng thái phát quảng cáo
-        console.log("trang thai", isPlayingAd);
         audioRef.current.src = data.file_path; // Cập nhật src của audio
         audioRef.current.play(); // Phát quảng cáo
       }
@@ -129,18 +111,17 @@ const Footer = React.memo(function FooterComponent() {
     try {
       const userId = JSON.parse(localStorage.getItem("user")).id;
       const response = await fetch(
-        `https://admin.soundwave.io.vn/api/${userId}/bai-hat-yeu-thich`
+        `${API_URL}/${userId}/bai-hat-yeu-thich`
       );
       if (response.ok) {
         const data = await response.json();
         const favoriteSongs = data;
         setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
-        console.log("Danh sách yêu thích:", favoriteSongs);
       } else {
         console.error("Không thể lấy danh sách yêu thích:", response.status);
       }
     } catch (error) {
-      console.error("Lỗi khi gọi API:", error);
+      console.error("Không thể lấy danh sách yêu thích:", error);
     }
   };
 
@@ -153,17 +134,23 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   const togglePlayPause = () => {
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
+    if (audioRef.current) {
+      if (isPlaying) {
+        audioRef.current.pause();
+      } else {
+        audioRef.current.play();
+      }
     }
     setIsPlaying(!isPlaying);
     setIsPlay(!isPlaying);
   };
 
   const onLoadedMetadata = () => {
-    setDuration(audioRef.current.duration);
+    if (isPlayingAd) {
+      setDuration(audioRef.current.duration);
+    } else {
+      setDuration(listsongs[currentSongIndex].time);
+    }
   };
 
   const handleNextSong = () => {
@@ -180,7 +167,7 @@ const Footer = React.memo(function FooterComponent() {
     setIsPlay(true);
   };
 
-  const handlePreviousSong = () => {
+  const handlePreviousSong =  ()  => {
     if (isPlayingAd) return;
     setCurrentSongIndex(
       (prev) => (prev - 1 + listsongs.length) % listsongs.length
@@ -189,10 +176,31 @@ const Footer = React.memo(function FooterComponent() {
     setIsPlay(true);
   };
 
-  const handleSongEnd = () => {
+  const handleSongEnd = async () => {
     if (isLooping) {
       audioRef.current.play(); // Lặp lại bài hát hiện tại
     } else {
+      const currentSong = listsongs[currentSongIndex];
+      saveSongToHistory({
+        song_name: currentSong.song_name,
+        composer: currentSong.composer,
+        song_image: currentSong.song_image,
+        id: currentSong.id, // Thời lượng bài hát
+      });
+      // Gọi API cập nhật lượt nghe
+      try {
+        await fetch(`${API_URL}/luot-nghe/${currentSong.id}`, {
+          method: "POST", // Thay đổi tùy thuộc vào API (POST/PUT)
+          headers: {
+            "Content-Type": "application/json",
+            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+          },
+          body: JSON.stringify({}), // Nếu API yêu cầu dữ liệu trong body, thêm dữ liệu cần thiết
+        });
+        console.log(`Cập nhật lượt nghe cho bài hát: ${currentSong.song_name}`);
+      } catch (error) {
+        console.error("Lỗi khi cập nhật lượt nghe:", error);
+      }
       if (isPlayingAd) {
         setIsPlayingAd(false);
         setSongPlayCount(0);
@@ -220,12 +228,34 @@ const Footer = React.memo(function FooterComponent() {
     }
   };
 
+  const saveSongToHistory = (song) => {
+    // Lấy danh sách lịch sử hiện tại từ localStorage
+    let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
+    
+    // Kiểm tra nếu bài hát đã tồn tại trong lịch sử
+    const isAlreadyInHistory = songHistory.some(
+      (historySong) => historySong.song_name === song.song_name
+    );
+  
+    if (!isAlreadyInHistory) {
+      if (songHistory.length >= 20) {
+        songHistory = []; // Xóa hết danh sách
+      }
+      // Thêm bài hát mới vào danh sách lịch sử
+      songHistory.unshift(song);
+  
+      // Lưu danh sách cập nhật vào localStorage
+      localStorage.setItem("songHistory", JSON.stringify(songHistory));
+    }
+  };
+  
+
   const toggleFavorite = async (songId) => {
     try {
       if (favoriteSongs.includes(songId)) {
         // Nếu bài hát đã yêu thích, xóa khỏi danh sách yêu thích
         const response = await fetch(
-          "https://admin.soundwave.io.vn/api/xoa-bai-hat-yeu-thich",
+          `${API_URL}/xoa-bai-hat-yeu-thich`,
           {
             method: "POST",
             headers: {
@@ -246,7 +276,7 @@ const Footer = React.memo(function FooterComponent() {
       } else {
         // Nếu bài hát chưa được yêu thích, thêm vào danh sách yêu thích
         const response = await fetch(
-          "https://admin.soundwave.io.vn/api/bai-hat-yeu-thich",
+          `${API_URL}/bai-hat-yeu-thich`,
           {
             method: "POST",
             headers: {
@@ -266,16 +296,14 @@ const Footer = React.memo(function FooterComponent() {
         }
       }
     } catch (error) {
-      console.error("Lỗi khi gọi API:", error);
+      console.error("Lỗi khi thêm yêu thích:", error);
     }
   };
 
-  // Hiển thị modal hẹn giờ
   const toggleTimerModal = () => {
     setIsTimerModalVisible(!isTimerModalVisible);
   };
 
-  // Đặt hẹn giờ
   const setTimerWithMinutes = (minutes) => {
     const timeInMs = minutes * 60 * 1000;
     setTimer(
@@ -328,22 +356,45 @@ const Footer = React.memo(function FooterComponent() {
   const toggleVolume = () => {
     setIsVolumeVisible(!isVolumeVisible);
   };
+  
+  
+  useEffect(() => {
+    
+    handleFetchSongs("rank");
+    setIsLoading(false);
+    fetchFavoriteSongs();
+
+   
+
+
+    const handleClickOutside = (event) => {
+      if (Playlist.current && !Playlist.current.contains(event.target) && !Divlist.current.contains(event.target)) {
+        setIsAlbum(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+
+  }, []);
 
   useEffect(() => {
-    // Kiểm tra nếu currentSong có dữ liệu
-    if (currentSong) {
-      // Tìm chỉ số bài hát trong listsongs
-      const index = listsongs.findIndex(
-        (song) => song.song_name === currentSong.song_name
-      );
-      if (index !== -1) {
-        setCurrentSongIndex(index);
-        setOptionSongIndex(index);
-      }
-    } else {
-      // Nếu không có currentSong, đặt currentSongIndex về 0
-      setCurrentSongIndex(0);
-    }
+    // console.log("listsongs",listsongs);
+    if (listsongs.length === 0) return;
+    // if (!currentSongIndex && currentSong ) {
+    //   // console.log("listsongs",listsongs);
+    //   const index = listsongs.findIndex(
+    //     (song) => song.song_name === currentSong.song_name
+    //   );
+    //   if (index !== -1) {
+    //     setCurrentSongIndex(index);
+    //     setOptionSongIndex(index);
+    //   }
+    // } else {
+    //   setCurrentSongIndex(0);
+    // }
 
     if (audioRef.current) {
       audioRef.current.volume = volume;
@@ -356,45 +407,40 @@ const Footer = React.memo(function FooterComponent() {
 
   useEffect(() => {
     setVolume(volume); // Cập nhật giá trị volume
-  }, [volume]); // Chạy khi volume thay đổi
+  }, [volume]); 
 
   useEffect(() => {
-    // Khi currentSongIndex thay đổi, cập nhật thông tin bài hát vào UserContext
+    // console.log("song",isListUpdated);
+
     if (listsongs.length === 0) return;
+    if (isListUpdated) {
+      // setCurrentSongIndex(0);
+      // console.log("set");
+      setIsListUpdated(false); // Reset flag
+    } else {
+      const song = listsongs[currentSongIndex];
+      // console.log("song",song);
+      setCurrentSong({
+        song_name: song.song_name,
+        composer: song.composer,
+        song_image: song.song_image,
+      });
+      audioRef.current.pause();
+      if (audioRef.current) {
+        audioRef.current.src =
+          song.file_paths && song.file_paths[selectedQuality];
+        // audioRef.current.currentTime = currentTime;
 
-    const song = listsongs[currentSongIndex];
-    setCurrentSong({
-      song_name: song.song_name,
-      composer: song.composer,
-      song_image: song.song_image,
-    });
-
-    if (audioRef.current) {
-      audioRef.current.src =
-        song.file_paths && song.file_paths[selectedQuality];
-      // audioRef.current.currentTime = currentTime;
-
-      if (optionSongIndex == currentSongIndex) {
-        audioRef.current.currentTime = currentTime;
-      }
-      if (isPlaying) {
-        audioRef.current.play();
+        if (optionSongIndex == currentSongIndex) {
+          audioRef.current.currentTime = currentTime;
+        }
+        if (isPlaying) {
+          audioRef.current.play();
+        }
       }
     }
-  }, [currentSongIndex, selectedQuality]);
+  }, [listsongs,currentSongIndex, selectedQuality]);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (Playlist.current && !Playlist.current.contains(event.target)) {
-        setIsAlbum(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
 
   if (isLoading) {
     return null;
@@ -418,7 +464,9 @@ const Footer = React.memo(function FooterComponent() {
               <div className="relative">
                 <img
                   className="inline-block size-20 max-xl:size-14 "
-                  src={listsongs[currentSongIndex].song_image}
+                  src={listsongs.length > 0
+                    ? listsongs[currentSongIndex].song_image
+                    : null} 
                 />
                 {isPlaying && (
                   <i
@@ -440,7 +488,9 @@ const Footer = React.memo(function FooterComponent() {
                     : null}
                 </p>
                 <p className="text-sm text-slate-300">
-                  {listsongs[currentSongIndex].composer}{" "}
+                  {listsongs.length > 0
+                    ? listsongs[currentSongIndex].composer
+                    : null}
                 </p>
               </div>
             </div>
@@ -657,8 +707,9 @@ const Footer = React.memo(function FooterComponent() {
           </div>
           <div
             onClick={() => {
-              setIsAlbum(!isAlbum);
+                setIsAlbum(true);
             }}
+            ref = {Divlist}
             className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  h-[40px] px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
           >
             <div className="border border-white size-4 flex items-center justify-center rounded-full mr-2 rotate-90">

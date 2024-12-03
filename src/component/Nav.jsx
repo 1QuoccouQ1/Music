@@ -11,23 +11,61 @@ import {
 } from "lucide-react";
 import { useNavigate } from "react-router-dom"; 
 import { Link } from 'react-router-dom';
-''
+import { API_URL } from "../services/apiService";
+
+
 function Nav() {
   const navigate = useNavigate();
   // const { user ,isProfile } = useContext(UserContext);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem('user')) 
   const isProfile = user ? true : false;
-  // console.log(user);
   const profileRef = useRef(null);
 
+  const [songs, setSongs] = useState([]); 
+  const [singers, setSingers] = useState([]); 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [isFocused, setIsFocused] = useState(false);
 
-    // Hàm xử lý logout
+  const fetchSearchResults = async (query) => {
+    if (!query) {
+      setSongs([]);
+      setSingers([]);
+      return;
+    }
+
+    setLoading(true);
+    setError("");
+
+    try {
+      const response = await fetch(`${API_URL}/tim-kiem` , {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        },
+        body: JSON.stringify({ search : query }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to fetch results.");
+      }
+
+      const data = await response.json();
+      setSongs(data.songs || []);
+      setSingers(data.singers || []); 
+    } catch (error) {
+      setError("Lỗi khi tìm kiếm. Vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+
     const handleLogout = async () => {
 
       try {
-        // Gửi yêu cầu logout tới API
-        await fetch('https://admin.soundwave.io.vn/api/logout', { 
+        await fetch(`${API_URL}/logout`, { 
           method: 'POST',
           headers: {
             "Content-Type": "application/json",
@@ -35,11 +73,9 @@ function Nav() {
           }
         }); 
   
-        // Xóa user khỏi localStorage và cập nhật context
         localStorage.removeItem('user');
         localStorage.removeItem('access_token');
   
-        // Chuyển hướng tới trang /login
         navigate('/login');
       } catch (error) {
         console.error('Logout failed:', error);
@@ -61,8 +97,83 @@ function Nav() {
   
   return (
     <>
-      <div className="flex justify-between  w-auto h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10">
-        <InputSearch></InputSearch>
+      <div className="flex justify-between  w-auto h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
+        <div className="relative ">
+        <InputSearch
+            onSearch={fetchSearchResults}
+            onFocus={() => setIsFocused(true)} 
+            onBlur={() => {
+            setTimeout(() => setIsFocused(false), 200);
+          }}
+          />
+
+        {isFocused && (songs.length > 0 || singers.length > 0 || loading) && (
+          <div className="results mt-10 z-10 absolute top-3 bg-[#172533] rounded-xl p-5 w-full" >
+            {loading && <p className="text-center text-gray-400">Đang tìm kiếm...</p>}
+
+            {songs.length > 0 && (
+              <div className="songs mt-6">
+                <h2 className="text-base text-slate-400 font-semibold mb-4">🎵 Danh sách bài hát:</h2>
+                <ul className=" gap-6">
+                  {songs.map((song, index) => (
+                    <li
+                      key={index}
+                      className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
+                    >
+                      <div className="flex items-center">
+                        <img
+                          src={song.song_image}
+                          alt={song.song_name}
+                          className="size-12 rounded-lg"
+                        />
+                         <div className="ml-5">
+                        <h3 className="font-bold text-base truncate text-slate-300">{song.song_name}</h3>
+                          <p className="text-gray-400 text-sm">{song.singer_name}</p>
+                        </div>
+                        
+                      </div>
+
+                     
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {/* Danh sách ca sĩ */}
+            {singers.length > 0 && (
+              <div className="singers mt-8">
+                <h2 className="text-base text-slate-400 font-semibold mb-4">🎤  Danh sách ca sĩ:</h2>
+                <ul className="gap-6">
+                  {singers.map((singer) => (
+                    <li
+                      key={singer.id}
+                      className="rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
+                    >
+                      <div className="flex items-center">
+                        <img
+                          src={singer.singer_image}
+                          alt={singer.singer_name}
+                          className="size-12 rounded-lg"
+                        />
+                         <div className="ml-5">
+                        <h3 className="font-bold text-base truncate text-slate-300">{singer.singer_name}</h3>
+                        </div>
+                        
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
+            {!loading && songs.length === 0 && singers.length === 0 && (
+              <p className="text-center text-gray-400 mt-10">Không tìm thấy kết quả.</p>
+            )}
+          </div>
+        )}
+        </div>
+        
         <div className=" flex  text-left items-center">
           {isProfile ? (
             <>

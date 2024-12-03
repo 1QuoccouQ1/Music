@@ -8,9 +8,7 @@ import { UserProvider } from './ContextAPI/UserContext';
 import ModalListen from './component/ModalListen';
 import { ToastContainer } from 'react-toastify';
 
-
 function App() {
-  const isSetting = false;
 
   return (
     <>
@@ -23,7 +21,7 @@ function App() {
             <Outlet   />
           </div>
           <ModalListen/>
-         <Footer></Footer> 
+         <Footer  />
         </div>
           <ToastContainer
             position="top-right"
