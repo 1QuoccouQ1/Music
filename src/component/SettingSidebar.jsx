@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import MenuIcon from '@mui/icons-material/Menu';
 import CloseIcon from '@mui/icons-material/Close';
 import LockPersonOutlinedIcon from '@mui/icons-material/LockPersonOutlined';
@@ -11,11 +11,6 @@ import PrivacyTipOutlinedIcon from '@mui/icons-material/PrivacyTipOutlined';
 import SettingsIcon from '@mui/icons-material/Settings';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import GroupsIcon from '@mui/icons-material/Groups';
-
-import { useContext } from "react";
-import { UserContext } from "../ContextAPI/UserContext";
-import { Link } from 'react-router-dom';
-import { useNavigate } from "react-router-dom"; 
 import { API_URL } from '../services/apiService';
 
 
@@ -26,16 +21,16 @@ function SettingSidebar() {
 
     const handleLogout = async () => {
         try {
-            await fetch('https://admin.soundwave.io.vn/api/logout', { 
+            await fetch('https://admin.soundwave.io.vn/api/logout', {
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
-            }); 
+            });
 
-         
-    
+
+
             localStorage.removeItem('user');
             localStorage.removeItem('access_token');
             navigate('/login');
@@ -59,9 +54,8 @@ function SettingSidebar() {
 
             {/* Sidebar */}
             <aside
-                className={`fixed top-0 left-0 h-full bg-sidebar px-6 py-3 z-40 transition-transform duration-300 ${
-                    isSidebarOpen ? "translate-x-0" : "-translate-x-full"
-                } lg:translate-x-0 lg:w-56`}
+                className={`fixed top-0 left-0 h-full bg-sidebar px-6 py-3 z-40 transition-transform duration-300 ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+                    } lg:translate-x-0 lg:w-56`}
             >
 
                 <div className='space-y-4 h-auto'>
@@ -133,7 +127,7 @@ function SettingSidebar() {
                                     <GroupsIcon fontSize='small' />
                                     <span className="hidden lg:inline">Về Chúng Tôi</span>
                                 </Link>
-                                <div onClick={handleLogout}  className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90'>
+                                <div onClick={handleLogout} className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90'>
                                     Đăng Xuất
                                 </div>
                             </div>
