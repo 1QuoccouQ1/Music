@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Facebook, Instagram, Twitter, Music } from "lucide-react"
+
 import { Link, useParams } from 'react-router-dom';
 import { API_URL, getArtist } from '../../services/apiService';
 import { ToastContainer, toast } from 'react-toastify';
@@ -13,6 +14,8 @@ function ProfileArtist() {
     const [isSelect, setIsSelect] = useState("1");
     const { id } = useParams();
     const [artist, setArtist] = useState(null);
+
+
     const [artists, setArtists] = useState([]);
     const [artistSong, setArtistSong] = useState([]);
     const [isSongFavourite, setIsSongFavourite] = useState(false);
@@ -141,7 +144,6 @@ function ProfileArtist() {
                 console.error('Lỗi khi gửi yêu cầu:', error);
             });
 
-
     }
 
 
@@ -165,6 +167,7 @@ function ProfileArtist() {
             document.body.style.overflow = 'auto';
         };
     }, [isModal]);
+
 
     // Hàm định dạng thời gian
     const formatTime = (seconds) => {
@@ -209,6 +212,7 @@ function ProfileArtist() {
                             </div>
                             <div className='flex items-center gap-5 mt-5'>
                                 <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1'>  <Play /> Phát tất cả</button>
+
                                 {isFollowing ? <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button> : <button onClick={handleFollowing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>}
 
 
@@ -239,6 +243,7 @@ function ProfileArtist() {
                                     <p>{song.listen_count}</p>
                                 </div>
                                 <div className='flex items-center gap-5 duration-300 w-1/3 justify-end'>
+
                                     {isSongFavourite ? <Heart size={16} fill="red" onClick={handleSongFavourite} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
                                         : <Heart size={16} onClick={handleSongFavourite} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />}
 
@@ -280,7 +285,9 @@ function ProfileArtist() {
                     >
                         {artistSong && artistSong.length > 0 ? (
                             artistSong.map((song, index) => (
+
                                 <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
+
                                     <div className="text-center flex flex-col  items-start ">
                                         <img src={song.song_image} className=" mb-3 " style={{
                                             width: '260px',
@@ -303,7 +310,6 @@ function ProfileArtist() {
                             </SwiperSlide>
                         )}
                     </Swiper>
-
                 </section>
                 <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
@@ -315,6 +321,7 @@ function ProfileArtist() {
                             </svg>
 
                         </div>
+
                     </div>
                     <div className="flex items-center ">
                         {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean'].map((item, index) => (
@@ -380,7 +387,6 @@ function ProfileArtist() {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
-
                         </div>
                     </div>
 
@@ -450,6 +456,7 @@ function ProfileArtist() {
             </section>
                 <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
+
                         <h1 className="text-xl font-medium mb-16">{artist.singer_name} trong loạt hit nổi bật</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
                             <p className="text-sm text-red-600 ">Xem Thêm </p>
@@ -465,6 +472,8 @@ function ProfileArtist() {
                         className="mySwiper "
 
                     >
+
+
                         {artistSong && artistSong.length > 0 ? (
                             artistSong.map((song, index) => (
                                 <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >

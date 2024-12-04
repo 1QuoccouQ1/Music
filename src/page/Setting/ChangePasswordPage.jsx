@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function ChangePasswordPage() {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -7,7 +9,6 @@ function ChangePasswordPage() {
     const [validationMessage, setValidationMessage] = useState('');
     const [isValid, setIsValid] = useState(false);
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
 
     const validatePassword = () => {
         const hasLetter = /[a-zA-Z]/.test(newPassword);
@@ -29,28 +30,25 @@ function ChangePasswordPage() {
         }
     };
 
-    const handleSubmit = async e => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        // Check if passwords match
         if (newPassword !== repeatPassword) {
-            alert('Mật khẩu mới và mật khẩu lặp lại không trùng khớp.');
+            toast.error('Mật khẩu mới và mật khẩu lặp lại không trùng khớp.');
             return;
         }
 
         if (!isValid) {
-            alert('Vui lòng đảm bảo mật khẩu của bạn đáp ứng các điều kiện.');
+            toast.warning('Vui lòng đảm bảo mật khẩu của bạn đáp ứng các điều kiện.');
             return;
         }
 
         setIsSubmitting(true);
-        setErrorMessage('');
 
         const user = JSON.parse(localStorage.getItem('user'));
         const id = user ? user.id : null;
 
         try {
-            // Make API call to update password
             const response = await fetch(
                 `https://admin.soundwave.io.vn/api/${id}/newpass-member`,
                 {
@@ -69,21 +67,18 @@ function ChangePasswordPage() {
             const data = await response.json();
 
             if (response.ok) {
-                // Handle success
-                alert('Mật khẩu đã được cập nhật thành công!');
-                // Optionally, reset form here after success
+                toast.success('Mật khẩu đã được cập nhật thành công!');
+                // Reset form on success
                 setCurrentPassword('');
                 setNewPassword('');
                 setRepeatPassword('');
                 setValidationMessage('');
                 setIsValid(false);
             } else {
-                // Handle error
-                setErrorMessage(data.message || 'Đã xảy ra lỗi khi cập nhật mật khẩu.');
+                toast.error(data.message || 'Đã xảy ra lỗi khi cập nhật mật khẩu.');
             }
         } catch (error) {
-            // Handle error
-            setErrorMessage('Đã xảy ra lỗi. Vui lòng thử lại.');
+            toast.error('Đã xảy ra lỗi. Vui lòng thử lại.');
         } finally {
             setIsSubmitting(false);
         }
@@ -91,6 +86,20 @@ function ChangePasswordPage() {
 
     return (
         <div className='bg-gray-900 min-h-screen flex justify-center px-4 sm:px-6 py-5'>
+            {/* Toast Notification Container */}
+            <ToastContainer
+                position='top-center'
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={true}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme='dark'
+            />
+
             <div className='bg-gray-900 p-6 sm:p-8 rounded-lg w-full max-w-[777px]'>
                 <h1 className='text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-9'>
                     Đổi mật khẩu của bạn
@@ -98,7 +107,7 @@ function ChangePasswordPage() {
 
                 {/* Form */}
                 <form onSubmit={handleSubmit}>
-                    {/* Mật khẩu hiện tại */}
+                    {/* Current Password */}
                     <div className='mb-6'>
                         <label className='block text-sm font-medium text-gray-100 mb-2'>
                             Nhập mật khẩu hiện tại
@@ -108,11 +117,11 @@ function ChangePasswordPage() {
                             className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
                             placeholder='Nhập mật khẩu hiện tại'
                             value={currentPassword}
-                            onChange={e => setCurrentPassword(e.target.value)}
+                            onChange={(e) => setCurrentPassword(e.target.value)}
                         />
                     </div>
 
-                    {/* Mật khẩu mới */}
+                    {/* New Password */}
                     <div className='mb-4'>
                         <label className='block text-sm font-medium text-gray-100 mb-2'>
                             Nhập mật khẩu mới
@@ -122,14 +131,14 @@ function ChangePasswordPage() {
                             className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
                             placeholder='Nhập mật khẩu mới'
                             value={newPassword}
-                            onChange={e => {
+                            onChange={(e) => {
                                 setNewPassword(e.target.value);
                                 validatePassword();
                             }}
                         />
                     </div>
 
-                    {/* Điều kiện mật khẩu */}
+                    {/* Password Requirements */}
                     <div className='mb-5'>
                         <p className='text-gray-400 text-sm mb-2'>
                             Mật khẩu của bạn phải có ít nhất:
@@ -144,7 +153,7 @@ function ChangePasswordPage() {
                         <p className='text-pink-600 mt-2'>{validationMessage}</p>
                     </div>
 
-                    {/* Lặp lại mật khẩu mới */}
+                    {/* Repeat New Password */}
                     <div className='mb-4'>
                         <label className='block text-sm font-medium text-gray-100 mb-2'>
                             Lặp lại mật khẩu mới
@@ -154,18 +163,11 @@ function ChangePasswordPage() {
                             className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
                             placeholder='Lặp lại mật khẩu mới'
                             value={repeatPassword}
-                            onChange={e => setRepeatPassword(e.target.value)}
+                            onChange={(e) => setRepeatPassword(e.target.value)}
                         />
                     </div>
 
-                    {/* Error message */}
-                    {errorMessage && (
-                        <p className='text-red-600 text-sm mt-3'>
-                            {errorMessage}
-                        </p>
-                    )}
-
-                    {/* Nút */}
+                    {/* Buttons */}
                     <div className='flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4'>
                         <button
                             type='button'
