@@ -48,7 +48,7 @@ function RankingBoard({ artist }) {
     }
 
     return (
-        <div className='bg-gray-900 min-h-screen py-10 px-4'>
+        <div className='bg-gray-900 min-h-screen py-10 w-full px-4'>
             <h2 className='text-white text-lg sm:text-2xl md:text-4xl font-bold mb-12 border-l-4 border-l-blue-400 pl-5 hover:from-pink-700 hover:to-sky-400'>
                 Bảng Xếp Hạng Tuần
             </h2>
@@ -61,6 +61,7 @@ function RankingBoard({ artist }) {
                         <ArtistRankingCard
                             rank={2}
                             artist={{
+                                id:rankings[1].singer_id,
                                 name: rankings[1].singer_name,
                                 imageUrl: rankings[1].song_image
                             }}
@@ -80,6 +81,7 @@ function RankingBoard({ artist }) {
                         <ArtistRankingCard
                             rank={1}
                             artist={{
+                                id: rankings[0].singer_id,
                                 name: rankings[0].singer_name,
                                 imageUrl: rankings[0].song_image
                             }}
@@ -145,9 +147,9 @@ function RankingBoard({ artist }) {
                                 </td>
                                 <td>
                                     <Link
-                                        to={`/ProfileArtist/${song.artist_id}`}
+                                        to={`/ProfileArtist/${song.singer_id}`}
                                     >
-                                        {song.provider}
+                                        {song.singer_name}
                                     </Link>
                                 </td>
                                 <td>{song.listen_count || 'N/A'}</td>

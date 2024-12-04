@@ -190,7 +190,7 @@ const Footer = React.memo(function FooterComponent() {
       // Gọi API cập nhật lượt nghe
       try {
         await fetch(`${API_URL}/luot-nghe/${currentSong.id}`, {
-          method: "POST", // Thay đổi tùy thuộc vào API (POST/PUT)
+          method: "GET", // Thay đổi tùy thuộc vào API (POST/PUT)
           headers: {
             "Content-Type": "application/json",
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
