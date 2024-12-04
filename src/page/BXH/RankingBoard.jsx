@@ -142,12 +142,12 @@ function RankingBoard({ artist }) {
                         >
                             {/* Song Index Column */}
                             <td className='py-2 px-4'>
-                                
+
                                 <Play
                                     size={16}
                                     className='hidden  group-hover:block duration-300'
                                 />
-                               <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>{index + 1}</p>
+                                <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>{index + 4}</p>
                             </td>
 
                             {/* Song Info Column */}
@@ -183,11 +183,11 @@ function RankingBoard({ artist }) {
                             <td className='px-4'>
                                 <div className='flex items-center justify-end gap-5'>
                                     <Heart
-                                        size={16}
+                                        size={22}
                                         className='text-red-500 opacity-0 group-hover:opacity-100 duration-300'
                                     />
                                     <CirclePlus
-                                        size={16}
+                                        size={22}
                                         className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300'
                                     />
 

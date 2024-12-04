@@ -7,6 +7,7 @@ import { Facebook, Instagram, Twitter, Music } from "lucide-react"
 import { Link, useParams } from 'react-router-dom';
 import { API_URL, getArtist } from '../../services/apiService';
 import { ToastContainer, toast } from 'react-toastify';
+import ProfileArtistSong from './ProfileArtistSong';
 
 function ProfileArtist() {
     const [isFollowing, setIsFollowing] = useState(false);
@@ -18,7 +19,7 @@ function ProfileArtist() {
 
     const [artists, setArtists] = useState([]);
     const [artistSong, setArtistSong] = useState([]);
-    const [isSongFavourite, setIsSongFavourite] = useState(false);
+
 
     const [loading, setLoading] = useState(true); // Theo dõi trạng thái loading
 
@@ -51,19 +52,18 @@ function ProfileArtist() {
                 setLoading(false); // Đặt loading = false
             }
         };
-        const fetchArtists = async () => {
-            try {
-                const data = await getArtist; // Gọi hàm getArtist để lấy dữ liệu
-                setArtists(data); // Cập nhật state với dữ liệu nhận được
-            } catch (err) {
-                setError(err.message); // Cập nhật state lỗi
-            } finally {
-                setLoading(false); // Tắt loading
-            }
-        };
+        getArtist()
+            .then((data) => {
+                setArtists(data);
+            })
+            .catch((error) => {
+                console.error('Error fetching artist data:', error);
+            });
+
+
         const folow = async () => {
             try {
-                
+
                 const response = await fetch(API_URL + `/check-ca-si-yeu-thich/${user.id}/${id}`, {
                     method: 'GET',
                     headers: {
@@ -74,7 +74,7 @@ function ProfileArtist() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    console.log(data);
+                    // console.log(data);
                     data[0] === true ? setIsFollowing(true) : setIsFollowing(false);
 
                 }
@@ -85,7 +85,7 @@ function ProfileArtist() {
             }
         }
         folow();
-        fetchArtists();
+
         fetchArtistsong();
         fetchArtistData();
     }, [id]);
@@ -108,43 +108,18 @@ function ProfileArtist() {
             .then(response => response.json())
             .then(data => {
                 // Xử lý dữ liệu trả về từ API (nếu cần)
-                console.log('Đã đánh dấu yêu thích:', data.message);
+                // console.log('Đã đánh dấu yêu thích:', data.message);
                 setIsFollowing(!isFollowing);
                 toast.success(data.message);
             })
             .catch(error => {
-                console.error('Lỗi khi gửi yêu cầu:', error);
+                // console.error('Lỗi khi gửi yêu cầu:', error);
                 toast.success('Lỗi khi gửi yêu cầu:', error);
             });
 
 
     }
-    const handleSongFavourite = () => {
-        // Gửi request API khi người dùng nhấn "Theo giỏi"
-        fetch(API_URL + '/ca-si/add-to-favourite', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`
-            },
-            body: JSON.stringify({
-                liked: !isFollowing,
-                singer_id: id,
-                user_id: user.id
-            })
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Xử lý dữ liệu trả về từ API (nếu cần)
-                console.log('Đã đánh dấu yêu thích:', data.message);
-                setIsFollowing(!isFollowing);
-                toast.success(data.message);
-            })
-            .catch(error => {
-                console.error('Lỗi khi gửi yêu cầu:', error);
-            });
-
-    }
+    
 
 
     const handleModal = () => {
@@ -195,8 +170,8 @@ function ProfileArtist() {
 
     return (<>
         <div className='bg-medium w-full h-auto pb-40'>
-            <section className='w-full   pt-16  text-white px-5'>
-                <div className="relative w-full h-[481px] z-10">
+            <section className='w-full   pt-7  text-white px-5'>
+                <div className="relative w-full h-[600px] z-10">
                     <img src={artist.singer_background} className='rounded-t-xl h-full w-full' />
                     <div className="flex items-center justify-center absolute bottom-7 left-16 gap-8">
                         <img className='size-60 rounded-full border-1 border-black translate-y-1/4' src={artist.singer_image} />
@@ -231,29 +206,8 @@ function ProfileArtist() {
                 <div className='flex w-2/3 flex-col gap-2' >
                     <p className='text-right font-medium text-sm text-red-500 cursor-pointer mr-5'>Xem thêm</p>
                     {artistSong && artistSong.length > 0 ? (
-                        artistSong.slice(0, 5).map((song, index) => (
-                            <div key={(song.id)} className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
-                                <div className='flex items-center gap-3 w-1/3 justify-start'>
-                                    <Play size={18} className='hidden  group-hover:block duration-300' />
-                                    <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>{index + 1}</p>
-                                    <img className='size-10 rounded-lg' src={song.song_image} />
-                                    <p className='w-full truncate '>{song.song_name}</p>
-                                </div>
-                                <div className='w-1/3 flex items-center justify-center'>
-                                    <p>{song.listen_count}</p>
-                                </div>
-                                <div className='flex items-center gap-5 duration-300 w-1/3 justify-end'>
-
-                                    {isSongFavourite ? <Heart size={16} fill="red" onClick={handleSongFavourite} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                                        : <Heart size={16} onClick={handleSongFavourite} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />}
-
-                                    <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
-                                    <p>{formatTime(song.time)}</p>
-                                    <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
-                                </div>
-                            </div>
-
-                        ))) : (
+                        <ProfileArtistSong artistSong={artistSong} user_id={user.id} length={'5'}/>
+                    ) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             Không có bài hát nào.
                         </div>
@@ -425,28 +379,7 @@ function ProfileArtist() {
                         <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
                     </div>
                     {artistSong && artistSong.length > 0 ? (
-                        artistSong.map((song, index) => (
-                            <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
-                                <div className='flex items-center gap-3 w-1/4 justify-start'>
-                                    <Play size={18} className='hidden  group-hover:block duration-300' />
-                                    <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>{index + 1}</p>
-                                    <img className='size-10 rounded-lg' src={song.song_image} />
-                                    <p className='w-full truncate '>{song.song_name}</p>
-                                </div>
-                                <div className='w-1/4 flex items-center justify-center'>
-                                    <p>{song.singer_name}</p>
-                                </div>
-                                <div className='w-1/4 flex items-center justify-center'>
-                                    <p>{song.singer_name} - Single</p>
-                                </div>
-                                <div className='flex items-center gap-5 duration-300 w-1/4 justify-end'>
-                                    <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                                    <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
-                                    <p>{formatTime(song.time)}</p>
-                                    <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
-                                </div>
-                            </div>
-                        ))) : (
+                        <ProfileArtistSong artistSong={artistSong} user_id={user.id} length={'20'}/>) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             <p>Không có bài hát</p>
                         </div>

@@ -64,31 +64,31 @@ function Upgrade() {
   const planss = [
     {
       duration: 12,
-      price: 156000,
-      originalPrice: 264000,
+      price: 136800,
+      originalPrice: 228000,
       discount: 40,
-      perMonth: 13000,
+      perMonth: 11400,
     },
     {
       duration: 6,
-      price: 90000,
-      originalPrice: 132000,
+      price: 79800,
+      originalPrice: 114000,
       discount: 30,
-      perMonth: 15000,
+      perMonth: 13300,
     },
     {
       duration: 3,
-      price: 57000,
-      originalPrice: 84000,
+      price: 45600,
+      originalPrice: 57000,
       discount: 20,
-      perMonth: 19000,
+      perMonth: 15200,
     },
     {
       duration: 1,
-      price: 22000,
-      originalPrice: 22000,
+      price: 19000,
+      originalPrice: 19000,
       discount: 0,
-      perMonth: 22000,
+      perMonth: 19000,
     },
   ];
 
@@ -136,7 +136,7 @@ function Upgrade() {
             Nâng cấp tài khoản để trải nghiệm các đặt quyền và lợi ích cao cấp
           </h1>
           <p className="text-center text-gray-400 mb-2 text-sm">
-            65.000 đ/tháng • Không bao gồm thuế GTGT • Hủy bất cứ lúc nào
+            39.000 đ/tháng • Không bao gồm thuế GTGT • Hủy bất cứ lúc nào
           </p>
           <div className="text-center my-12">
             <button className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-90  text-white   py-2 px-6 rounded-full">
