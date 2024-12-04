@@ -1,31 +1,28 @@
-import React, { createContext, useState, useEffect } from "react";
+import  { createContext, useState, useEffect ,useRef } from "react";
+import { API_URL } from "../services/apiService";
 
-// Tạo Context
 export const UserContext = createContext();
 
-// Tạo Provider để cung cấp giá trị cho Context
 export const UserProvider = ({ children }) => {
   const [isSetting, setIsSetting] = useState(() => {
     const savedIsSetting = localStorage.getItem("isSetting");
-    return savedIsSetting ? JSON.parse(savedIsSetting) : false; // Mặc định là false
+    return savedIsSetting ? JSON.parse(savedIsSetting) : false; 
   });
   const [isPlay, setIsPlay] = useState(false);
   const [volume, setVolume] = useState(() => {
     const savedVolume = localStorage.getItem("volume");
-    return savedVolume ? JSON.parse(savedVolume) : 1; // Giá trị mặc định là 1
+    return savedVolume ? JSON.parse(savedVolume) : 1;
   });
   const [currentTime, setCurrentTime] = useState(() => {
     const savedTime = localStorage.getItem("currentTime");
-    return savedTime ? JSON.parse(savedTime) : 10; // Giá trị mặc định là 0
+    return savedTime ? JSON.parse(savedTime) : 10; 
   });
   const [isModal, setIsModal] = useState(false);
   const [user, setUser] = useState(() => {
-    // Lấy user từ localStorage nếu có
     const savedUser = localStorage.getItem("user");
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [currentSong, setCurrentSong] = useState(() => {
-    // Lấy bài hát từ cookie nếu có
     const savedSong = document.cookie
       .split("; ")
       .find((row) => row.startsWith("currentSong="));
@@ -37,38 +34,65 @@ export const UserProvider = ({ children }) => {
           song_image: "",
         };
   });
+  const audioRef = useRef(null);
+  const [listsongs, setListSongs] = useState([]);
+  const [currentSongIndex, setCurrentSongIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(() => {
+    const savedIsPlay = localStorage.getItem("isPlaying");
+    return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
+  });
+  const [isListUpdated, setIsListUpdated] = useState(false);
+  const handleFetchSongs = async (type, id) => {
+    try {
+      let fetchedSongs;
+      // Xử lý gọi API dựa trên type
+      switch (type) {
+        case "rank":
+          fetchedSongs = await fetch(`${API_URL}/rand-10`); 
+          break;
+        case "trending":
+          fetchedSongs = await fetch(`${API_URL}/trending`); 
+          break;
+        case "toplisten":
+          fetchedSongs = await fetch(`${API_URL}/top-listen`); 
+          break;
+        case "yeuthich":
+          fetchedSongs = await fetch(`${API_URL}/top-like`); 
+          break;
+        case "song":
+          fetchedSongs = await fetch(`${API_URL}/${id}/play`); 
+          break;
+        default:
+          console.error("Unknown type");
+          return;
+      }
+      const data = await fetchedSongs.json();
+      setListSongs(data);
+      setCurrentSongIndex(0); 
+      setIsListUpdated(true);
+    } catch (error) {
+      console.error("Error fetching songs:", error);
+    }
+  };
 
-  // useEffect(() => {
-  //   localStorage.setItem("isPlay", JSON.stringify(isPlay));
-  // }, [isPlay]);
   useEffect(() => {
     localStorage.setItem("isSetting", JSON.stringify(isSetting));
   }, [isSetting]);
-  // Lưu giá trị volume vào localStorage khi nó thay đổi
   useEffect(() => {
     localStorage.setItem("volume", JSON.stringify(volume));
 
   }, [volume]);
-
-  // Lưu giá trị currentTime vào localStorage khi nó thay đổi
   useEffect(() => {
     localStorage.setItem("currentTime", JSON.stringify(currentTime));
   }, [currentTime]);
-
-  // Mỗi khi user thay đổi, lưu nó vào localStorage
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
 
     } else {
       localStorage.removeItem("user");
-
     }
-
   }, [user]);
-  // console.log(user);
-
-  // Lưu bài hát đang nghe vào cookie trước khi người dùng đóng trang hoặc tải lại trang
   useEffect(() => {
     const handleBeforeUnload = () => {
       if (currentSong.song_name) {
@@ -101,7 +125,13 @@ export const UserProvider = ({ children }) => {
         currentTime,
         setCurrentTime,
         isPlay, setIsPlay,
-        isSetting, setIsSetting
+        isSetting, setIsSetting,
+        audioRef,
+        listsongs, setListSongs,
+        currentSongIndex, setCurrentSongIndex,
+        isPlaying, setIsPlaying,
+        handleFetchSongs,
+        isListUpdated, setIsListUpdated
       }}
     >
       {children}

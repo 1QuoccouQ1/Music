@@ -12,6 +12,13 @@ import SettingsIcon from '@mui/icons-material/Settings';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
 import GroupsIcon from '@mui/icons-material/Groups';
 
+import { useContext } from "react";
+import { UserContext } from "../ContextAPI/UserContext";
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom"; 
+import { API_URL } from '../services/apiService';
+
+
 function SettingSidebar() {
     const navigate = useNavigate();
     const { isSetting } = useContext(UserContext);
@@ -26,6 +33,8 @@ function SettingSidebar() {
                     'Authorization': `Bearer ${localStorage.getItem('access_token')}`
                 }
             }); 
+
+         
     
             localStorage.removeItem('user');
             localStorage.removeItem('access_token');
@@ -39,6 +48,7 @@ function SettingSidebar() {
 
     return (
         <>
+
             {/* Nút mở sidebar trên mobile */}
             <button
                 className="fixed top-4 left-4 z-50 bg-red-600 text-white p-2 rounded-md lg:hidden"
@@ -53,6 +63,7 @@ function SettingSidebar() {
                     isSidebarOpen ? "translate-x-0" : "-translate-x-full"
                 } lg:translate-x-0 lg:w-56`}
             >
+
                 <div className='space-y-4 h-auto'>
                     <Link to='/' className='flex justify-center'>
                         <img src='../imgs/Music Brand and App Logo 1.png' alt='Music Brand Logo' />

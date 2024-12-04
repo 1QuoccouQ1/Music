@@ -8,22 +8,20 @@ import { UserProvider } from './ContextAPI/UserContext';
 import ModalListen from './component/ModalListen';
 import { ToastContainer } from 'react-toastify';
 
-
 function App() {
-  const isSetting = false;
 
   return (
     <>
       <UserProvider>
-        <div className="flex h-auto bg-[#f4f7fe]">
+        <div className="flex h-auto bg-[#f4f7fe] w-full">
           <Sidebar></Sidebar> 
           <SettingSidebar></SettingSidebar> 
-          <div className="w-full ml-56 pb-[204px] bg-medium">
+          <div className="pl-64 pb-[204px] bg-medium w-full">
             <Nav></Nav>
-            <Outlet   />
+            <Outlet/>
           </div>
           <ModalListen/>
-         <Footer></Footer> 
+         <Footer  />
         </div>
           <ToastContainer
             position="top-right"

@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import ArtistRankingCard from './ArtistRankingCard';
+
 import { Heart, CirclePlus, Ellipsis, Play } from 'lucide-react';
+
+import { API_URL } from '../../services/apiService';
+import { CiHeart } from 'react-icons/ci';
+
 import { Link } from 'react-router-dom';
 
 function RankingBoard({ artist }) {
@@ -21,7 +26,7 @@ function RankingBoard({ artist }) {
         const fetchRankings = async () => {
             try {
                 const response = await fetch(
-                    'https://admin.soundwave.io.vn/api/bxh-100'
+                    `${API_URL}/bxh-100`
                 );
                 const data = await response.json();
 
@@ -49,8 +54,10 @@ function RankingBoard({ artist }) {
     }
 
     return (
+
         <div className='bg-gray-900 min-h-screen py-10 px-4'>
             <h2 className='text-white text-lg sm:text-2xl md:text-4xl font-bold mb-12 border-l-4 border-l-blue-400 pl-5'>
+
                 Bảng Xếp Hạng Tuần
             </h2>
 
@@ -61,7 +68,9 @@ function RankingBoard({ artist }) {
                         <ArtistRankingCard
                             rank={2}
                             artist={{
+
                                 id: rankings[1].singer_id,
+
                                 name: rankings[1].singer_name,
                                 imageUrl: rankings[1].song_image
                             }}
@@ -181,6 +190,7 @@ function RankingBoard({ artist }) {
                                         size={16}
                                         className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300'
                                     />
+
                                     {formatTime(song.time) || 'N/A'}
                                     <Ellipsis
                                         size={16}

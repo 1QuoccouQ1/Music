@@ -3,26 +3,31 @@ import { useState, useEffect } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Facebook, Instagram, Twitter, Music } from "lucide-react"
-import { useParams } from 'react-router-dom';
 
+import { Link, useParams } from 'react-router-dom';
+import { API_URL, getArtist } from '../../services/apiService';
+import { ToastContainer, toast } from 'react-toastify';
 
 function ProfileArtist() {
-    const [isFlowwing, setIsFlowwing] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
     const [isModal, setIsModal] = useState(false);
     const [isSelect, setIsSelect] = useState("1");
     const { id } = useParams();
     const [artist, setArtist] = useState(null);
-    const [artistSong, setArtistSong] = useState([]);
 
-    const [songs, setSongs] = useState([]);
-  
+
+    const [artists, setArtists] = useState([]);
+    const [artistSong, setArtistSong] = useState([]);
+    const [isSongFavourite, setIsSongFavourite] = useState(false);
 
     const [loading, setLoading] = useState(true); // Theo dõi trạng thái loading
 
+    const user = JSON.parse(localStorage.getItem('user'));
+    // console.log(user_id.id);
     useEffect(() => {
         const fetchArtistData = async () => {
             try {
-                const response = await fetch(`https://admin.soundwave.io.vn/api/ca-si/${id}`);
+                const response = await fetch(API_URL + `/ca-si/${id}`);
                 const data = await response.json();
                 setArtist(data); // Cập nhật state `artist`
             } catch (error) {
@@ -34,9 +39,9 @@ function ProfileArtist() {
 
         const fetchArtistsong = async () => {
             try {
-                const response = await fetch(`https://admin.soundwave.io.vn/api/ca-si/${id}/bai-hat`);
+                const response = await fetch(API_URL + `/ca-si/${id}/bai-hat`);
                 const data = await response.json();
-                console.log(response);
+
                 if (response.ok) {
                     setArtistSong(data); // Cập nhật state `artist`
                 }
@@ -46,35 +51,99 @@ function ProfileArtist() {
                 setLoading(false); // Đặt loading = false
             }
         };
+        const fetchArtists = async () => {
+            try {
+                const data = await getArtist; // Gọi hàm getArtist để lấy dữ liệu
+                setArtists(data); // Cập nhật state với dữ liệu nhận được
+            } catch (err) {
+                setError(err.message); // Cập nhật state lỗi
+            } finally {
+                setLoading(false); // Tắt loading
+            }
+        };
+        const folow = async () => {
+            try {
+                
+                const response = await fetch(API_URL + `/check-ca-si-yeu-thich/${user.id}/${id}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+                const data = await response.json();
 
+                if (response.ok) {
+                    console.log(data);
+                    data[0] === true ? setIsFollowing(true) : setIsFollowing(false);
+
+                }
+            } catch (err) {
+                setError(err.message); // Cập nhật state lỗi
+            } finally {
+                setLoading(false); // Tắt loading
+            }
+        }
+        folow();
+        fetchArtists();
         fetchArtistsong();
         fetchArtistData();
     }, [id]);
 
-    useEffect(() => {
-        // Hàm gọi API
-        const fetchArtistSongs = async () => {
-            try {
-                const response = await fetch(`https://admin.soundwave.io.vn/api/ca-si/${id}/bai-hat`);
-                const data = await response.json();
 
-                if (response.ok) {
-                    fetchArtistSongs(data); // Cập nhật state nếu API trả về thành công
-                } else {
-                    console.error('Failed to fetch songs:', data.message || 'Unknown error');
-                }
-            } catch (error) {
-                console.error('Error fetching artist songs:', error);
-            } finally {
-                setLoading(false); // Luôn tắt trạng thái loading khi hoàn thành
-            }
-        };
+    const handleFollowing = () => {
+        // Gửi request API khi người dùng nhấn "Theo giỏi"
+        fetch(API_URL + '/ca-si/add-to-favourite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            },
+            body: JSON.stringify({
+                liked: !isFollowing,
+                singer_id: id,
+                user_id: user.id
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Xử lý dữ liệu trả về từ API (nếu cần)
+                console.log('Đã đánh dấu yêu thích:', data.message);
+                setIsFollowing(!isFollowing);
+                toast.success(data.message);
+            })
+            .catch(error => {
+                console.error('Lỗi khi gửi yêu cầu:', error);
+                toast.success('Lỗi khi gửi yêu cầu:', error);
+            });
 
-        fetchArtistSongs(); // Gọi hàm lấy dữ liệu
-    }, [id]); // Khi `id` thay đổi, effect sẽ chạy lại
 
-    const handleFlowwing = () => {
-        setIsFlowwing(!isFlowwing);
+    }
+    const handleSongFavourite = () => {
+        // Gửi request API khi người dùng nhấn "Theo giỏi"
+        fetch(API_URL + '/ca-si/add-to-favourite', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            },
+            body: JSON.stringify({
+                liked: !isFollowing,
+                singer_id: id,
+                user_id: user.id
+            })
+        })
+            .then(response => response.json())
+            .then(data => {
+                // Xử lý dữ liệu trả về từ API (nếu cần)
+                console.log('Đã đánh dấu yêu thích:', data.message);
+                setIsFollowing(!isFollowing);
+                toast.success(data.message);
+            })
+            .catch(error => {
+                console.error('Lỗi khi gửi yêu cầu:', error);
+            });
+
     }
 
 
@@ -99,9 +168,6 @@ function ProfileArtist() {
         };
     }, [isModal]);
 
-    useEffect(() => {
-        console.log(`Fetching data for artist with ID: ${id}`);
-    }, [id]);
 
     // Hàm định dạng thời gian
     const formatTime = (seconds) => {
@@ -131,7 +197,7 @@ function ProfileArtist() {
         <div className='bg-medium w-full h-auto pb-40'>
             <section className='w-full   pt-16  text-white px-5'>
                 <div className="relative w-full h-[481px] z-10">
-                    <img src={artist.singer_background} className='rounded-t-xl h-full z-10 w-full' />
+                    <img src={artist.singer_background} className='rounded-t-xl h-full w-full' />
                     <div className="flex items-center justify-center absolute bottom-7 left-16 gap-8">
                         <img className='size-60 rounded-full border-1 border-black translate-y-1/4' src={artist.singer_image} />
                         <div >
@@ -146,7 +212,8 @@ function ProfileArtist() {
                             </div>
                             <div className='flex items-center gap-5 mt-5'>
                                 <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1'>  <Play /> Phát tất cả</button>
-                                {isFlowwing ? <button onClick={handleFlowwing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button> : <button onClick={handleFlowwing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>}
+
+                                {isFollowing ? <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button> : <button onClick={handleFollowing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>}
 
 
                             </div>
@@ -176,7 +243,10 @@ function ProfileArtist() {
                                     <p>{song.listen_count}</p>
                                 </div>
                                 <div className='flex items-center gap-5 duration-300 w-1/3 justify-end'>
-                                    <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
+
+                                    {isSongFavourite ? <Heart size={16} fill="red" onClick={handleSongFavourite} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
+                                        : <Heart size={16} onClick={handleSongFavourite} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />}
+
                                     <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
                                     <p>{formatTime(song.time)}</p>
                                     <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
@@ -215,7 +285,9 @@ function ProfileArtist() {
                     >
                         {artistSong && artistSong.length > 0 ? (
                             artistSong.map((song, index) => (
-                                <SwiperSlide style={{ width: 'auto' }} >
+
+                                <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
+
                                     <div className="text-center flex flex-col  items-start ">
                                         <img src={song.song_image} className=" mb-3 " style={{
                                             width: '260px',
@@ -238,7 +310,6 @@ function ProfileArtist() {
                             </SwiperSlide>
                         )}
                     </Swiper>
-
                 </section>
                 <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
@@ -250,6 +321,7 @@ function ProfileArtist() {
                             </svg>
 
                         </div>
+
                     </div>
                     <div className="flex items-center ">
                         {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean'].map((item, index) => (
@@ -269,7 +341,7 @@ function ProfileArtist() {
                 </section>
                 <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-xl font-medium mb-16">Sơn Tùng M-TP trong loạt hit nổi bật</h1>
+                        <h1 className="text-xl font-medium mb-16">{artist.singer_name} trong loạt hit nổi bật</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
                             <p className="text-sm text-red-600 ">Xem Thêm </p>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
@@ -284,27 +356,25 @@ function ProfileArtist() {
                         className="mySwiper "
 
                     >
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center flex flex-col  items-start ">
-                                <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                <p className='text-sm ml-2'>Nhạc gen Z</p>
-                                <p className=' text-sm ml-2 text-slate-600 mt-1 truncate w-52'>Hoàng Thùy Linh, Sơn tùng mTP, mono.... </p>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center flex flex-col  items-start ">
-                                <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                <p className='text-sm ml-2'>Nhạc gen Z</p>
-                                <p className=' text-sm ml-2 text-slate-600 mt-1 truncate w-52'>Hoàng Thùy Linh, Sơn tùng mTP, mono.... </p>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center flex flex-col  items-start ">
-                                <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                <p className='text-sm ml-2'>Nhạc gen Z</p>
-                                <p className=' text-sm ml-2 text-slate-600 mt-1 truncate w-52'>Hoàng Thùy Linh, Sơn tùng mTP, mono.... </p>
-                            </div>
-                        </SwiperSlide>
+                        {artistSong && artistSong.length > 0 ? (
+                            artistSong.map((song, index) => (
+                                <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
+                                    <div className="text-center flex flex-col  items-start ">
+                                        <img src={song.song_image} className=" mb-3 rounded-xl w-44 h-44" />
+                                        <p className='text-sm ml-2'>{song.song_name}</p>
+                                        <p className=' text-sm text-slate-600 mt-1 truncate w-52'>{song.description}.... </p>
+                                    </div>
+                                </SwiperSlide>
+                            ))) : (
+                            <SwiperSlide style={{ width: 'auto' }} >
+                                <div className="text-center flex flex-col  items-start ">
+                                    Không có bài hát nào.
+                                    {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
+                                    <p className=''>Đừng Làm Trái Tim Anh đau</p>
+                                    <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p> */}
+                                </div>
+                            </SwiperSlide>
+                        )}
 
                     </Swiper>
 
@@ -317,7 +387,6 @@ function ProfileArtist() {
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
-
                         </div>
                     </div>
 
@@ -327,114 +396,25 @@ function ProfileArtist() {
                         className="mySwiper "
 
                     >
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center">
-                                <img src="../imgs/image (13).png" className="rounded-full mb-3  w-full" />
-                                <p className="font-medium mb-2 text-base">Sơn Tùng - MTP</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (14).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">RPT MCK</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (15).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">VŨ.</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (16).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">KARIK</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (17).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">Bích Phương</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (18).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">Đen Vâu</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center">
-                                <img src="../imgs/image (13).png" className="rounded-full mb-3  w-full" />
-                                <p className="font-medium mb-2 text-base">Sơn Tùng - MTP</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (14).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">RPT MCK</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (15).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">VŨ.</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (16).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">KARIK</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (17).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">Bích Phương</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }}>
-                            <div className="text-center">
-                                <img src="../imgs/image (18).png" className="rounded-full mb-3 w-full" />
-                                <p className="font-medium mb-2 text-base">Đen Vâu</p>
-                                <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
-
-                            </div>
-                        </SwiperSlide>
-
+                        {artists && artists.length > 0 ? (
+                            artists.map((artist, index) => (
+                                <SwiperSlide key={artist.id} style={{ width: 'auto' }} >
+                                    <div className="text-center">
+                                        <Link to={`/ProfileArtist/${artist.id}`}>
+                                            <img src={artist.singer_image} className="rounded-full mb-3 w-52 h-52" />
+                                            <p className="font-medium mb-2 text-base">{artist.singer_name}</p>
+                                        </Link>
+                                        <p className="text-sm text-slate-700">Nghệ Sĩ</p>
+                                        <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
+                                    </div>
+                                </SwiperSlide>
+                            ))) : (
+                            <SwiperSlide style={{ width: 'auto' }} >
+                                <div className="text-center">
+                                    <p>Không có ca sĩ nào</p>
+                                </div>
+                            </SwiperSlide>
+                        )}
                     </Swiper>
 
                 </section> </>}
@@ -444,111 +424,40 @@ function ProfileArtist() {
                         <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
                         <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
                     </div>
-                    <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
-                        <div className='flex items-center gap-3 w-1/4 justify-start'>
-                            <Play size={18} className='hidden  group-hover:block duration-300' />
-                            <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>01</p>
-                            <img className='size-10 rounded-lg' src='../imgs/image (23).png' />
-                            <p className='w-full truncate '>Đừng Làm Trái Tim Anh Đau</p>
+                    {artistSong && artistSong.length > 0 ? (
+                        artistSong.map((song, index) => (
+                            <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
+                                <div className='flex items-center gap-3 w-1/4 justify-start'>
+                                    <Play size={18} className='hidden  group-hover:block duration-300' />
+                                    <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>{index + 1}</p>
+                                    <img className='size-10 rounded-lg' src={song.song_image} />
+                                    <p className='w-full truncate '>{song.song_name}</p>
+                                </div>
+                                <div className='w-1/4 flex items-center justify-center'>
+                                    <p>{song.singer_name}</p>
+                                </div>
+                                <div className='w-1/4 flex items-center justify-center'>
+                                    <p>{song.singer_name} - Single</p>
+                                </div>
+                                <div className='flex items-center gap-5 duration-300 w-1/4 justify-end'>
+                                    <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
+                                    <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
+                                    <p>{formatTime(song.time)}</p>
+                                    <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
+                                </div>
+                            </div>
+                        ))) : (
+                        <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
+                            <p>Không có bài hát</p>
                         </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Sơn Tùng M-TP</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Chúng Ta - Single</p>
-                        </div>
-                        <div className='flex items-center gap-5 duration-300 w-1/4 justify-end'>
-                            <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <p>04:05</p>
-                            <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
-                        </div>
-                    </div>
-                    <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
-                        <div className='flex items-center gap-3 w-1/4 justify-start'>
-                            <Play size={18} className='hidden  group-hover:block duration-300' />
-                            <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>01</p>
-                            <img className='size-10 rounded-lg' src='../imgs/image (23).png' />
-                            <p className='w-full truncate '>Đừng Làm Trái Tim Anh Đau</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Sơn Tùng M-TP</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Chúng Ta - Single</p>
-                        </div>
-                        <div className='flex items-center gap-5 duration-300 w-1/4 justify-end'>
-                            <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <p>04:05</p>
-                            <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
-                        </div>
-                    </div>
-                    <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
-                        <div className='flex items-center gap-3 w-1/4 justify-start'>
-                            <Play size={18} className='hidden  group-hover:block duration-300' />
-                            <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>01</p>
-                            <img className='size-10 rounded-lg' src='../imgs/image (23).png' />
-                            <p className='w-full truncate '>Đừng Làm Trái Tim Anh Đau</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Sơn Tùng M-TP</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Chúng Ta - Single</p>
-                        </div>
-                        <div className='flex items-center gap-5 duration-300 w-1/4 justify-end'>
-                            <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <p>04:05</p>
-                            <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
-                        </div>
-                    </div>
-                    <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
-                        <div className='flex items-center gap-3 w-1/4 justify-start'>
-                            <Play size={18} className='hidden  group-hover:block duration-300' />
-                            <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>01</p>
-                            <img className='size-10 rounded-lg' src='../imgs/image (23).png' />
-                            <p className='w-full truncate '>Đừng Làm Trái Tim Anh Đau</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Sơn Tùng M-TP</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Chúng Ta - Single</p>
-                        </div>
-                        <div className='flex items-center gap-5 duration-300 w-1/4 justify-end'>
-                            <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <p>04:05</p>
-                            <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
-                        </div>
-                    </div>
-                    <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
-                        <div className='flex items-center gap-3 w-1/4 justify-start'>
-                            <Play size={18} className='hidden  group-hover:block duration-300' />
-                            <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>01</p>
-                            <img className='size-10 rounded-lg' src='../imgs/image (23).png' />
-                            <p className='w-full truncate '>Đừng Làm Trái Tim Anh Đau</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Sơn Tùng M-TP</p>
-                        </div>
-                        <div className='w-1/4 flex items-center justify-center'>
-                            <p>Chúng Ta - Single</p>
-                        </div>
-                        <div className='flex items-center gap-5 duration-300 w-1/4 justify-end'>
-                            <Heart size={16} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <CirclePlus size={16} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            <p>04:05</p>
-                            <Ellipsis size={16} className='opacity-0 group-hover:opacity-100 duration-300' />
-                        </div>
-                    </div>
+                    )}
+
                 </div>
             </section>
                 <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
-                        <h1 className="text-xl font-medium mb-16">Sơn Tùng M-TP trong loạt hit nổi bật</h1>
+
+                        <h1 className="text-xl font-medium mb-16">{artist.singer_name} trong loạt hit nổi bật</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
                             <p className="text-sm text-red-600 ">Xem Thêm </p>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
@@ -563,27 +472,27 @@ function ProfileArtist() {
                         className="mySwiper "
 
                     >
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center flex flex-col  items-start ">
-                                <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                <p className='text-sm ml-2'>Nhạc gen Z</p>
-                                <p className=' text-sm ml-2 text-slate-600 mt-1 truncate w-52'>Hoàng Thùy Linh, Sơn tùng mTP, mono.... </p>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center flex flex-col  items-start ">
-                                <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                <p className='text-sm ml-2'>Nhạc gen Z</p>
-                                <p className=' text-sm ml-2 text-slate-600 mt-1 truncate w-52'>Hoàng Thùy Linh, Sơn tùng mTP, mono.... </p>
-                            </div>
-                        </SwiperSlide>
-                        <SwiperSlide style={{ width: 'auto' }} >
-                            <div className="text-center flex flex-col  items-start ">
-                                <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                <p className='text-sm ml-2'>Nhạc gen Z</p>
-                                <p className=' text-sm ml-2 text-slate-600 mt-1 truncate w-52'>Hoàng Thùy Linh, Sơn tùng mTP, mono.... </p>
-                            </div>
-                        </SwiperSlide>
+
+
+                        {artistSong && artistSong.length > 0 ? (
+                            artistSong.map((song, index) => (
+                                <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
+                                    <div className="text-center flex flex-col  items-start ">
+                                        <img src={song.song_image} className=" mb-3 rounded-xl w-44 h-44" />
+                                        <p className='text-sm ml-2'>{song.song_name}</p>
+                                        <p className=' text-sm text-slate-600 mt-1 truncate w-52'>{song.description}.... </p>
+                                    </div>
+                                </SwiperSlide>
+                            ))) : (
+                            <SwiperSlide style={{ width: 'auto' }} >
+                                <div className="text-center flex flex-col  items-start ">
+                                    Không có bài hát nào.
+                                    {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
+                                    <p className=''>Đừng Làm Trái Tim Anh đau</p>
+                                    <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p> */}
+                                </div>
+                            </SwiperSlide>
+                        )}
 
                     </Swiper>
 

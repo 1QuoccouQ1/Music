@@ -4,6 +4,7 @@ import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from '../ContextAPI/UserContext';
 import { Undo2 } from 'lucide-react';
+import { API_URL } from "../services/apiService";
 function Login() {
   // const { setUser } = useContext(UserContext); 
   const [language, setLanguage] = useState("vi");
@@ -82,7 +83,7 @@ function Login() {
 
     if (validate()) {
       try {
-        const response = await fetch('https://admin.soundwave.io.vn/api/users/login', {
+        const response = await fetch(`${API_URL}/users/login`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -97,7 +98,7 @@ function Login() {
         if (response.status === 200) {
           const data = await response.json();
 
-          localStorage.setItem('access_token',JSON.stringify(data.access_token) );
+          localStorage.setItem('access_token',data.access_token);
           localStorage.setItem('user',JSON.stringify(data.user) );
           
           // Lưu thông tin người dùng vào Context

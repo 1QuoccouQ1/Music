@@ -1,4 +1,4 @@
-const API_URL = 'https://admin.soundwave.io.vn/api';
+export const API_URL = 'https://admin.soundwave.io.vn/api';
 
 async function fetchAPI(endpoint, method = 'GET', body = null) {
     const response = await fetch(`${API_URL}${endpoint}`, {
@@ -16,6 +16,8 @@ export const loginUser = (user) => fetchAPI('/users/login', 'POST', user);
 
 
 export const getMusics = () => fetchAPI('/rand-10');
+
+export const getArtist =  fetchAPI('/ca-si');
 
 
 
@@ -35,41 +37,6 @@ export const findUser = (id) => fetchAPI('/users/Finduser', 'POST',{id});
 export const updateUser = (id,userData) => fetchAPI('/users/UpdateUser', 'PUT',{id,...userData});
 // Delete User
 export const DelUser = (id) => fetchAPI('/users/DeleteUser', 'DELETE',{id});
-
-
-
-
-
-// Lấy dữ liệu goats
-export const getTransactions = (UserAccountID) => fetchAPI('/transactions/transactions', 'POST', {UserAccountID});
-// Lấy tạo transactions
-export const createTransaction = (transaction) => fetchAPI('/transactions/Createtransaction', 'POST', transaction);
-
-
-
-// Lấy dữ liệu goats
-export const getGoats = (UserAccountID) => fetchAPI('/goats/goats', 'POST', {UserAccountID});
-// Tạo một goat mới
-export const Creategoat = (user) => fetchAPI('/goats/Creategoat', 'POST', user);
-// Xóa một goat
-export const DelGoat = (id) => fetchAPI('/goats/Deletegoat', 'DELETE', {id});
-// Cập nhật goat
-export const updateGoat = (id, goatData) => fetchAPI('/goats/Updategoat', 'PUT', { id , ...goatData });
-// Lấy dữ liệu goat  theo id
-export const findGoat = (id) => fetchAPI('/goats/Findgoat', 'POST',{id});
-
-
-
-// Lấy dữ liệu goats
-export const getPlans = (UserAccountID) => fetchAPI('/plans/plans', 'POST', {UserAccountID});
-// Tạo một goat mới
-export const CreatePlan = (user) => fetchAPI('/plans/Createplan', 'POST', user);
-// Xóa một goat
-export const DelPlan = (id) => fetchAPI('/plans/Deleteplan', 'DELETE', {id});
-// Cập nhật goat
-export const updatePlan = (id, Data) => fetchAPI('/plans/Updateplan', 'PUT', { id , ...Data });
-// Lấy dữ liệu goat  theo id
-export const findPlan = (id) => fetchAPI('/plans/Findplan', 'POST',{id});
 
 
 
