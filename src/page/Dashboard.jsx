@@ -6,6 +6,7 @@ import { Play } from "lucide-react";
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
+import { Link } from "react-router-dom";
 
 function Dashboard() {
   const {
@@ -363,11 +364,13 @@ function Dashboard() {
           {artists.map((artist) => (
             <SwiperSlide key={artist.id} style={{ width: "auto" }}>
               <div className="text-center">
+                <Link to = {`/ProfileArtist/${artist.id}`}>
                 <img
                   src={artist.singer_image} // URL hình ảnh của nghệ sĩ
                   alt={artist.singer_name}
                   className="rounded-full mb-3  size-64"
                 />
+                </Link>
                 <p className="font-medium mb-2 text-base">
                   {artist.singer_name}
                 </p>

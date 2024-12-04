@@ -5,9 +5,7 @@ function ProfileEditPage() {
     const [profileData, setProfileData] = useState({
         name: '',
         email: '',
-        birthDay: '',
-        birthMonth: '',
-        birthYear: '',
+        birthday: '',
         gender: '',
         image: ''
     });

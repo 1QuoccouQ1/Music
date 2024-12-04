@@ -97,7 +97,7 @@ function Nav() {
   
   return (
     <>
-      <div className="flex justify-between  w-auto h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
+      <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
         <div className="relative ">
         <InputSearch
             onSearch={fetchSearchResults}
@@ -223,7 +223,7 @@ function Nav() {
                   </svg>
                 </button>
                 {isProfileOpen && (
-                  <div className="absolute z-10 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
+                  <div className="absolute z-50 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
                     <div className="flex flex-col w-full max-w-md mx-auto bg-gray-900 text-white rounded-xl">
                       <div onClick={() => {
                         navigate('/ProfileEditPage')
@@ -245,7 +245,7 @@ function Nav() {
                         </div>
                         <ChevronRight className="w-5 h-5 text-gray-400" />
                       </div>
-                      <nav className="flex flex-col">
+                      <nav className="flex flex-col z-50">
                       {[
                         { icon: Sparkles, href: "/Upgrade", label: "Nâng cấp tài khoản" },
                         { icon: CloudDownload, href: "https://example.com", label: "Nhạc đã tải xuống" }, // Ví dụ link ngoại vi

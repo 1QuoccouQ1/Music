@@ -47,7 +47,7 @@ function SettingSidebar() {
 
     return (
         <>
-            <aside className='w-56 max-w-64 bg-sidebar px-6 py-3 h-full fixed '>
+            <aside className='w-64 max-w-64 bg-sidebar px-6 py-3 h-full fixed '>
                 <div className='space-y-4 h-auto'>
                     <Link to='/' className='flex justify-center'>
                         <img src='../imgs/Music Brand and App Logo 1.png' alt='Music Brand Logo' />
