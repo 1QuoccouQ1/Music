@@ -59,7 +59,7 @@ function ProfileArtist() {
                 const data = await response.json();
 
                 if (response.ok) {
-                    setArtistSongs(data); // Cập nhật state nếu API trả về thành công
+                    fetchArtistSongs(data); // Cập nhật state nếu API trả về thành công
                 } else {
                     console.error('Failed to fetch songs:', data.message || 'Unknown error');
                 }

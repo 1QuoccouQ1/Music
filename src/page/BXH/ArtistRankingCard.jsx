@@ -72,11 +72,11 @@ function ArtistRankingCard({ rank, artist, song }) {
                     <h3 className='text-white text-sm sm:text-base font-semibold'>
                         {song.title}
                     </h3>
-                    <Link to={`/ProfileArtist/${artist.id}`} >
+                
                         <p className='text-gray-400 text-xs sm:text-sm'>
                             {song.artist}
                         </p>
-                    </Link>
+                    
                 </div>
 
                 {/* Thời lượng bài hát */}
