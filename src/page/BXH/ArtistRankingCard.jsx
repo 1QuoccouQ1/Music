@@ -29,13 +29,13 @@ function ArtistRankingCard({ rank, artist, song }) {
             <div className='relative flex flex-col items-center mb-3'>
                 <div className='relative group'>
                     <img
-                        className='w-14 h-14 sm:w-16 sm:h-16 rounded-full duration-150 hover:scale-125'
+                        className='w-14 h-14 sm:w-16 sm:h-16 rounded-full duration-150 transform group-hover:scale-125'
                         src={artist.imageUrl}
                         alt={artist.name}
                     />
 
                     {/* Nút Play chỉ hiện khi hover */}
-                    <button className='absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 hover:scale-125'>
+                    <button className='absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-125'>
                         <svg
                             className='w-6 h-6 sm:w-8 sm:h-8'
                             fill='none'
@@ -72,7 +72,7 @@ function ArtistRankingCard({ rank, artist, song }) {
                     <h3 className='text-white text-sm sm:text-base font-semibold'>
                         {song.title}
                     </h3>
-                    <Link to={`/ProfileArtist/${artist.id}`}>
+                    <Link to={`/ProfileArtist/${artist.id}`} >
                         <p className='text-gray-400 text-xs sm:text-sm'>
                             {song.artist}
                         </p>
