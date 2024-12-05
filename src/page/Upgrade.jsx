@@ -1,8 +1,10 @@
 import { Check, X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 function Upgrade() {
+  const navigate = useNavigate();
   const faqData = [
     {
       question: "SoundWave là gì?",
@@ -58,47 +60,93 @@ function Upgrade() {
       features: [true, true, false, true, true, true, true],
     },
   ];
-  const handleUpgradeClick = () => {
+  const [show, setShow] = useState([]);
+  const [type, setType] = useState(null);
+  const handleUpgradeClick = (option) => {
     setShowPricingPage(true);
+    if(option == 'plus'){
+      setShow(plus);
+      setType('Plus');
+    } else if(option == 'premium'){
+      setShow(premium);
+      setType('Premium');
+    }
   };
-  const planss = [
+  const plus = [
     {
       duration: 12,
-      price: 156000,
-      originalPrice: 264000,
+      price: 136800,
+      originalPrice: 228000,
       discount: 40,
-      perMonth: 13000,
+      perMonth: 11400,
     },
     {
       duration: 6,
-      price: 90000,
-      originalPrice: 132000,
+      price: 79800,
+      originalPrice: 114000,
       discount: 30,
-      perMonth: 15000,
+      perMonth: 13300,
     },
     {
       duration: 3,
-      price: 57000,
-      originalPrice: 84000,
+      price: 45600,
+      originalPrice: 57000,
       discount: 20,
-      perMonth: 19000,
+      perMonth: 15200,
     },
     {
       duration: 1,
-      price: 22000,
-      originalPrice: 22000,
+      price: 19000,
+      originalPrice: 19000,
       discount: 0,
-      perMonth: 22000,
+      perMonth: 19000,
     },
   ];
-
+  const premium = [
+    {
+      duration: 12,
+      price: 280800,
+      originalPrice: 468000,
+      discount: 40,
+      perMonth: 23400,
+    },
+    {
+      duration: 6,
+      price: 163800,
+      originalPrice: 234000,
+      discount: 30,
+      perMonth: 27300,
+    },
+    {
+      duration: 3,
+      price: 93600,
+      originalPrice: 117000,
+      discount: 20,
+      perMonth: 31200,
+    },
+    {
+      duration: 1,
+      price: 39000,
+      originalPrice: 39000,
+      discount: 0,
+      perMonth: 39000,
+    },
+  ];
   const [selectedPlan, setSelectedPlan] = useState(null); // Không chọn gói nào ban đầu
   const [agreed, setAgreed] = useState(false);
-
+  
   const handleContinue = () => {
     if (agreed && selectedPlan !== null) {
-      console.log(`Selected plan: ${planss[selectedPlan].duration} months`);
+      const data = {
+        plan: show[selectedPlan].duration,
+        price: show[selectedPlan].price,
+        type: type,
+      };
+      localStorage.setItem('payment',JSON.stringify(data));
+      // console.log(`Selected plan: ${show[selectedPlan].duration} months, ${show[selectedPlan].price} VND, ${type}`);
       // Ở đây bạn có thể thêm logic để bắt đầu quá trình thanh toán
+      navigate('/Payment');
+      // navigate('/');
     }
   };
 
@@ -136,7 +184,7 @@ function Upgrade() {
             Nâng cấp tài khoản để trải nghiệm các đặt quyền và lợi ích cao cấp
           </h1>
           <p className="text-center text-gray-400 mb-2 text-sm">
-            65.000 đ/tháng • Không bao gồm thuế GTGT • Hủy bất cứ lúc nào
+            39.000 đ/tháng • Không bao gồm thuế GTGT • Hủy bất cứ lúc nào
           </p>
           <div className="text-center my-12">
             <button className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-90  text-white   py-2 px-6 rounded-full">
@@ -153,7 +201,7 @@ function Upgrade() {
               <div className="text-white text-xs mb-2 absolute top-0 py-1 px-8 bg-[#757575] rounded-lg font-bold -translate-y-1/2">
                 BASIC
               </div>
-              <h3 className="text-xl font-bold mb-2">Miễn Phí</h3>
+              <h3 className="text-xl font-bold mb-2">SoundWave Basic</h3>
               <p className="text-xs text-gray-400 mb-4">Miễn phí trọn đời</p>
               <p className="text-2xl text-white mb-8 mt-auto ">
                 <span className="text-2xl font-medium">0đ</span> /tháng
@@ -166,7 +214,7 @@ function Upgrade() {
               <div className="text-white text-xs mb-2 absolute top-0 py-1 px-8 bg-yellow-500 rounded-lg font-bold -translate-y-1/2">
                 PLUS
               </div>
-              <h3 className="text-xl font-bold mb-2">Plus SoundWave</h3>
+              <h3 className="text-xl font-bold mb-2">SoundWave Plus</h3>
               <ul className="text-xs space-y-1 mb-4">
                 <li>✓ Nghe nhạc không quảng cáo</li>
                 <li>✓ Tải xuống để nghe offline</li>
@@ -178,7 +226,7 @@ function Upgrade() {
                 <span className="text-2xl font-medium">19.000đ</span> /tháng
               </p>
               <button
-                onClick={handleUpgradeClick}
+                onClick={()=> handleUpgradeClick('plus') }
                 className=" cursor-pointer w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
               >
                 Nâng Cấp Ngay
@@ -201,7 +249,7 @@ function Upgrade() {
                 <span className="text-2xl font-medium">39.000đ</span> /tháng
               </p>
               <button
-                onClick={handleUpgradeClick}
+                onClick={()=> handleUpgradeClick('premium')}
                 className=" cursor-pointer w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
               >
                 Nâng Cấp Ngay
@@ -303,14 +351,14 @@ function Upgrade() {
           <div className="min-h-screen  text-white flex items-center justify-center p-4 -translate-y-7">
             <div className="max-w-2xl w-full bg-slate-800 rounded-lg p-6 space-y-6">
               <div>
-                <h2 className="text-2xl font-bold">Plus SoundWave</h2>
+                <h2 className="text-2xl font-bold">SoundWave {type}</h2>
                 <p className="text-slate-400 text-sm">
                   Thanh toán trước một lần, hợp lệ khi bạn muốn. Không tự động
                   gia hạn.
                 </p>
               </div>
 
-              {planss.map((plan, index) => (
+              {show.map((plan, index) => (
                 <div
                   key={index}
                   className={`p-4 rounded-lg cursor-pointer ${
@@ -321,7 +369,7 @@ function Upgrade() {
                   <div className="flex justify-between items-center">
                     <div>
                       <h3 className="font-medium">
-                        SoundWave Plus - {plan.duration} tháng
+                        SoundWave {type} - {plan.duration} tháng
                       </h3>
                       <div className="flex items-center space-x-2">
                         <span className="text-xl font-medium">
