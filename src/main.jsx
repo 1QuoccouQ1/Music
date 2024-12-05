@@ -38,6 +38,7 @@ import SettingsPage from "./page/Setting/SettingsPage.jsx";
 import AboutUs from "./page/Setting/AboutUs.jsx";
 import Privacy from "./page/Setting/Privacy.jsx";
 
+import PayNotification from "./page/Payment/PayNotification.jsx";
 import PaySuccess from "./page/Payment/PaySuccess.jsx";
 import PayFail from "./page/Payment/PayFail.jsx";
 import PayError from "./page/Payment/PayError.jsx";
@@ -95,20 +96,25 @@ const router = createBrowserRouter([
         element: <ArtistGallery />,
       },
       {
-        path: "/PaySuccess",
+        path: "/PayNotification",
         loader: changeIsSetting,
-        element: <PaySuccess />,
+        element: <PayNotification />,
       },
-      {
-        path: "/PayFail",
-        loader: changeIsSetting,
-        element: <PayFail />,
-      },
-      {
-        path: "/PayError",
-        loader: changeIsSetting,
-        element: <PayError />,
-      },
+      // {
+      //   path: "/PaySuccess",
+      //   loader: changeIsSetting,
+      //   element: <PaySuccess />,
+      // },
+      // {
+      //   path: "/PayFail",
+      //   loader: changeIsSetting,
+      //   element: <PayFail />,
+      // },
+      // {
+      //   path: "/PayError",
+      //   loader: changeIsSetting,
+      //   element: <PayError />,
+      // },
       {
         path: "/Payment",
         loader: changeIsSetting,

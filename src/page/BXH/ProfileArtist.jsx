@@ -215,7 +215,7 @@ function ProfileArtist() {
                 <div className='flex w-full lg:w-2/3 flex-col gap-2' >
                     <p className='text-right font-medium text-sm text-red-500 cursor-pointer mr-5'>Xem thêm</p>
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user_id : null} length={'5'} />
+                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user.id : null} length={'5'} />
                     ) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             Không có bài hát nào.
@@ -389,7 +389,7 @@ function ProfileArtist() {
                         <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
                     </div>
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user_id : null} length={'20'} />) : (
+                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user.id : null} length={'20'} />) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             <p>Không có bài hát</p>
                         </div>
