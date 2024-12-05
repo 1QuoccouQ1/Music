@@ -187,15 +187,12 @@ const Footer = React.memo(function FooterComponent() {
         song_image: currentSong.song_image,
         id: currentSong.id, // Thời lượng bài hát
       });
-      // Gọi API cập nhật lượt nghe
       try {
         await fetch(`${API_URL}/luot-nghe/${currentSong.id}`, {
-          method: "GET", // Thay đổi tùy thuộc vào API (POST/PUT)
           headers: {
             "Content-Type": "application/json",
             'Authorization': `Bearer ${localStorage.getItem('access_token')}`
           },
-          body: JSON.stringify({}), // Nếu API yêu cầu dữ liệu trong body, thêm dữ liệu cần thiết
         });
         console.log(`Cập nhật lượt nghe cho bài hát: ${currentSong.song_name}`);
       } catch (error) {
