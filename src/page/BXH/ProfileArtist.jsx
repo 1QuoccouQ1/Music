@@ -43,11 +43,14 @@ function ProfileArtist() {
                 const response = await fetch(API_URL + `/ca-si/${id}/bai-hat`);
                 const data = await response.json();
 
-                if (response.ok) {
+                if (response.status == false) {
+                    console.error('Error fetching artist data:', data.message);
+
+                } else {
                     setArtistSong(data); // Cập nhật state `artist`
                 }
             } catch (error) {
-                console.error('Error fetching artist data:', error);
+                console.error('Error fetching artist data:', error.message);
             } finally {
                 setLoading(false); // Đặt loading = false
             }
@@ -84,7 +87,9 @@ function ProfileArtist() {
                 setLoading(false); // Tắt loading
             }
         }
-        folow();
+        if (user) {
+            folow();
+        }
 
         fetchArtistsong();
         fetchArtistData();
@@ -92,34 +97,38 @@ function ProfileArtist() {
 
 
     const handleFollowing = () => {
-        // Gửi request API khi người dùng nhấn "Theo giỏi"
-        fetch(API_URL + '/ca-si/add-to-favourite', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                Authorization: `Bearer ${localStorage.getItem('access_token')}`
-            },
-            body: JSON.stringify({
-                liked: !isFollowing,
-                singer_id: id,
-                user_id: user.id
+        if (!user) {
+            toast.error('Vui lòng đăng nhập để theo dõi ca sĩ.');
+            return;
+        } else {
+            // Gửi request API khi người dùng nhấn "Theo giỏi"
+            fetch(API_URL + '/ca-si/add-to-favourite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                },
+                body: JSON.stringify({
+                    liked: !isFollowing,
+                    singer_id: id,
+                    user_id: user.id
+                })
             })
-        })
-            .then(response => response.json())
-            .then(data => {
-                // Xử lý dữ liệu trả về từ API (nếu cần)
-                // console.log('Đã đánh dấu yêu thích:', data.message);
-                setIsFollowing(!isFollowing);
-                toast.success(data.message);
-            })
-            .catch(error => {
-                // console.error('Lỗi khi gửi yêu cầu:', error);
-                toast.success('Lỗi khi gửi yêu cầu:', error);
-            });
+                .then(response => response.json())
+                .then(data => {
+                    // Xử lý dữ liệu trả về từ API (nếu cần)
+                    // console.log('Đã đánh dấu yêu thích:', data.message);
+                    setIsFollowing(!isFollowing);
+                    toast.success(data.message);
+                })
+                .catch(error => {
+                    // console.error('Lỗi khi gửi yêu cầu:', error);
+                    toast.success('Lỗi khi gửi yêu cầu:', error);
+                });
 
-
+        }
     }
-    
+
 
 
     const handleModal = () => {
@@ -173,9 +182,9 @@ function ProfileArtist() {
             <section className='w-full   pt-7  text-white px-5'>
                 <div className="relative w-full h-[600px] z-10">
                     <img src={artist.singer_background} className='rounded-t-xl h-full w-full' />
-                    <div className="flex items-center justify-center absolute bottom-7 left-16 gap-8">
-                        <img className='size-60 rounded-full border-1 border-black translate-y-1/4' src={artist.singer_image} />
-                        <div >
+                    <div className="flex flex-wrap items-center justify-center absolute bottom-7 left-16 gap-8">
+                        <img className='size-60 rounded-full border-1 border-black lg:translate-y-1/4' src={artist.singer_image} />
+                        <div className=''>
                             <p>Nghệ Sĩ Của Công Chúng</p>
                             <div className="flex items-center my-5">
                                 <p className='text-7xl font-semibold '> {artist.singer_name}</p>
@@ -195,28 +204,28 @@ function ProfileArtist() {
                         </div>
                     </div>
                 </div>
-                <div className='flex py-4 w-full px-72 gap-10 rounded-b-xl shadow-medium-xl  bg-slate-900'>
+                <div className='flex py-4 w-full justify-center gap-10 rounded-b-xl shadow-medium-xl  bg-slate-900'>
                     <p onClick={() => handleSelect("1")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "1" ? "text-red-500" : " text-white"} `}>Nổi Bật</p>
                     <p onClick={() => handleSelect("2")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "2" ? "text-red-500" : " text-white"} `}>Bài hát</p>
                     <p onClick={() => handleSelect("3")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "3" ? "text-red-500" : " text-white"} `}>Single & EP</p>
                     <p onClick={() => handleSelect("4")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "4" ? "text-red-500" : " text-white"} `}>Album</p>
                 </div>
             </section>
-            {isSelect === "1" && <><section className='w-full text-white px-5 pt-10 flex '>
-                <div className='flex w-2/3 flex-col gap-2' >
+            {isSelect === "1" && <><section className='w-full text-white px-5 pt-10 flex flex-wrap'>
+                <div className='flex w-full lg:w-2/3 flex-col gap-2' >
                     <p className='text-right font-medium text-sm text-red-500 cursor-pointer mr-5'>Xem thêm</p>
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong artistSong={artistSong} user_id={user.id} length={'5'}/>
+                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user_id : null} length={'5'} />
                     ) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             Không có bài hát nào.
                         </div>
                     )}
                 </div>
-                <div className='flex w-1/3 '>
+                <div className='flex w-full lg:w-1/3 '>
                     <div className='w-full h-full p-3 relative ' >
                         <img className='rounded-xl w-full h-full shadow-2xl' src={artist.singer_background} />
-                        <p className='absolute bottom-7 left-7 text-sm w-80  '>{limitCharacters(artist.singer_biography, 200)}<span onClick={handleModal} className='font-semibold text-red-600  cursor-pointer'>Xem Thêm </span></p>
+                        <p className='absolute bottom-4 left-7 text-sm w-5/6'>{limitCharacters(artist.singer_biography, 120)}<span onClick={handleModal} className='font-semibold text-red-600  cursor-pointer'>Xem Thêm </span></p>
                     </div>
                 </div>
             </section>
@@ -376,10 +385,11 @@ function ProfileArtist() {
                 <div className='flex w-full flex-col gap-2' >
                     <div className='flex items-center justify-between border-b border-slate-500 pb-2'>
                         <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
+                        <p className='flex items-center font-medium text-sm  cursor-pointer'>Lượt nghe</p>
                         <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
                     </div>
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong artistSong={artistSong} user_id={user.id} length={'20'}/>) : (
+                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user_id : null} length={'20'} />) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             <p>Không có bài hát</p>
                         </div>
