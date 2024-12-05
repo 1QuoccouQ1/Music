@@ -2,8 +2,10 @@ import { Check, X } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from 'react-toastify';
 
 function Upgrade() {
+  const user = JSON.parse(localStorage.getItem('user'));
   const navigate = useNavigate();
   const faqData = [
     {
@@ -64,10 +66,10 @@ function Upgrade() {
   const [type, setType] = useState(null);
   const handleUpgradeClick = (option) => {
     setShowPricingPage(true);
-    if(option == 'plus'){
+    if (option == 'plus') {
       setShow(plus);
       setType('Plus');
-    } else if(option == 'premium'){
+    } else if (option == 'premium') {
       setShow(premium);
       setType('Premium');
     }
@@ -134,15 +136,20 @@ function Upgrade() {
   ];
   const [selectedPlan, setSelectedPlan] = useState(null); // Không chọn gói nào ban đầu
   const [agreed, setAgreed] = useState(false);
-  
+
   const handleContinue = () => {
+    if (!user) {
+      toast.error('Vui lòng đăng nhập để nâng cấp gói.');
+      return false
+    }
     if (agreed && selectedPlan !== null) {
       const data = {
-        plan: show[selectedPlan].duration,
+        month: show[selectedPlan].duration,
         price: show[selectedPlan].price,
         type: type,
+        user_id: user.id,
       };
-      localStorage.setItem('payment',JSON.stringify(data));
+      localStorage.setItem('payment', JSON.stringify(data));
       // console.log(`Selected plan: ${show[selectedPlan].duration} months, ${show[selectedPlan].price} VND, ${type}`);
       // Ở đây bạn có thể thêm logic để bắt đầu quá trình thanh toán
       navigate('/Payment');
@@ -175,9 +182,8 @@ function Upgrade() {
   return (
     <>
       <div
-        className={` bg-slate-900 text-white h-auto flex flex-col items-center justify-center px-4 pt-28 pb-56 tracking-wide  ${
-          showPricingPage ? " blur-sm " : ""
-        }`}
+        className={` bg-slate-900 text-white h-auto flex flex-col items-center justify-center px-4 pt-28 pb-56 tracking-wide  ${showPricingPage ? " blur-sm " : ""
+          }`}
       >
         <div className="max-w-4xl w-full">
           <h1 className="text-5xl md:text-5xl font-bold text-center mb-4 ">
@@ -207,7 +213,7 @@ function Upgrade() {
                 <span className="text-2xl font-medium">0đ</span> /tháng
               </p>
               <button className=" w-full bg-[#212121] border-2 border-slate-700  text-slate-400 hover:text-slate-300 hover:border-slate-300 py-2 px-4 rounded-full duration-300">
-                Gói hiện tại
+                {user ? user.users_type == 'Basic' ? 'Gói hiện tại' : 'Chuyển' : 'Gói hiện tại'}
               </button>
             </div>
             <div className="bg-[#212121] rounded-lg px-6 pt-14 pb-6  flex flex-col items-center  relative h-[450px]">
@@ -215,7 +221,7 @@ function Upgrade() {
                 PLUS
               </div>
               <h3 className="text-xl font-bold mb-2">SoundWave Plus</h3>
-              <ul className="text-xs space-y-1 mb-4">
+              <ul className="text-xs space-y-2 mb-4">
                 <li>✓ Nghe nhạc không quảng cáo</li>
                 <li>✓ Tải xuống để nghe offline</li>
                 <li>✓ Chất lượng âm thanh cao</li>
@@ -225,19 +231,37 @@ function Upgrade() {
               <p className="text-2xl text-white mb-8 mt-auto ">
                 <span className="text-2xl font-medium">19.000đ</span> /tháng
               </p>
-              <button
-                onClick={()=> handleUpgradeClick('plus') }
-                className=" cursor-pointer w-full bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
-              >
-                Nâng Cấp Ngay
-              </button>
+
+              {user ? user.users_type == 'Plus' ?
+                <button
+                  onClick={() => handleUpgradeClick('plus')}
+                  className=" cursor-pointer w-full hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
+                >Gói hiện tại</button>
+                : user.users_type == 'Basic'
+                  ?
+                  <button
+                    onClick={() => handleUpgradeClick('plus')}
+                    className=" cursor-pointer w-full hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
+                  >Nâng Cấp Ngay</button>
+                  :
+                  <button
+                    onClick={() => handleUpgradeClick('plus')}
+                    className=" cursor-pointer w-full  hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
+                  >Chuyển</button>
+                :
+                <button
+                  onClick={() => handleUpgradeClick('plus')}
+                  className=" cursor-pointer w-full bg-yellow-600 hover:bg-yellow-500 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
+                >Nâng Cấp Ngay</button>
+              }
+
             </div>
             <div className="bg-[#212121] rounded-lg px-6 pt-14 pb-6  flex flex-col items-center relative h-[450px]">
               <div className="text-white text-sm mb-2 absolute top-0 py-1 px-8 bg-pink-400 rounded-lg font-bold -translate-y-1/2">
                 PREMIUM
               </div>
               <h3 className="text-xl font-bold mb-2">SoundWave Premium</h3>
-              <ul className="text-xs space-y-1 mb-4">
+              <ul className="text-xs space-y-2 mb-4">
                 <li>✓ Nghe nhạc không quảng cáo</li>
                 <li>✓ Kho nhạc Premium</li>
                 <li>✓ Phát nhạc theo danh sách tự chọn</li>
@@ -248,12 +272,24 @@ function Upgrade() {
               <p className="text-2xl text-red-600 mb-8 mt-auto ">
                 <span className="text-2xl font-medium">39.000đ</span> /tháng
               </p>
-              <button
-                onClick={()=> handleUpgradeClick('premium')}
-                className=" cursor-pointer w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
-              >
-                Nâng Cấp Ngay
-              </button>
+
+              {user ? user.users_type == 'Premium' ?
+                <button
+                  onClick={() => handleUpgradeClick('premium')}
+                  className=" cursor-pointer w-full hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
+                >Gói hiện tại</button>
+                :
+                <button
+                  onClick={() => handleUpgradeClick('premium')}
+                  className=" cursor-pointer w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
+                >Nâng cấp ngay</button>
+                :
+                <button
+                  onClick={() => handleUpgradeClick('premium')}
+                  className=" cursor-pointer w-full bg-pink-600 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full border-slate-400 border"
+                >Nâng cấp ngay</button>
+              }
+
             </div>
           </div>
         </div>
@@ -361,9 +397,8 @@ function Upgrade() {
               {show.map((plan, index) => (
                 <div
                   key={index}
-                  className={`p-4 rounded-lg cursor-pointer ${
-                    selectedPlan === index ? "bg-purple-900" : "bg-slate-700"
-                  }`}
+                  className={`p-4 rounded-lg cursor-pointer ${selectedPlan === index ? "bg-purple-900" : "bg-slate-700"
+                    }`}
                   onClick={() => setSelectedPlan(index)}
                 >
                   <div className="flex justify-between items-center">
@@ -391,11 +426,10 @@ function Upgrade() {
                       </p>
                     </div>
                     <div
-                      className={`w-6 h-6 rounded-full border-2 ${
-                        selectedPlan === index
-                          ? "border-pink-500 bg-pink-500"
-                          : "border-slate-500"
-                      }`}
+                      className={`w-6 h-6 rounded-full border-2 ${selectedPlan === index
+                        ? "border-pink-500 bg-pink-500"
+                        : "border-slate-500"
+                        }`}
                     >
                       {/* {selectedPlan === index && <CheckCircle2 className="text-white" size={22} />} */}
                     </div>
@@ -431,11 +465,10 @@ function Upgrade() {
                     Hủy bỏ
                   </button>
                   <button
-                    className={`px-6 py-2 ml-6 rounded-full transition-colors ${
-                      agreed && selectedPlan !== null
-                        ? "bg-pink-600 hover:bg-pink-700"
-                        : "bg-slate-700 cursor-not-allowed"
-                    }`}
+                    className={`px-6 py-2 ml-6 rounded-full transition-colors ${agreed && selectedPlan !== null
+                      ? "bg-pink-600 hover:bg-pink-700"
+                      : "bg-slate-700 cursor-not-allowed"
+                      }`}
                     disabled={!agreed || selectedPlan === null} // Vô hiệu hóa nếu chưa chọn gói hoặc chưa đồng ý
                     onClick={handleContinue} // Sự kiện tiếp tục
                   >

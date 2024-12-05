@@ -49,7 +49,7 @@ function InputSearch({ onSearch, onFocus, onBlur }) {
   };
 
   return (
-    <div className="relative flex items-center bg-[#172533] py-2 px-3 h-[40px] w-[500px]  rounded-3xl">
+    <div className="relative flex items-center bg-[#172533] py-2 px-3 h-[40px] rounded-3xl">
       <input
         type="text"
         value={query}

@@ -99,6 +99,11 @@ function Nav() {
   return (
     <>
       <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
+        <div className='w-full lg:hidden text-center h-full px-2'>
+          <Link to="/" className="flex justify-center">
+            <img src="../imgs/Music Brand and App Logo 1.png"  className="w-[60px]"/>
+          </Link>
+        </div>
         <div className="relative ">
           <InputSearch
             onSearch={fetchSearchResults}
@@ -236,11 +241,12 @@ function Nav() {
                       <div onClick={() => {
                         navigate('/ProfileEditPage')
                       }} className="flex items-center p-4 border-b border-gray-800">
-                        <div className="w-12 h-12 mr-4 ">
+                        <div className="w-14 h-14 mr-4 ">
                           <img
-                            className="rounded-full"
+                            className="rounded-full h-14 w-14"
                             src={user.image}
                             alt="Profile"
+
                           />
                         </div>
                         <div className="flex-grow">
@@ -250,12 +256,19 @@ function Nav() {
                           {user.users_type == 'Basic' ?
                             <p className="text-xs bg-gray-400 py-1 px-2 mt-2 text-white font-medium  w-fit rounded-full">
                               SoundWave Basic
+                              
                             </p>
                             :
                             user.users_type == 'Plus' ?
-                              <p className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition w-fit duration-300 mr-10"> SoundWave Plus</p>
+                              <p className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition w-fit duration-300 mr-10">
+                                SoundWave Plus <br/>
+                                {user.expiry_date ? <em>Hạn: {user.expiry_date}</em>: ''}
+                                </p>
                               :
-                              <p className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition  w-fit duration-300 mr-10"> SoundWave Premium </p>
+                              <p className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition  w-fit duration-300 mr-10">
+                                SoundWave Premium <br />
+                                {user.expiry_date ? <em>Hạn: {user.expiry_date}</em>: ''}
+                                </p>
                           }
                         </div>
                         <ChevronRight className="w-5 h-5 text-gray-400" />
