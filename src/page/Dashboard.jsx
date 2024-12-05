@@ -9,7 +9,8 @@ import { API_URL } from "../services/apiService";
 
 function Dashboard() {
   const {
-    handleFetchSongs
+    handleFetchSongs,
+    handleAddSong
   } = useContext(UserContext);
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
@@ -158,7 +159,7 @@ function Dashboard() {
     }
     return songs.map((song, index) => (
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
-        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onClick={() => {handleFetchSongs("song",song.id)}} >
+        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onClick={() => {handleAddSong("song",song.id)}} >
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
           <img
             className="size-16 rounded-md"
