@@ -13,12 +13,12 @@ function App() {
   return (
     <>
       <UserProvider>
-        <div className="flex h-auto bg-[#f4f7fe]">
+        <div className="flex h-auto bg-[#f4f7fe] w-full">
           <Sidebar></Sidebar> 
           <SettingSidebar></SettingSidebar> 
-          <div className="w-full ml-56 pb-[204px] bg-medium">
+          <div className="pl-64 pb-[204px] bg-medium w-full">
             <Nav></Nav>
-            <Outlet   />
+            <Outlet/>
           </div>
           <ModalListen/>
          <Footer  />

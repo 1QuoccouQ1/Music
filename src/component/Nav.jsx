@@ -1,5 +1,5 @@
 import InputSearch from "./InputSearch";
-import  { useState ,useRef ,useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import {
   ChevronRight,
   CloudDownload,
@@ -9,21 +9,22 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom"; 
+import { useNavigate } from "react-router-dom";
 import { Link } from 'react-router-dom';
 import { API_URL } from "../services/apiService";
+
 
 
 function Nav() {
   const navigate = useNavigate();
   // const { user ,isProfile } = useContext(UserContext);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-  const user = JSON.parse(localStorage.getItem('user')) 
+  const user = JSON.parse(localStorage.getItem('user'))
   const isProfile = user ? true : false;
   const profileRef = useRef(null);
 
-  const [songs, setSongs] = useState([]); 
-  const [singers, setSingers] = useState([]); 
+  const [songs, setSongs] = useState([]);
+  const [singers, setSingers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
@@ -39,13 +40,13 @@ function Nav() {
     setError("");
 
     try {
-      const response = await fetch(`${API_URL}/tim-kiem` , {
+      const response = await fetch(`${API_URL}/tim-kiem`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${localStorage.getItem('access_token')}`
         },
-        body: JSON.stringify({ search : query }),
+        body: JSON.stringify({ search: query }),
       });
       if (!response.ok) {
         throw new Error("Failed to fetch results.");
@@ -53,7 +54,7 @@ function Nav() {
 
       const data = await response.json();
       setSongs(data.songs || []);
-      setSingers(data.singers || []); 
+      setSingers(data.singers || []);
     } catch (error) {
       setError("Lỗi khi tìm kiếm. Vui lòng thử lại.");
     } finally {
@@ -62,124 +63,132 @@ function Nav() {
   };
 
 
-    const handleLogout = async () => {
+  const handleLogout = async () => {
 
-      try {
-        await fetch(`${API_URL}/logout`, { 
-          method: 'POST',
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          }
-        }); 
-  
-        localStorage.removeItem('user');
-        localStorage.removeItem('access_token');
-  
-        navigate('/login');
-      } catch (error) {
-        console.error('Logout failed:', error);
+    try {
+      await fetch(`${API_URL}/logout`, {
+        method: 'POST',
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+        }
+      });
+
+      localStorage.removeItem('user');
+      localStorage.removeItem('access_token');
+
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
       }
     };
 
-    useEffect(() => {
-      const handleClickOutside = (event) => {
-        if (profileRef.current && !profileRef.current.contains(event.target)) {
-          setIsProfileOpen(false);
-        }
-      };
-  
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-      };
-    }, []);
-  
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
-      <div className="flex justify-between  w-auto h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
+      <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
         <div className="relative ">
-        <InputSearch
+          <InputSearch
             onSearch={fetchSearchResults}
-            onFocus={() => setIsFocused(true)} 
+            onFocus={() => setIsFocused(true)}
             onBlur={() => {
-            setTimeout(() => setIsFocused(false), 200);
-          }}
+              setTimeout(() => setIsFocused(false), 200);
+            }}
           />
 
-        {isFocused && (songs.length > 0 || singers.length > 0 || loading) && (
-          <div className="results mt-10 z-10 absolute top-3 bg-[#172533] rounded-xl p-5 w-full" >
-            {loading && <p className="text-center text-gray-400">Đang tìm kiếm...</p>}
+          {isFocused && (songs.length > 0 || singers.length > 0 || loading) && (
+            <div className="results mt-10 z-10 absolute top-3 bg-[#172533] rounded-xl p-5 w-full" >
+              {loading && <p className="text-center text-gray-400">Đang tìm kiếm...</p>}
 
-            {songs.length > 0 && (
-              <div className="songs mt-6">
-                <h2 className="text-base text-slate-400 font-semibold mb-4">🎵 Danh sách bài hát:</h2>
-                <ul className=" gap-6">
-                  {songs.map((song, index) => (
-                    <li
-                      key={index}
-                      className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
-                    >
-                      <div className="flex items-center">
-                        <img
-                          src={song.song_image}
-                          alt={song.song_name}
-                          className="size-12 rounded-lg"
-                        />
-                         <div className="ml-5">
-                        <h3 className="font-bold text-base truncate text-slate-300">{song.song_name}</h3>
-                          <p className="text-gray-400 text-sm">{song.singer_name}</p>
+              {songs.length > 0 && (
+                <div className="songs mt-6">
+                  <h2 className="text-base text-slate-400 font-semibold mb-4">🎵 Danh sách bài hát:</h2>
+                  <ul className=" gap-6">
+                    {songs.map((song, index) => (
+                      <li
+                        key={index}
+                        className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
+                      >
+                        <div className="flex items-center">
+                          <img
+                            src={song.song_image}
+                            alt={song.song_name}
+                            className="size-12 rounded-lg"
+                          />
+                          <div className="ml-5">
+                            <h3 className="font-bold text-base truncate text-slate-300">{song.song_name}</h3>
+                            <p className="text-gray-400 text-sm">{song.singer_name}</p>
+                          </div>
+
                         </div>
-                        
-                      </div>
 
-                     
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
 
-            {/* Danh sách ca sĩ */}
-            {singers.length > 0 && (
-              <div className="singers mt-8">
-                <h2 className="text-base text-slate-400 font-semibold mb-4">🎤  Danh sách ca sĩ:</h2>
-                <ul className="gap-6">
-                  {singers.map((singer) => (
-                    <li
-                      key={singer.id}
-                      className="rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
-                    >
-                      <div className="flex items-center">
-                        <img
-                          src={singer.singer_image}
-                          alt={singer.singer_name}
-                          className="size-12 rounded-lg"
-                        />
-                         <div className="ml-5">
-                        <h3 className="font-bold text-base truncate text-slate-300">{singer.singer_name}</h3>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+
+              {/* Danh sách ca sĩ */}
+              {singers.length > 0 && (
+                <div className="singers mt-8">
+                  <h2 className="text-base text-slate-400 font-semibold mb-4">🎤  Danh sách ca sĩ:</h2>
+                  <ul className="gap-6">
+                    {singers.map((singer) => (
+                      <li
+                        key={singer.id}
+                        className="rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
+                      >
+                        <div className="flex items-center">
+                          <img
+                            src={singer.singer_image}
+                            alt={singer.singer_name}
+                            className="size-12 rounded-lg"
+                          />
+                          <div className="ml-5">
+                            <h3 className="font-bold text-base truncate text-slate-300">{singer.singer_name}</h3>
+                          </div>
+
                         </div>
-                        
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
 
-            {!loading && songs.length === 0 && singers.length === 0 && (
-              <p className="text-center text-gray-400 mt-10">Không tìm thấy kết quả.</p>
-            )}
-          </div>
-        )}
+              {!loading && songs.length === 0 && singers.length === 0 && (
+                <p className="text-center text-gray-400 mt-10">Không tìm thấy kết quả.</p>
+              )}
+            </div>
+          )}
         </div>
-        
+
         <div className=" flex  text-left items-center">
           {isProfile ? (
             <>
-              <Link to='/Upgrade' className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10">
-                Trải nghiệm Premium
-              </Link>
+
+              {user.users_type == 'Basic' ?
+                <Link to='/Upgrade' className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10">
+                  Trải nghiệm Premium
+                </Link>
+                :
+                user.users_type == 'Plus' ?
+                  <span className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10"> SoundWave Plus</span>
+                  :
+                  <span className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10"> SoundWave Premium </span>
+              }
               <button className="relative size-9 flex items-center justify-center bg-gray-800 rounded-full transition duration-300 mr-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -215,15 +224,14 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform duration-300 ${
-                      isProfileOpen ? "rotate-180" : ""
-                    }`}
+                    className={`transform transition-transform duration-300 ${isProfileOpen ? "rotate-180" : ""
+                      }`}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
                 </button>
                 {isProfileOpen && (
-                  <div className="absolute z-10 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
+                  <div className="absolute z-50 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
                     <div className="flex flex-col w-full max-w-md mx-auto bg-gray-900 text-white rounded-xl">
                       <div onClick={() => {
                         navigate('/ProfileEditPage')
@@ -237,42 +245,48 @@ function Nav() {
                         </div>
                         <div className="flex-grow">
                           <h2 className="text-base font-semibold">
-                             {user.name}
+                            {user.name}
                           </h2>
-                          <p className="text-xs bg-gray-400 py-1 px-2 mt-2 text-white font-medium  w-fit rounded-full">
-                            SoundWave Basic
-                          </p>
+                          {user.users_type == 'Basic' ?
+                            <p className="text-xs bg-gray-400 py-1 px-2 mt-2 text-white font-medium  w-fit rounded-full">
+                              SoundWave Basic
+                            </p>
+                            :
+                            user.users_type == 'Plus' ?
+                              <p className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition w-fit duration-300 mr-10"> SoundWave Plus</p>
+                              :
+                              <p className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition  w-fit duration-300 mr-10"> SoundWave Premium </p>
+                          }
                         </div>
                         <ChevronRight className="w-5 h-5 text-gray-400" />
                       </div>
-                      <nav className="flex flex-col">
-                      {[
-                        { icon: Sparkles, href: "/Upgrade", label: "Nâng cấp tài khoản" },
-                        { icon: CloudDownload, href: "https://example.com", label: "Nhạc đã tải xuống" }, // Ví dụ link ngoại vi
-                        { icon: LockKeyhole, href: "Privacy", label: "Quyền riêng tư" },
-                        { icon: Settings, href: "SettingsPage", label: "Cài đặt" },
-                        { icon: Headset, href: "ContactForm", label: "Liên hệ" },
-                      ].map((item, index) => (
-                        <button
-                          key={index}
-                          className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl"
-                        >
-                          <item.icon
-                            className={`w-5 h-5 mr-4 ${
-                              index === 0 ? "text-yellow-500" : "text-gray-400"
-                            }`}
-                          />
-                          <span className="flex-grow text-left text-sm">
-                            {/* Kiểm tra href có phải là đường dẫn nội bộ */}
-                            {item.href && item.href.startsWith('/') ? (
-                              <Link to={item.href}>{item.label}</Link> // Dùng Link cho đường dẫn nội bộ
-                            ) : (
-                              <a href={item.href} >{item.label}</a> // Dùng thẻ a cho liên kết ngoại vi
-                            )}
-                          </span>
-                          <ChevronRight className="w-5 h-5 text-gray-400" />
-                        </button>
-                      ))}
+                      <nav className="flex flex-col z-50">
+                        {[
+                          { icon: Sparkles, href: "/Upgrade", label: "Nâng cấp tài khoản" },
+                          { icon: CloudDownload, href: "https://example.com", label: "Nhạc đã tải xuống" }, // Ví dụ link ngoại vi
+                          { icon: LockKeyhole, href: "Privacy", label: "Quyền riêng tư" },
+                          { icon: Settings, href: "SettingsPage", label: "Cài đặt" },
+                          { icon: Headset, href: "ContactForm", label: "Liên hệ" },
+                        ].map((item, index) => (
+                          <button
+                            key={index}
+                            className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl"
+                          >
+                            <item.icon
+                              className={`w-5 h-5 mr-4 ${index === 0 ? "text-yellow-500" : "text-gray-400"
+                                }`}
+                            />
+                            <span className="flex-grow text-left text-sm">
+                              {/* Kiểm tra href có phải là đường dẫn nội bộ */}
+                              {item.href && item.href.startsWith('/') ? (
+                                <Link to={item.href}>{item.label}</Link> // Dùng Link cho đường dẫn nội bộ
+                              ) : (
+                                <a href={item.href} >{item.label}</a> // Dùng thẻ a cho liên kết ngoại vi
+                              )}
+                            </span>
+                            <ChevronRight className="w-5 h-5 text-gray-400" />
+                          </button>
+                        ))}
                         <button onClick={handleLogout} className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl">
                           <LogOut className="w-5 h-5 mr-4 text-red-500" />
                           <span className="flex-grow text-left text-sm">Đăng xuất</span>
