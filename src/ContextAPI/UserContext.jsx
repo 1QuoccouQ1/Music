@@ -35,7 +35,7 @@ export const UserProvider = ({ children }) => {
   });
   const [playSong, setPlaySong] = useState(null);
   
-  const handleFetchSongs = async (type) => {
+  const handleFetchSongs = async (type , id) => {
     try {
       let fetchedSongs;
       // Xử lý gọi API dựa trên type
@@ -51,6 +51,9 @@ export const UserProvider = ({ children }) => {
           break;
         case "yeuthich":
           fetchedSongs = await fetch(`${API_URL}/top-like`); 
+          break;
+        case "theloai":
+          fetchedSongs = await fetch(`${API_URL}/the-loai/${id}/bai-hat`); 
           break;
         default:
           console.error("Unknown type");
