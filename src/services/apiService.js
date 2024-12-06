@@ -18,3 +18,4 @@ export const loginUser = (user) => fetchAPI('/users/login', 'POST', user);
 export const getMusics = () => fetchAPI('/rand-10');
 
 export const getArtist = () => fetchAPI('/ca-si');
+

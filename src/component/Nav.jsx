@@ -98,12 +98,7 @@ function Nav() {
 
   return (
     <>
-      <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
-        <div className='w-full lg:hidden text-center h-full px-2'>
-          <Link to="/" className="flex justify-center">
-            <img src="../imgs/Music Brand and App Logo 1.png"  className="w-[60px]"/>
-          </Link>
-        </div>
+      <div className="flex md:justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
         <div className="relative ">
           <InputSearch
             onSearch={fetchSearchResults}
@@ -114,7 +109,7 @@ function Nav() {
           />
 
           {isFocused && (songs.length > 0 || singers.length > 0 || loading) && (
-            <div className="results mt-10 z-10 absolute top-3 bg-[#172533] rounded-xl p-5 w-full" >
+            <div className="results mt-10 z-50 absolute top-3 bg-[#172533] rounded-xl p-5 w-full " >
               {loading && <p className="text-center text-gray-400">Đang tìm kiếm...</p>}
 
               {songs.length > 0 && (
@@ -180,19 +175,19 @@ function Nav() {
           )}
         </div>
 
-        <div className=" flex  text-left items-center">
+        <div className="  hidden md:flex text-left items-center">
           {isProfile ? (
             <>
 
               {user.users_type == 'Basic' ?
-                <Link to='/Upgrade' className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10">
+                <Link to='/Upgrade' className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
                   Trải nghiệm Premium
                 </Link>
                 :
                 user.users_type == 'Plus' ?
-                  <span className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10"> SoundWave Plus</span>
+                  <span className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3"> SoundWave Plus</span>
                   :
-                  <span className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-10"> SoundWave Premium </span>
+                  <span className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3"> SoundWave Premium </span>
               }
               <button className="relative size-9 flex items-center justify-center bg-gray-800 rounded-full transition duration-300 mr-3">
                 <svg
@@ -260,12 +255,12 @@ function Nav() {
                             </p>
                             :
                             user.users_type == 'Plus' ?
-                              <p className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition w-fit duration-300 mr-10">
+                              <p className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition w-fit duration-300">
                                 SoundWave Plus <br/>
                                 {user.expiry_date ? <em>Hạn: {user.expiry_date}</em>: ''}
                                 </p>
                               :
-                              <p className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition  w-fit duration-300 mr-10">
+                              <p className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition  w-fit duration-300">
                                 SoundWave Premium <br />
                                 {user.expiry_date ? <em>Hạn: {user.expiry_date}</em>: ''}
                                 </p>

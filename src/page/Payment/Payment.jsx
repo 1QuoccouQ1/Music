@@ -35,7 +35,7 @@ function Payment() {
             .then(response => response.json())
             .then(data => {
                 // Xử lý dữ liệu trả về từ API (nếu cần)
-                console.log('Đã đánh dấu ', data);
+                // console.log('Đã đánh dấu ', data);
                 localStorage.setItem('payment',data.user_type);
                 localStorage.setItem('month',data.month);
                 // toast.success(data.message);
