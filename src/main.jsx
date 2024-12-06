@@ -73,26 +73,35 @@ export async function changeLogo() {
 
 export async function checkAuth() {
   const token = localStorage.getItem("access_token");
-  const UserID = localStorage.getItem("user");
+  const User = localStorage.getItem("user");
 
-  if (token && UserID) {
-    return null; // Nếu token hợp lệ, cho phép truy cập vào trang yêu cầu xác thực
-
-    // const isValid = await AuthToken(token);
-    // if (isValid.isValid) {
-    //   return null; // Nếu token hợp lệ, cho phép truy cập vào trang yêu cầu xác thực
-    // } else {
-    //   localStorage.removeItem('authToken');
-    //   localStorage.removeItem('UserID');
-    //   localStorage.removeItem('isAdmin');
-    //   localStorage.removeItem('UserName');
-    //   return redirect('/login'); // Nếu token không hợp lệ, chuyển hướng đến trang Login
+  if (token && User) {
+    // const decodedToken = decodeJwt(token);
+    // if (isTokenExpired(decodedToken)) {
+    //   localStorage.removeItem("access_token");
+    //   localStorage.removeItem("user");
+    //   return redirect("/login");
     // }
+    return null; 
   } else {
     localStorage.removeItem("authToken");
     localStorage.removeItem("user");
     return redirect("/login"); // Nếu không có token, chuyển hướng đến trang Login
   }
+}
+function decodeJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Đảm bảo chuỗi base64 hợp lệ
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
+}
+
+function isTokenExpired(decodedToken) {
+  const currentTime = Math.floor(Date.now() / 1000); 
+  return decodedToken.exp < currentTime; 
 }
 
 const router = createBrowserRouter([
