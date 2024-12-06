@@ -45,32 +45,62 @@ import PayError from "./page/Payment/PayError.jsx";
 import Payment from "./page/Payment/Payment.jsx";
 import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
+import { redirect } from "react-router-dom";
 
+export async function changeIsSetting() {
+  const authCheck = await checkAuth();
+  if (authCheck) return authCheck;
 
-
-function changeIsSetting() {
   localStorage.setItem("isSetting", true);
   sessionStorage.removeItem("reloaded");
-  return null
+  return null;
 }
 
-function changeDashboard() {
+export async function changeDashboard() {
+  const authCheck = await checkAuth();
+  if (authCheck) return authCheck;
+
   localStorage.setItem("isSetting", false);
-  return null
+  return null;
 }
-function changeLogo() {
+export async function changeLogo() {
+  const authCheck = await checkAuth();
+  if (authCheck) return authCheck;
+
   localStorage.setItem("isSetting", false);
-  return null
+  return null;
 }
 
+export async function checkAuth() {
+  const token = localStorage.getItem("access_token");
+  const UserID = localStorage.getItem("user");
 
+  if (token && UserID) {
+    return null; // Nếu token hợp lệ, cho phép truy cập vào trang yêu cầu xác thực
+
+    // const isValid = await AuthToken(token);
+    // if (isValid.isValid) {
+    //   return null; // Nếu token hợp lệ, cho phép truy cập vào trang yêu cầu xác thực
+    // } else {
+    //   localStorage.removeItem('authToken');
+    //   localStorage.removeItem('UserID');
+    //   localStorage.removeItem('isAdmin');
+    //   localStorage.removeItem('UserName');
+    //   return redirect('/login'); // Nếu token không hợp lệ, chuyển hướng đến trang Login
+    // }
+  } else {
+    localStorage.removeItem("authToken");
+    localStorage.removeItem("user");
+    return redirect("/login"); // Nếu không có token, chuyển hướng đến trang Login
+  }
+}
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-    {
+      {
         path: "/",
         loader: changeLogo,
         element: <Dashboard />,
@@ -140,25 +170,25 @@ const router = createBrowserRouter([
         path: "/Information",
         element: <Information />,
         children: [
-            { index: true, element: <InfoLibrary /> },
-            { path: "InfoLibrary", element: <InfoLibrary /> },
-            { path: "ListenedMusic", element: <ListenedMusic /> },
-            { path: "PlayLists", element: <PlayLists /> },
-            { path: "InfoAlbums", element: <InfoAlbums /> },
-            { path: "Artist", element: <Artist /> },
-            { path: "Downloaded", element: <Downloaded /> },
-            { path: "Followed", element: <Followed /> }
-        ]
-    },
+          { index: true, element: <InfoLibrary /> },
+          { path: "InfoLibrary", element: <InfoLibrary /> },
+          { path: "ListenedMusic", element: <ListenedMusic /> },
+          { path: "PlayLists", element: <PlayLists /> },
+          { path: "InfoAlbums", element: <InfoAlbums /> },
+          { path: "Artist", element: <Artist /> },
+          { path: "Downloaded", element: <Downloaded /> },
+          { path: "Followed", element: <Followed /> },
+        ],
+      },
 
       {
         path: "/ManagerHistory",
         element: <ManagerHistory />,
         children: [
-            { index: true, element: <ManagePayment /> },
-            { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
-            { path: "ManagePayment", element: <ManagePayment /> }
-        ]
+          { index: true, element: <ManagePayment /> },
+          { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
+          { path: "ManagePayment", element: <ManagePayment /> },
+        ],
       },
       //Route for Setting
       {
@@ -234,11 +264,10 @@ const router = createBrowserRouter([
     path: "/NewPassword",
     element: <NewPassword />,
   },
-
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+  <React.StrictMode>
+    <RouterProvider router={router} />
+  </React.StrictMode>
 );
