@@ -194,21 +194,20 @@ const Footer = React.memo(function FooterComponent() {
     if (isLooping) {
       audioRef.current.play(); // Lặp lại bài hát hiện tại
     } else {
-      const currentSong = listsongs[currentSongIndex];
       saveSongToHistory({
-        song_name: currentSong.song_name,
-        composer: currentSong.composer,
-        song_image: currentSong.song_image,
-        id: currentSong.id, // Thời lượng bài hát
+        song_name: playSong.song_name,
+        composer: playSong.composer,
+        song_image: playSong.song_image,
+        id: playSong.id, // Thời lượng bài hát
       });
       try {
-        await fetch(`${API_URL}/luot-nghe/${currentSong.id}`, {
+        await fetch(`${API_URL}/luot-nghe/${playSong.id}`, {
           headers: {
             "Content-Type": "application/json",
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
         });
-        console.log(`Cập nhật lượt nghe cho bài hát: ${currentSong.song_name}`);
+        console.log(`Cập nhật lượt nghe cho bài hát: ${playSong.song_name}`);
       } catch (error) {
         console.error("Lỗi khi cập nhật lượt nghe:", error);
       }
