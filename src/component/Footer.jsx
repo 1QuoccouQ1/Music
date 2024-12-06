@@ -113,7 +113,12 @@ const Footer = React.memo(function FooterComponent() {
   const fetchFavoriteSongs = async () => {
     try {
       const userId = JSON.parse(localStorage.getItem("user")).id;
-      const response = await fetch(`${API_URL}/${userId}/bai-hat-yeu-thich`);
+      const response = await fetch(`${API_URL}/${userId}/bai-hat-yeu-thich`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         const favoriteSongs = data;

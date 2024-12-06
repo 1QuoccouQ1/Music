@@ -174,7 +174,9 @@ function ProfileArtist() {
 
     // Ngăn render cho đến khi `artist` có dữ liệu
     if (!artist) {
-        return <p>Loading...</p>; // Hiển thị loading khi chưa có dữ liệu
+        return (<div className="flex items-center justify-center h-screen">
+            <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>); // Hiển thị loading khi chưa có dữ liệu
     }
 
     return (<>
@@ -182,19 +184,19 @@ function ProfileArtist() {
             <section className='w-full   pt-7  text-white px-5'>
                 <div className="relative w-full h-[600px] z-10">
                     <img src={artist.singer_background} className='rounded-t-xl h-full w-full' />
-                    <div className="flex flex-wrap items-center justify-center absolute bottom-7 left-16 gap-8">
+                    <div className="flex flex-wrap items-center justify-center absolute bottom-7 px-3 md:left-16 gap-8">
                         <img className='size-60 rounded-full border-1 border-black lg:translate-y-1/4' src={artist.singer_image} />
                         <div className=''>
                             <p>Nghệ Sĩ Của Công Chúng</p>
                             <div className="flex items-center my-5">
-                                <p className='text-7xl font-semibold '> {artist.singer_name}</p>
+                                <p className='text-3xl lg:text-7xl font-semibold '> {artist.singer_name}</p>
                                 <img className='size-10 ml-5 ' src='../imgs/pepicons-pop_checkmark-filled.png' />
                             </div>
                             <div className="flex items-center gap-7">
                                 <p className='flex items-center  text-sm font-semibold gap-2'><Headphones size={18} className='text-red-600 ' /> 1.584.659 người nghe hằng tháng</p>
                                 <p className='flex  items-center  text-sm font-semibold gap-2 '><UserRoundPlus size={18} className='text-red-600 ' /> 5.940.438 người  theo dõi</p>
                             </div>
-                            <div className='flex items-center gap-5 mt-5'>
+                            <div className='flex items-center justify-between gap-5 mt-5'>
                                 <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1'>  <Play /> Phát tất cả</button>
 
                                 {isFollowing ? <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button> : <button onClick={handleFollowing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>}
@@ -229,7 +231,7 @@ function ProfileArtist() {
                     </div>
                 </div>
             </section>
-                <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
+                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Single & EP</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -253,13 +255,14 @@ function ProfileArtist() {
 
                                     <div className="text-center flex flex-col  items-start ">
                                         <img src={song.song_image} className=" mb-3 " style={{
-                                            width: '260px',
-                                            height: '260px',
+                                            width: '160px',
+                                            height: '160px',
                                             borderRadius: '15px',
 
                                         }} />
                                         <p className=''>{song.song_name}</p>
-                                        <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
+                                        <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất.</p>
+                                        <p className='flex text-sm text-slate-600 mt-1'>Đĩa đơn </p>
                                     </div>
                                 </SwiperSlide>
                             ))) : (
@@ -274,7 +277,7 @@ function ProfileArtist() {
                         )}
                     </Swiper>
                 </section>
-                <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
+                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Album Hot</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -287,22 +290,35 @@ function ProfileArtist() {
 
                     </div>
                     <div className="flex items-center ">
-                        {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean'].map((item, index) => (
-                            <div className="w-1/6 mr-36 flex flex-col" key={index}>
-                                <div className="w-full relative flex    ">
-                                    <img src="../imgs/image 8.png" className="  z-10" />
-                                    <img src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png" className="absolute translate-x-1/2 w-full h-full" />
-                                </div>
-                                <p className="text-base font-medium ml-2 mt-1 mt-3 w-56 truncate">Sky Tour (Original Motion .....</p>
-                                <p className="text-sm font-medium ml-2 text-slate-500">2022</p>
-                            </div>
-                        ))}
+                        <Swiper
+                            spaceBetween={20}
+                            slidesPerView="auto" // Số item hiện trong 1 lần
+                            className="mySwiper "
+
+                        >
+                            {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean','Wean','Wean','Wean'].map((item, index) => (
+                                <SwiperSlide key={(index)} style={{ width: 'auto' }} >
+                                    <div className="w-1/6 flex flex-col w-full" key={index}>
+                                        <div className="w-full relative flex w-full">
+                                            <img src="../imgs/image 8.png" className="  z-10" style={{
+                                            width: '180px',
+                                            height: '180px',
+                                            borderRadius: '15px',
+
+                                        }}  />
+                                            
+                                        </div>
+                                        <p className="text-base font-medium ml-2 mt-1 mt-3 w-56 truncate">Sky Tour (Original Motion .....</p>
+                                        <p className="text-sm font-medium ml-2 text-slate-500">2022</p>
+                                    </div>
+                                </SwiperSlide>
+                            ))}
 
 
-
+                        </Swiper>
                     </div>
                 </section>
-                <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
+                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">{artist.singer_name} trong loạt hit nổi bật</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -342,7 +358,7 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section>
-                <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide w-full max-w-full">
+                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide w-full max-w-full">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Fan có thể thích</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -381,7 +397,7 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section> </>}
-            {isSelect === "2" && <> <section className='w-full text-white px-5 pt-10 flex '>
+            {isSelect === "2" && <> <section className='w-full text-white px-5 pt-5 flex '>
                 <div className='flex w-full flex-col gap-2' >
                     <div className='flex items-center justify-between border-b border-slate-500 pb-2'>
                         <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
