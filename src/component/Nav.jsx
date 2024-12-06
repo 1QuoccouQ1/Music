@@ -55,6 +55,8 @@ function Nav() {
       const data = await response.json();
       setSongs(data.songs || []);
       setSingers(data.singers || []);
+      console.log(" setSongs" ,songs);
+      console.log("setSingers" , singers);
     } catch (error) {
       setError("Lỗi khi tìm kiếm. Vui lòng thử lại.");
     } finally {
@@ -151,6 +153,7 @@ function Nav() {
                         key={singer.id}
                         className="rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
                       >
+                      <Link to={`/ProfileArtist/${singer.id}`}>
                         <div className="flex items-center">
                           <img
                             src={singer.singer_image}
@@ -162,6 +165,7 @@ function Nav() {
                           </div>
 
                         </div>
+                      </Link>
                       </li>
                     ))}
                   </ul>

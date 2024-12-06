@@ -1,74 +1,24 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import Footer from "./Footer";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 
 function ModalListen() {
   const { currentSong, isPlay } = useContext(UserContext);
   const { isModal, setIsModal } = useContext(UserContext);
   const [isVisible, setIsVisible] = useState(false);
-  const [currentSongIndex, setCurrentSongIndex] = useState(0);
-  const songListRef = useRef(null);
-  const songs = [
-    "Mùa Thu Mang Giấc Mơ Quay Về",
-    "Vẫn Nguyên Vẹn Như Hôm Nào",
-    "Lá Bay Theo Gió Xôn Xao",
-    "Chốn Xưa Em Chờ (Chốn Xưa Em Chờ)",
-    "Đoạn Đường Ngày Nào Nơi Ta Từng Đón Đưa",
-    "Còn Vấn Vương Không Phai Mờ",
-    "Giấu Yêu Thương Trong Vần Thơ",
-    "Vân Nguyên Vẹn Như Hôm Nào",
-    "Lá Bay Theo Gió Xôn Xao",
-    "Chốn Xưa Em Chờ (Reprise)",
-    "Mùa Thu Mang Giấc Mơ Quay Về",
-    "Vẫn Nguyên Vẹn Như Hôm Nào",
-    "Lá Bay Theo Gió Xôn Xao",
-    "Chốn Xưa Em Chờ (Chốn Xưa Em Chờ)",
-    "Đoạn Đường Ngày Nào Nơi Ta Từng Đón Đưa",
-    "Còn Vấn Vương Không Phai Mờ",
-    "Giấu Yêu Thương Trong Vần Thơ",
-    "Vân Nguyên Vẹn Như Hôm Nào",
-    "Lá Bay Theo Gió Xôn Xao",
-    "Chốn Xưa Em Chờ (Reprise)",
-  ];
-
+  const songs = currentSong?.lyrics || "";
+  const formattedLyrics = songs.replace(/\n/g, "<br>");
   const hasSongs = songs.length > 0;
 
   useEffect(() => {
     if (isModal) {
       setTimeout(() => {
-        setIsVisible(true); // Hiện modal sau một khoảng thời gian nhỏ
+        setIsVisible(true);
       }, 50);
     } else {
-      setIsVisible(false); // Ẩn modal ngay khi isModal = false
+      setIsVisible(false);
     }
   }, [isModal]);
-
-  // Tự động thay đổi bài hát sau mỗi 3 giây
-  useEffect(() => {
-    let interval;
-    if (isPlay) {
-      interval = setInterval(() => {
-        setCurrentSongIndex((prevIndex) =>
-          prevIndex < songs.length - 1 ? prevIndex + 1 : 0
-        );
-      }, 3000);
-    } else if (!isPlay && interval) {
-      clearInterval(interval); // Tạm dừng khi isPlaying là false
-    }
-    return () => clearInterval(interval); // Dọn dẹp khi component unmount
-  }, [isPlay, songs.length]);
-
-  // useEffect để cuộn đến bài hát hiện tại
-  useEffect(() => {
-    // Cuộn tự động đến bài hát hiện tại
-    if (songListRef.current) {
-      const currentItem = songListRef.current.children[currentSongIndex];
-      if (currentItem) {
-        currentItem.scrollIntoView({ behavior: "smooth", block: "center" });
-      }
-    } 
-  }, [currentSongIndex]);
 
   if (!isModal) return null;
 
@@ -92,7 +42,10 @@ function ModalListen() {
             <p className="text-4xl font-semibold tracking-wide">
               {currentSong.song_name}
             </p>
-            <p className="text-lg font-medium mt-2  "> {currentSong.composer}</p>
+            <p className="text-lg font-medium mt-2  ">
+              {" "}
+              {currentSong.composer}
+            </p>
           </div>
           <div
             onClick={() => {
@@ -113,24 +66,10 @@ function ModalListen() {
             <div className="bg-medium p-6 rounded-lg max-w-lg relative overflow-hidden">
               <div className="absolute inset-x-0 top-0 h-40 bg-gradient-to-b from-medium to-transparent z-10"></div>
               <div className="absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-medium to-transparent z-10"></div>
-
-              <ul
-                ref={songListRef}
-                className="space-y-10 max-h-[500px] overflow-y-auto py-16 relative z-0 no-scrollbar"
-              >
-                {songs.map((song, index) => (
-                  <li
-                    key={index}
-                    className={`text-lg ${
-                      index === currentSongIndex
-                        ? "text-pink-500"
-                        : "text-gray-400"
-                    } hover:text-gray-200 transition-colors duration-200`}
-                  >
-                    {song}
-                  </li>
-                ))}
-              </ul>
+              <div
+                className="space-y-6 max-h-[500px] overflow-y-auto py-16 relative z-0 no-scrollbar text-lg text-gray-400"
+                dangerouslySetInnerHTML={{ __html: formattedLyrics }}
+              ></div>
             </div>
           </div>
           <div className="w-2/4  flex items-center justify-center ">
@@ -204,8 +143,7 @@ function ModalListen() {
             </div>
           </div>
         </div>
-        <div>
-        </div>
+        <div></div>
       </section>
     </>
   );

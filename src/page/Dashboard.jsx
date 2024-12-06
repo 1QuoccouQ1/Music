@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 function Dashboard() {
   const {
     handleFetchSongs,
-    handleAddSong
+    handleAddSong,
   } = useContext(UserContext);
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
@@ -112,6 +112,7 @@ function Dashboard() {
                       setSongs([]); // Nếu không có bài hát nào thì set state rỗng
                   }
               } catch (error) {
+                  setSongs([]);
                   console.error('Error fetching songs:', error);
               } finally {
                   setLoading(false);
@@ -158,9 +159,10 @@ function Dashboard() {
     if (songs.length === 0) {
       return <p>Không có bài hát nào được tìm thấy.</p>;
     }
-    return songs.map((song, index) => (
+    const limitedSongs = songs.slice(0, 9);
+    return limitedSongs.map((song, index) => (
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
-        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onClick={() => {handleAddSong("song",song.id)}} >
+        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onDoubleClick={() => {handleAddSong("song",song.id)}} >
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
           <img
             className="size-16 rounded-md"
@@ -186,8 +188,8 @@ function Dashboard() {
               Các bản hit cuối tuần này là gì?
             </h1>
             <div className="flex items-center justify-start my-10  ">
-              <div className="text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer">
-                Phát Tất Cả{" "}
+              <div className="text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer" onClick={() => {handleFetchSongs("rank")}}>
+                Phát Tất Cả
               </div>
             </div>
             <div className="flex items-center ">
@@ -283,7 +285,7 @@ function Dashboard() {
             {renderCountries()}
           </div>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <p className="text-sm  ">Xem Thêm </p>
+            <Link to={"/BXH"}><p className="text-sm cursor-pointer">Xem Thêm </p></Link> 
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -314,7 +316,7 @@ function Dashboard() {
           >
             {songHistory.map((song, index) => (
               <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div className="text-center flex flex-col  items-center">
+                <div className="text-center flex flex-col  items-center" onDoubleClick={()=> handleAddSong("song", song.id)}>
                   <img
                     src={song.song_image} // URL hình ảnh của bài hát
                     className="rounded-full mb-7  size-52 "
@@ -339,7 +341,7 @@ function Dashboard() {
             Top Nghệ Sĩ Được Yêu Thích
           </h1>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <p className="text-sm  ">Xem Thêm </p>
+            <Link to={"/Artist"}><p className="text-sm  ">Xem Thêm </p></Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -421,7 +423,7 @@ function Dashboard() {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-medium mb-16">Thể Loại</h1>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <p className="text-sm  ">Xem Thêm </p>
+            <Link to={"/Genre"}><p className="text-sm  ">Xem Thêm </p></Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -440,7 +442,7 @@ function Dashboard() {
         </div>
         <div className="flex items-center  flex-wrap ">
           {genres.map((genre) => (
-            <div key={genre.id} className="w-1/6 pr-3 pb-3">
+            <div key={genre.id} className="w-1/6 pr-3 pb-3" onDoubleClick={()=>handleFetchSongs("theloai",genre.id)}>
               <div
                 className="w-full h-64 rounded-xl flex items-center justify-center bg-cover bg-center"
                 style={{

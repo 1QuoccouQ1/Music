@@ -1,17 +1,14 @@
 import { Facebook, Apple } from "lucide-react";
-import { useState, useRef, useEffect,useContext } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import { UserContext } from '../ContextAPI/UserContext';
 import { Undo2 } from 'lucide-react';
 import { API_URL } from "../services/apiService";
 function Login() {
-  // const { setUser } = useContext(UserContext); 
   const [language, setLanguage] = useState("vi");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
-  // State cho các trường và lỗi
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -72,6 +69,8 @@ function Login() {
 
     if (!password) {
       newErrors.password = language === "vi" ? "Mật khẩu không được để trống." : "Password cannot be empty.";
+    } else if (password.length < 8) {
+      newErrors.password = language === "vi" ? "Mật khẩu phải có ít nhất 8 ký tự." : "Password must be at least 8 characters.";
     }
 
     setErrors(newErrors);
@@ -101,8 +100,6 @@ function Login() {
           localStorage.setItem('access_token',data.access_token);
           localStorage.setItem('user',JSON.stringify(data.user) );
           
-          // Lưu thông tin người dùng vào Context
-          // setUser(data.user);  // data.user là thông tin người dùng trả về từ API
           localStorage.setItem('isSetting',false );
 
           navigate('/');
