@@ -76,12 +76,12 @@ export async function checkAuth() {
   const User = localStorage.getItem("user");
 
   if (token && User) {
-    // const decodedToken = decodeJwt(token);
-    // if (isTokenExpired(decodedToken)) {
-    //   localStorage.removeItem("access_token");
-    //   localStorage.removeItem("user");
-    //   return redirect("/login");
-    // }
+    const decodedToken = decodeJwt(token);
+    if (isTokenExpired(decodedToken)) {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+      return redirect("/login");
+    }
     return null; 
   } else {
     localStorage.removeItem("authToken");
@@ -103,6 +103,7 @@ function isTokenExpired(decodedToken) {
   const currentTime = Math.floor(Date.now() / 1000); 
   return decodedToken.exp < currentTime; 
 }
+
 
 const router = createBrowserRouter([
   {
