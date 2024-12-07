@@ -719,3 +719,4 @@ function ProfileArtist() {
 }
 
 export default ProfileArtist;
+
