@@ -130,8 +130,8 @@ function Nav() {
                             alt={song.song_name}
                             className="size-12 rounded-lg"
                           />
-                          <div className="ml-5">
-                            <h3 className="font-bold text-base truncate text-slate-300">{song.song_name}</h3>
+                          <div className="ml-5 w-full flex-1">
+                            <h3 className="font-bold text-base truncate text-slate-300 w-[80%]">{song.song_name}</h3>
                             <p className="text-gray-400 text-sm">{song.singer_name}</p>
                           </div>
 
@@ -162,7 +162,7 @@ function Nav() {
                             className="size-12 rounded-lg"
                           />
                           <div className="ml-5">
-                            <h3 className="font-bold text-base truncate text-slate-300">{singer.singer_name}</h3>
+                            <h3 className="font-bold text-base truncate text-slate-300 ">{singer.singer_name}</h3>
                           </div>
 
                         </div>
