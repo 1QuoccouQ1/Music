@@ -5,7 +5,7 @@ function ArtistCard({ artist }) {
     return (
         <Link to={`/ProfileArtist/${artist.id}`} className='flex flex-col items-center transition-transform delay-50 duration-100 transform hover:scale-110 cursor-pointer'>
             <img
-                className='w-40 h-40 md:w-40 md:h-40 rounded-full ease-in duration-500 '
+                className='w-36 h-36 md:w-40 md:h-40 rounded-full ease-in duration-500 '
                 src={artist.imageUrl}
                 alt={artist.name}
             />

@@ -19,7 +19,7 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                     }
                 });
                 const data = await response.json();
-                console.log(response);
+                // console.log(response);
                 if (response.status === 200) {
                     const songId = data.map(song => song.id);
                     // console.log(data);
@@ -31,8 +31,6 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
             } catch (err) {
                 console.log(err);
 
-            } finally {
-                console.log('get thành công');
             }
         };
         if (user_id) {
