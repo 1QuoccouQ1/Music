@@ -1,6 +1,8 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
+import { API_URL } from "../services/apiService";
+import { Link } from 'react-router-dom';
 
 function ModalListen() {
   const { currentSong, isPlay } = useContext(UserContext);
@@ -9,6 +11,7 @@ function ModalListen() {
   const songs = currentSong?.lyrics || "";
   const formattedLyrics = songs.replace(/\n/g, "<br>");
   const hasSongs = songs.length > 0;
+  const [singers, setSingers] = useState([]);
 
   useEffect(() => {
     if (isModal) {
@@ -19,6 +22,24 @@ function ModalListen() {
       setIsVisible(false);
     }
   }, [isModal]);
+
+  // Hàm gọi API
+  useEffect(() => {
+    const fetchSingers = async () => {
+      try {
+        const response = await fetch(`${API_URL}/ca-si`); // Thay URL_API_CUA_BAN bằng URL thật
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json(); // Parse JSON từ response
+        setSingers(data); // Gán dữ liệu từ API vào state
+      } catch (err) {
+        console.error(err);
+      }
+    };
+
+    fetchSingers(); // Gọi API khi component được mount
+  }, []);
 
   if (!isModal) return null;
 
@@ -105,36 +126,20 @@ function ModalListen() {
                 <ChevronUp size={18} />
               </div>
               <ul className="flex flex-col gap-10 h-[550px] overflow-y-auto no-scrollbar">
-                <li>
-                  <img
-                    className="size-60  rounded-full shadow-medium"
-                    src="../imgs/image (13).png"
-                  />
-                </li>
-                <li>
-                  <img
-                    className="size-60  rounded-full shadow-medium"
-                    src="../imgs/image (14).png"
-                  />
-                </li>
-                <li>
-                  <img
-                    className="size-60  rounded-full shadow-medium"
-                    src="../imgs/image (14).png"
-                  />
-                </li>
-                <li>
-                  <img
-                    className="size-60  rounded-full shadow-medium"
-                    src="../imgs/image (14).png"
-                  />
-                </li>
-                <li>
-                  <img
-                    className="size-60  rounded-full shadow-medium"
-                    src="../imgs/image (14).png"
-                  />
-                </li>
+                {singers.map((singer) => (
+                  <li key={singer.id} >
+                  <Link to={`/ProfileArtist/${singer.id}`} onClick={()=>{
+                    window.scrollTo(0, 0);
+                    setIsModal(!isModal);
+                  }}>
+                    <img
+                      className="size-60 rounded-full shadow-medium"
+                      src={singer.singer_image}
+                      alt={singer.singer_name}
+                    />
+                    </Link>
+                  </li>
+                ))}
               </ul>
               <div className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center">
                 {" "}
