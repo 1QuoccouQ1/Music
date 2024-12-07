@@ -11,6 +11,7 @@ import History from "./page/History.jsx";
 import Albums from "./page/Albums.jsx";
 import MusicLibrary from "./page/Library/MusicLibrary.jsx";
 import ShowChart from "./page/MeChart/ShowChart.jsx";
+import SongGlobal from "./page/BXH/SongGlobal.jsx";
 
 import Information from "./page/information/Information.jsx";
 import InfoLibrary from "./page/information/Profile/infoLibrary.jsx";
@@ -212,6 +213,11 @@ const router = createBrowserRouter([
         loader: changeIsSetting,
         element: <Privacy />,
       },
+      {
+        path: "/SongGlobal/:id",
+        loader: changeDashboard,
+        element: <SongGlobal />,
+      }
     ],
   },
   {
