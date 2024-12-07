@@ -38,7 +38,6 @@ export const UserProvider = ({ children }) => {
     const savedAccountType = localStorage.getItem("isAccountType");
     return savedAccountType ? (savedAccountType) : "basic"; 
   });
-  console.log(isAccountType);
   const handleFetchSongs = async (type , id) => {
     try {
       let fetchedSongs;
