@@ -99,6 +99,7 @@ function Login() {
 
           localStorage.setItem('access_token',data.access_token);
           localStorage.setItem('user',JSON.stringify(data.user) );
+          localStorage.setItem('isAccountType',(data.user.users_type) );
           
           localStorage.setItem('isSetting',false );
 
