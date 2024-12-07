@@ -14,6 +14,7 @@ import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
 import React from "react";
+import { toast } from "react-toastify";
 
 const Footer = React.memo(function FooterComponent() {
   const {
@@ -38,7 +39,7 @@ const Footer = React.memo(function FooterComponent() {
     setPlaySong,
     isAccountType,
     isUpdate,
-    setIsUpdate
+    setIsUpdate,
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -94,6 +95,7 @@ const Footer = React.memo(function FooterComponent() {
   const [favoriteSongs, setFavoriteSongs] = useState([]);
   const circumference = 2 * Math.PI * 17.5;
   const offset = circumference - Number(volume) * circumference;
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const fetchAd = async () => {
     if (isAccountType === "Plus" || isAccountType === "Premium") {
@@ -132,7 +134,7 @@ const Footer = React.memo(function FooterComponent() {
       });
       if (response.ok) {
         const data = await response.json();
-        const favoriteSongs = data;
+        const favoriteSongs = data.map(song => song.id);
         setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
       } else {
         console.error("Không thể lấy danh sách yêu thích:", response.status);
@@ -221,7 +223,7 @@ const Footer = React.memo(function FooterComponent() {
       }
     }
 
-    setSelectedQuality(newQuality); 
+    setSelectedQuality(newQuality);
     setSelectedQualityLabel(
       qualities.find((q) => q.value === newQuality)?.label
     );
@@ -303,44 +305,43 @@ const Footer = React.memo(function FooterComponent() {
     }
   };
 
-  const toggleFavorite = async (songId) => {
+  const toggleFavorite = async (songId, check) => {
     try {
-      if (favoriteSongs.includes(songId)) {
-        // Nếu bài hát đã yêu thích, xóa khỏi danh sách yêu thích
-        const response = await fetch(`${API_URL}/xoa-bai-hat-yeu-thich`, {
+      if (JSON.parse(localStorage.getItem("user"))) {
+        fetch(API_URL + "/bai-hat-yeu-thich", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
           body: JSON.stringify({
+            liked: !check,
             song_id: songId,
-            user_id: JSON.parse(localStorage.getItem("user")).id,
+            user_id: (JSON.parse(localStorage.getItem("user")).id),
           }),
-        });
-
-        if (response.ok) {
-          setFavoriteSongs((prev) => prev.filter((id) => id !== songId)); // Loại bỏ id khỏi danh sách
-        } else {
-          console.error("Lỗi khi xóa yêu thích:", response.status);
-        }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Xử lý dữ liệu trả về từ API (nếu cần)
+            // console.log('Đã đánh dấu yêu thích:', data.message);
+            if (check) {
+              setFavoriteSongs((set) => {
+                return set.filter((id) => id !== songId);
+              });
+            } else {
+              setFavoriteSongs((set) => {
+                return [...set, songId];
+              });
+            }
+            toast.success(data.message);
+          })
+          .catch((error) => {
+            console.error("Lỗi khi gửi yêu cầu:", error);
+          });
       } else {
-        // Nếu bài hát chưa được yêu thích, thêm vào danh sách yêu thích
-        const response = await fetch(`${API_URL}/bai-hat-yeu-thich`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            song_id: songId,
-            user_id: JSON.parse(localStorage.getItem("user")).id,
-          }),
-        });
-
-        if (response.ok) {
-          setFavoriteSongs((prev) => [...prev, songId]); // Thêm id vào danh sách
-        } else {
-          console.error("Lỗi khi thêm yêu thích:", response.status);
-        }
+        toast.error(
+          "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào yêu thích."
+        );
       }
     } catch (error) {
       console.error("Lỗi khi thêm yêu thích:", error);
@@ -423,7 +424,7 @@ const Footer = React.memo(function FooterComponent() {
 
     // Gọi hàm fetchData
     fetchData();
-    
+
     const handleClickOutside = (event) => {
       if (
         Playlist.current &&
@@ -475,7 +476,7 @@ const Footer = React.memo(function FooterComponent() {
       }
       return;
     }
-    
+
     if (audioRef.current) {
       audioRef.current.src =
         playSong.file_paths && playSong.file_paths[selectedQuality];
@@ -483,13 +484,12 @@ const Footer = React.memo(function FooterComponent() {
       if (optionSongIndex == currentSongIndex) {
         audioRef.current.currentTime = currentTime;
       }
-     
+
       if (isPlaying) {
         audioRef.current.play();
       }
     }
   }, [currentSongIndex, selectedQuality, playSong]);
-
 
   if (isLoading) {
     return null;
@@ -810,20 +810,25 @@ const Footer = React.memo(function FooterComponent() {
                     </p>
                   </div>
                   <div className="ml-auto flex items-center space-x-3">
-                    <Heart
-                      className={`size-5 cursor-pointer ${
-                        favoriteSongs.includes(playSong.id)
-                          ? "text-blue-500"
-                          : ""
-                      }`}
-                      onClick={() => toggleFavorite(playSong.id)}
-                    />
+                    {favoriteSongs.includes(playSong.id) ? (
+                      <Heart
+                        fill="white"
+                        className={`size-5 cursor-pointer `}
+                        onClick={() => toggleFavorite(playSong.id, true)}
+                      />
+                    ) : (
+                      <Heart
+                        className={`size-5 cursor-pointer`}
+                        onClick={() => toggleFavorite(playSong.id, false)}
+                      />
+                    )}
+
                     <MoreHorizontal className="w-4 h-4 cursor-pointer" />
                   </div>
                 </div>
                 <h3 className=" ml-2text-sm font-medium mb-2">Tiếp theo</h3>
-                <ul className="ml-2 space-y-2  h-[400px] overflow-y-auto no-scrollbar">
-                  {listsongs.map((song, index) => (
+                <ul className="ml-2 space-y-2  h-[368px] overflow-y-auto no-scrollbar">
+                  {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
                       className="flex items-center space-x-3"
@@ -835,7 +840,7 @@ const Footer = React.memo(function FooterComponent() {
                       <img
                         src={song.song_image}
                         alt="Song thumbnail"
-                        className="w-10 h-10 rounded object-cover "
+                        className="w-10 h-10 rounded object-cover"
                       />
                       <div>
                         <h4 className="font-medium">{song.song_name}</h4>
@@ -846,6 +851,16 @@ const Footer = React.memo(function FooterComponent() {
                     </li>
                   ))}
                 </ul>
+                {visibleCount < listsongs.length && (
+                  <div className="flex justify-center mt-2">
+                    <button
+                      className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white px-4 py-1 rounded"
+                      onClick={() => setVisibleCount(listsongs.length)}
+                    >
+                      Xem thêm
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
