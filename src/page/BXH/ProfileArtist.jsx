@@ -11,7 +11,7 @@ import {
   X,
   Filter,
 } from "lucide-react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { Facebook, Instagram, Twitter, Music } from "lucide-react";
@@ -19,6 +19,7 @@ import { Link, useParams } from "react-router-dom";
 import { API_URL, getArtist } from "../../services/apiService";
 import { ToastContainer, toast } from "react-toastify";
 import ProfileArtistSong from "./ProfileArtistSong";
+import { UserContext } from "../../ContextAPI/UserContext";
 
 function ProfileArtist() {
   const [isFollowing, setIsFollowing] = useState(false);
@@ -30,6 +31,7 @@ function ProfileArtist() {
   const [artistFavorite, setartistFavorite] = useState([]);
   const [artistSong, setArtistSong] = useState([]);
   const [loading, setLoading] = useState(true); // Theo dõi trạng thái loading
+  const { handleFetchSongs } = useContext(UserContext);
 
   const user = JSON.parse(localStorage.getItem("user"));
   // console.log(user_id.id);
@@ -249,8 +251,7 @@ function ProfileArtist() {
                   </p>
                 </div>
                 <div className="flex items-center justify-between md:justify-start  gap-5 mt-5">
-                  <button className="flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1">
-                    {" "}
+                  <button className="flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1" onClick={()=> handleFetchSongs("casi",artist.id )}>
                     <Play /> Phát tất cả
                   </button>
 
