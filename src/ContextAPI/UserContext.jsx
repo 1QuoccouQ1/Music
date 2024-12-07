@@ -38,25 +38,30 @@ export const UserProvider = ({ children }) => {
     const savedAccountType = localStorage.getItem("isAccountType");
     return savedAccountType ? (savedAccountType) : "basic"; 
   });
+  const [isUpdate, setIsUpdate] = useState(false);
+
   const handleFetchSongs = async (type , id) => {
     try {
       let fetchedSongs;
-      // Xử lý gọi API dựa trên type
       switch (type) {
         case "rank":
           fetchedSongs = await fetch(`${API_URL}/rand-10`); 
           break;
         case "trending":
           fetchedSongs = await fetch(`${API_URL}/trending`); 
+          setIsUpdate(true)
           break;
         case "toplisten":
           fetchedSongs = await fetch(`${API_URL}/top-listen`); 
+          setIsUpdate(true)
           break;
         case "yeuthich":
           fetchedSongs = await fetch(`${API_URL}/top-like`); 
+          setIsUpdate(true)
           break;
         case "theloai":
           fetchedSongs = await fetch(`${API_URL}/the-loai/${id}/bai-hat`); 
+          setIsUpdate(true)
           break;
         default:
           console.error("Unknown type");
@@ -77,6 +82,7 @@ export const UserProvider = ({ children }) => {
       switch (type) {
         case "song":
           fetchedSong = await fetch(`${API_URL}/${id}/play`); 
+          setIsUpdate(true)
           break;
         default:
           console.error("Unknown type");
@@ -136,7 +142,8 @@ export const UserProvider = ({ children }) => {
         handleFetchSongs,
         handleAddSong,
         playSong, setPlaySong,
-        isAccountType, setIsAccountType
+        isAccountType, setIsAccountType,
+        isUpdate,setIsUpdate
       }}
     >
       {children}

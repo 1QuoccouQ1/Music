@@ -37,7 +37,8 @@ const Footer = React.memo(function FooterComponent() {
     playSong,
     setPlaySong,
     isAccountType,
-    setIsAccountType,
+    isUpdate,
+    setIsUpdate
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -404,6 +405,7 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   useEffect(() => {
+    setIsPlaying(false);
     // Hàm bất đồng bộ để gọi API và xử lý logic
     const fetchData = async () => {
       // Gọi API để lấy danh sách bài hát
@@ -421,7 +423,7 @@ const Footer = React.memo(function FooterComponent() {
 
     // Gọi hàm fetchData
     fetchData();
-
+    
     const handleClickOutside = (event) => {
       if (
         Playlist.current &&
@@ -437,7 +439,6 @@ const Footer = React.memo(function FooterComponent() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   useEffect(() => {
     if (listsongs.length === 0) return;
     if (audioRef.current) {
@@ -457,8 +458,24 @@ const Footer = React.memo(function FooterComponent() {
   useEffect(() => {
     console.log("playSong", playSong);
     if (!playSong || !listsongs.length) return;
-
     setCurrentSong(playSong);
+    if (isUpdate) {
+      setIsPlaying(true);
+      setIsUpdate(false);
+      if (audioRef.current) {
+        audioRef.current.src =
+          playSong.file_paths && playSong.file_paths[selectedQuality];
+        audioRef.current.load();
+        if (optionSongIndex == currentSongIndex) {
+          audioRef.current.currentTime = currentTime;
+        }
+        if (!isPlaying) {
+          audioRef.current.play();
+        }
+      }
+      return;
+    }
+    
     if (audioRef.current) {
       audioRef.current.src =
         playSong.file_paths && playSong.file_paths[selectedQuality];
@@ -466,11 +483,13 @@ const Footer = React.memo(function FooterComponent() {
       if (optionSongIndex == currentSongIndex) {
         audioRef.current.currentTime = currentTime;
       }
+     
       if (isPlaying) {
         audioRef.current.play();
       }
     }
   }, [currentSongIndex, selectedQuality, playSong]);
+
 
   if (isLoading) {
     return null;
