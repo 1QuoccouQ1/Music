@@ -33,6 +33,7 @@ function SettingSidebar() {
 
             localStorage.removeItem('user');
             localStorage.removeItem('access_token');
+            localStorage.removeItem('isAccountType');
             navigate('/login');
         } catch (error) {
             console.error('Logout failed:', error);

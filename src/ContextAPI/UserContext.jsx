@@ -34,7 +34,11 @@ export const UserProvider = ({ children }) => {
     return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
   });
   const [playSong, setPlaySong] = useState(null);
-  
+  const [isAccountType, setIsAccountType] = useState(() => {
+    const savedAccountType = localStorage.getItem("isAccountType");
+    return savedAccountType ? (savedAccountType) : "basic"; 
+  });
+  console.log(isAccountType);
   const handleFetchSongs = async (type , id) => {
     try {
       let fetchedSongs;
@@ -132,7 +136,8 @@ export const UserProvider = ({ children }) => {
         isPlaying, setIsPlaying,
         handleFetchSongs,
         handleAddSong,
-        playSong, setPlaySong
+        playSong, setPlaySong,
+        isAccountType, setIsAccountType
       }}
     >
       {children}
