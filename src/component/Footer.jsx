@@ -197,14 +197,33 @@ const Footer = React.memo(function FooterComponent() {
       }
     }
 
-    setSelectedQuality(newQuality); 
-    setSelectedQualityLabel(qualities.find((q) => q.value === newQuality)?.label);
+    setSelectedQuality(newQuality);
+    setSelectedQualityLabel(
+      qualities.find((q) => q.value === newQuality)?.label
+    );
     setIsPlaying(true);
     setIsPlay(true);
   };
 
   const handlePreviousSong = () => {
     if (isPlayingAd) return;
+    let prevIndex =
+      (currentSongIndex - 1 + listsongs.length) % listsongs.length;
+    const prevSong = listsongs[prevIndex];
+
+    let newQuality = selectedQuality;
+    if (!prevSong.file_paths[selectedQuality]) {
+      if (selectedQuality === "premium" && prevSong.file_paths["plus"]) {
+        newQuality = "plus";
+      } else if (selectedQuality !== "basic") {
+        newQuality = "basic";
+      }
+    }
+
+    setSelectedQuality(newQuality); 
+    setSelectedQualityLabel(
+      qualities.find((q) => q.value === newQuality)?.label
+    );
     setCurrentSongIndex(
       (prev) => (prev - 1 + listsongs.length) % listsongs.length
     );
@@ -1033,8 +1052,7 @@ const Footer = React.memo(function FooterComponent() {
                     const isDisabled =
                       (isAccountType === "basic" &&
                         quality.value !== "basic") ||
-                      (isAccountType === "plus" &&
-                        quality.value === "premium");
+                      (isAccountType === "plus" && quality.value === "premium");
                     return (
                       <button
                         key={quality.value}
