@@ -21,7 +21,7 @@ function Register() {
   const texts = {
     vi: {
       title: "Đăng Ký Tài Khoản",
-      emailLabel: "Email hoặc số điện thoại",
+      emailLabel: "Email",
       passwordLabel: "Mật Khẩu",
       forgotPassword: "Quên mật khẩu?",
       loginButton: "Đăng Ký",
@@ -323,9 +323,9 @@ function Register() {
                 onChange={handleInputChange}
                 className="w-full px-3 py-2 border border-pink-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
               >
-                <option value="Khac">{texts[language].other}</option>
+                <option value="Khác">{texts[language].other}</option>
                 <option value="Nam">{texts[language].male}</option>ß
-                <option value="Nu">{texts[language].female}</option>ß
+                <option value="Nữ">{texts[language].female}</option>ß
               </select>
               {errors.gender && <p className="text-red-500 text-sm mt-1">{errors.gender}</p>}
               {errors.form && <p className="text-red-500 text-sm mt-1">{errors.form}</p>}

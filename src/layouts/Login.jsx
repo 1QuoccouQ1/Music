@@ -16,7 +16,7 @@ function Login() {
   const texts = {
     vi: { 
       title: "Đăng Nhập",
-      emailLabel: "Email hoặc số điện thoại",
+      emailLabel: "Email",
       passwordLabel: "Mật Khẩu",
       forgotPassword: "Quên mật khẩu?",
       loginButton: "Đăng Nhập",

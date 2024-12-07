@@ -81,14 +81,9 @@ export async function checkAuth() {
     if (isTokenExpired(decodedToken)) {
       localStorage.removeItem("access_token");
       localStorage.removeItem("user");
-      return redirect("/login");
     }
-    return null; 
-  } else {
-    localStorage.removeItem("authToken");
-    localStorage.removeItem("user");
-    return redirect("/login"); // Nếu không có token, chuyển hướng đến trang Login
   }
+  
 }
 function decodeJwt(token) {
   const base64Url = token.split('.')[1];
