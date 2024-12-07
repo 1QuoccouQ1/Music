@@ -28,11 +28,14 @@ const Footer = React.memo(function FooterComponent() {
     setIsModal,
     isSetting,
     audioRef,
-    listsongs, setListSongs,
-    currentSongIndex, setCurrentSongIndex,
-    isPlaying, setIsPlaying,
+    listsongs,
+    currentSongIndex,
+    setCurrentSongIndex,
+    isPlaying,
+    setIsPlaying,
     handleFetchSongs,
-    isListUpdated, setIsListUpdated
+    playSong,
+    setPlaySong,
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -44,7 +47,7 @@ const Footer = React.memo(function FooterComponent() {
     // Lọc các quality mà có giá trị trùng với file_paths của bài hát hiện tại
     return qualities.filter((quality) => currentSong.file_paths[quality.value]);
   };
-  const qualities = [ 
+  const qualities = [
     {
       name: "Thường (128kbps)",
       label: "128kbps",
@@ -67,7 +70,7 @@ const Footer = React.memo(function FooterComponent() {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
-  
+
   const [duration, setDuration] = useState(0);
   const [isLooping, setIsLooping] = useState(false);
   const [isSeeking, setIsSeeking] = useState(false);
@@ -75,25 +78,25 @@ const Footer = React.memo(function FooterComponent() {
   const [isShuffling, setIsShuffling] = useState(false);
   const [timer, setTimer] = useState(null);
   const [isTimerActive, setIsTimerActive] = useState(false);
-  const [isTimerModalVisible, setIsTimerModalVisible] = useState(false); 
+  const [isTimerModalVisible, setIsTimerModalVisible] = useState(false);
   const [optionSongIndex, setOptionSongIndex] = useState(null);
   const Playlist = useRef(null);
   const Divlist = useRef(null);
-  const [songPlayCount, setSongPlayCount] = useState(0); 
-  const [isPlayingAd, setIsPlayingAd] = useState(false); 
+  const [songPlayCount, setSongPlayCount] = useState(0);
+  const [isPlayingAd, setIsPlayingAd] = useState(false);
   const [favoriteSongs, setFavoriteSongs] = useState([]);
+  const circumference = 2 * Math.PI * 17.5;
+  const offset = circumference - Number(volume) * circumference;
 
   const fetchAd = async () => {
     try {
-      const response = await fetch(
-        `${API_URL}/quang-cao`,{ 
-          method: 'GET',
-          headers: {
-            "Content-Type": "application/json",
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
-          }
-        }
-      ); // Gọi API để lấy quảng cáo
+      const response = await fetch(`${API_URL}/quang-cao`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      }); // Gọi API để lấy quảng cáo
       const data = await response.json();
       if (data && data.file_path) {
         // Bật trạng thái phát quảng cáo
@@ -110,9 +113,12 @@ const Footer = React.memo(function FooterComponent() {
   const fetchFavoriteSongs = async () => {
     try {
       const userId = JSON.parse(localStorage.getItem("user")).id;
-      const response = await fetch(
-        `${API_URL}/${userId}/bai-hat-yeu-thich`
-      );
+      const response = await fetch(`${API_URL}/${userId}/bai-hat-yeu-thich`, {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         const favoriteSongs = data;
@@ -138,7 +144,10 @@ const Footer = React.memo(function FooterComponent() {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
-        audioRef.current.play();
+        console.log("play");
+        if (!isPlaying) {
+          audioRef.current.play();
+        }
       }
     }
     setIsPlaying(!isPlaying);
@@ -149,7 +158,7 @@ const Footer = React.memo(function FooterComponent() {
     if (isPlayingAd) {
       setDuration(audioRef.current.duration);
     } else {
-      setDuration(listsongs[currentSongIndex].time);
+      setDuration(playSong.time);
     }
   };
 
@@ -160,17 +169,22 @@ const Footer = React.memo(function FooterComponent() {
         randomIndex = Math.floor(Math.random() * listsongs.length);
       } while (randomIndex === currentSongIndex);
       setCurrentSongIndex(randomIndex);
+      setPlaySong(listsongs[randomIndex]);
     } else {
       setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
+      setPlaySong(listsongs[(currentSongIndex + 1) % listsongs.length]);
     }
     setIsPlaying(true);
     setIsPlay(true);
   };
 
-  const handlePreviousSong =  ()  => {
+  const handlePreviousSong = () => {
     if (isPlayingAd) return;
     setCurrentSongIndex(
       (prev) => (prev - 1 + listsongs.length) % listsongs.length
+    );
+    setPlaySong(
+      listsongs[(currentSongIndex - 1 + listsongs.length) % listsongs.length]
     );
     setIsPlaying(true);
     setIsPlay(true);
@@ -180,21 +194,20 @@ const Footer = React.memo(function FooterComponent() {
     if (isLooping) {
       audioRef.current.play(); // Lặp lại bài hát hiện tại
     } else {
-      const currentSong = listsongs[currentSongIndex];
       saveSongToHistory({
-        song_name: currentSong.song_name,
-        composer: currentSong.composer,
-        song_image: currentSong.song_image,
-        id: currentSong.id, // Thời lượng bài hát
+        song_name: playSong.song_name,
+        composer: playSong.composer,
+        song_image: playSong.song_image,
+        id: playSong.id, // Thời lượng bài hát
       });
       try {
-        await fetch(`${API_URL}/luot-nghe/${currentSong.id}`, {
+        await fetch(`${API_URL}/luot-nghe/${playSong.id}`, {
           headers: {
             "Content-Type": "application/json",
-            'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
         });
-        console.log(`Cập nhật lượt nghe cho bài hát: ${currentSong.song_name}`);
+        console.log(`Cập nhật lượt nghe cho bài hát: ${playSong.song_name}`);
       } catch (error) {
         console.error("Lỗi khi cập nhật lượt nghe:", error);
       }
@@ -228,42 +241,38 @@ const Footer = React.memo(function FooterComponent() {
   const saveSongToHistory = (song) => {
     // Lấy danh sách lịch sử hiện tại từ localStorage
     let songHistory = JSON.parse(localStorage.getItem("songHistory")) || [];
-    
+
     // Kiểm tra nếu bài hát đã tồn tại trong lịch sử
     const isAlreadyInHistory = songHistory.some(
       (historySong) => historySong.song_name === song.song_name
     );
-  
+
     if (!isAlreadyInHistory) {
       if (songHistory.length >= 20) {
         songHistory = []; // Xóa hết danh sách
       }
       // Thêm bài hát mới vào danh sách lịch sử
       songHistory.unshift(song);
-  
+
       // Lưu danh sách cập nhật vào localStorage
       localStorage.setItem("songHistory", JSON.stringify(songHistory));
     }
   };
-  
 
   const toggleFavorite = async (songId) => {
     try {
       if (favoriteSongs.includes(songId)) {
         // Nếu bài hát đã yêu thích, xóa khỏi danh sách yêu thích
-        const response = await fetch(
-          `${API_URL}/xoa-bai-hat-yeu-thich`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              song_id: songId,
-              user_id: JSON.parse(localStorage.getItem("user")).id,
-            }),
-          }
-        );
+        const response = await fetch(`${API_URL}/xoa-bai-hat-yeu-thich`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            song_id: songId,
+            user_id: JSON.parse(localStorage.getItem("user")).id,
+          }),
+        });
 
         if (response.ok) {
           setFavoriteSongs((prev) => prev.filter((id) => id !== songId)); // Loại bỏ id khỏi danh sách
@@ -272,19 +281,16 @@ const Footer = React.memo(function FooterComponent() {
         }
       } else {
         // Nếu bài hát chưa được yêu thích, thêm vào danh sách yêu thích
-        const response = await fetch(
-          `${API_URL}/bai-hat-yeu-thich`,
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              song_id: songId,
-              user_id: JSON.parse(localStorage.getItem("user")).id,
-            }),
-          }
-        );
+        const response = await fetch(`${API_URL}/bai-hat-yeu-thich`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            song_id: songId,
+            user_id: JSON.parse(localStorage.getItem("user")).id,
+          }),
+        });
 
         if (response.ok) {
           setFavoriteSongs((prev) => [...prev, songId]); // Thêm id vào danh sách
@@ -353,19 +359,32 @@ const Footer = React.memo(function FooterComponent() {
   const toggleVolume = () => {
     setIsVolumeVisible(!isVolumeVisible);
   };
-  
-  
+
   useEffect(() => {
-    
-    handleFetchSongs("rank");
-    setIsLoading(false);
-    fetchFavoriteSongs();
+    // Hàm bất đồng bộ để gọi API và xử lý logic
+    const fetchData = async () => {
+      // Gọi API để lấy danh sách bài hát
+      await handleFetchSongs("rank");
+      setIsLoading(false);
+      fetchFavoriteSongs();
 
-   
+      // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
+      if (currentSong) {
+        setPlaySong(currentSong);
+      } else {
+        setCurrentSongIndex(0); // Nếu không có `currentSong`, bắt đầu từ bài đầu tiên
+      }
+    };
 
+    // Gọi hàm fetchData
+    fetchData();
 
     const handleClickOutside = (event) => {
-      if (Playlist.current && !Playlist.current.contains(event.target) && !Divlist.current.contains(event.target)) {
+      if (
+        Playlist.current &&
+        !Playlist.current.contains(event.target) &&
+        !Divlist.current.contains(event.target)
+      ) {
         setIsAlbum(false);
       }
     };
@@ -374,78 +393,51 @@ const Footer = React.memo(function FooterComponent() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-
   }, []);
 
   useEffect(() => {
-    // console.log("listsongs",listsongs);
     if (listsongs.length === 0) return;
-    // if (!currentSongIndex && currentSong ) {
-    //   // console.log("listsongs",listsongs);
-    //   const index = listsongs.findIndex(
-    //     (song) => song.song_name === currentSong.song_name
-    //   );
-    //   if (index !== -1) {
-    //     setCurrentSongIndex(index);
-    //     setOptionSongIndex(index);
-    //   }
-    // } else {
-    //   setCurrentSongIndex(0);
-    // }
-
     if (audioRef.current) {
       audioRef.current.volume = volume;
       audioRef.current.currentTime = currentTime;
-      if (isPlaying) {
-        audioRef.current.play();
-      }
+
+      audioRef.current.addEventListener("canplay", () => {
+        if (isPlaying) {
+          audioRef.current.play().catch((error) => {
+            console.error("Error playing audio:", error);
+          });
+        }
+      });
     }
   }, [listsongs]);
 
   useEffect(() => {
-    setVolume(volume); // Cập nhật giá trị volume
-  }, [volume]); 
+    console.log("playSong", playSong);
+    if (!playSong || !listsongs.length) return;
+    // const song = listsongs[currentSongIndex];
+    // console.log("song",song);
 
-  useEffect(() => {
-    // console.log("song",isListUpdated);
-
-    if (listsongs.length === 0) return;
-    if (isListUpdated) {
-      // setCurrentSongIndex(0);
-      // console.log("set");
-      setIsListUpdated(false); // Reset flag
-    } else {
-      const song = listsongs[currentSongIndex];
-      // console.log("song",song);
-      setCurrentSong({
-        song_name: song.song_name,
-        composer: song.composer,
-        song_image: song.song_image,
-      });
-      audioRef.current.pause();
-      if (audioRef.current) {
-        audioRef.current.src =
-          song.file_paths && song.file_paths[selectedQuality];
-        // audioRef.current.currentTime = currentTime;
-
-        if (optionSongIndex == currentSongIndex) {
-          audioRef.current.currentTime = currentTime;
-        }
-        if (isPlaying) {
-          audioRef.current.play();
-        }
+    setCurrentSong(playSong);
+    if (audioRef.current) {
+      audioRef.current.src =
+        playSong.file_paths && playSong.file_paths[selectedQuality];
+      // audioRef.current.currentTime = currentTime;
+      audioRef.current.load();
+      if (optionSongIndex == currentSongIndex) {
+        audioRef.current.currentTime = currentTime;
+      }
+      if (isPlaying) {
+        console.log("play");
+        audioRef.current.play();
       }
     }
-  }, [listsongs,currentSongIndex, selectedQuality]);
-
+  }, [currentSongIndex, selectedQuality, playSong]);
 
   if (isLoading) {
     return null;
   }
   if (isSetting) return null;
 
-  const circumference = 2 * Math.PI * 17.5;
-  const offset = circumference - Number(volume) * circumference;
   return (
     <>
       <audio
@@ -461,9 +453,7 @@ const Footer = React.memo(function FooterComponent() {
               <div className="relative">
                 <img
                   className="inline-block size-20 max-xl:size-14 "
-                  src={listsongs.length > 0
-                    ? listsongs[currentSongIndex].song_image
-                    : null} 
+                  src={playSong ? playSong.song_image : null}
                 />
                 {isPlaying && (
                   <i
@@ -480,14 +470,10 @@ const Footer = React.memo(function FooterComponent() {
               </div>
               <div className="mx-3">
                 <p className="text-base ">
-                  {listsongs.length > 0
-                    ? listsongs[currentSongIndex].song_name
-                    : null}
+                  {playSong ? playSong.song_name : null}
                 </p>
                 <p className="text-sm text-slate-300">
-                  {listsongs.length > 0
-                    ? listsongs[currentSongIndex].composer
-                    : null}
+                  {playSong ? playSong.composer : null}
                 </p>
               </div>
             </div>
@@ -704,9 +690,9 @@ const Footer = React.memo(function FooterComponent() {
           </div>
           <div
             onClick={() => {
-                setIsAlbum(true);
+              setIsAlbum(true);
             }}
-            ref = {Divlist}
+            ref={Divlist}
             className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  h-[40px] px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
           >
             <div className="border border-white size-4 flex items-center justify-center rounded-full mr-2 rotate-90">
@@ -737,7 +723,7 @@ const Footer = React.memo(function FooterComponent() {
                 <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4">
                   <div className="w-12 h-12 mr-3 relative">
                     <img
-                      src={listsongs[currentSongIndex].song_image}
+                      src={playSong.song_image}
                       alt="Song thumbnail"
                       className="w-full h-full rounded  "
                     />
@@ -760,23 +746,19 @@ const Footer = React.memo(function FooterComponent() {
                     )}
                   </div>
                   <div>
-                    <h3 className="font-medium">
-                      {listsongs[currentSongIndex].song_name}
-                    </h3>
+                    <h3 className="font-medium">{playSong.song_name}</h3>
                     <p className="text-[11px] opacity-60 mt-1">
-                      {listsongs[currentSongIndex].composer}
+                      {playSong.composer}
                     </p>
                   </div>
                   <div className="ml-auto flex items-center space-x-3">
                     <Heart
                       className={`size-5 cursor-pointer ${
-                        favoriteSongs.includes(listsongs[currentSongIndex].id)
+                        favoriteSongs.includes(playSong.id)
                           ? "text-blue-500"
                           : ""
                       }`}
-                      onClick={() =>
-                        toggleFavorite(listsongs[currentSongIndex].id)
-                      }
+                      onClick={() => toggleFavorite(playSong.id)}
                     />
                     <MoreHorizontal className="w-4 h-4 cursor-pointer" />
                   </div>
@@ -787,7 +769,10 @@ const Footer = React.memo(function FooterComponent() {
                     <li
                       key={index}
                       className="flex items-center space-x-3"
-                      onClick={() => setCurrentSongIndex(index)}
+                      onClick={() => {
+                        setCurrentSongIndex(index);
+                        setPlaySong(song);
+                      }}
                     >
                       <img
                         src={song.song_image}

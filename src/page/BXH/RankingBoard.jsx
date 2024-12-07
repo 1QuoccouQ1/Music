@@ -4,6 +4,8 @@ import { ToastContainer, toast } from 'react-toastify';
 import { API_URL } from '../../services/apiService';
 import 'react-toastify/dist/ReactToastify.css';
 import ArtistRankingCard from './ArtistRankingCard';
+import { Link } from 'react-router-dom';
+
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
@@ -225,7 +227,12 @@ const RankingBoard = () => {
                                     </p>
                                 </div>
                             </td>
-                            <td className='px-4'>{song.singer_name}</td>
+                              {/* Singer Column */}
+                              <td className='px-4'>
+                                <Link to={`/ProfileArtist/${song.singer_id}`}>
+                                    {song.singer_name}
+                                </Link>
+                            </td>
                             <td className='px-4 text-center'>
                                 {song.listen_count || 'N/A'}
                             </td>

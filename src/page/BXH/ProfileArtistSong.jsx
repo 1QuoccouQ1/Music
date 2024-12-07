@@ -106,12 +106,12 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                 </div>
                 <div className='flex items-center gap-5 duration-300 w-1/3 justify-end'>
                     {SongFavourite != [] ?
-                        SongFavourite.includes(song.id) ? <Heart size={22} fill="red" onClick={() => handleSongFavourite(song.id, true)} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
-                            : <Heart size={22} onClick={() => handleSongFavourite(song.id, false)} className='text-red-500 opacity-0 group-hover:opacity-100 duration-300' />
+                        SongFavourite.includes(song.id) ? <Heart size={22} fill="red" onClick={() => handleSongFavourite(song.id, true)} className='text-red-500 lg:opacity-0 group-hover:opacity-100 duration-300' />
+                            : <Heart size={22} onClick={() => handleSongFavourite(song.id, false)} className='text-red-500 lg:opacity-0 group-hover:opacity-100 duration-300' />
                         : ''}
-                    <CirclePlus size={22} className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300' />
+                    <CirclePlus size={22} className='text-slate-500 lg:opacity-0 group-hover:opacity-100 duration-300' />
                     <p>{formatTime(song.time)}</p>
-                    <Ellipsis size={22} className='opacity-0 group-hover:opacity-100 duration-300' />
+                    <Ellipsis size={22} className='lg:opacity-0 group-hover:opacity-100 duration-300' />
                 </div>
             </div>
 

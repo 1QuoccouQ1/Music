@@ -49,7 +49,7 @@ function InputSearch({ onSearch, onFocus, onBlur }) {
   };
 
   return (
-    <div className="relative flex items-center bg-[#172533] py-2 px-3 h-[40px] w-[500px]  rounded-3xl">
+    <div className="relative flex items-center bg-[#172533] py-2 px-3 h-[40px] rounded-3xl">
       <input
         type="text"
         value={query}
@@ -57,7 +57,7 @@ function InputSearch({ onSearch, onFocus, onBlur }) {
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}
-        className="border-none mx-2 w-[300px] bg-transparent focus:outline-none text-white text-sm placeholder-gray-600"
+        className="border-none mx-2 w-[270px] lg:w-[350px]  bg-transparent focus:outline-none text-white text-sm placeholder-gray-600"
         placeholder="Tìm kiếm....."
       />
       <div

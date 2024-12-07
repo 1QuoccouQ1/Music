@@ -19,26 +19,3 @@ export const getMusics = () => fetchAPI('/rand-10');
 
 export const getArtist = () => fetchAPI('/ca-si');
 
-
-
-// Lấy dữ liệu categories
-export const getCategories = () => fetchAPI('/categories');
-// Tạo một category mới
-export const createCategory = (category) => fetchAPI('/categories', 'POST', category);
-
-
-
-
-// Lấy dữ liệu user
-export const getUsers = () => fetchAPI('/users/user');
-//Tìm user theo id
-export const findUser = (id) => fetchAPI('/users/Finduser', 'POST',{id});
-// Cập nhật user
-export const updateUser = (id,userData) => fetchAPI('/users/UpdateUser', 'PUT',{id,...userData});
-// Delete User
-export const DelUser = (id) => fetchAPI('/users/DeleteUser', 'DELETE',{id});
-
-
-
-// Check token
-export const AuthToken = (token) => fetchAPI('/users/AuthToken', 'POST', {token});

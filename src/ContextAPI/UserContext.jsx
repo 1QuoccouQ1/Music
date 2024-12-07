@@ -23,16 +23,8 @@ export const UserProvider = ({ children }) => {
     return savedUser ? JSON.parse(savedUser) : null;
   });
   const [currentSong, setCurrentSong] = useState(() => {
-    const savedSong = document.cookie
-      .split("; ")
-      .find((row) => row.startsWith("currentSong="));
-    return savedSong
-      ? JSON.parse(decodeURIComponent(savedSong.split("=")[1]))
-      : {
-          song_name: "",
-          composer: "",
-          song_image: "",
-        };
+    const savedSong = localStorage.getItem("currentSong"); // Lấy giá trị từ localStorage
+    return savedSong ? JSON.parse(savedSong) : null;
   });
   const audioRef = useRef(null);
   const [listsongs, setListSongs] = useState([]);
@@ -41,8 +33,9 @@ export const UserProvider = ({ children }) => {
     const savedIsPlay = localStorage.getItem("isPlaying");
     return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
   });
-  const [isListUpdated, setIsListUpdated] = useState(false);
-  const handleFetchSongs = async (type, id) => {
+  const [playSong, setPlaySong] = useState(null);
+  
+  const handleFetchSongs = async (type) => {
     try {
       let fetchedSongs;
       // Xử lý gọi API dựa trên type
@@ -59,17 +52,33 @@ export const UserProvider = ({ children }) => {
         case "yeuthich":
           fetchedSongs = await fetch(`${API_URL}/top-like`); 
           break;
+        default:
+          console.error("Unknown type");
+          return;
+      }
+      const dataList = await fetchedSongs.json();
+      setListSongs(dataList);
+      setPlaySong(dataList[0]); 
+      setCurrentSongIndex(0); 
+    } catch (error) {
+      console.error("Error fetching songs:", error);
+    }
+  };
+  const handleAddSong = async (type, id) => {
+    try {
+      let fetchedSong;
+      // Xử lý gọi API dựa trên type
+      switch (type) {
         case "song":
-          fetchedSongs = await fetch(`${API_URL}/${id}/play`); 
+          fetchedSong = await fetch(`${API_URL}/${id}/play`); 
           break;
         default:
           console.error("Unknown type");
           return;
       }
-      const data = await fetchedSongs.json();
-      setListSongs(data);
-      setCurrentSongIndex(0); 
-      setIsListUpdated(true);
+      const dataSong = await fetchedSong.json();
+      setListSongs(dataSong.rand);
+      setPlaySong(dataSong.song); 
     } catch (error) {
       console.error("Error fetching songs:", error);
     }
@@ -94,21 +103,9 @@ export const UserProvider = ({ children }) => {
     }
   }, [user]);
   useEffect(() => {
-    const handleBeforeUnload = () => {
-      if (currentSong.song_name) {
-        document.cookie = `currentSong=${encodeURIComponent(
-          JSON.stringify({
-            ...currentSong,
-          })
-        )}; path=/; max-age=31536000`;
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => {
-      window.removeEventListener("beforeunload", handleBeforeUnload);
-    };
-    
+    if (currentSong) {
+      localStorage.setItem("currentSong", JSON.stringify(currentSong)); // Lưu giá trị vào localStorage
+    }
   }, [currentSong]);
 
   return (
@@ -131,7 +128,8 @@ export const UserProvider = ({ children }) => {
         currentSongIndex, setCurrentSongIndex,
         isPlaying, setIsPlaying,
         handleFetchSongs,
-        isListUpdated, setIsListUpdated
+        handleAddSong,
+        playSong, setPlaySong
       }}
     >
       {children}
