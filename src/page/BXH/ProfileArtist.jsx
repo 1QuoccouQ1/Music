@@ -85,7 +85,7 @@ function ProfileArtist() {
         fetchArtistData();
     }, [id]);
 
-
+// theo thích ca sĩ
     const handleFollowing = () => {
         if (!user) {
             toast.error('Vui lòng đăng nhập để theo dõi ca sĩ.');
@@ -118,8 +118,8 @@ function ProfileArtist() {
 
         }
     }
+    // lấy danh sách ca sĩ
     useEffect(() => {
-        console.log(user.id);
         getArtist()
             .then((data) => {
                 setArtists(data);
@@ -128,7 +128,7 @@ function ProfileArtist() {
                 console.error('Error fetching artist data:', error);
             });
     }, []);
-
+// lấy ca sĩ yêu thích theo user
     useEffect(() => {
         const FavouriteSinger = async () => {
             try {
@@ -154,10 +154,52 @@ function ProfileArtist() {
 
             }
         };
-        if (user.id) {
+        if (user) {
             FavouriteSinger();
         }
     }, []);
+    // thêm ca sĩ yêu thích ở dưới danh sách
+    const handleFollowinglistsinger = (singer_id, check) => {
+        if (!user) {
+            toast.error('Vui lòng đăng nhập để theo dõi ca sĩ.');
+            return;
+        } else {
+            // Gửi request API khi người dùng nhấn "Theo giỏi"
+            fetch(API_URL + '/ca-si/add-to-favourite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                },
+                body: JSON.stringify({
+                    liked: !check,
+                    singer_id: singer_id,
+                    user_id: user.id
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Xử lý dữ liệu trả về từ API (nếu cần)
+                    // console.log('Đã đánh dấu yêu thích:', data.message);
+                    if (check) {
+                        setartistFavorite((set) => {
+                            return set.filter((id) => id !== singer_id);
+                        })
+                    } else {
+                        setartistFavorite((set) => {
+                            return [...set, singer_id];
+                        })
+                    }
+                    toast.success(data.message);
+                    
+                })
+                .catch(error => {
+                    // console.error('Lỗi khi gửi yêu cầu:', error);
+                    toast.success('Lỗi khi gửi yêu cầu:', error);
+                });
+
+        }
+    }
 
     const handleModal = () => {
         setIsModal(!isModal);
@@ -227,7 +269,11 @@ function ProfileArtist() {
                             <div className='flex items-center justify-between md:justify-start  gap-5 mt-5'>
                                 <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1'>  <Play /> Phát tất cả</button>
 
-                                {isFollowing ? <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button> : <button onClick={handleFollowing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>}
+                                {isFollowing ? 
+                                <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button>
+                                 : 
+                                 <button onClick={handleFollowing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>
+                                 }
 
 
                             </div>
@@ -404,7 +450,11 @@ function ProfileArtist() {
                                             <p className="font-medium mb-2 text-base">{artist.singer_name}</p>
                                         </Link>
                                         <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                        <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
+                                        {artistFavorite.includes(artist.id) ?
+                                <button onClick={()=>handleFollowinglistsinger(artist.id, true)} className='flex items-center border-2 box-border border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm'>  <Check size={20} /> Đang theo dõi</button>
+                                : 
+                                <button onClick={()=>handleFollowinglistsinger(artist.id, false)} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
+                                }
                                     </div>
                                 </SwiperSlide>
                             ))) : (
