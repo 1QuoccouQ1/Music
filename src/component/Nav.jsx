@@ -262,12 +262,12 @@ function Nav() {
                             user.users_type == 'Plus' ?
                               <p className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition w-fit duration-300">
                                 SoundWave Plus <br/>
-                                {user.expiry_date ? <em>Hạn: {user.expiry_date}</em>: ''}
+                                {user.expiry_date !== null ? <em>Hạn: {user.expiry_date}</em>: <em>Hạn: Vĩnh viễn</em>}
                                 </p>
                               :
                               <p className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 transition  w-fit duration-300">
                                 SoundWave Premium <br />
-                                {user.expiry_date ? <em>Hạn: {user.expiry_date}</em>: ''}
+                                {user.expiry_date !== null ? <em>Hạn: {user.expiry_date}</em>: <em>Hạn: Vĩnh viễn</em>}
                                 </p>
                           }
                         </div>
