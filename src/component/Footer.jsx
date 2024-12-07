@@ -38,7 +38,7 @@ const Footer = React.memo(function FooterComponent() {
     setPlaySong,
     isAccountType,
     isUpdate,
-    setIsUpdate
+    setIsUpdate,
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -94,6 +94,7 @@ const Footer = React.memo(function FooterComponent() {
   const [favoriteSongs, setFavoriteSongs] = useState([]);
   const circumference = 2 * Math.PI * 17.5;
   const offset = circumference - Number(volume) * circumference;
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const fetchAd = async () => {
     if (isAccountType === "Plus" || isAccountType === "Premium") {
@@ -221,7 +222,7 @@ const Footer = React.memo(function FooterComponent() {
       }
     }
 
-    setSelectedQuality(newQuality); 
+    setSelectedQuality(newQuality);
     setSelectedQualityLabel(
       qualities.find((q) => q.value === newQuality)?.label
     );
@@ -423,7 +424,7 @@ const Footer = React.memo(function FooterComponent() {
 
     // Gọi hàm fetchData
     fetchData();
-    
+
     const handleClickOutside = (event) => {
       if (
         Playlist.current &&
@@ -475,7 +476,7 @@ const Footer = React.memo(function FooterComponent() {
       }
       return;
     }
-    
+
     if (audioRef.current) {
       audioRef.current.src =
         playSong.file_paths && playSong.file_paths[selectedQuality];
@@ -483,13 +484,12 @@ const Footer = React.memo(function FooterComponent() {
       if (optionSongIndex == currentSongIndex) {
         audioRef.current.currentTime = currentTime;
       }
-     
+
       if (isPlaying) {
         audioRef.current.play();
       }
     }
   }, [currentSongIndex, selectedQuality, playSong]);
-
 
   if (isLoading) {
     return null;
@@ -822,8 +822,8 @@ const Footer = React.memo(function FooterComponent() {
                   </div>
                 </div>
                 <h3 className=" ml-2text-sm font-medium mb-2">Tiếp theo</h3>
-                <ul className="ml-2 space-y-2  h-[400px] overflow-y-auto no-scrollbar">
-                  {listsongs.map((song, index) => (
+                <ul className="ml-2 space-y-2  h-[368px] overflow-y-auto no-scrollbar">
+                  {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
                       className="flex items-center space-x-3"
@@ -835,7 +835,7 @@ const Footer = React.memo(function FooterComponent() {
                       <img
                         src={song.song_image}
                         alt="Song thumbnail"
-                        className="w-10 h-10 rounded object-cover "
+                        className="w-10 h-10 rounded object-cover"
                       />
                       <div>
                         <h4 className="font-medium">{song.song_name}</h4>
@@ -846,6 +846,16 @@ const Footer = React.memo(function FooterComponent() {
                     </li>
                   ))}
                 </ul>
+                {visibleCount < listsongs.length && (
+                  <div className="flex justify-center mt-2">
+                    <button
+                      className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white px-4 py-1 rounded"
+                      onClick={() => setVisibleCount(listsongs.length)}
+                    >
+                      Xem thêm
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
