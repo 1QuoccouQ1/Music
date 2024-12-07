@@ -63,6 +63,10 @@ export const UserProvider = ({ children }) => {
           fetchedSongs = await fetch(`${API_URL}/the-loai/${id}/bai-hat`); 
           setIsUpdate(true)
           break;
+        case "casi":
+          fetchedSongs = await fetch(`${API_URL}/ca-si/${id}/bai-hat`); 
+          setIsUpdate(true)
+          break;
         default:
           console.error("Unknown type");
           return;

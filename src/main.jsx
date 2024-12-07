@@ -46,6 +46,7 @@ import Payment from "./page/Payment/Payment.jsx";
 import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 import { redirect } from "react-router-dom";
+import SongDetail from "./page/Song/SongDetail.jsx";
 
 export async function changeIsSetting() {
   const authCheck = await checkAuth();
@@ -246,6 +247,16 @@ const router = createBrowserRouter([
         path: "/Privacy",
         loader: changeIsSetting,
         element: <Privacy />,
+      },
+      {
+        path: "/SongDetail",
+        loader: changeDashboard,
+        element: <SongDetail />,
+      },
+      {
+        path: "/SongDetail/:id",
+        loader: changeDashboard,
+        element: <SongDetail />,
       },
     ],
   },

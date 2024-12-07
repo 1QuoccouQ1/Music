@@ -1,12 +1,13 @@
-import { Headphones, UserRoundPlus, Play, Check, Heart, CirclePlus, Ellipsis, Dot, UserRound, X, Filter } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Headphones, UserRoundPlus, Play, Check, Heart, CirclePlus, Ellipsis, UserRound, X, Filter } from 'lucide-react';
+import { useState, useEffect, useContext } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Facebook, Instagram, Twitter, Music } from "lucide-react"
 import { Link, useParams } from 'react-router-dom';
 import { API_URL, getArtist } from '../../services/apiService';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import ProfileArtistSong from './ProfileArtistSong';
+import { UserContext } from '../../ContextAPI/UserContext';
 
 
 function ProfileArtist() {
@@ -19,7 +20,8 @@ function ProfileArtist() {
     const [artistFavorite, setartistFavorite] = useState([]);
     const [artistSong, setArtistSong] = useState([]);
     const [loading, setLoading] = useState(true); // Theo dõi trạng thái loading
-
+    const { handleFetchSongs } = useContext(UserContext);
+    
     const user = JSON.parse(localStorage.getItem('user'));
     // console.log(user_id.id);
     useEffect(() => {
@@ -223,18 +225,6 @@ function ProfileArtist() {
     }, [isModal]);
 
 
-    // Hàm định dạng thời gian
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60); // Lấy phần nguyên của phút
-        const remainingSeconds = Math.floor(seconds % 60); // Lấy phần nguyên của giây
-
-        // Đảm bảo có số 0 trước nếu phút hoặc giây < 10
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        const formattedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-
-        return `${formattedMinutes}:${formattedSeconds}`;
-    };
-
     const limitCharacters = (str, charCount) => {
         if (str.length > charCount) {
             return str.slice(0, charCount) + '...'; // Cắt chuỗi và thêm dấu "..."
@@ -267,7 +257,7 @@ function ProfileArtist() {
                                 <p className='flex  items-center  text-sm font-semibold gap-2 '><UserRoundPlus size={18} className='text-red-600 ' /> 5.940.438 người  theo dõi</p>
                             </div>
                             <div className='flex items-center justify-between md:justify-start  gap-5 mt-5'>
-                                <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1'>  <Play /> Phát tất cả</button>
+                                <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1' onClick={()=> handleFetchSongs("casi",artist.id )}>  <Play /> Phát tất cả</button>
 
                                 {isFollowing ?
                                     <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button>
@@ -504,7 +494,7 @@ function ProfileArtist() {
 
 
                         {artistSong && artistSong.length > 0 ? (
-                            artistSong.map((song, index) => (
+                            artistSong.map((song, index ) => (
                                 <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
                                     <div className="text-center flex flex-col  items-start ">
                                         <img src={song.song_image} className=" mb-3 rounded-xl w-44 h-44" />
