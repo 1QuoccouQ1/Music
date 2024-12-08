@@ -98,7 +98,7 @@ function Nav() {
   return (
     <>
       <div className="flex md:justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
-        <div className="relative ">
+        <div className="relative w-full md:w-auto">
           <InputSearch
             onSearch={fetchSearchResults}
             onFocus={() => setIsFocused(true)}
