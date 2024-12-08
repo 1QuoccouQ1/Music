@@ -4,7 +4,7 @@ import { API_URL } from "../../services/apiService";
 
 function ArtistGallery() {
   const [artists, setArtists] = useState([]);
-
+  const [loading, setLoading] = useState(true);
   
   useEffect(() => {
     fetch(`${API_URL}/ca-si`)
@@ -18,11 +18,18 @@ function ArtistGallery() {
           imageUrl: artist.singer_image || "https://via.placeholder.com/150",
         }));
         setArtists(formattedArtists);
+        setLoading(false);
       })
       .catch(error => console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error));
   }, []);
 
- 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+      </div>
+    ); 
+  }
 
   return (
     <div className="bg-gray-900 min-h-screen py-10 px-4 sm:px-8">

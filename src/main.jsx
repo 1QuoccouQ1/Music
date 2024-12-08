@@ -249,11 +249,6 @@ const router = createBrowserRouter([
         element: <Privacy />,
       },
       {
-        path: "/SongDetail",
-        loader: changeDashboard,
-        element: <SongDetail />,
-      },
-      {
         path: "/SongDetail/:id",
         loader: changeDashboard,
         element: <SongDetail />,
