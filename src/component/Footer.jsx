@@ -15,6 +15,7 @@ import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
 import React from "react";
 import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 const Footer = React.memo(function FooterComponent() {
   const {
@@ -498,6 +499,12 @@ const Footer = React.memo(function FooterComponent() {
 
   return (
     <>
+    <Helmet>
+        <title>Sound Wave | {playSong.song_name}</title>
+        <meta name="description" content={playSong.description} />
+        <meta name="keywords" content={`${playSong.song_name}, ${playSong.singer_name}, ${playSong.provider}, ${playSong.composer}`} />
+        <meta name="author" content={playSong.provider} />
+      </Helmet>
       <audio
         ref={audioRef}
         onLoadedMetadata={onLoadedMetadata}
