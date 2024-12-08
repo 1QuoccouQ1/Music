@@ -20,10 +20,9 @@ function Genre() {
             const response = await fetch(`${API_URL}/quoc-gia`);
             const data = await response.json();
             setCountries(data); // Assuming the data is in an array format
-            setLoading(false);
           } catch (error) {
             console.error('Error fetching data:', error);
-            setLoading(false);
+            
           }
         };
     
@@ -46,6 +45,7 @@ function Genre() {
                     ...prevSongs,
                     [category.id]: songData
                 }));
+                setLoading(false);
                 });
             });
         })
@@ -53,7 +53,11 @@ function Genre() {
     }, []);
 
     if (loading) {
-    return <div className="text-white">Loading...</div>;
+      return (
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+      ); 
     }
 
 

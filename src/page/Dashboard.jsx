@@ -22,6 +22,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(false); // Trạng thái tải dữ liệu
   const [artists, setArtists] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [loadingGlobal, setLoadingGlobal] = useState(true);
 
   const fetchData = async () => {
     try {
@@ -48,6 +49,7 @@ function Dashboard() {
             setTrending(trendingData);
             setTopListen(topListenData);
             setTopLike(topLikeData);
+            setLoadingGlobal(false);
             setArtists(artistData);
             setGenres(genresData);
         } catch (error) {
@@ -178,6 +180,14 @@ function Dashboard() {
       </div>
     ));
   };
+
+  if (loadingGlobal) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+      </div>
+    ); 
+  }
   return (
     <>
       <section className="bg-medium w-full h-[1000px] text-white ">
