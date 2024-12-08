@@ -3,8 +3,6 @@
 @tailwind utilities;
 /* Tailwind CSS utility classes */
 @media (max-width: 1024px) {
-    .bg-sidebar {
-      background-color: #2d3748;
-    }
+   
   }
   
