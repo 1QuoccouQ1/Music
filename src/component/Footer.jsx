@@ -267,8 +267,10 @@ const Footer = React.memo(function FooterComponent() {
             randomIndex = Math.floor(Math.random() * listsongs.length);
           } while (randomIndex === currentSongIndex);
           setCurrentSongIndex(randomIndex);
+          setPlaySong(listsongs[randomIndex]);
         } else {
           setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
+          setPlaySong(listsongs[(currentSongIndex + 1) % listsongs.length]);
         }
         setIsPlaying(true);
         setIsPlay(true);
