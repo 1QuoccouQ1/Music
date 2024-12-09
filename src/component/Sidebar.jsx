@@ -2,7 +2,7 @@ import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 
 // Danh sách menu được định nghĩa ở đây
 const menuItems = [
@@ -58,6 +58,7 @@ const menuItems = [
 function Sidebar() {
   const { isSetting } = useContext(UserContext);
   const isLoggedIn = Boolean(localStorage.getItem('user')); // Kiểm tra đăng nhập
+  const location = useLocation();
 
   if (isSetting) return null;
 
@@ -71,11 +72,14 @@ function Sidebar() {
           <div className="flex flex-col justify-between h-auto">
             <div className="text-sm">
               {menuItems.map((item, index) => {
-                if (item.requireAuth && !isLoggedIn) return null; // Bỏ qua mục yêu cầu đăng nhập khi chưa đăng nhập
+                if (item.requireAuth && !isLoggedIn) return null; 
+                const isActive = location.pathname === item.to; 
                 return (
                   <Link
                     key={index}
-                    className="flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300 cursor-pointer"
+                    className={`flex items-center space-x-2 py-3 px-3 hover:shadow-lg rounded-lg duration-300 cursor-pointer ${
+                      isActive ? 'text-red-600 font-semibold' : 'text-gray-400 hover:text-red-600'
+                    }`}
                     to={item.to}
                   >
                     {item.icon}
