@@ -1,6 +1,6 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
-import  { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Play } from "lucide-react";
 import { useContext } from "react";
@@ -46,111 +46,110 @@ function Dashboard() {
       const artistData = await artistList.json();
       const genresData = await genresList.json();
 
-            setTrending(trendingData);
-            setTopListen(topListenData);
-            setTopLike(topLikeData);
-            setLoadingGlobal(false);
-            setArtists(artistData);
-            setGenres(genresData);
-        } catch (error) {
-            console.error('Lỗi khi gọi API:', error);
-        }
-    };
+      setTrending(trendingData);
+      setTopListen(topListenData);
+      setTopLike(topLikeData);
+      setLoadingGlobal(false);
+      setArtists(artistData);
+      setGenres(genresData);
+    } catch (error) {
+      console.error('Lỗi khi gọi API:', error);
+    }
+  };
 
   const [songHistory, setSongHistory] = useState(
     JSON.parse(localStorage.getItem("songHistory")) || []
   );
-    
+
   useEffect(() => {
-      fetch(`${API_URL}/ca-si`)
-          .then(response => response.json())
-          .then(data => {
-              // Mapping the fetched data to match the format needed for ArtistCard
-              const formattedArtists = data.map(artist => ({
-                  name: artist.singer_name || 'Unknown Artist',
-                  profession: 'Nghệ Sĩ',
-                  id: artist.id,
-                  imageUrl:
-                      artist.singer_image || 'https://via.placeholder.com/150'
-              }));
-              setArtists(formattedArtists);
-          })
-          .catch(error =>
-              console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error)
-          );
+    fetch(`${API_URL}/ca-si`)
+      .then(response => response.json())
+      .then(data => {
+        // Mapping the fetched data to match the format needed for ArtistCard
+        const formattedArtists = data.map(artist => ({
+          name: artist.singer_name || 'Unknown Artist',
+          profession: 'Nghệ Sĩ',
+          id: artist.id,
+          imageUrl:
+            artist.singer_image || 'https://via.placeholder.com/150'
+        }));
+        setArtists(formattedArtists);
+      })
+      .catch(error =>
+        console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error)
+      );
   }, []);
 
   // Lấy danh sách quốc gia khi component được render lần đầu
   useEffect(() => {
-      const fetchCountries = async () => {
-          try {
-              const response = await axios.get(
-                  `${API_URL}/quoc-gia`
-              ); // Gọi API /quoc-gia
-              setCountries(response.data); // Lưu danh sách quốc gia vào state
-              if (response.data.length > 0) {
-                  setActiveTab(response.data[0].id); // Đặt quốc gia đầu tiên làm mặc định
-              }
-          } catch (error) {
-              console.error('Error fetching countries:', error);
-          }
-      };
-      fetchCountries();
+    const fetchCountries = async () => {
+      try {
+        const response = await axios.get(
+          `${API_URL}/quoc-gia`
+        ); // Gọi API /quoc-gia
+        setCountries(response.data); // Lưu danh sách quốc gia vào state
+        if (response.data.length > 0) {
+          setActiveTab(response.data[0].id); // Đặt quốc gia đầu tiên làm mặc định
+        }
+      } catch (error) {
+        console.error('Error fetching countries:', error);
+      }
+    };
+    fetchCountries();
   }, []);
 
   // Lấy danh sách bài hát khi activeTab thay đổi
   useEffect(() => {
-      if (activeTab) {
-          const fetchSongs = async () => {
-              setLoading(true);
-              try {
-                  const response = await axios.get(
-                      `${API_URL}/quoc-gia/${activeTab}/bai-hat`
-                  ); // Gọi API /bai-hat với ID quốc gia
+    if (activeTab) {
+      const fetchSongs = async () => {
+        setLoading(true);
+        try {
+          const response = await axios.get(
+            `${API_URL}/quoc-gia/${activeTab}/bai-hat`
+          ); // Gọi API /bai-hat với ID quốc gia
 
-                  if (response.status === 200) {
-                      setSongs(response.data); // Lưu danh sách bài hát vào state
-                  } else {
-                      setSongs([]); // Nếu không có bài hát nào thì set state rỗng
-                  }
-              } catch (error) {
-                  setSongs([]);
-                  console.error('Error fetching songs:', error);
-              } finally {
-                  setLoading(false);
-              }
-          };
-          fetchSongs();
-      }
+          if (response.status === 200) {
+            setSongs(response.data); // Lưu danh sách bài hát vào state
+          } else {
+            setSongs([]); // Nếu không có bài hát nào thì set state rỗng
+          }
+        } catch (error) {
+          setSongs([]);
+          console.error('Error fetching songs:', error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchSongs();
+    }
   }, [activeTab]);
 
   useEffect(() => {
-      const isSetting = localStorage.getItem('isSetting');
-      if (isSetting === 'false') {
-          localStorage.removeItem('isSetting'); // Remove it to prevent repeated reloads
-          if (!sessionStorage.getItem('reloaded')) {
-              sessionStorage.setItem('reloaded', true); // Flag that reload has occurred
-              window.location.reload(); // Reload the page
-          }
+    const isSetting = localStorage.getItem('isSetting');
+    if (isSetting === 'false') {
+      localStorage.removeItem('isSetting'); // Remove it to prevent repeated reloads
+      if (!sessionStorage.getItem('reloaded')) {
+        sessionStorage.setItem('reloaded', true); // Flag that reload has occurred
+        window.location.reload(); // Reload the page
       }
-      fetchData();
+    }
+    fetchData();
   }, []);
 
   // Hàm render danh sách quốc gia
   const renderCountries = () => {
-      return countries.map(country => (
-          <p
-              key={country.id}
-              className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
-                  activeTab === country.id
-                      ? 'bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
-                      : 'bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
-              }`}
-              onClick={() => setActiveTab(country.id)} // Đổi quốc gia khi nhấn vào tab
-          >
-              {country.name_country}
-          </p>
-      ));
+    return countries.map(country => (
+      <p
+        key={country.id}
+        className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${activeTab === country.id
+            ? 'bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
+            : 'bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
+          }`}
+        onClick={() => setActiveTab(country.id)} // Đổi quốc gia khi nhấn vào tab
+      >
+        {country.name_country}
+      </p>
+    ));
   };
 
   // Hàm render danh sách bài hát
@@ -164,7 +163,7 @@ function Dashboard() {
     const limitedSongs = songs.slice(0, 9);
     return limitedSongs.map((song, index) => (
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
-        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onDoubleClick={() => {handleAddSong("song",song.id)}} >
+        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onDoubleClick={() => { handleAddSong("song", song.id) }} >
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
           <img
             className="size-16 rounded-md"
@@ -186,7 +185,7 @@ function Dashboard() {
       <div className="flex items-center justify-center h-screen">
         <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
       </div>
-    ); 
+    );
   }
   return (
     <>
@@ -198,7 +197,7 @@ function Dashboard() {
               Các bản hit cuối tuần này là gì?
             </h1>
             <div className="flex items-center justify-start my-10  ">
-              <div className="text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer" onClick={() => {handleFetchSongs("rank")}}>
+              <div className="text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer" onClick={() => { handleFetchSongs("new") }}>
                 Phát Tất Cả
               </div>
             </div>
@@ -223,7 +222,7 @@ function Dashboard() {
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => {handleFetchSongs("trending")}}>
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => { handleFetchSongs("trending") }}>
                         <Play size={18} />
                       </div>
                     </div>
@@ -250,7 +249,7 @@ function Dashboard() {
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => {handleFetchSongs("toplisten")}}>
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => { handleFetchSongs("toplisten") }}>
                         <Play size={18} />
                       </div>
                     </div>
@@ -277,7 +276,7 @@ function Dashboard() {
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer " onClick={() => {handleFetchSongs("yeuthich")}}>
+                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer " onClick={() => { handleFetchSongs("yeuthich") }}>
                         <Play size={18} />
                       </div>
                     </div>
@@ -295,7 +294,7 @@ function Dashboard() {
             {renderCountries()}
           </div>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={"/BXH"}><p className="text-sm cursor-pointer">Xem Thêm </p></Link> 
+            <Link to={"/BXH"}><p className="text-sm cursor-pointer">Xem Thêm </p></Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -326,7 +325,7 @@ function Dashboard() {
           >
             {songHistory.map((song, index) => (
               <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div className="text-center flex flex-col  items-center" onDoubleClick={()=> handleAddSong("song", song.id)}>
+                <div className="text-center flex flex-col  items-center" onDoubleClick={() => handleAddSong("song", song.id)}>
                   <img
                     src={song.song_image} // URL hình ảnh của bài hát
                     className="rounded-full mb-7  size-52 "
@@ -377,12 +376,12 @@ function Dashboard() {
           {artists.map((artist) => (
             <SwiperSlide key={artist.id} style={{ width: "auto" }}>
               <div className="text-center">
-                <Link to = {`/ProfileArtist/${artist.id}`}>
-                <img
-                  src={artist.singer_image} // URL hình ảnh của nghệ sĩ
-                  alt={artist.singer_name}
-                  className="rounded-full mb-3  size-64"
-                />
+                <Link to={`/ProfileArtist/${artist.id}`}>
+                  <img
+                    src={artist.singer_image} // URL hình ảnh của nghệ sĩ
+                    alt={artist.singer_name}
+                    className="rounded-full mb-3  size-64"
+                  />
                 </Link>
                 <p className="font-medium mb-2 text-base">
                   {artist.singer_name}
@@ -415,18 +414,26 @@ function Dashboard() {
           </div>
         </div>
         <div className="flex items-center ">
-          {["Wean", "Tăng Duy Tân", "Wean", "Wean"].map((item, index) => (
-            <div className="w-1/6 mr-36 flex flex-col" key={index}>
-              <div className="w-full relative flex    ">
-                <img src="../imgs/image 8.png" className="  z-10" />
-                <img
-                  src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png"
-                  className="absolute translate-x-1/2 w-full h-full"
-                />
+          <Swiper
+            spaceBetween={20}
+            slidesPerView="auto" // Số item hiện trong 1 lần
+            className="mySwiper "
+          >
+            {["Wean", "Tăng Duy Tân", "Wean", "Wean"].map((item, index) => (
+              <SwiperSlide key={index} style={{ width: "auto" }}>
+              <div className="mr-36 flex flex-col" >
+                <div className="w-full relative flex    ">
+                  <img src="../imgs/image 8.png" className="  z-10" />
+                  <img
+                    src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png"
+                    className="absolute translate-x-1/2 w-full h-full"
+                  />
+                </div>
+                <p className="text-lg font-medium ml-24 mt-5 mt-3">{item}</p>
               </div>
-              <p className="text-lg font-medium ml-24 mt-5 mt-3">{item}</p>
-            </div>
-          ))}
+              </SwiperSlide>
+            ))}
+          </Swiper>
         </div>
       </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto pb-48 tracking-wide">
@@ -452,9 +459,9 @@ function Dashboard() {
         </div>
         <div className="flex items-center  flex-wrap ">
           {genres.map((genre) => (
-            <div key={genre.id} className="w-1/6 pr-3 pb-3" onDoubleClick={()=>handleFetchSongs("theloai",genre.id)}>
+            <div key={genre.id} className="pr-3 pb-3" onDoubleClick={() => handleFetchSongs("theloai", genre.id)}>
               <div
-                className="w-full h-64 rounded-xl flex items-center justify-center bg-cover bg-center"
+                className="w-64 h-64 rounded-xl flex items-center justify-center bg-cover bg-center"
                 style={{
                   backgroundImage: `url(${genre.background})`,
                 }}

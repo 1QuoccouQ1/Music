@@ -242,10 +242,10 @@ function ProfileArtist() {
     return (<>
         <div className='bg-medium w-full h-auto pb-40'>
             <section className='w-full   pt-7  text-white px-5'>
-                <div className="relative w-full h-[600px] z-10">
-                    <img src={artist.singer_background} className='rounded-t-xl h-full w-full' />
-                    <div className="flex flex-wrap items-center justify-center absolute bottom-7 px-3 lg:left-16 gap-8">
-                        <img className='size-60 rounded-full border-8 border-[#0B1928] lg:translate-y-1/4' src={artist.singer_image} />
+                <div className="relative w-full lg:h-[600px] md:h-[330px] h-[500px] z-10">
+                    <img src={artist.singer_background} className='rounded-t-xl  xl:h-full w-full' />
+                    <div className="flex flex-wrap items-center md:mt-0 justify-center absolute bottom-0 lg:bottom-7 px-3 xl:left-16 gap-8">
+                        <img className='lg:size-60 size-48 rounded-full border-8 border-[#0B1928] lg:translate-y-1/4' src={artist.singer_image} />
                         <div className=''>
                             <p>Nghệ Sĩ Của Công Chúng</p>
                             <div className="flex items-center my-5">
