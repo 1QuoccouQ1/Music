@@ -7,11 +7,16 @@ import SettingSidebar from './component/SettingSidebar';
 import { UserProvider } from './ContextAPI/UserContext';
 import ModalListen from './component/ModalListen';
 import { ToastContainer } from 'react-toastify';
+import AuthChecker from './component/checkAuth';
+
 
 function App() {
 
+  
+  
   return (
     <>
+      <AuthChecker/>
       <UserProvider>
         <div className="flex h-auto bg-[#f4f7fe] w-full">
           <Sidebar></Sidebar>
