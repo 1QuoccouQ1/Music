@@ -27,37 +27,33 @@ function Genre() {
     }, []);
 
     useEffect(() => {
-        const fetchCategoriesAndSongs = async () => {
-            try {
-                const response = await fetch(`${API_URL}/the-loai`);
-                if (!response.ok)
-                    throw new Error('Không thể tải danh sách thể loại');
-                const categoryData = await response.json();
-                setCategories(categoryData);
-
-                // Lấy bài hát theo từng thể loại
-                const songsData = {};
-                for (const category of categoryData) {
-                    const songResponse = await fetch(
-                        `${API_URL}/the-loai/${category.id}/bai-hat`
-                    );
-                    if (songResponse.ok) {
-                        songsData[category.id] = await songResponse.json();
-                    } else {
-                        songsData[category.id] = [];
-                    }
-                }
-                setSongs(songsData);
-            } catch (error) {
-                console.error('Lỗi khi tải thể loại hoặc bài hát:', error);
-            }
-        };
-
-        fetchCategoriesAndSongs();
+        // Gọi API để lấy danh sách thể loại
+        fetch(`${API_URL}/the-loai`)
+        .then(response => response.json())
+        .then(data => {
+            setCategories(data);
+            // Gọi API để lấy bài hát của từng thể loại
+            data.forEach(category => {
+            fetch(`${API_URL}/the-loai/${category.id}/bai-hat`)
+                .then(response => response.json())
+                .then(songData => {
+                setSongs(prevSongs => ({
+                    ...prevSongs,
+                    [category.id]: songData
+                }));
+                setLoading(false);
+                });
+            });
+        })
+        .catch(error => console.error('Error fetching categories:', error));
     }, []);
 
     if (loading) {
-        return <div className='text-white'>Loading...</div>;
+      return (
+        <div className="flex items-center justify-center h-screen">
+          <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+        </div>
+      ); 
     }
 
     return (

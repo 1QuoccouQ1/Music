@@ -1,4 +1,4 @@
-import  { createContext, useState, useEffect ,useRef } from "react";
+import { createContext, useState, useEffect, useRef } from "react";
 import { API_URL } from "../services/apiService";
 
 export const UserContext = createContext();
@@ -6,7 +6,7 @@ export const UserContext = createContext();
 export const UserProvider = ({ children }) => {
   const [isSetting, setIsSetting] = useState(() => {
     const savedIsSetting = localStorage.getItem("isSetting");
-    return savedIsSetting ? JSON.parse(savedIsSetting) : false; 
+    return savedIsSetting ? JSON.parse(savedIsSetting) : false;
   });
   const [isPlay, setIsPlay] = useState(false);
   const [volume, setVolume] = useState(() => {
@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
   });
   const [currentTime, setCurrentTime] = useState(() => {
     const savedTime = localStorage.getItem("currentTime");
-    return savedTime ? JSON.parse(savedTime) : 10; 
+    return savedTime ? JSON.parse(savedTime) : 10;
   });
   const [isModal, setIsModal] = useState(false);
   const [user, setUser] = useState(() => {
@@ -34,23 +34,56 @@ export const UserProvider = ({ children }) => {
     return savedIsPlay ? JSON.parse(savedIsPlay) : false; // Mặc định là false
   });
   const [playSong, setPlaySong] = useState(null);
-  
-  const handleFetchSongs = async (type) => {
+  const [isAccountType, setIsAccountType] = useState(() => {
+    const savedAccountType = localStorage.getItem("isAccountType");
+    return savedAccountType ? (savedAccountType) : "basic";
+  });
+  const [isUpdate, setIsUpdate] = useState(false);
+  const [isSidebar, setIsSidebar] = useState(false);
+
+  const handleFetchSongs = async (type, id) => {
     try {
       let fetchedSongs;
-      // Xử lý gọi API dựa trên type
       switch (type) {
         case "rank":
-          fetchedSongs = await fetch(`${API_URL}/rand-10`); 
+          fetchedSongs = await fetch(`${API_URL}/rand-10`);
+          break;
+        case "new":
+          fetchedSongs = await fetch(`${API_URL}/new-song`);
           break;
         case "trending":
-          fetchedSongs = await fetch(`${API_URL}/trending`); 
+          fetchedSongs = await fetch(`${API_URL}/trending`);
+          setIsUpdate(true)
           break;
         case "toplisten":
-          fetchedSongs = await fetch(`${API_URL}/top-listen`); 
+          fetchedSongs = await fetch(`${API_URL}/top-listen`);
+          setIsUpdate(true)
           break;
         case "yeuthich":
-          fetchedSongs = await fetch(`${API_URL}/top-like`); 
+          fetchedSongs = await fetch(`${API_URL}/top-like`);
+          setIsUpdate(true)
+          break;
+        case "theloai":
+          fetchedSongs = await fetch(`${API_URL}/the-loai/${id}/bai-hat`);
+          setIsUpdate(true)
+          break;
+        case "casi":
+          fetchedSongs = await fetch(`${API_URL}/ca-si/${id}/bai-hat`);
+          setIsUpdate(true)
+          break;
+        case "favorite":
+          fetchedSongs = await fetch(`${API_URL}/${id}/bai-hat-yeu-thich`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            }
+          });
+          setIsUpdate(true)
+          break;
+        case "bxh":
+          fetchedSongs = await fetch(`${API_URL}/bxh-100`);
+          setIsUpdate(true)
           break;
         default:
           console.error("Unknown type");
@@ -58,8 +91,27 @@ export const UserProvider = ({ children }) => {
       }
       const dataList = await fetchedSongs.json();
       setListSongs(dataList);
-      setPlaySong(dataList[0]); 
-      setCurrentSongIndex(0); 
+      setPlaySong(dataList[0]);
+      setCurrentSongIndex(0);
+    } catch (error) {
+      console.error("Error fetching songs:", error);
+    }
+  };
+  const handleListSongs = (type) => {
+    try {
+      let fetchedSongs;
+      switch (type) {
+        case "history":
+          fetchedSongs = JSON.parse(localStorage.getItem("songHistory"));
+          setIsUpdate(true)
+          break;
+        default:
+          console.error("Unknown type");
+          return;
+      }
+      setListSongs(fetchedSongs);
+      setPlaySong(fetchedSongs[0]);
+      setCurrentSongIndex(0);
     } catch (error) {
       console.error("Error fetching songs:", error);
     }
@@ -70,7 +122,8 @@ export const UserProvider = ({ children }) => {
       // Xử lý gọi API dựa trên type
       switch (type) {
         case "song":
-          fetchedSong = await fetch(`${API_URL}/${id}/play`); 
+          fetchedSong = await fetch(`${API_URL}/${id}/play`);
+          setIsUpdate(true)
           break;
         default:
           console.error("Unknown type");
@@ -78,7 +131,7 @@ export const UserProvider = ({ children }) => {
       }
       const dataSong = await fetchedSong.json();
       setListSongs(dataSong.rand);
-      setPlaySong(dataSong.song); 
+      setPlaySong(dataSong.song);
     } catch (error) {
       console.error("Error fetching songs:", error);
     }
@@ -129,7 +182,11 @@ export const UserProvider = ({ children }) => {
         isPlaying, setIsPlaying,
         handleFetchSongs,
         handleAddSong,
-        playSong, setPlaySong
+        handleListSongs,
+        playSong, setPlaySong,
+        isAccountType, setIsAccountType,
+        isUpdate,setIsUpdate,
+        isSidebar, setIsSidebar
       }}
     >
       {children}

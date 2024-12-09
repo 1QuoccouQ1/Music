@@ -1,13 +1,14 @@
-import { Headphones, UserRoundPlus, Play, Check, Heart, CirclePlus, Ellipsis, Dot, UserRound, X, Filter } from 'lucide-react';
-import { useState, useEffect } from 'react';
+import { Headphones, UserRoundPlus, Play, Check, Heart, CirclePlus, Ellipsis, UserRound, X, Filter } from 'lucide-react';
+import { useState, useEffect, useContext } from 'react';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import { Facebook, Instagram, Twitter, Music } from "lucide-react"
-
 import { Link, useParams } from 'react-router-dom';
 import { API_URL, getArtist } from '../../services/apiService';
-import { ToastContainer, toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import ProfileArtistSong from './ProfileArtistSong';
+import { UserContext } from '../../ContextAPI/UserContext';
+
 
 function ProfileArtist() {
     const [isFollowing, setIsFollowing] = useState(false);
@@ -15,14 +16,12 @@ function ProfileArtist() {
     const [isSelect, setIsSelect] = useState("1");
     const { id } = useParams();
     const [artist, setArtist] = useState(null);
-
-
     const [artists, setArtists] = useState([]);
+    const [artistFavorite, setartistFavorite] = useState([]);
     const [artistSong, setArtistSong] = useState([]);
-
-
     const [loading, setLoading] = useState(true); // Theo dõi trạng thái loading
-
+    const { handleFetchSongs } = useContext(UserContext);
+    
     const user = JSON.parse(localStorage.getItem('user'));
     // console.log(user_id.id);
     useEffect(() => {
@@ -55,13 +54,6 @@ function ProfileArtist() {
                 setLoading(false); // Đặt loading = false
             }
         };
-        getArtist()
-            .then((data) => {
-                setArtists(data);
-            })
-            .catch((error) => {
-                console.error('Error fetching artist data:', error);
-            });
 
 
         const folow = async () => {
@@ -82,7 +74,7 @@ function ProfileArtist() {
 
                 }
             } catch (err) {
-                setError(err.message); // Cập nhật state lỗi
+                console.log(err.message); // Cập nhật state lỗi
             } finally {
                 setLoading(false); // Tắt loading
             }
@@ -95,7 +87,7 @@ function ProfileArtist() {
         fetchArtistData();
     }, [id]);
 
-
+    // theo thích ca sĩ
     const handleFollowing = () => {
         if (!user) {
             toast.error('Vui lòng đăng nhập để theo dõi ca sĩ.');
@@ -128,8 +120,88 @@ function ProfileArtist() {
 
         }
     }
+    // lấy danh sách ca sĩ
+    useEffect(() => {
+        getArtist()
+            .then((data) => {
+                setArtists(data);
+            })
+            .catch((error) => {
+                console.error('Error fetching artist data:', error);
+            });
+    }, []);
+    // lấy ca sĩ yêu thích theo user
+    useEffect(() => {
+        const FavouriteSinger = async () => {
+            try {
+                const response = await fetch(API_URL + `/${user.id}/ca-si-yeu-thich`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                    }
+                });
+                const data = await response.json();
+                // console.log(response);
+                if (response.status === 200) {
+                    const singerId = data.data.map(singer => singer.id);
+                    // console.log(data);
+                    setartistFavorite(singerId);
+                } else {
+                    console.log('Lỗi khi lấy danh sách ca sĩ yêu thích');
+                }
 
+            } catch (err) {
+                console.log(err);
 
+            }
+        };
+        if (user) {
+            FavouriteSinger();
+        }
+    }, []);
+    // thêm ca sĩ yêu thích ở dưới danh sách
+    const handleFollowinglistsinger = (singer_id, check) => {
+        if (!user) {
+            toast.error('Vui lòng đăng nhập để theo dõi ca sĩ.');
+            return;
+        } else {
+            // Gửi request API khi người dùng nhấn "Theo giỏi"
+            fetch(API_URL + '/ca-si/add-to-favourite', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                },
+                body: JSON.stringify({
+                    liked: !check,
+                    singer_id: singer_id,
+                    user_id: user.id
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Xử lý dữ liệu trả về từ API (nếu cần)
+                    // console.log('Đã đánh dấu yêu thích:', data.message);
+                    if (check) {
+                        setartistFavorite((set) => {
+                            return set.filter((id) => id !== singer_id);
+                        })
+                    } else {
+                        setartistFavorite((set) => {
+                            return [...set, singer_id];
+                        })
+                    }
+                    toast.success(data.message);
+
+                })
+                .catch(error => {
+                    // console.error('Lỗi khi gửi yêu cầu:', error);
+                    toast.success('Lỗi khi gửi yêu cầu:', error);
+                });
+
+        }
+    }
 
     const handleModal = () => {
         setIsModal(!isModal);
@@ -153,18 +225,6 @@ function ProfileArtist() {
     }, [isModal]);
 
 
-    // Hàm định dạng thời gian
-    const formatTime = (seconds) => {
-        const minutes = Math.floor(seconds / 60); // Lấy phần nguyên của phút
-        const remainingSeconds = Math.floor(seconds % 60); // Lấy phần nguyên của giây
-
-        // Đảm bảo có số 0 trước nếu phút hoặc giây < 10
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        const formattedSeconds = remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-
-        return `${formattedMinutes}:${formattedSeconds}`;
-    };
-
     const limitCharacters = (str, charCount) => {
         if (str.length > charCount) {
             return str.slice(0, charCount) + '...'; // Cắt chuỗi và thêm dấu "..."
@@ -182,10 +242,10 @@ function ProfileArtist() {
     return (<>
         <div className='bg-medium w-full h-auto pb-40'>
             <section className='w-full   pt-7  text-white px-5'>
-                <div className="relative w-full h-[600px] z-10">
-                    <img src={artist.singer_background} className='rounded-t-xl h-full w-full' />
-                    <div className="flex flex-wrap items-center justify-center absolute bottom-7 px-3 md:left-16 gap-8">
-                        <img className='size-60 rounded-full border-1 border-black lg:translate-y-1/4' src={artist.singer_image} />
+                <div className="relative w-full lg:h-[600px] md:h-[330px] h-[500px] z-10">
+                    <img src={artist.singer_background} className='rounded-t-xl  xl:h-full w-full' />
+                    <div className="flex flex-wrap items-center md:mt-0 justify-center absolute bottom-0 lg:bottom-7 px-3 xl:left-16 gap-8">
+                        <img className='lg:size-60 size-48 rounded-full border-8 border-[#0B1928] lg:translate-y-1/4' src={artist.singer_image} />
                         <div className=''>
                             <p>Nghệ Sĩ Của Công Chúng</p>
                             <div className="flex items-center my-5">
@@ -196,10 +256,14 @@ function ProfileArtist() {
                                 <p className='flex items-center  text-sm font-semibold gap-2'><Headphones size={18} className='text-red-600 ' /> 1.584.659 người nghe hằng tháng</p>
                                 <p className='flex  items-center  text-sm font-semibold gap-2 '><UserRoundPlus size={18} className='text-red-600 ' /> 5.940.438 người  theo dõi</p>
                             </div>
-                            <div className='flex items-center justify-between gap-5 mt-5'>
-                                <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1'>  <Play /> Phát tất cả</button>
+                            <div className='flex items-center justify-between md:justify-start  gap-5 mt-5'>
+                                <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1' onClick={()=> handleFetchSongs("casi",artist.id )}>  <Play /> Phát tất cả</button>
 
-                                {isFollowing ? <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button> : <button onClick={handleFollowing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>}
+                                {isFollowing ?
+                                    <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button>
+                                    :
+                                    <button onClick={handleFollowing} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-4 py-2 rounded-full font-medium gap-1'> Theo dõi</button>
+                                }
 
 
                             </div>
@@ -269,9 +333,6 @@ function ProfileArtist() {
                             <SwiperSlide style={{ width: 'auto' }} >
                                 <div className="text-center flex flex-col  items-start ">
                                     Không có bài hát nào.
-                                    {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                    <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                                    <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p> */}
                                 </div>
                             </SwiperSlide>
                         )}
@@ -296,17 +357,17 @@ function ProfileArtist() {
                             className="mySwiper "
 
                         >
-                            {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean','Wean','Wean','Wean'].map((item, index) => (
+                            {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean', 'Wean', 'Wean', 'Wean'].map((item, index) => (
                                 <SwiperSlide key={(index)} style={{ width: 'auto' }} >
                                     <div className="w-1/6 flex flex-col w-full" key={index}>
                                         <div className="w-full relative flex w-full">
                                             <img src="../imgs/image 8.png" className="  z-10" style={{
-                                            width: '180px',
-                                            height: '180px',
-                                            borderRadius: '15px',
+                                                width: '180px',
+                                                height: '180px',
+                                                borderRadius: '15px',
 
-                                        }}  />
-                                            
+                                            }} />
+
                                         </div>
                                         <p className="text-base font-medium ml-2 mt-1 mt-3 w-56 truncate">Sky Tour (Original Motion .....</p>
                                         <p className="text-sm font-medium ml-2 text-slate-500">2022</p>
@@ -348,9 +409,6 @@ function ProfileArtist() {
                             <SwiperSlide style={{ width: 'auto' }} >
                                 <div className="text-center flex flex-col  items-start ">
                                     Không có bài hát nào.
-                                    {/* <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                                    <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                                    <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p> */}
                                 </div>
                             </SwiperSlide>
                         )}
@@ -362,29 +420,31 @@ function ProfileArtist() {
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Fan có thể thích</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
-                            <p className="text-sm text-red-600 ">Xem Thêm </p>
+                            <Link to={`/Artist`} className="text-sm text-red-600 ">Xem Thêm </Link>
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
                                 <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                             </svg>
                         </div>
                     </div>
-
                     <Swiper
                         spaceBetween={20}
                         slidesPerView="auto" // Số item hiện trong 1 lần
                         className="mySwiper "
-
                     >
                         {artists && artists.length > 0 ? (
                             artists.map((artist, index) => (
-                                <SwiperSlide key={artist.id} style={{ width: 'auto' }} >
+                                <SwiperSlide key={index} style={{ width: 'auto' }} >
                                     <div className="text-center">
                                         <Link to={`/ProfileArtist/${artist.id}`}>
-                                            <img src={artist.singer_image} className="rounded-full mb-3 w-52 h-52" />
+                                            <img src={artist.singer_image} className="rounded-full mb-3 w-32 h-32 md:w-52 md:h-52" />
                                             <p className="font-medium mb-2 text-base">{artist.singer_name}</p>
                                         </Link>
                                         <p className="text-sm text-slate-700">Nghệ Sĩ</p>
-                                        <button className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
+                                        {artistFavorite.includes(artist.id) ?
+                                            <button onClick={() => handleFollowinglistsinger(artist.id, true)} className='flex items-center border-2 box-border border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm'>  <Check size={20} /> Đang theo dõi</button>
+                                            :
+                                            <button onClick={() => handleFollowinglistsinger(artist.id, false)} className='flex items-center border-2 box-border bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm '> <UserRoundPlus size={15} className='text-white ' /> Theo dõi</button>
+                                        }
                                     </div>
                                 </SwiperSlide>
                             ))) : (
@@ -434,7 +494,7 @@ function ProfileArtist() {
 
 
                         {artistSong && artistSong.length > 0 ? (
-                            artistSong.map((song, index) => (
+                            artistSong.map((song, index ) => (
                                 <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
                                     <div className="text-center flex flex-col  items-start ">
                                         <img src={song.song_image} className=" mb-3 rounded-xl w-44 h-44" />
@@ -457,56 +517,21 @@ function ProfileArtist() {
 
                 </section></>}
             {isSelect === "3" && <> <section className="bg-medium w-full h-auto pb-32  pt-5  text-white px-5 ">
-                <div className="flex  w-full flex-wrap">
-                    <div className="w-1/6 px-2 mb-7  cursor-pointer">
+                <div className="">
+                    {artistSong && artistSong.length > 0 ? (
+                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user.id : null} length={'20'} />) : (
+                        <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
+                            <p>Không có bài hát</p>
+                        </div>
+                    )}
+                    {/* <div className="w-1/6 px-2 mb-7  cursor-pointer">
                         <div className="text-center flex flex-col  items-start ">
                             <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
                             <p className=''>Đừng Làm Trái Tim Anh đau</p>
                             <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
                         </div>
                     </div>
-                    <div className="w-1/6 px-2 mb-7  cursor-pointer">
-                        <div className="text-center flex flex-col  items-start ">
-                            <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                            <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                            <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
-                        </div>
-                    </div>
-                    <div className="w-1/6 px-2 mb-7  cursor-pointer">
-                        <div className="text-center flex flex-col  items-start ">
-                            <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                            <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                            <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
-                        </div>
-                    </div>
-                    <div className="w-1/6 px-2 mb-7  cursor-pointer">
-                        <div className="text-center flex flex-col  items-start ">
-                            <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                            <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                            <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
-                        </div>
-                    </div>
-                    <div className="w-1/6 px-2 mb-7  cursor-pointer">
-                        <div className="text-center flex flex-col  items-start ">
-                            <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                            <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                            <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
-                        </div>
-                    </div>
-                    <div className="w-1/6 px-2 mb-7  cursor-pointer">
-                        <div className="text-center flex flex-col  items-start ">
-                            <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                            <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                            <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
-                        </div>
-                    </div>
-                    <div className="w-1/6 px-2 mb-7  cursor-pointer">
-                        <div className="text-center flex flex-col  items-start ">
-                            <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                            <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                            <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
-                        </div>
-                    </div>
+                   */}
                 </div>
             </section></>}
             {isSelect === "4" && <>
@@ -684,3 +709,4 @@ function ProfileArtist() {
 }
 
 export default ProfileArtist;
+

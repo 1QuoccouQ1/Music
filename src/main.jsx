@@ -46,6 +46,8 @@ import PayError from "./page/Payment/PayError.jsx";
 import Payment from "./page/Payment/Payment.jsx";
 import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
+import { redirect } from "react-router-dom";
+import SongDetail from "./page/Song/SongDetail.jsx";
 
 
 
@@ -61,7 +63,30 @@ function changeDashboard() {
 }
 function changeLogo() {
   localStorage.setItem("isSetting", false);
-  return null
+  return null;
+}
+
+export async function checkAuth() {
+  const token = localStorage.getItem("access_token");
+  const User = localStorage.getItem("user");
+
+  if (token && User) {
+    const decodedToken = decodeJwt(token);
+    if (isTokenExpired(decodedToken)) {
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("user");
+    }
+  }
+  
+}
+function decodeJwt(token) {
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Đảm bảo chuỗi base64 hợp lệ
+  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+
+  return JSON.parse(jsonPayload);
 }
 
 
@@ -218,6 +243,10 @@ const router = createBrowserRouter([
         loader: changeDashboard,
         element: <SongGlobal />,
       }
+        path: "/SongDetail/:id",
+        loader: changeDashboard,
+        element: <SongDetail />,
+      },
     ],
   },
   {

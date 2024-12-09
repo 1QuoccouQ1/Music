@@ -14,6 +14,8 @@ import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
 import React from "react";
+import { toast } from "react-toastify";
+import { Helmet } from "react-helmet";
 
 const Footer = React.memo(function FooterComponent() {
   const {
@@ -36,6 +38,9 @@ const Footer = React.memo(function FooterComponent() {
     handleFetchSongs,
     playSong,
     setPlaySong,
+    isAccountType,
+    isUpdate,
+    setIsUpdate,
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,6 +92,7 @@ const Footer = React.memo(function FooterComponent() {
   const [favoriteSongs, setFavoriteSongs] = useState([]);
   const circumference = 2 * Math.PI * 17.5;
   const offset = circumference - Number(volume) * circumference;
+  const [visibleCount, setVisibleCount] = useState(10);
 
   const fetchAd = async () => {
     try {
@@ -113,18 +119,20 @@ const Footer = React.memo(function FooterComponent() {
   const fetchFavoriteSongs = async () => {
     try {
       const userId = JSON.parse(localStorage.getItem("user")).id;
-      const response = await fetch(`${API_URL}/${userId}/bai-hat-yeu-thich`, {
-        headers: {
-          'Content-Type': 'application/json',
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+      if (userId) {
+        const response = await fetch(`${API_URL}/${userId}/bai-hat-yeu-thich`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const favoriteSongs = data.map(song => song.id);
+          setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
+        } else {
+          console.error("Không thể lấy danh sách yêu thích:", response.status);
         }
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const favoriteSongs = data;
-        setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
-      } else {
-        console.error("Không thể lấy danh sách yêu thích:", response.status);
       }
     } catch (error) {
       console.error("Không thể lấy danh sách yêu thích:", error);
@@ -180,6 +188,23 @@ const Footer = React.memo(function FooterComponent() {
 
   const handlePreviousSong = () => {
     if (isPlayingAd) return;
+    let prevIndex =
+      (currentSongIndex - 1 + listsongs.length) % listsongs.length;
+    const prevSong = listsongs[prevIndex];
+
+    let newQuality = selectedQuality;
+    if (!prevSong.file_paths[selectedQuality]) {
+      if (selectedQuality === "premium" && prevSong.file_paths["plus"]) {
+        newQuality = "plus";
+      } else if (selectedQuality !== "basic") {
+        newQuality = "basic";
+      }
+    }
+
+    setSelectedQuality(newQuality);
+    setSelectedQualityLabel(
+      qualities.find((q) => q.value === newQuality)?.label
+    );
     setCurrentSongIndex(
       (prev) => (prev - 1 + listsongs.length) % listsongs.length
     );
@@ -198,8 +223,12 @@ const Footer = React.memo(function FooterComponent() {
         song_name: playSong.song_name,
         composer: playSong.composer,
         song_image: playSong.song_image,
-        id: playSong.id, // Thời lượng bài hát
+        id: playSong.id,
+        listen_count: playSong.listen_count,
+        time: playSong.time, // Thời lượng bài hát
+        file_paths: playSong.file_paths
       });
+      console.log(playSong);
       try {
         await fetch(`${API_URL}/luot-nghe/${playSong.id}`, {
           headers: {
@@ -220,8 +249,10 @@ const Footer = React.memo(function FooterComponent() {
             randomIndex = Math.floor(Math.random() * listsongs.length);
           } while (randomIndex === currentSongIndex);
           setCurrentSongIndex(randomIndex);
+          setPlaySong(listsongs[randomIndex]);
         } else {
           setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
+          setPlaySong(listsongs[(currentSongIndex + 1) % listsongs.length]);
         }
         setIsPlaying(true);
         setIsPlay(true);
@@ -259,44 +290,43 @@ const Footer = React.memo(function FooterComponent() {
     }
   };
 
-  const toggleFavorite = async (songId) => {
+  const toggleFavorite = async (songId, check) => {
     try {
-      if (favoriteSongs.includes(songId)) {
-        // Nếu bài hát đã yêu thích, xóa khỏi danh sách yêu thích
-        const response = await fetch(`${API_URL}/xoa-bai-hat-yeu-thich`, {
+      if (JSON.parse(localStorage.getItem("user"))) {
+        fetch(API_URL + "/bai-hat-yeu-thich", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
           body: JSON.stringify({
+            liked: !check,
             song_id: songId,
-            user_id: JSON.parse(localStorage.getItem("user")).id,
+            user_id: (JSON.parse(localStorage.getItem("user")).id),
           }),
-        });
-
-        if (response.ok) {
-          setFavoriteSongs((prev) => prev.filter((id) => id !== songId)); // Loại bỏ id khỏi danh sách
-        } else {
-          console.error("Lỗi khi xóa yêu thích:", response.status);
-        }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            // Xử lý dữ liệu trả về từ API (nếu cần)
+            // console.log('Đã đánh dấu yêu thích:', data.message);
+            if (check) {
+              setFavoriteSongs((set) => {
+                return set.filter((id) => id !== songId);
+              });
+            } else {
+              setFavoriteSongs((set) => {
+                return [...set, songId];
+              });
+            }
+            toast.success(data.message);
+          })
+          .catch((error) => {
+            console.error("Lỗi khi gửi yêu cầu:", error);
+          });
       } else {
-        // Nếu bài hát chưa được yêu thích, thêm vào danh sách yêu thích
-        const response = await fetch(`${API_URL}/bai-hat-yeu-thich`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            song_id: songId,
-            user_id: JSON.parse(localStorage.getItem("user")).id,
-          }),
-        });
-
-        if (response.ok) {
-          setFavoriteSongs((prev) => [...prev, songId]); // Thêm id vào danh sách
-        } else {
-          console.error("Lỗi khi thêm yêu thích:", response.status);
-        }
+        toast.error(
+          "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào yêu thích."
+        );
       }
     } catch (error) {
       console.error("Lỗi khi thêm yêu thích:", error);
@@ -361,12 +391,13 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   useEffect(() => {
+    setIsPlaying(false);
     // Hàm bất đồng bộ để gọi API và xử lý logic
     const fetchData = async () => {
       // Gọi API để lấy danh sách bài hát
       await handleFetchSongs("rank");
       setIsLoading(false);
-      fetchFavoriteSongs();
+      
 
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
       if (currentSong) {
@@ -378,6 +409,9 @@ const Footer = React.memo(function FooterComponent() {
 
     // Gọi hàm fetchData
     fetchData();
+    if (JSON.parse(localStorage.getItem("user"))) {
+      fetchFavoriteSongs();
+    }
 
     const handleClickOutside = (event) => {
       if (
@@ -394,7 +428,6 @@ const Footer = React.memo(function FooterComponent() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
-
   useEffect(() => {
     if (listsongs.length === 0) return;
     if (audioRef.current) {
@@ -418,6 +451,23 @@ const Footer = React.memo(function FooterComponent() {
     // console.log("song",song);
 
     setCurrentSong(playSong);
+    if (isUpdate) {
+      setIsPlaying(true);
+      setIsUpdate(false);
+      if (audioRef.current) {
+        audioRef.current.src =
+          playSong.file_paths && playSong.file_paths[selectedQuality];
+        audioRef.current.load();
+        if (optionSongIndex == currentSongIndex) {
+          audioRef.current.currentTime = currentTime;
+        }
+        if (!isPlaying) {
+          audioRef.current.play();
+        }
+      }
+      return;
+    }
+
     if (audioRef.current) {
       audioRef.current.src =
         playSong.file_paths && playSong.file_paths[selectedQuality];
@@ -426,6 +476,7 @@ const Footer = React.memo(function FooterComponent() {
       if (optionSongIndex == currentSongIndex) {
         audioRef.current.currentTime = currentTime;
       }
+
       if (isPlaying) {
         console.log("play");
         audioRef.current.play();
@@ -440,6 +491,12 @@ const Footer = React.memo(function FooterComponent() {
 
   return (
     <>
+    <Helmet>
+        <title>SoundWave | {playSong.song_name}</title>
+        <meta name="description" content={playSong.description} />
+        <meta name="keywords" content={`${playSong.song_name}, ${playSong.singer_name}, ${playSong.provider}, ${playSong.composer}`} />
+        <meta name="author" content={playSong.provider} />
+      </Helmet>
       <audio
         ref={audioRef}
         onLoadedMetadata={onLoadedMetadata}
@@ -447,12 +504,12 @@ const Footer = React.memo(function FooterComponent() {
         onEnded={handleSongEnd}
       />
       {!isModal ? (
-        <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50">
-          <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white  w-[350px] rounded-r-lg">
-            <div className="flex items-center ">
-              <div className="relative">
+        <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 h-[100px]">
+          <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white   md:w-[350px] rounded-r-lg h-full">
+            <div className="flex items-center h-full justify-between w-full" >
+              <div className="relative h-full xl:block hidden flex-none">
                 <img
-                  className="inline-block size-20 max-xl:size-14 "
+                  className="inline-block rounded lg:size-20 "
                   src={playSong ? playSong.song_image : null}
                 />
                 {isPlaying && (
@@ -464,24 +521,22 @@ const Footer = React.memo(function FooterComponent() {
                     }}
                     className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 size-5 "
                   >
-                    {" "}
                   </i>
                 )}
               </div>
-              <div className="mx-3">
-                <p className="text-base ">
+              <div className="mx-3 w-[60%] hidden md:block">
+                <p className="text-base truncate w-[100%]">
                   {playSong ? playSong.song_name : null}
                 </p>
                 <p className="text-sm text-slate-300">
                   {playSong ? playSong.composer : null}
                 </p>
               </div>
-            </div>
-            <div
+              <div
               onClick={() => {
                 setIsModal(!isModal);
               }}
-              className="size-6 max-xl:size-4 cursor-pointer border border-white  rounded-full flex items-center justify-center"
+              className="size-6 max-xl:size-4 cursor-pointer border border-white  rounded-full flex items-center justify-center "  
             >
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -498,13 +553,15 @@ const Footer = React.memo(function FooterComponent() {
                 />
               </svg>
             </div>
+            </div>
+            
           </div>
           <div className="flex items-center justify-center ">
-            <div className="relative p-4 rounded-lg w-full max-w-5xl">
+            <div className="relative lg:p-4 py-4 px-2 rounded-lg w-full max-w-5xl">
               <div className="flex items-center justify-between text-white">
                 <div className="flex items-center space-x-4 mr-2">
                   <button
-                    className="p-3 bg-gray-800 rounded-full "
+                    className="p-3 bg-gray-800 rounded-full lg:block hidden"
                     onClick={handlePreviousSong}
                     disabled={isPlayingAd}
                   >
@@ -534,15 +591,14 @@ const Footer = React.memo(function FooterComponent() {
                     )}
                   </button>
                   <button
-                    className="p-3 bg-gray-800 rounded-full"
+                    className="p-3 bg-gray-800 rounded-full lg:block hidden"
                     onClick={handleNextSong}
                     disabled={isPlayingAd}
                   >
                     <SkipForward size={24} />
                   </button>
                 </div>
-
-                <div className="flex-grow mx-4 w-[660px]">
+                <div className="flex-grow mx-4 xl:w-[660px] w-[260px]">
                   <div className="relative">
                     <input
                       type="range"
@@ -560,7 +616,6 @@ const Footer = React.memo(function FooterComponent() {
                     </div>
                   </div>
                 </div>
-
                 <div className="flex items-center space-x-3">
                   <button
                     className="p-3  rounded-full relative"
@@ -608,7 +663,7 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full ${
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
                       isShuffling ? "text-blue-500" : ""
                     }`}
                     onClick={toggleShuffle}
@@ -617,7 +672,7 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full ${
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
                       isLooping ? "text-green-500" : ""
                     }`}
                     onClick={toggleLoop}
@@ -626,7 +681,7 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full ${
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
                       isTimerActive ? "text-yellow-500" : ""
                     }`}
                     onClick={
@@ -693,7 +748,7 @@ const Footer = React.memo(function FooterComponent() {
               setIsAlbum(true);
             }}
             ref={Divlist}
-            className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  h-[40px] px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
+            className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  lg:h-[40px] px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
           >
             <div className="border border-white size-4 flex items-center justify-center rounded-full mr-2 rotate-90">
               {" "}
@@ -713,7 +768,7 @@ const Footer = React.memo(function FooterComponent() {
               </svg>
             </div>
 
-            <p>Bài Tiếp Theo</p>
+            <p className="truncate min-h-fit ">Play List</p>
             {isAlbum && (
               <div
                 ref={Playlist}
@@ -752,32 +807,38 @@ const Footer = React.memo(function FooterComponent() {
                     </p>
                   </div>
                   <div className="ml-auto flex items-center space-x-3">
-                    <Heart
-                      className={`size-5 cursor-pointer ${
-                        favoriteSongs.includes(playSong.id)
-                          ? "text-blue-500"
-                          : ""
-                      }`}
-                      onClick={() => toggleFavorite(playSong.id)}
-                    />
+                    {favoriteSongs.includes(playSong.id) ? (
+                      <Heart
+                        fill="white"
+                        className={`size-5 cursor-pointer `}
+                        onClick={() => toggleFavorite(playSong.id, true)}
+                      />
+                    ) : (
+                      <Heart
+                        className={`size-5 cursor-pointer`}
+                        onClick={() => toggleFavorite(playSong.id, false)}
+                      />
+                    )}
+
                     <MoreHorizontal className="w-4 h-4 cursor-pointer" />
                   </div>
                 </div>
                 <h3 className=" ml-2text-sm font-medium mb-2">Tiếp theo</h3>
-                <ul className="ml-2 space-y-2  h-[400px] overflow-y-auto no-scrollbar">
-                  {listsongs.map((song, index) => (
+                <ul className="ml-2 space-y-2  h-[368px] overflow-y-auto no-scrollbar">
+                  {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
                       className="flex items-center space-x-3"
                       onClick={() => {
                         setCurrentSongIndex(index);
                         setPlaySong(song);
+                        setIsPlaying(true);
                       }}
                     >
                       <img
                         src={song.song_image}
                         alt="Song thumbnail"
-                        className="w-10 h-10 rounded object-cover "
+                        className="w-10 h-10 rounded object-cover"
                       />
                       <div>
                         <h4 className="font-medium">{song.song_name}</h4>
@@ -788,14 +849,24 @@ const Footer = React.memo(function FooterComponent() {
                     </li>
                   ))}
                 </ul>
+                {visibleCount < listsongs.length && (
+                  <div className="flex justify-center mt-2">
+                    <button
+                      className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white px-4 py-1 rounded"
+                      onClick={() => setVisibleCount(listsongs.length)}
+                    >
+                      Xem thêm
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
         </div>
       ) : (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 py-3">
-          <div className="flex items-center justify-between  p-3 text-white  w-[350px] rounded-r-lg">
-            <div className="flex items-center space-x-4 ml-14">
+          <div className="flex items-center justify-between  p-3 text-white  max-w-[350px] w-fit  rounded-r-lg">
+            <div className="flex items-center space-x-4 xl:ml-14">
               <button
                 className="p-3 bg-gray-800 rounded-full "
                 onClick={handlePreviousSong}
@@ -834,9 +905,9 @@ const Footer = React.memo(function FooterComponent() {
             </div>
           </div>
           <div className="flex items-center justify-center ">
-            <div className="relative p-4 rounded-lg w-full max-w-5xl">
+            <div className="relative lg:p-4 rounded-lg w-full max-w-5xl">
               <div className="flex items-center justify-between text-white">
-                <div className="flex-grow mx-4 w-[660px]">
+                <div className="flex-grow mx-4 xl:w-[660px] lg:w-[360px] md:w-[260px] min-w-[140px] ">
                   <div className="relative">
                     <input
                       type="range"
@@ -954,7 +1025,7 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full ${
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
                   isShuffling ? "text-blue-500" : "text-white"
                 }`}
                 onClick={toggleShuffle}
@@ -963,7 +1034,7 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full ${
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
                   isLooping ? "text-green-500" : "text-white"
                 }`}
                 onClick={toggleLoop}
@@ -972,7 +1043,7 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full ${
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
                   isTimerActive ? "text-yellow-500" : "text-white"
                 }`}
                 onClick={isTimerActive ? handleCancelTimer : toggleTimerModal}

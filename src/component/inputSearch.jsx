@@ -57,7 +57,7 @@ function InputSearch({ onSearch, onFocus, onBlur }) {
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}
-        className="border-none mx-2 w-[270px] lg:w-[350px]  bg-transparent focus:outline-none text-white text-sm placeholder-gray-600"
+        className="border-none mx-2 w-full md:w-[270px] lg:w-[350px]  bg-transparent focus:outline-none text-white text-sm placeholder-gray-600"
         placeholder="Tìm kiếm....."
       />
       <div

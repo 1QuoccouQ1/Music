@@ -13,14 +13,16 @@ import HeadphonesIcon from '@mui/icons-material/Headphones';
 import GroupsIcon from '@mui/icons-material/Groups';
 import { API_URL } from '../services/apiService';
 
+import { LogOut } from 'lucide-react';
+
 function SettingSidebar() {
     const navigate = useNavigate();
-    const { isSetting } = useContext(UserContext);
-    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { isSetting ,isSidebar, setIsSidebar } = useContext(UserContext);
+    const sidebarSettingRef = useRef(null);
 
     const handleLogout = async () => {
         try {
-            await fetch('https://admin.soundwave.io.vn/api/logout', {
+            await fetch(`${API_URL}/logout`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -38,6 +40,20 @@ function SettingSidebar() {
         }
     };
 
+    // Đóng Sidebar khi click bên ngoài
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarSettingRef.current && !sidebarSettingRef.current.contains(event.target)) {
+        setIsSidebar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsSidebar]);
+
     if (!isSetting) return null;
 
     return (
@@ -47,6 +63,7 @@ function SettingSidebar() {
                 className={`fixed top-0 left-0 h-full bg-sidebar px-6 py-3 z-40 transition-transform duration-300 ${
                     isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
                 } lg:translate-x-0 lg:w-56`}
+
             >
                 <div className='space-y-4 h-auto'>
                     {/* Nút mở sidebar trên mobile */}
@@ -141,10 +158,13 @@ function SettingSidebar() {
                                         Về Chúng Tôi
                                     </span>
                                 </Link>
-                                <div
+                                <Link
+                                    className='flex items-center space-x-2 text-gray-400 hover:text-red-600 py-3 px-3 hover:shadow-lg rounded-lg duration-300 lg:hidden block'
                                     onClick={handleLogout}
-                                    className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90'
                                 >
+                                    <LogOut fontSize='small' />
+                                </Link>
+                                <div onClick={handleLogout} className='text-red-600 border-red-600 border rounded-full py-1 cursor-pointer text-center mt-6 hover:opacity-90 hidden lg:inline'>
                                     Đăng Xuất
                                 </div>
                             </div>
