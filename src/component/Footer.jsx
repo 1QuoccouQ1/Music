@@ -246,8 +246,12 @@ const Footer = React.memo(function FooterComponent() {
         song_name: playSong.song_name,
         composer: playSong.composer,
         song_image: playSong.song_image,
-        id: playSong.id, // Thời lượng bài hát
+        id: playSong.id,
+        listen_count: playSong.listen_count,
+        time: playSong.time, // Thời lượng bài hát
+        file_paths: playSong.file_paths
       });
+      console.log(playSong);
       try {
         await fetch(`${API_URL}/luot-nghe/${playSong.id}`, {
           headers: {
@@ -500,7 +504,7 @@ const Footer = React.memo(function FooterComponent() {
   return (
     <>
     <Helmet>
-        <title>Sound Wave | {playSong.song_name}</title>
+        <title>SoundWave | {playSong.song_name}</title>
         <meta name="description" content={playSong.description} />
         <meta name="keywords" content={`${playSong.song_name}, ${playSong.singer_name}, ${playSong.provider}, ${playSong.composer}`} />
         <meta name="author" content={playSong.provider} />

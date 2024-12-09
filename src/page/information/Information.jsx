@@ -1,14 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
-
+import { API_URL } from '../../services/apiService';
 
 
 function Information() {
     const [userName, setUserName] = useState('');
     const [userImage, setUserImage] = useState('');
+    const user = JSON.parse(localStorage.getItem('user'));
+    const [textFavorite, setTextFavorite] = useState('');
+
+    const settext = (text) => {
+        setTextFavorite(text);
+    };
 
     useEffect(() => {
-        const user = JSON.parse(localStorage.getItem('user'));
+        
         if (user) {
             setUserName(user.name);
             setUserImage(user.image);
@@ -32,7 +38,7 @@ function Information() {
                                 {userName}
                                 </h2>
                                 <p className='text-gray-400'>
-                                    123 bài hát yêu thích
+                                    {textFavorite ? textFavorite : '0'}
                                 </p>
                             </div>
                         </div>
@@ -185,7 +191,7 @@ function Information() {
                 </div>
 
                 {/* Outlet for Nested Routes */}
-                <Outlet />
+                <Outlet context={{ settext }}/>
             </div>
         </div>
     );
