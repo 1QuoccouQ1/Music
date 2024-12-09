@@ -127,18 +127,20 @@ const Footer = React.memo(function FooterComponent() {
   const fetchFavoriteSongs = async () => {
     try {
       const userId = JSON.parse(localStorage.getItem("user")).id;
-      const response = await fetch(`${API_URL}/${userId}/bai-hat-yeu-thich`, {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-        },
-      });
-      if (response.ok) {
-        const data = await response.json();
-        const favoriteSongs = data.map(song => song.id);
-        setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
-      } else {
-        console.error("Không thể lấy danh sách yêu thích:", response.status);
+      if (userId) {
+        const response = await fetch(`${API_URL}/${userId}/bai-hat-yeu-thich`, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          const favoriteSongs = data.map(song => song.id);
+          setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
+        } else {
+          console.error("Không thể lấy danh sách yêu thích:", response.status);
+        }
       }
     } catch (error) {
       console.error("Không thể lấy danh sách yêu thích:", error);
@@ -415,7 +417,7 @@ const Footer = React.memo(function FooterComponent() {
       // Gọi API để lấy danh sách bài hát
       await handleFetchSongs("rank");
       setIsLoading(false);
-      fetchFavoriteSongs();
+      
 
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
       if (currentSong) {
@@ -427,6 +429,9 @@ const Footer = React.memo(function FooterComponent() {
 
     // Gọi hàm fetchData
     fetchData();
+    if (JSON.parse(localStorage.getItem("user"))) {
+      fetchFavoriteSongs();
+    }
 
     const handleClickOutside = (event) => {
       if (
@@ -501,7 +506,7 @@ const Footer = React.memo(function FooterComponent() {
 
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>Sound Wave | {playSong.song_name}</title>
         <meta name="description" content={playSong.description} />
         <meta name="keywords" content={`${playSong.song_name}, ${playSong.singer_name}, ${playSong.provider}, ${playSong.composer}`} />

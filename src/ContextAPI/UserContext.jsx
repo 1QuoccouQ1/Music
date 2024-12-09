@@ -39,6 +39,7 @@ export const UserProvider = ({ children }) => {
     return savedAccountType ? (savedAccountType) : "basic"; 
   });
   const [isUpdate, setIsUpdate] = useState(false);
+  const [isSidebar, setIsSidebar] = useState(false);
 
   const handleFetchSongs = async (type , id) => {
     try {
@@ -147,7 +148,8 @@ export const UserProvider = ({ children }) => {
         handleAddSong,
         playSong, setPlaySong,
         isAccountType, setIsAccountType,
-        isUpdate,setIsUpdate
+        isUpdate,setIsUpdate,
+        isSidebar, setIsSidebar
       }}
     >
       {children}

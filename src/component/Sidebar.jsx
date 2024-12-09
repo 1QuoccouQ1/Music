@@ -1,6 +1,6 @@
 import QueueMusicIcon from '@mui/icons-material/QueueMusic';
 import PlaylistPlayIcon from '@mui/icons-material/PlaylistPlay';
-import { useContext } from "react";
+import { useContext, useEffect, useRef } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { Link, useLocation } from 'react-router-dom';
 
@@ -56,17 +56,33 @@ const menuItems = [
 ];
 
 function Sidebar() {
-  const { isSetting } = useContext(UserContext);
+  const { isSetting , isSidebar, setIsSidebar } = useContext(UserContext);
   const isLoggedIn = Boolean(localStorage.getItem('user')); // Kiểm tra đăng nhập
   const location = useLocation();
+  const sidebarRef = useRef(null);
+
+  // Đóng Sidebar khi click bên ngoài
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sidebarRef.current && !sidebarRef.current.contains(event.target)) {
+        setIsSidebar(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [setIsSidebar]);
 
   if (isSetting) return null;
 
   return (
-    <aside className="max-w-64 bg-sidebar px-6 py-3 fixed max-lg:hidden h-full w-full">
+    <aside ref={sidebarRef} className={`max-w-64 bg-sidebar lg:px-6 px-5 py-3 fixed top-0 left-0 h-full lg:w-56 z-20 ${isSidebar ? "translate-x-0" : "-translate-x-full"
+                    } transition-transform duration-300 lg:translate-x-0`}>
       <div className="space-y-4 h-auto">
         <Link to="/" className="flex justify-center">
-          <img src="../imgs/Music Brand and App Logo 1.png" alt="Logo" />
+          <img src="../imgs/Music Brand and App Logo 1.png" alt="Logo" className='size-5 lg:size-auto' />
         </Link>
         <nav className="space-y-1 h-auto tracking-wide">
           <div className="flex flex-col justify-between h-auto">
@@ -83,7 +99,7 @@ function Sidebar() {
                     to={item.to}
                   >
                     {item.icon}
-                    <span>{item.label}</span>
+                    <span className="hidden lg:inline">{item.label}</span>
                   </Link>
                 );
               })}
