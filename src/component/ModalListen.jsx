@@ -1,6 +1,5 @@
 import { ChevronDown, ChevronUp } from "lucide-react";
-import Footer from "./Footer";
-import { useContext, useState, useEffect, useRef } from "react";
+import { useContext, useState, useEffect } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
 import { Link } from 'react-router-dom';
@@ -17,18 +16,18 @@ function ModalListen() {
   useEffect(() => {
     if (isModal) {
       setTimeout(() => {
-        setIsVisible(true); // Hiện modal sau một khoảng thời gian nhỏ
+        setIsVisible(true);
       }, 50);
     } else {
-      setIsVisible(false); // Ẩn modal ngay khi isModal = false
+      setIsVisible(false);
     }
   }, [isModal]);
-  
+
   // Hàm gọi API
   useEffect(() => {
     const fetchSingers = async () => {
       try {
-        const response = await fetch(`${API_URL}/ca-si`); // Thay URL_API_CUA_BAN bằng URL thật
+        const response = await fetch(`${API_URL}/ca-si`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -46,7 +45,7 @@ function ModalListen() {
 
   return (
     <>
-       <section
+      <section
         style={{
           backgroundImage: `url("../imgs/background.png")`,
           backgroundPosition: "center",

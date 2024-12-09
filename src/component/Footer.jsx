@@ -1,3 +1,4 @@
+
 import { Heart, MoreHorizontal, Play } from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
@@ -253,7 +254,7 @@ const Footer = React.memo(function FooterComponent() {
         time: playSong.time, // Thời lượng bài hát
         file_paths: playSong.file_paths
       });
-      // console.log(playSong);
+      console.log(playSong);
       try {
         await fetch(`${API_URL}/luot-nghe/${playSong.id}`, {
           headers: {

@@ -196,7 +196,8 @@ function Dashboard() {
               Các bản hit cuối tuần này là gì?
             </h1>
             <div className="flex items-center justify-start my-10  ">
-              <div className="text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer" onClick={() => { handleFetchSongs("new") }}>
+              <div className="flex items-center text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer" onClick={() => { handleFetchSongs("new") }}>
+                <Play size={18} className="mr-2" />
                 Phát Tất Cả
               </div>
             </div>

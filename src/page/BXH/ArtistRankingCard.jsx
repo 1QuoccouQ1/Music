@@ -1,8 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import { FaMedal } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import { UserContext } from "../../ContextAPI/UserContext";
+import { useNavigate } from "react-router-dom";
 
 function ArtistRankingCard({ rank, artist, song }) {
+    const { handleAddSong } = useContext(UserContext);
+    const navigate = useNavigate();
+
     const rankClasses = {
         1: 'border-yellow-500', // Top 1 với màu vàng
         2: 'border-gray-400', // Top 2 với màu bạc
@@ -19,7 +24,7 @@ function ArtistRankingCard({ rank, artist, song }) {
         <div
             className={`relative border-t-4 ${
                 rankClasses[rank]
-            } rounded-lg p-4 bg-gray-800 w-full sm:w-[27.1875rem] ${
+            } rounded-lg p-4 bg-gray-800 w-full sm:max-w-[27.1875rem] ${
                 rank === 2 || rank === 3 ? 'mt-8' : '' // Đẩy Top 2 và Top 3 xuống
             }`}
         >
@@ -35,7 +40,9 @@ function ArtistRankingCard({ rank, artist, song }) {
                     />
 
                     {/* Nút Play chỉ hiện khi hover */}
-                    <button className='absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-125'>
+                    <button 
+                    onClick={() => handleAddSong("song", song.id)}
+                    className='absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-125'>
                         <svg
                             className='w-6 h-6 sm:w-8 sm:h-8'
                             fill='none'
@@ -59,7 +66,7 @@ function ArtistRankingCard({ rank, artist, song }) {
                 </h3>
             </Link>
 
-            <div className='flex items-center bg-gray-700 p-3 sm:p-4 rounded-lg border border-blue-500'>
+            <div className='flex items-center bg-gray-700 w-full p-3 sm:p-4 rounded-lg border cursor-pointer border-blue-500' onClick={() => navigate(`/SongDetail/${song.id}`)}>
                 {/* Ảnh bài hát */}
                 <img
                     src={song.coverImageUrl}
@@ -80,7 +87,7 @@ function ArtistRankingCard({ rank, artist, song }) {
                 </div>
 
                 {/* Thời lượng bài hát */}
-                <span className='text-gray-400 text-xs sm:text-sm'>
+                <span className='text-gray-400 text-xs sm:text-sm hidden xl:block'>
                     {song.duration}
                 </span>
             </div>
