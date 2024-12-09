@@ -40,14 +40,13 @@ import AboutUs from "./page/Setting/AboutUs.jsx";
 import Privacy from "./page/Setting/Privacy.jsx";
 
 import PayNotification from "./page/Payment/PayNotification.jsx";
-import PaySuccess from "./page/Payment/PaySuccess.jsx";
-import PayFail from "./page/Payment/PayFail.jsx";
-import PayError from "./page/Payment/PayError.jsx";
 import Payment from "./page/Payment/Payment.jsx";
 import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
+import { useLocation} from "react-router-dom";
+import { useEffect } from "react";
 
 
 
@@ -66,37 +65,12 @@ function changeLogo() {
   return null;
 }
 
-export async function checkAuth() {
-  const token = localStorage.getItem("access_token");
-  const User = localStorage.getItem("user");
-
-  if (token && User) {
-    const decodedToken = decodeJwt(token);
-    if (isTokenExpired(decodedToken)) {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("user");
-    }
-  }
-  
-}
-function decodeJwt(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Đảm bảo chuỗi base64 hợp lệ
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
-}
-
-
-
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
     children: [
-    {
+      {
         path: "/",
         loader: changeLogo,
         element: <Dashboard />,
@@ -166,24 +140,24 @@ const router = createBrowserRouter([
         path: "/Information",
         element: <Information />,
         children: [
-            { index: true, element: <InfoLibrary /> },
-            { path: "InfoLibrary", element: <InfoLibrary /> },
-            { path: "ListenedMusic", element: <ListenedMusic /> },
-            { path: "PlayLists", element: <PlayLists /> },
-            { path: "InfoAlbums", element: <InfoAlbums /> },
-            { path: "Artist", element: <Artist /> },
-            { path: "Downloaded", element: <Downloaded /> },
-            { path: "Followed", element: <Followed /> }
+          { index: true, element: <InfoLibrary /> },
+          { path: "InfoLibrary", element: <InfoLibrary /> },
+          { path: "ListenedMusic", element: <ListenedMusic /> },
+          { path: "PlayLists", element: <PlayLists /> },
+          { path: "InfoAlbums", element: <InfoAlbums /> },
+          { path: "Artist", element: <Artist /> },
+          { path: "Downloaded", element: <Downloaded /> },
+          { path: "Followed", element: <Followed /> }
         ]
-    },
+      },
 
       {
         path: "/ManagerHistory",
         element: <ManagerHistory />,
         children: [
-            { index: true, element: <ManagePayment /> },
-            { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
-            { path: "ManagePayment", element: <ManagePayment /> }
+          { index: true, element: <ManagePayment /> },
+          { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
+          { path: "ManagePayment", element: <ManagePayment /> }
         ]
       },
       //Route for Setting
@@ -242,7 +216,8 @@ const router = createBrowserRouter([
         path: "/SongGlobal/:id",
         loader: changeDashboard,
         element: <SongGlobal />,
-      }
+      },
+      {
         path: "/SongDetail/:id",
         loader: changeDashboard,
         element: <SongDetail />,
@@ -273,7 +248,9 @@ const router = createBrowserRouter([
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-    <React.StrictMode>
-        <RouterProvider router={router} />
-    </React.StrictMode>
+  <React.StrictMode>
+
+    <RouterProvider router={router}>
+    </RouterProvider>
+  </React.StrictMode>
 );

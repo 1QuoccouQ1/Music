@@ -159,7 +159,8 @@ function Dashboard() {
     if (songs.length === 0) {
       return <p>Không có bài hát nào được tìm thấy.</p>;
     }
-    return songs.map((song, index) => (
+    const limitedSongs = songs.slice(0, 9);
+    return limitedSongs.map((song, index) => (
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
         <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onDoubleClick={() => { handleAddSong("song", song.id) }} >
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
@@ -317,7 +318,7 @@ function Dashboard() {
         <h1 className="text-3xl font-medium mb-16">Nhạc Nghe Gần Đây</h1>
         {songHistory.length > 0 ? (
           <Swiper
-            spaceBetween={30}
+            spaceBetween={20}
             slidesPerView="auto" // Số item hiện trong 1 lần
             className="mySwiper "
           >

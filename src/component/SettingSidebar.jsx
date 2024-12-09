@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useContext } from 'react';
+import { useContext, useRef, useEffect } from 'react';
 import { UserContext } from '../ContextAPI/UserContext';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -61,7 +61,7 @@ function SettingSidebar() {
             {/* Sidebar */}
             <aside
                 className={`fixed top-0 left-0 h-full bg-sidebar px-6 py-3 z-40 transition-transform duration-300 ${
-                    isSidebarOpen ? 'translate-x-0' : '-translate-x-full'
+                    isSidebar ? 'translate-x-0' : '-translate-x-full'
                 } lg:translate-x-0 lg:w-56`}
 
             >
@@ -69,9 +69,9 @@ function SettingSidebar() {
                     {/* Nút mở sidebar trên mobile */}
                     <button
                         className='fixed top-4 left-4 z-50 bg-red-600 text-white p-2 rounded-md lg:hidden mb-4'
-                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        onClick={() => setIsSidebar(!isSidebar)}
                     >
-                        {isSidebarOpen ? <CloseIcon /> : <MenuIcon />}
+                        {isSidebar ? <CloseIcon /> : <MenuIcon />}
                     </button>
                     <Link to='/' className='flex justify-center'>
                         <img

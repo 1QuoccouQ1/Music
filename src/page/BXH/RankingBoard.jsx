@@ -11,7 +11,7 @@ const RankingBoard = () => {
     const [songs, setSongs] = useState([]);
     const [favouriteSongIds, setFavouriteSongIds] = useState([]);
     const [error, setError] = useState(null);
-    const user_id = localStorage.getItem('user.id');
+    const user =  JSON.parse(localStorage.getItem('user'));
 
     const fetchRankings = async () => {
         try {
@@ -30,14 +30,15 @@ const RankingBoard = () => {
     };
 
     const fetchFavouriteSongs = async () => {
+        if (!user) return;
         try {
             const response = await fetch(
-                `${API_URL}/${user_id}/bai-hat-yeu-thich`,
+                `${API_URL}/${user.id}/bai-hat-yeu-thich`,
                 {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem(
+                        'Authorization': `Bearer ${localStorage.getItem(
                             'access_token'
                         )}`
                     }
@@ -67,8 +68,8 @@ const RankingBoard = () => {
                 },
                 body: JSON.stringify({
                     liked: !isFavourite,
-                    song_id,
-                    user_id
+                    song_id:song_id,
+                    user_id:user.id,
                 })
             });
 
@@ -101,8 +102,8 @@ const RankingBoard = () => {
 
     useEffect(() => {
         fetchRankings();
-        if (user_id) fetchFavouriteSongs();
-    }, [user_id]);
+        if (user) fetchFavouriteSongs();
+    }, []);
 
     if (error) {
         return (

@@ -20,6 +20,7 @@ function Artist() {
 
         })
             .then(response => {
+
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -37,11 +38,12 @@ function Artist() {
 
     useEffect(() => {
         getArtist();
-        
-    }, []);
 
-    settext(artists.length + ' Ca sĩ yêu thích');
-    
+    }, []);
+    useEffect(() => {
+        const count = artists ? artists.length : '0';
+        settext(count + ' Ca sĩ yêu thích');
+    });
     const handleFollowinglistsinger = (singer_id, check) => {
         if (!user) {
             toast.error('Vui lòng đăng nhập để theo dõi ca sĩ.');
@@ -68,11 +70,8 @@ function Artist() {
                         getArtist((set) => {
                             return set.filter((id) => id.id !== singer_id);
                         })
-                    } else {
-                        getArtist((set) => {
-                            return [...set, singer_id];
-                        })
                     }
+                    // console.log(data.message);
                     toast.success(data.message);
 
                 })
@@ -88,7 +87,7 @@ function Artist() {
         <section className='bg-medium w-full h-auto pb-16 pt-10 text-white px-6'>
             <div className='flex flex-wrap gap-2 md:gap-4 justify-center md:justify-start'>
                 {artists.map((artist, index) => (
-                    <div className="text-center mt-6">
+                    <div key={index +1} className="text-center mt-6">
                         <Link to={`/ProfileArtist/${artist.id}`} className="">
                             <img src={artist.singer_image} className="rounded-full mb-3 w-28 h-28 md:w-44 md:h-44 mx-auto" />
                             <p className="font-medium mb-2 text-base">{artist.singer_name}</p>

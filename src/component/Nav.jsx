@@ -30,28 +30,14 @@ function Nav() {
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
 
-  const fetchSearchResults = async (query) => {
+  const fetchSearchResults = async query => {
     if (!query) {
       setSongs([]);
       setSingers([]);
       return;
     }
-
-    const [songs, setSongs] = useState([]);
-    const [singers, setSingers] = useState([]);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState('');
-    const [isFocused, setIsFocused] = useState(false);
-
-
-    const fetchSearchResults = async query => {
-        if (!query) {
-            setSongs([]);
-            setSingers([]);
-            return;
-        }
-        setLoading(true);
-        setError('');
+    setLoading(true);
+    setError('');
     try {
       const response = await fetch(`${API_URL}/tim-kiem`, {
         method: "POST",
@@ -90,36 +76,36 @@ function Nav() {
       localStorage.removeItem("user");
       localStorage.removeItem("access_token");
       localStorage.removeItem("isAccountType");
-            navigate('/login');
-        } catch (error) {
-            console.error('Logout failed:', error);
-        }
+      navigate('/login');
+    } catch (error) {
+      console.error('Logout failed:', error);
+    }
+  };
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(event.target)
+      ) {
+        setIsProfileOpen(false);
+      }
     };
-    useEffect(() => {
-        const handleClickOutside = event => {
-            if (
-                profileRef.current &&
-                !profileRef.current.contains(event.target)
-            ) {
-                setIsProfileOpen(false);
-            }
-        };
 
-        document.addEventListener('mousedown', handleClickOutside);
-        return () => {
-            document.removeEventListener('mousedown', handleClickOutside);
-        };
-    }, []);
-    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
-      <button
-                className=" bg-red-600 text-white p-2 rounded-md lg:hidden "
-                onClick={() => setIsSidebar(!isSidebar)}
-            >
-                {isSidebar ? <CloseIcon /> : <MenuIcon />}
-            </button>
+        <button
+          className=" bg-red-600 text-white p-2 rounded-md lg:hidden "
+          onClick={() => setIsSidebar(!isSidebar)}
+        >
+          {isSidebar ? <CloseIcon /> : <MenuIcon />}
+        </button>
         <div className="relative w-[80%] md:w-auto">
           <InputSearch
             onSearch={fetchSearchResults}
@@ -266,9 +252,8 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform duration-300 ${
-                      isProfileOpen ? "rotate-180" : ""
-                    }`}
+                    className={`transform transition-transform duration-300 ${isProfileOpen ? "rotate-180" : ""
+                      }`}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
@@ -352,11 +337,10 @@ function Nav() {
                             className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl"
                           >
                             <item.icon
-                              className={`w-5 h-5 mr-4 ${
-                                index === 0
-                                  ? "text-yellow-500"
-                                  : "text-gray-400"
-                              }`}
+                              className={`w-5 h-5 mr-4 ${index === 0
+                                ? "text-yellow-500"
+                                : "text-gray-400"
+                                }`}
                             />
                             <span className="flex-grow text-left text-sm">
                               {/* Kiểm tra href có phải là đường dẫn nội bộ */}
@@ -403,6 +387,6 @@ function Nav() {
       </div>
     </>
   );
-}
+};
 
 export default Nav;
