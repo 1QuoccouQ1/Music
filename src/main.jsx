@@ -45,8 +45,6 @@ import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
-import { useLocation} from "react-router-dom";
-import { useEffect } from "react";
 
 
 
