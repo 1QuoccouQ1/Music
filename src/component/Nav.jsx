@@ -1,5 +1,5 @@
 import InputSearch from "./InputSearch";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect, useContext } from "react";
 import {
   ChevronRight,
   CloudDownload,
@@ -12,10 +12,13 @@ import {
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import { API_URL } from "../services/apiService";
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
+import { UserContext } from "../ContextAPI/UserContext";
 
 function Nav() {
   const navigate = useNavigate();
-  // const { user ,isProfile } = useContext(UserContext);
+  const { isSidebar, setIsSidebar } = useContext(UserContext);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
   const isProfile = user ? true : false;
@@ -97,8 +100,14 @@ function Nav() {
 
   return (
     <>
-      <div className="flex md:justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
-        <div className="relative ">
+      <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
+      <button
+                className=" bg-red-600 text-white p-2 rounded-md lg:hidden "
+                onClick={() => setIsSidebar(!isSidebar)}
+            >
+                {isSidebar ? <CloseIcon /> : <MenuIcon />}
+            </button>
+        <div className="relative w-[80%] md:w-auto">
           <InputSearch
             onSearch={fetchSearchResults}
             onFocus={() => setIsFocused(true)}

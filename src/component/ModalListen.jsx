@@ -78,7 +78,7 @@ function ModalListen() {
           </div>
         </div>
         <div className="flex items-center h-[600px] ">
-          <div className="w-1/4 ">
+          <div className="md:w-1/4 md:block  hidden">
             {!hasSongs && (
               <div className="text-slate-300 text-2xl   text-center mb-4">
                 Bài hát chưa có Lyric
@@ -93,21 +93,21 @@ function ModalListen() {
               ></div>
             </div>
           </div>
-          <div className="w-2/4  flex items-center justify-center ">
+          <div className="w-full md:w-3/4 xl:w-2/4  flex items-center justify-center ">
             <div
               style={{
                 backgroundImage: `url("../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3 (1).png")`,
                 backgroundPosition: "center",
                 backgroundSize: "cover",
               }}
-              className="relative size-[550px]  "
+              className="relative size-[450px] md:size-[550px]  "
             >
               <div className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">
                 <img
                   style={{
                     animationPlayState: isPlay ? "running" : "paused",
                   }}
-                  className={` size-44  rounded-full animate-[spin_8s_linear_infinite]`}
+                  className={` size-36 md:size-44  rounded-full animate-[spin_8s_linear_infinite]`}
                   src={currentSong.song_image}
                 />
               </div>
@@ -119,7 +119,7 @@ function ModalListen() {
               />
             </div>
           </div>
-          <div className="w-1/4 flex flex-col items-end mr-10  gap-10">
+          <div className="xl:w-1/4 flex flex-col items-end mr-10  gap-10 hidden xl:block">
             <div className="flex flex-col items-center gap-5">
               <div className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center">
                 {" "}
@@ -148,7 +148,6 @@ function ModalListen() {
             </div>
           </div>
         </div>
-        <div></div>
       </section>
     </>
   );

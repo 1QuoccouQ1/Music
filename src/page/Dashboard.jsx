@@ -333,7 +333,7 @@ function Dashboard() {
                   <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
                     {song.song_name}
                   </p>
-                  <p className="text-sm text-slate-700">{song.composer}</p>
+                  <p className="text-sm text-slate-700 truncate w-[120px]">{song.composer}</p>
                 </div>
               </SwiperSlide>
             ))}
