@@ -517,7 +517,7 @@ const Footer = React.memo(function FooterComponent() {
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 h-[100px]">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white   md:w-[350px] rounded-r-lg h-full">
             <div className="flex items-center h-full justify-between w-full" >
-              <div className="relative h-full xl:block hidden flex-1">
+              <div className="relative h-full xl:block hidden flex-none">
                 <img
                   className="inline-block rounded lg:size-20 "
                   src={playSong ? playSong.song_image : null}
@@ -875,8 +875,8 @@ const Footer = React.memo(function FooterComponent() {
         </div>
       ) : (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 py-3">
-          <div className="flex items-center justify-between  p-3 text-white  w-[350px] rounded-r-lg">
-            <div className="flex items-center space-x-4 ml-14">
+          <div className="flex items-center justify-between  p-3 text-white  max-w-[350px] w-fit  rounded-r-lg">
+            <div className="flex items-center space-x-4 xl:ml-14">
               <button
                 className="p-3 bg-gray-800 rounded-full "
                 onClick={handlePreviousSong}
@@ -915,9 +915,9 @@ const Footer = React.memo(function FooterComponent() {
             </div>
           </div>
           <div className="flex items-center justify-center ">
-            <div className="relative p-4 rounded-lg w-full max-w-5xl">
+            <div className="relative lg:p-4 rounded-lg w-full max-w-5xl">
               <div className="flex items-center justify-between text-white">
-                <div className="flex-grow mx-4 w-[660px]">
+                <div className="flex-grow mx-4 xl:w-[660px] lg:w-[360px] md:w-[260px] min-w-[140px] ">
                   <div className="relative">
                     <input
                       type="range"
@@ -1035,7 +1035,7 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full ${
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
                   isShuffling ? "text-blue-500" : "text-white"
                 }`}
                 onClick={toggleShuffle}
@@ -1044,7 +1044,7 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full ${
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
                   isLooping ? "text-green-500" : "text-white"
                 }`}
                 onClick={toggleLoop}
@@ -1053,7 +1053,7 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full ${
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
                   isTimerActive ? "text-yellow-500" : "text-white"
                 }`}
                 onClick={isTimerActive ? handleCancelTimer : toggleTimerModal}
