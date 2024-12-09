@@ -50,11 +50,7 @@ const Footer = React.memo(function FooterComponent() {
     if (!currentSong.file_paths) return []; // Không có tùy chọn nào nếu file_paths không tồn tại
 
     // Lọc các quality mà có giá trị trùng với file_paths của bài hát hiện tại
-    return qualities.filter(
-      (quality) =>
-        currentSong.file_paths[quality.value] !== null && // Không phải null
-        currentSong.file_paths[quality.value] !== undefined // Không phải undefined
-    );
+    return qualities.filter((quality) => currentSong.file_paths[quality.value]);
   };
   const qualities = [
     {
@@ -99,10 +95,6 @@ const Footer = React.memo(function FooterComponent() {
   const [visibleCount, setVisibleCount] = useState(10);
 
   const fetchAd = async () => {
-    if (isAccountType === "Plus" || isAccountType === "Premium") {
-      handleNextSong(); // Nếu không có quảng cáo, chuyển bài
-      return;
-    }
     try {
       const response = await fetch(`${API_URL}/quang-cao`, {
         method: "GET",
@@ -160,6 +152,7 @@ const Footer = React.memo(function FooterComponent() {
       if (isPlaying) {
         audioRef.current.pause();
       } else {
+        console.log("play");
         if (!isPlaying) {
           audioRef.current.play();
         }
@@ -178,35 +171,17 @@ const Footer = React.memo(function FooterComponent() {
   };
 
   const handleNextSong = () => {
-    let nextIndex;
     if (isShuffling) {
       let randomIndex;
       do {
         randomIndex = Math.floor(Math.random() * listsongs.length);
       } while (randomIndex === currentSongIndex);
-      nextIndex = randomIndex;
       setCurrentSongIndex(randomIndex);
       setPlaySong(listsongs[randomIndex]);
     } else {
-      nextIndex = (currentSongIndex + 1) % listsongs.length;
       setCurrentSongIndex((prev) => (prev + 1) % listsongs.length);
       setPlaySong(listsongs[(currentSongIndex + 1) % listsongs.length]);
     }
-    const nextSong = listsongs[nextIndex];
-
-    let newQuality = selectedQuality;
-    if (!nextSong.file_paths[selectedQuality]) {
-      if (selectedQuality === "premium" && nextSong.file_paths["plus"]) {
-        newQuality = "plus";
-      } else if (selectedQuality !== "basic") {
-        newQuality = "basic";
-      }
-    }
-
-    setSelectedQuality(newQuality);
-    setSelectedQualityLabel(
-      qualities.find((q) => q.value === newQuality)?.label
-    );
     setIsPlaying(true);
     setIsPlay(true);
   };
@@ -261,6 +236,7 @@ const Footer = React.memo(function FooterComponent() {
             Authorization: `Bearer ${localStorage.getItem("access_token")}`,
           },
         });
+        console.log(`Cập nhật lượt nghe cho bài hát: ${playSong.song_name}`);
       } catch (error) {
         console.error("Lỗi khi cập nhật lượt nghe:", error);
       }
@@ -283,7 +259,7 @@ const Footer = React.memo(function FooterComponent() {
       } else {
         setSongPlayCount(songPlayCount + 1);
 
-        if (isAccountType === "basic" && songPlayCount >= 3) {
+        if (songPlayCount >= 3) {
           setIsPlayingAd(true);
           fetchAd();
         } else {
@@ -471,6 +447,9 @@ const Footer = React.memo(function FooterComponent() {
   useEffect(() => {
     console.log("playSong", playSong);
     if (!playSong || !listsongs.length) return;
+    // const song = listsongs[currentSongIndex];
+    // console.log("song",song);
+
     setCurrentSong(playSong);
     if (isUpdate) {
       setIsPlaying(true);
@@ -492,12 +471,14 @@ const Footer = React.memo(function FooterComponent() {
     if (audioRef.current) {
       audioRef.current.src =
         playSong.file_paths && playSong.file_paths[selectedQuality];
+      // audioRef.current.currentTime = currentTime;
       audioRef.current.load();
       if (optionSongIndex == currentSongIndex) {
         audioRef.current.currentTime = currentTime;
       }
 
       if (isPlaying) {
+        console.log("play");
         audioRef.current.play();
       }
     }
@@ -1098,50 +1079,34 @@ const Footer = React.memo(function FooterComponent() {
               </div>
               {isOpen && (
                 <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-gray-900 rounded-lg shadow-2xl overflow-hidden">
-                  {getAvailableQualities().map((quality) => {
-                    // Kiểm tra xem nút có được phép chọn hay không
-                    const isDisabled =
-                      (isAccountType === "basic" &&
-                        quality.value !== "basic") ||
-                      (isAccountType === "plus" && quality.value === "premium");
-                    return (
-                      <button
-                        key={quality.value}
-                        onClick={() => {
-                          if (!isDisabled) {
-                            setSelectedQuality(quality.value);
-                            setSelectedQualityLabel(quality.label);
-                            setIsOpen(false);
-                          }
-                        }}
-                        disabled={isDisabled}
-                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${
-                          isDisabled
-                            ? "text-gray-500 cursor-not-allowed bg-gray-800"
-                            : "text-white hover:bg-gray-800"
-                        }`}
-                      >
-                        <div className="flex items-center space-x-2 py-0.5">
-                          <span>{quality.name}</span>
-                          {quality.value && (
-                            <span
-                              className={`text-[8px] px-1 rounded ${quality.labelColor} text-white`}
-                            >
-                              {quality.value}
-                            </span>
-                          )}
-                        </div>
+                  {getAvailableQualities().map((quality) => (
+                    <button
+                      key={quality.value}
+                      onClick={() => {
+                        setSelectedQuality(quality.value);
+                        setSelectedQualityLabel(quality.label);
+                        setIsOpen(false);
+                      }}
+                      className="w-full px-4 py-2 text-left text-sm text-white hover:bg-gray-800 flex items-center justify-between"
+                    >
+                      <div className="flex items-center space-x-2 py-0.5">
+                        <span className="">{quality.name}</span>
+                        {quality.value && (
+                          <span
+                            className={`text-[8px] px-1   rounded ${quality.labelColor} text-white`}
+                          >
+                            {quality.value}
+                          </span>
+                        )}
+                      </div>
 
-                        <span
-                          className={`w-2 h-2 rounded-full ${
-                            selectedQuality === quality.value
-                              ? "bg-pink-500"
-                              : ""
-                          }`}
-                        ></span>
-                      </button>
-                    );
-                  })}
+                      <span
+                        className={`w-2 h-2 rounded-full ${
+                          selectedQuality === quality.value ? "bg-pink-500" : ""
+                        }`}
+                      ></span>
+                    </button>
+                  ))}
                 </div>
               )}
             </div>

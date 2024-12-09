@@ -1,49 +1,108 @@
 import React, { useEffect, useState } from 'react';
-import ArtistRankingCard from './ArtistRankingCard';
-
-import { Heart, CirclePlus, Ellipsis, Play } from 'lucide-react';
-
+import { Heart, Play, CirclePlus, Ellipsis } from 'lucide-react';
+import { ToastContainer, toast } from 'react-toastify';
 import { API_URL } from '../../services/apiService';
-import { CiHeart } from 'react-icons/ci';
-
+import 'react-toastify/dist/ReactToastify.css';
+import ArtistRankingCard from './ArtistRankingCard';
 import { Link } from 'react-router-dom';
 
-function RankingBoard({ artist }) {
+const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
     const [songs, setSongs] = useState([]);
+    const [favouriteSongIds, setFavouriteSongIds] = useState([]);
     const [error, setError] = useState(null);
+    const user_id = localStorage.getItem('user.id');
 
-    // Helper function to format time in MM:SS format
-    const formatTime = time => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes.toString().padStart(2, '0')}:${seconds
-            .toString()
-            .padStart(2, '0')}`;
+    const fetchRankings = async () => {
+        try {
+            const response = await fetch(`${API_URL}/bxh-100`);
+            if (response.ok) {
+                const data = await response.json();
+                setRankings(data.slice(0, 3)); // Top 3
+                setSongs(data.slice(3)); // Remaining songs
+            } else {
+                setError('Không thể tải bảng xếp hạng.');
+            }
+        } catch (error) {
+            setError('Có lỗi xảy ra khi tải bảng xếp hạng.');
+            console.error(error);
+        }
+    };
+
+    const fetchFavouriteSongs = async () => {
+        try {
+            const response = await fetch(
+                `${API_URL}/${user_id}/bai-hat-yeu-thich`,
+                {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${localStorage.getItem(
+                            'access_token'
+                        )}`
+                    }
+                }
+            );
+
+            if (response.ok) {
+                const data = await response.json();
+                setFavouriteSongIds(data.map(song => song.id));
+            } else {
+                console.error('Failed to fetch favorite songs.');
+            }
+        } catch (err) {
+            console.error('Error fetching favorite songs:', err);
+        }
+    };
+
+    const toggleFavourite = async (song_id, isFavourite) => {
+        try {
+            const response = await fetch(`${API_URL}/bai-hat-yeu-thich`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${localStorage.getItem(
+                        'access_token'
+                    )}`
+                },
+                body: JSON.stringify({
+                    liked: !isFavourite,
+                    song_id,
+                    user_id
+                })
+            });
+
+            if (response.ok) {
+                setFavouriteSongIds(prev =>
+                    isFavourite
+                        ? prev.filter(id => id !== song_id)
+                        : [...prev, song_id]
+                );
+                const data = await response.json();
+                toast.success(data.message || 'Cập nhật thành công!');
+            } else {
+                toast.error('Không thể cập nhật trạng thái bài hát!');
+            }
+        } catch (error) {
+            console.error('Lỗi khi cập nhật trạng thái yêu thích:', error);
+            toast.error('Có lỗi xảy ra.');
+        }
+    };
+
+    const formatTime = seconds => {
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = Math.floor(seconds % 60);
+        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
+        const formattedSeconds =
+            remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
+
+        return `${formattedMinutes}:${formattedSeconds}`;
     };
 
     useEffect(() => {
-        const fetchRankings = async () => {
-            try {
-                const response = await fetch(
-                    `${API_URL}/bxh-100`
-                );
-                const data = await response.json();
-
-                if (data && Array.isArray(data)) {
-                    setRankings(data.slice(0, 3)); // Top 3
-                    setSongs(data.slice(3)); // Rest of the songs
-                } else {
-                    setError('Invalid data format from API.');
-                }
-            } catch (error) {
-                setError('Failed to fetch rankings.');
-                console.error('Error fetching rankings:', error);
-            }
-        };
-
         fetchRankings();
-    }, []);
+        if (user_id) fetchFavouriteSongs();
+    }, [user_id]);
 
     if (error) {
         return (
@@ -54,10 +113,8 @@ function RankingBoard({ artist }) {
     }
 
     return (
-
         <div className='bg-gray-900 min-h-screen py-10 px-4'>
             <h2 className='text-white text-lg sm:text-2xl md:text-4xl font-bold mb-12 border-l-4 border-l-blue-400 pl-5'>
-
                 Bảng Xếp Hạng Tuần
             </h2>
 
@@ -68,9 +125,7 @@ function RankingBoard({ artist }) {
                         <ArtistRankingCard
                             rank={2}
                             artist={{
-
                                 id: rankings[1].singer_id,
-
                                 name: rankings[1].singer_name,
                                 imageUrl: rankings[1].song_image
                             }}
@@ -123,87 +178,93 @@ function RankingBoard({ artist }) {
                 )}
             </div>
 
-            {/* Song Rankings Table */}
-            <table className='min-w-full text-white text-sm sm:text-base'>
-                <thead>
-                    <tr className='text-left border-b border-gray-600 mb-2'>
-                        <th className='py-1 w-2 text-center'>#</th>
-                        <th className='py-2 px-4'>Bài hát</th>
-                        <th className='py-2 px-4'>Tên Ca Sĩ</th>
-                        <th className='py-2 px-4 text-center'>Lượt nghe</th>
-                        <th className='py-2 px-4 text-right'>Thời lượng</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {songs.map((song, index) => (
-                        <tr
-                            key={index + 3}
-                            className='group border-b-[10px] border-transparent hover:bg-slate-800 duration-300 '
-                        >
-                            {/* Song Index Column */}
-                            <td className='py-2 px-4'>
-
-                                <Play
-                                    size={16}
-                                    className='hidden  group-hover:block duration-300'
-                                />
-                                <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>{index + 4}</p>
-                            </td>
-
-                            {/* Song Info Column */}
-                            <td className='flex items-center space-x-4 px-4'>
-                                <img
-                                    src={song.song_image}
-                                    alt={song.song_name}
-                                    className='w-10 h-10 sm:w-12 sm:h-12 rounded-md'
-                                />
-                                <div className='w-full truncate'>
-                                    <p className='font-semibold'>
-                                        {song.song_name}
-                                    </p>
-                                    <p className='text-gray-400'>
-                                        {song.provider}
-                                    </p>
-                                </div>
-                            </td>
-
-                            {/* Singer Column */}
-                            <td className='px-4'>
-                                <Link to={`/ProfileArtist/${song.singer_id}`}>
-                                    {song.singer_name}
-                                </Link>
-                            </td>
-
-                            {/* Listen Count Column */}
-                            <td className='px-4 text-center'>
-                                {song.listen_count || 'N/A'}
-                            </td>
-
-                            {/* Icon Column */}
-                            <td className='px-4'>
-                                <div className='flex items-center justify-end gap-5'>
-                                    <Heart
-                                        size={22}
-                                        className='text-red-500 opacity-0 group-hover:opacity-100 duration-300'
-                                    />
-                                    <CirclePlus
-                                        size={22}
-                                        className='text-slate-500 opacity-0 group-hover:opacity-100 duration-300'
-                                    />
-
-                                    {formatTime(song.time) || 'N/A'}
-                                    <Ellipsis
-                                        size={16}
-                                        className='opacity-0 group-hover:opacity-100 duration-300'
-                                    />
-                                </div>
-                            </td>
+            {/* Ranking Table */}
+            <div className='overflow-x-auto'>
+                <table className='min-w-full text-white text-sm sm:text-base'>
+                    <thead>
+                        <tr className='text-left border-b border-gray-600 mb-2'>
+                            <th className='py-1 w-2 text-center'>#</th>
+                            <th className='py-2 px-4'>Bài hát</th>
+                            <th className='py-2 px-4'>Tên Ca Sĩ</th>
+                            <th className='py-2 px-4 text-center'>Lượt nghe</th>
+                            <th className='py-2 px-4 text-right'>Thời lượng</th>
                         </tr>
-                    ))}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {songs.map((song, index) => (
+                            <tr
+                                key={song.id}
+                                className='group border-b-[10px] border-transparent hover:bg-slate-800 duration-300'
+                            >
+                                <td className='py-2 px-4 text-center'>
+                                    <Play
+                                        size={16}
+                                        className='hidden group-hover:block duration-300'
+                                    />
+                                    <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>
+                                        {index + 4}
+                                    </p>
+                                </td>
+                                <td className='flex items-center space-x-4 px-4'>
+                                    <img
+                                        src={song.song_image}
+                                        alt={song.song_name}
+                                        className='w-10 h-10 sm:w-12 sm:h-12 rounded-md'
+                                    />
+                                    <div className='w-full truncate'>
+                                        <p className='font-semibold'>
+                                            {song.song_name}
+                                        </p>
+                                        <p className='text-gray-400'>
+                                            {song.provider}
+                                        </p>
+                                    </div>
+                                </td>
+                                <td className='px-4'>
+                                    <Link to={`/ProfileArtist/${song.singer_id}`}>
+                                        {song.singer_name}
+                                    </Link>
+                                </td>
+                                <td className='px-4 text-center'>
+                                    {song.listen_count || 'N/A'}
+                                </td>
+                                <td className='flex items-center justify-end gap-4 px-4 '>
+                                    <div className='flex items-center gap-4 opacity-0 group-hover:opacity-100 duration-300'>
+                                        {favouriteSongIds.includes(song.id) ? (
+                                            <Heart
+                                                size={22}
+                                                fill='red'
+                                                className='text-red-500 cursor-pointer hover:scale-110 hover:fill-pink-600 duration-300'
+                                                onClick={() =>
+                                                    toggleFavourite(song.id, true)
+                                                }
+                                            />
+                                        ) : (
+                                            <Heart
+                                                size={22}
+                                                className='text-red-500 cursor-pointer hover:scale-110 hover:fill-pink-600 duration-300'
+                                                onClick={() =>
+                                                    toggleFavourite(song.id, false)
+                                                }
+                                            />
+                                        )}
+
+                                        <CirclePlus
+                                            size={22}
+                                            className='text-slate-500'
+                                        />
+                                    </div>
+
+                                    <span>{formatTime(song.time) || 'N/A'}</span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+            </div>
+            <ToastContainer />
         </div>
     );
-}
+};
 
 export default RankingBoard;

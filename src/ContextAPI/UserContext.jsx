@@ -187,7 +187,6 @@ export const UserProvider = ({ children }) => {
         isAccountType, setIsAccountType,
         isUpdate,setIsUpdate,
         isSidebar, setIsSidebar
-
       }}
     >
       {children}

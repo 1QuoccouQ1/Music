@@ -37,9 +37,21 @@ function Nav() {
       return;
     }
 
-    setLoading(true);
-    setError("");
+    const [songs, setSongs] = useState([]);
+    const [singers, setSingers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
+    const [isFocused, setIsFocused] = useState(false);
 
+
+    const fetchSearchResults = async query => {
+        if (!query) {
+            setSongs([]);
+            setSingers([]);
+            return;
+        }
+        setLoading(true);
+        setError('');
     try {
       const response = await fetch(`${API_URL}/tim-kiem`, {
         method: "POST",
@@ -78,26 +90,27 @@ function Nav() {
       localStorage.removeItem("user");
       localStorage.removeItem("access_token");
       localStorage.removeItem("isAccountType");
-
-      navigate("/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-    }
-  };
-
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (profileRef.current && !profileRef.current.contains(event.target)) {
-        setIsProfileOpen(false);
-      }
+            navigate('/login');
+        } catch (error) {
+            console.error('Logout failed:', error);
+        }
     };
+    useEffect(() => {
+        const handleClickOutside = event => {
+            if (
+                profileRef.current &&
+                !profileRef.current.contains(event.target)
+            ) {
+                setIsProfileOpen(false);
+            }
+        };
 
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => {
+            document.removeEventListener('mousedown', handleClickOutside);
+        };
+    }, []);
+    
   return (
     <>
       <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">

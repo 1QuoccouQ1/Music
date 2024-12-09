@@ -30,7 +30,7 @@ function NewPassword() {
   const validatePassword = (value) => {
     setHasLetter(/[a-zA-Z]/.test(value));
     setHasNumberOrSpecialChar(/[0-9!@#\$%\^&]/.test(value));
-    setIsLongEnough(value.length >= 8);
+    setIsLongEnough(value.length >= 10);
   };
 
   const checkPasswordsMatch = (confirmValue) => {
@@ -168,7 +168,7 @@ function NewPassword() {
               </label>
               <label className="flex items-center">
                 <input type="checkbox" className="form-checkbox text-pink-500" checked={isLongEnough} readOnly />
-                <span className="ml-2 text-sm text-gray-600 font-bold">8 ký tự</span>
+                <span className="ml-2 text-sm text-gray-600 font-bold">10 ký tự</span>
               </label>
             </div>
           </div>

@@ -103,14 +103,8 @@ function Register() {
     // Kiểm tra mật khẩu
     if (!formData.password) {
       newErrors.password = language === "vi" ? "Mật khẩu không được để trống." : "Password cannot be empty.";
-    } else if (formData.password.length < 8) {
-      newErrors.password = language === "vi" ? "Mật khẩu phải có ít nhất 8 ký tự." : "Password must be at least 8 characters long.";
-    } else if (!/[A-Z]/.test(formData.password)) { // Check for uppercase letters
-      newErrors.password = language === "vi" ? "Mật khẩu phải chứa ít nhất một ký tự viết hoa." : "Password must contain at least one uppercase letter.";
-    } else if (!/[0-9]/.test(formData.password)) { // Check for numbers
-      newErrors.password = language === "vi" ? "Mật khẩu phải chứa ít nhất một số." : "Password must contain at least one number.";
-    } else if (!/[^A-Za-z0-9]/.test(formData.password)) { // Check for special characters
-      newErrors.password = language === "vi" ? "Mật khẩu phải chứa ít nhất một ký tự đặc biệt." : "Password must contain at least one special character.";
+    } else if (formData.password.length < 6) {
+      newErrors.password = language === "vi" ? "Mật khẩu phải có ít nhất 6 ký tự." : "Password must be at least 6 characters long.";
     }
 
     // Kiểm tra họ và tên

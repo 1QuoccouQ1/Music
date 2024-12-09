@@ -11,7 +11,7 @@ import { Link } from "react-router-dom";
 function Dashboard() {
   const {
     handleFetchSongs,
-    handleAddSong,
+    handleAddSong
   } = useContext(UserContext);
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
@@ -107,7 +107,6 @@ function Dashboard() {
           const response = await axios.get(
             `${API_URL}/quoc-gia/${activeTab}/bai-hat`
           ); // Gọi API /bai-hat với ID quốc gia
-
           if (response.status === 200) {
             setSongs(response.data); // Lưu danh sách bài hát vào state
           } else {
@@ -160,8 +159,7 @@ function Dashboard() {
     if (songs.length === 0) {
       return <p>Không có bài hát nào được tìm thấy.</p>;
     }
-    const limitedSongs = songs.slice(0, 9);
-    return limitedSongs.map((song, index) => (
+    return songs.map((song, index) => (
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
         <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onDoubleClick={() => { handleAddSong("song", song.id) }} >
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
@@ -350,7 +348,7 @@ function Dashboard() {
             Top Nghệ Sĩ Được Yêu Thích
           </h1>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={"/Artist"}><p className="text-sm  ">Xem Thêm </p></Link>
+            <p className="text-sm  ">Xem Thêm </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -440,7 +438,7 @@ function Dashboard() {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-medium mb-16">Thể Loại</h1>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={"/Genre"}><p className="text-sm  ">Xem Thêm </p></Link>
+            <p className="text-sm  ">Xem Thêm </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"

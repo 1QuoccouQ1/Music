@@ -11,6 +11,7 @@ import History from "./page/History.jsx";
 import Albums from "./page/Albums.jsx";
 import MusicLibrary from "./page/Library/MusicLibrary.jsx";
 import ShowChart from "./page/MeChart/ShowChart.jsx";
+import SongGlobal from "./page/BXH/SongGlobal.jsx";
 
 import Information from "./page/information/Information.jsx";
 import InfoLibrary from "./page/information/Profile/infoLibrary.jsx";
@@ -48,26 +49,19 @@ import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
 
-export async function changeIsSetting() {
-  const authCheck = await checkAuth();
-  if (authCheck) return authCheck;
 
+
+function changeIsSetting() {
   localStorage.setItem("isSetting", true);
   sessionStorage.removeItem("reloaded");
-  return null;
+  return null
 }
 
-export async function changeDashboard() {
-  const authCheck = await checkAuth();
-  if (authCheck) return authCheck;
-
+function changeDashboard() {
   localStorage.setItem("isSetting", false);
-  return null;
+  return null
 }
-export async function changeLogo() {
-  const authCheck = await checkAuth();
-  if (authCheck) return authCheck;
-
+function changeLogo() {
   localStorage.setItem("isSetting", false);
   return null;
 }
@@ -95,10 +89,6 @@ function decodeJwt(token) {
   return JSON.parse(jsonPayload);
 }
 
-function isTokenExpired(decodedToken) {
-  const currentTime = Math.floor(Date.now() / 1000); 
-  return decodedToken.exp < currentTime; 
-}
 
 
 const router = createBrowserRouter([
@@ -106,7 +96,7 @@ const router = createBrowserRouter([
     path: "/",
     element: <App />,
     children: [
-      {
+    {
         path: "/",
         loader: changeLogo,
         element: <Dashboard />,
@@ -176,25 +166,25 @@ const router = createBrowserRouter([
         path: "/Information",
         element: <Information />,
         children: [
-          { index: true, element: <InfoLibrary /> },
-          { path: "InfoLibrary", element: <InfoLibrary /> },
-          { path: "ListenedMusic", element: <ListenedMusic /> },
-          { path: "PlayLists", element: <PlayLists /> },
-          { path: "InfoAlbums", element: <InfoAlbums /> },
-          { path: "Artist", element: <Artist /> },
-          { path: "Downloaded", element: <Downloaded /> },
-          { path: "Followed", element: <Followed /> },
-        ],
-      },
+            { index: true, element: <InfoLibrary /> },
+            { path: "InfoLibrary", element: <InfoLibrary /> },
+            { path: "ListenedMusic", element: <ListenedMusic /> },
+            { path: "PlayLists", element: <PlayLists /> },
+            { path: "InfoAlbums", element: <InfoAlbums /> },
+            { path: "Artist", element: <Artist /> },
+            { path: "Downloaded", element: <Downloaded /> },
+            { path: "Followed", element: <Followed /> }
+        ]
+    },
 
       {
         path: "/ManagerHistory",
         element: <ManagerHistory />,
         children: [
-          { index: true, element: <ManagePayment /> },
-          { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
-          { path: "ManagePayment", element: <ManagePayment /> },
-        ],
+            { index: true, element: <ManagePayment /> },
+            { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
+            { path: "ManagePayment", element: <ManagePayment /> }
+        ]
       },
       //Route for Setting
       {
@@ -249,6 +239,10 @@ const router = createBrowserRouter([
         element: <Privacy />,
       },
       {
+        path: "/SongGlobal/:id",
+        loader: changeDashboard,
+        element: <SongGlobal />,
+      }
         path: "/SongDetail/:id",
         loader: changeDashboard,
         element: <SongDetail />,
@@ -275,10 +269,11 @@ const router = createBrowserRouter([
     path: "/NewPassword",
     element: <NewPassword />,
   },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
-    <RouterProvider router={router} />
-  </React.StrictMode>
+    <React.StrictMode>
+        <RouterProvider router={router} />
+    </React.StrictMode>
 );
