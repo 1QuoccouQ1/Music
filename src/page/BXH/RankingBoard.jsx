@@ -1,17 +1,21 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Heart, Play, CirclePlus, Ellipsis } from 'lucide-react';
 import { ToastContainer, toast } from 'react-toastify';
 import { API_URL } from '../../services/apiService';
 import 'react-toastify/dist/ReactToastify.css';
 import ArtistRankingCard from './ArtistRankingCard';
 import { Link } from 'react-router-dom';
+import { UserContext } from "../../ContextAPI/UserContext";
+import { useNavigate } from "react-router-dom";
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
     const [songs, setSongs] = useState([]);
     const [favouriteSongIds, setFavouriteSongIds] = useState([]);
     const [error, setError] = useState(null);
-    const user =  JSON.parse(localStorage.getItem('user'));
+    const user = JSON.parse(localStorage.getItem('user'));
+    const { handleAddSong, handleFetchSongs } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const fetchRankings = async () => {
         try {
@@ -68,8 +72,8 @@ const RankingBoard = () => {
                 },
                 body: JSON.stringify({
                     liked: !isFavourite,
-                    song_id:song_id,
-                    user_id:user.id,
+                    song_id: song_id,
+                    user_id: user.id,
                 })
             });
 
@@ -115,14 +119,21 @@ const RankingBoard = () => {
 
     return (
         <div className='bg-gray-900 min-h-screen py-10 px-4'>
-            <h2 className='text-white text-lg sm:text-2xl md:text-4xl font-bold mb-12 border-l-4 border-l-blue-400 pl-5'>
-                Bảng Xếp Hạng Tuần
-            </h2>
+            <div className='md:flex items-center justify-between '>
+                <h2 className='w-1/2 text-white text-lg sm:text-2xl md:text-4xl font-bold mb-12 border-l-4 border-l-blue-400 pl-5'>
+                    Bảng Xếp Hạng Tuần
+                </h2>
+                <div className="flex items-center text-white w-[180px] py-2 px-7 opacity-100 lg:opacity-80 hover:opacity-100 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer" onClick={() => { handleFetchSongs("bxh") }}>
+                <Play size={18} className="mr-2" />
+                Phát Tất Cả
+              </div>
+
+            </div>
 
             {/* Top 3 Ranking Cards */}
-            <div className='flex flex-col md:flex-row justify-center items-center md:items-start space-y-6 md:space-y-0 md:space-x-8 mb-12'>
+            <div className='flex flex-col lg:flex-row  justify-center items-center md:items-start w-full space-y-6 md:space-y-0 md:space-x-8 mb-12'>
                 {rankings[1] && (
-                    <div className='transform md:translate-y-4 w-full md:w-auto'>
+                    <div className='transform flex justify-center md:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard
                             rank={2}
                             artist={{
@@ -131,6 +142,7 @@ const RankingBoard = () => {
                                 imageUrl: rankings[1].song_image
                             }}
                             song={{
+                                id: rankings[1].id,
                                 title: rankings[1].song_name,
                                 artist: rankings[1].provider,
                                 duration: formatTime(rankings[1].time),
@@ -141,7 +153,7 @@ const RankingBoard = () => {
                 )}
 
                 {rankings[0] && (
-                    <div className='transform md:translate-y-0 w-full md:w-auto'>
+                    <div className='transform flex justify-center md:translate-y-0 w-full lg:w-1/3'>
                         <ArtistRankingCard
                             rank={1}
                             artist={{
@@ -150,6 +162,7 @@ const RankingBoard = () => {
                                 imageUrl: rankings[0].song_image
                             }}
                             song={{
+                                id: rankings[0].id,
                                 title: rankings[0].song_name,
                                 artist: rankings[0].provider,
                                 duration: formatTime(rankings[0].time),
@@ -160,7 +173,7 @@ const RankingBoard = () => {
                 )}
 
                 {rankings[2] && (
-                    <div className='transform md:translate-y-4 w-full md:w-auto'>
+                    <div className='transform flex justify-center md:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard
                             rank={3}
                             artist={{
@@ -169,6 +182,7 @@ const RankingBoard = () => {
                                 imageUrl: rankings[2].song_image
                             }}
                             song={{
+                                id: rankings[2].id,
                                 title: rankings[2].song_name,
                                 artist: rankings[2].provider,
                                 duration: formatTime(rankings[2].time),
@@ -206,14 +220,14 @@ const RankingBoard = () => {
                                         {index + 4}
                                     </p>
                                 </td>
-                                <td className='flex items-center space-x-4 px-4'>
+                                <td className='flex items-center space-x-4 px-4 cursor-pointer' onDoubleClick={() => handleAddSong("song", song.id)}>
                                     <img
                                         src={song.song_image}
                                         alt={song.song_name}
                                         className='w-10 h-10 sm:w-12 sm:h-12 rounded-md'
                                     />
                                     <div className='w-full truncate'>
-                                        <p className='font-semibold'>
+                                        <p className='font-semibold cursor-pointer' onClick={() => navigate(`/SongDetail/${song.id}`)}>
                                             {song.song_name}
                                         </p>
                                         <p className='text-gray-400'>
@@ -230,7 +244,7 @@ const RankingBoard = () => {
                                     {song.listen_count || 'N/A'}
                                 </td>
                                 <td className='flex items-center justify-end gap-4 px-4 '>
-                                    <div className='flex items-center gap-4 opacity-0 group-hover:opacity-100 duration-300'>
+                                    <div className='flex items-center gap-4 opacity-0 h-full group-hover:opacity-100 duration-300'>
                                         {favouriteSongIds.includes(song.id) ? (
                                             <Heart
                                                 size={22}
