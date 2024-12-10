@@ -133,7 +133,7 @@ const RankingBoard = () => {
             {/* Top 3 Ranking Cards */}
             <div className='flex flex-col lg:flex-row  justify-center items-center md:items-start w-full space-y-6 md:space-y-0 md:space-x-8 mb-12'>
                 {rankings[1] && (
-                    <div className='transform flex justify-center md:translate-y-4 w-full lg:w-1/3'>
+                    <div className='transform flex justify-center lg:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard
                             rank={2}
                             artist={{
@@ -153,7 +153,7 @@ const RankingBoard = () => {
                 )}
 
                 {rankings[0] && (
-                    <div className='transform flex justify-center md:translate-y-0 w-full lg:w-1/3'>
+                    <div className='transform flex justify-center lg:translate-y-0 w-full lg:w-1/3'>
                         <ArtistRankingCard
                             rank={1}
                             artist={{
@@ -173,7 +173,7 @@ const RankingBoard = () => {
                 )}
 
                 {rankings[2] && (
-                    <div className='transform flex justify-center md:translate-y-4 w-full lg:w-1/3'>
+                    <div className='transform flex justify-center lg:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard
                             rank={3}
                             artist={{

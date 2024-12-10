@@ -99,12 +99,16 @@ const Footer = React.memo(function FooterComponent() {
   const offset = circumference - Number(volume) * circumference;
   const [visibleCount, setVisibleCount] = useState(10);
 
+  
   const fetchAd = async () => {
     if (isAccountType === "Plus" || isAccountType === "Premium") {
       handleNextSong(); // Nếu không có quảng cáo, chuyển bài
+      
       return;
     }
     try {
+      console.log('Phát quảng cáo');
+       // Bật trạng thái phát quảng cáo
       const response = await fetch(`${API_URL}/quang-cao`, {
         method: "GET",
         headers: {
@@ -254,7 +258,7 @@ const Footer = React.memo(function FooterComponent() {
         time: playSong.time, // Thời lượng bài hát
         file_paths: playSong.file_paths
       });
-      console.log(playSong);
+      // console.log(playSong);
       try {
         await fetch(`${API_URL}/luot-nghe/${playSong.id}`, {
           headers: {
@@ -284,7 +288,7 @@ const Footer = React.memo(function FooterComponent() {
       } else {
         setSongPlayCount(songPlayCount + 1);
 
-        if (isAccountType === "basic" && songPlayCount >= 3) {
+        if (isAccountType === "Basic" && songPlayCount >= 3) {
           setIsPlayingAd(true);
           fetchAd();
         } else {
@@ -470,7 +474,7 @@ const Footer = React.memo(function FooterComponent() {
   }, [listsongs]);
 
   useEffect(() => {
-    console.log("playSong", playSong);
+    // console.log("playSong", playSong);
     if (!playSong || !listsongs.length) return;
     setCurrentSong(playSong);
     if (isUpdate) {
