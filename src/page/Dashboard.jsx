@@ -9,10 +9,7 @@ import { API_URL } from "../services/apiService";
 import { Link } from "react-router-dom";
 
 function Dashboard() {
-  const {
-    handleFetchSongs,
-    handleAddSong
-  } = useContext(UserContext);
+  const { handleFetchSongs, handleAddSong } = useContext(UserContext);
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
   const [topLike, setTopLike] = useState([]);
@@ -26,19 +23,11 @@ function Dashboard() {
 
   const fetchData = async () => {
     try {
-      const trendingResponse = await fetch(
-        `${API_URL}/trending`
-      );
-      const topListenResponse = await fetch(
-        `${API_URL}/top-listen`
-      );
-      const topLikeResponse = await fetch(
-        `${API_URL}/top-like`
-      );
+      const trendingResponse = await fetch(`${API_URL}/trending`);
+      const topListenResponse = await fetch(`${API_URL}/top-listen`);
+      const topLikeResponse = await fetch(`${API_URL}/top-like`);
       const artistList = await fetch(`${API_URL}/ca-si`);
-      const genresList = await fetch(
-        `${API_URL}/the-loai`
-      );
+      const genresList = await fetch(`${API_URL}/the-loai`);
 
       const trendingData = await trendingResponse.json();
       const topListenData = await topListenResponse.json();
@@ -53,7 +42,7 @@ function Dashboard() {
       setArtists(artistData);
       setGenres(genresData);
     } catch (error) {
-      console.error('Lỗi khi gọi API:', error);
+      console.error("Lỗi khi gọi API:", error);
     }
   };
 
@@ -63,36 +52,31 @@ function Dashboard() {
 
   useEffect(() => {
     fetch(`${API_URL}/ca-si`)
-      .then(response => response.json())
-      .then(data => {
+      .then((response) => response.json())
+      .then((data) => {
         // Mapping the fetched data to match the format needed for ArtistCard
-        const formattedArtists = data.map(artist => ({
-          name: artist.singer_name || 'Unknown Artist',
-          profession: 'Nghệ Sĩ',
+        const formattedArtists = data.map((artist) => ({
+          name: artist.singer_name || "Unknown Artist",
+          profession: "Nghệ Sĩ",
           id: artist.id,
-          imageUrl:
-            artist.singer_image || 'https://via.placeholder.com/150'
+          imageUrl: artist.singer_image || "https://via.placeholder.com/150",
         }));
         setArtists(formattedArtists);
       })
-      .catch(error =>
-        console.error('Lỗi khi lấy dữ liệu nghệ sĩ:', error)
-      );
+      .catch((error) => console.error("Lỗi khi lấy dữ liệu nghệ sĩ:", error));
   }, []);
 
   // Lấy danh sách quốc gia khi component được render lần đầu
   useEffect(() => {
     const fetchCountries = async () => {
       try {
-        const response = await axios.get(
-          `${API_URL}/quoc-gia`
-        ); // Gọi API /quoc-gia
+        const response = await axios.get(`${API_URL}/quoc-gia`); // Gọi API /quoc-gia
         setCountries(response.data); // Lưu danh sách quốc gia vào state
         if (response.data.length > 0) {
           setActiveTab(response.data[0].id); // Đặt quốc gia đầu tiên làm mặc định
         }
       } catch (error) {
-        console.error('Error fetching countries:', error);
+        console.error("Error fetching countries:", error);
       }
     };
     fetchCountries();
@@ -114,7 +98,7 @@ function Dashboard() {
           }
         } catch (error) {
           setSongs([]);
-          console.error('Error fetching songs:', error);
+          console.error("Error fetching songs:", error);
         } finally {
           setLoading(false);
         }
@@ -124,11 +108,11 @@ function Dashboard() {
   }, [activeTab]);
 
   useEffect(() => {
-    const isSetting = localStorage.getItem('isSetting');
-    if (isSetting === 'false') {
-      localStorage.removeItem('isSetting'); // Remove it to prevent repeated reloads
-      if (!sessionStorage.getItem('reloaded')) {
-        sessionStorage.setItem('reloaded', true); // Flag that reload has occurred
+    const isSetting = localStorage.getItem("isSetting");
+    if (isSetting === "false") {
+      localStorage.removeItem("isSetting"); // Remove it to prevent repeated reloads
+      if (!sessionStorage.getItem("reloaded")) {
+        sessionStorage.setItem("reloaded", true); // Flag that reload has occurred
         window.location.reload(); // Reload the page
       }
     }
@@ -137,13 +121,14 @@ function Dashboard() {
 
   // Hàm render danh sách quốc gia
   const renderCountries = () => {
-    return countries.map(country => (
+    return countries.map((country) => (
       <p
         key={country.id}
-        className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${activeTab === country.id
-            ? 'bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
-            : 'bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]'
-          }`}
+        className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
+          activeTab === country.id
+            ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
+            : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
+        }`}
         onClick={() => setActiveTab(country.id)} // Đổi quốc gia khi nhấn vào tab
       >
         {country.name_country}
@@ -162,7 +147,12 @@ function Dashboard() {
     const limitedSongs = songs.slice(0, 9);
     return limitedSongs.map((song, index) => (
       <div className="w-1/3 pr-10 mb-10" key={song.id}>
-        <div className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer" onDoubleClick={() => { handleAddSong("song", song.id) }} >
+        <div
+          className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer"
+          onDoubleClick={() => {
+            handleAddSong("song", song.id);
+          }}
+        >
           <p className="text-xl text-slate-700 font-medium p-6">{index + 1}</p>
           <img
             className="size-16 rounded-md"
@@ -192,91 +182,111 @@ function Dashboard() {
         <div className="relative  ">
           <img src="../imgs/Group 92.png" />
           <div className="absolute top-1/2 px-10 w-full">
-            <h1 className="text-7xl font-medium  w-2/4 pr-10 italic tracking-wide">
+            <h1 className="text-7xl font-medium w-full md:w-3/4 lg:w-2/4 pr-10 italic tracking-wide">
               Các bản hit cuối tuần này là gì?
             </h1>
             <div className="flex items-center justify-start my-10  ">
-              <div className="flex items-center text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer" onClick={() => { handleFetchSongs("new") }}>
+              <div
+                className="flex items-center text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer"
+                onClick={() => {
+                  handleFetchSongs("new");
+                }}
+              >
                 <Play size={18} className="mr-2" />
                 Phát Tất Cả
               </div>
             </div>
-            <div className="flex items-center ">
-              <div className="w-1/3 px-5 relative ">
+            <div className="flex items-center flex-col lg:flex-row ">
+              <div className="w-full sm:w-[80%] lg:w-1/3 px-5 relative my-5 ">
                 {trending.length > 0 && (
                   <>
                     <img className=" w-full" src="../imgs/image.png" />
                     <p className="absolute top-2 left-7 text-black bg-yellow-500 py-1 rounded-md font-bold text-sm  px-4">
-                      Top Thịnh Hành{" "}
+                      Top Thịnh Hành
                     </p>
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
-                      <div className=" flex  items-center">
+                      <div className=" flex  items-center w-[70%] flex-1">
                         <img
-                          className=" size-16 rounded-lg"
+                          className="lg:size-12  xl:size-16 size-16 rounded-lg"
                           src={trending[0].song_image}
                         />
-                        <p className="mx-3 font-medium tracking-wide">
-                          {trending[0].song_name} <br />{" "}
-                          <span className="text-sm font-light">
+                        <p className="mx-3 font-medium tracking-wide truncate  flex-initial w-1/2 ">
+                          {trending[0].song_name} <br />
+                          <span className="text-xs lg:text-sm font-light truncate">
                             {trending[0].composer}
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => { handleFetchSongs("trending") }}>
+                      <div
+                        className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer"
+                        onClick={() => {
+                          handleFetchSongs("trending");
+                        }}
+                      >
                         <Play size={18} />
                       </div>
                     </div>
                   </>
                 )}
               </div>
-              <div className="w-1/3 px-5 relative ">
+              <div className="w-full sm:w-[80%] lg:w-1/3 px-5 relative  my-5">
                 {topListen.length > 0 && (
                   <>
                     <img className="" src="../imgs/image (4).png" />
                     <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
-                      Top Lượt Nghe{" "}
+                      Top Lượt Nghe
                     </p>
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
-                      <div className=" flex  items-center">
+                      <div className=" flex  items-center w-[70%] flex-1">
                         <img
-                          className=" size-16 rounded-lg"
+                          className="lg:size-12  xl:size-16 size-16 rounded-lg"
                           src={topListen[0].song_image}
                         />
-                        <p className="mx-3 font-medium tracking-wide">
-                          {topListen[0].song_name} <br />{" "}
-                          <span className="text-sm font-light">
+                        <p className="mx-3 font-medium tracking-wide truncate  flex-initial w-1/2 ">
+                          {topListen[0].song_name} <br />
+                          <span className="text-xs lg:text-sm font-light truncate">
                             {topListen[0].composer}
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer" onClick={() => { handleFetchSongs("toplisten") }}>
+                      <div
+                        className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer"
+                        onClick={() => {
+                          handleFetchSongs("toplisten");
+                        }}
+                      >
                         <Play size={18} />
                       </div>
                     </div>
                   </>
                 )}
               </div>
-              <div className="w-1/3 px-5 relative ">
+              <div className="w-full sm:w-[80%] lg:w-1/3 px-5 relative  my-5">
                 {topLike.length > 0 && (
                   <>
                     <img className="" src="../imgs/image (1).png" />
                     <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
-                      Top Yêu Thích{" "}
+                      Top Yêu Thích
                     </p>
                     <div className="absolute bottom-2 left-1/2 -translate-x-1/2 bg-stone-950/65 p-1 flex items-center justify-between w-4/5 rounded-md">
-                      <div className=" flex  items-center">
+                      <div className=" flex  items-center w-[70%] flex-1">
                         <img
-                          className=" size-16 rounded-lg"
+                          className="lg:size-12  xl:size-16 size-16 rounded-lg"
                           src={topLike[0].song_image}
                         />
-                        <p className="mx-3 font-medium tracking-wide">
-                          {topLike[0].song_name} <br />{" "}
-                          <span className="text-sm font-light">
+                        <p className="mx-3 font-medium tracking-wide truncate  flex-initial w-1/2 ">
+                          {topLike[0].song_name} <br />
+                          <span className="text-xs lg:text-sm font-light truncate">
                             {topLike[0].composer}
                           </span>
                         </p>
                       </div>
-                      <div className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer " onClick={() => { handleFetchSongs("yeuthich") }}>
+                      <div
+                        className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer "
+                        onClick={() => {
+                          handleFetchSongs("yeuthich");
+                        }}
+                      >
                         <Play size={18} />
                       </div>
                     </div>
@@ -294,7 +304,9 @@ function Dashboard() {
             {renderCountries()}
           </div>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={"/BXH"}><p className="text-sm cursor-pointer">Xem Thêm </p></Link>
+            <Link to={"/BXH"}>
+              <p className="text-sm cursor-pointer">Xem Thêm </p>
+            </Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -325,7 +337,10 @@ function Dashboard() {
           >
             {songHistory.map((song, index) => (
               <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div className="text-center flex flex-col  items-center" onDoubleClick={() => handleAddSong("song", song.id)}>
+                <div
+                  className="text-center flex flex-col  items-center"
+                  onDoubleClick={() => handleAddSong("song", song.id)}
+                >
                   <img
                     src={song.song_image} // URL hình ảnh của bài hát
                     className="rounded-full mb-7  size-52 "
@@ -333,7 +348,9 @@ function Dashboard() {
                   <p className="font-medium mb-2 text-base  text-center  w-[150px] truncate">
                     {song.song_name}
                   </p>
-                  <p className="text-sm text-slate-700 truncate w-[120px]">{song.composer}</p>
+                  <p className="text-sm text-slate-700 truncate w-[120px]">
+                    {song.composer}
+                  </p>
                 </div>
               </SwiperSlide>
             ))}
@@ -421,16 +438,16 @@ function Dashboard() {
           >
             {["Wean", "Tăng Duy Tân", "Wean", "Wean"].map((item, index) => (
               <SwiperSlide key={index} style={{ width: "auto" }}>
-              <div className="mr-36 flex flex-col" >
-                <div className="w-full relative flex    ">
-                  <img src="../imgs/image 8.png" className="  z-10" />
-                  <img
-                    src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png"
-                    className="absolute translate-x-1/2 w-full h-full"
-                  />
+                <div className="mr-36 flex flex-col">
+                  <div className="w-full relative flex    ">
+                    <img src="../imgs/image 8.png" className="  z-10" />
+                    <img
+                      src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png"
+                      className="absolute translate-x-1/2 w-full h-full"
+                    />
+                  </div>
+                  <p className="text-lg font-medium ml-24 mt-5 mt-3">{item}</p>
                 </div>
-                <p className="text-lg font-medium ml-24 mt-5 mt-3">{item}</p>
-              </div>
               </SwiperSlide>
             ))}
           </Swiper>
@@ -440,7 +457,9 @@ function Dashboard() {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-medium mb-16">Thể Loại</h1>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={'/Genre'} className="text-sm  ">Xem Thêm </Link>
+            <Link to={"/Genre"} className="text-sm  ">
+              Xem Thêm
+            </Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -459,8 +478,13 @@ function Dashboard() {
         </div>
         <div className="flex items-center  flex-wrap ">
           {genres.map((genre) => (
-            <div key={genre.id} className="pr-3 pb-3 group" onDoubleClick={() => handleFetchSongs("theloai", genre.id)}>
-              <Link to={`/GenreSongs/${genre.id}`}
+            <div
+              key={genre.id}
+              className="pr-3 pb-3 group"
+              onDoubleClick={() => handleFetchSongs("theloai", genre.id)}
+            >
+              <Link
+                to={`/GenreSongs/${genre.id}`}
                 className="w-64 h-64 rounded-xl flex items-center justify-center bg-cover bg-center brightness-100 transition-all duration-300 group-hover:brightness-125"
                 style={{
                   backgroundImage: `url(${genre.background})`,

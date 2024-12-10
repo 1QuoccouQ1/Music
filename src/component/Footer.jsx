@@ -1,4 +1,3 @@
-
 import { Heart, MoreHorizontal, Play } from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
@@ -137,7 +136,7 @@ const Footer = React.memo(function FooterComponent() {
         });
         if (response.ok) {
           const data = await response.json();
-          const favoriteSongs = data.map(song => song.id);
+          const favoriteSongs = data.map((song) => song.id);
           setFavoriteSongs(favoriteSongs); // Giả sử API trả về danh sách id bài hát yêu thích
         } else {
           console.error("Không thể lấy danh sách yêu thích:", response.status);
@@ -252,7 +251,7 @@ const Footer = React.memo(function FooterComponent() {
         id: playSong.id,
         listen_count: playSong.listen_count,
         time: playSong.time, // Thời lượng bài hát
-        file_paths: playSong.file_paths
+        file_paths: playSong.file_paths,
       });
       console.log(playSong);
       try {
@@ -284,7 +283,7 @@ const Footer = React.memo(function FooterComponent() {
       } else {
         setSongPlayCount(songPlayCount + 1);
 
-        if (isAccountType === "basic" && songPlayCount >= 3) {
+        if (isAccountType === "Basic" && songPlayCount >= 3) {
           setIsPlayingAd(true);
           fetchAd();
         } else {
@@ -327,7 +326,7 @@ const Footer = React.memo(function FooterComponent() {
           body: JSON.stringify({
             liked: !check,
             song_id: songId,
-            user_id: (JSON.parse(localStorage.getItem("user")).id),
+            user_id: JSON.parse(localStorage.getItem("user")).id,
           }),
         })
           .then((response) => response.json())
@@ -422,7 +421,6 @@ const Footer = React.memo(function FooterComponent() {
       // Gọi API để lấy danh sách bài hát
       await handleFetchSongs("rank");
       setIsLoading(false);
-      
 
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
       if (currentSong) {
@@ -511,10 +509,13 @@ const Footer = React.memo(function FooterComponent() {
 
   return (
     <>
-    <Helmet>
+      <Helmet>
         <title>SoundWave | {playSong.song_name}</title>
         <meta name="description" content={playSong.description} />
-        <meta name="keywords" content={`${playSong.song_name}, ${playSong.singer_name}, ${playSong.provider}, ${playSong.composer}`} />
+        <meta
+          name="keywords"
+          content={`${playSong.song_name}, ${playSong.singer_name}, ${playSong.provider}, ${playSong.composer}`}
+        />
         <meta name="author" content={playSong.provider} />
       </Helmet>
       <audio
@@ -525,9 +526,9 @@ const Footer = React.memo(function FooterComponent() {
       />
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 h-[100px]">
-          <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white   md:w-[350px] rounded-r-lg h-full">
-            <div className="flex items-center h-full justify-between w-full" >
-              <div className="relative h-full xl:block hidden flex-none">
+          <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white max-w-[270px]   md:w-[350px] rounded-r-lg h-full">
+            <div className="flex items-center h-full justify-between w-full">
+              <div className="relative h-full xl:block hidden flex-none ">
                 <img
                   className="inline-block rounded lg:size-20 "
                   src={playSong ? playSong.song_image : null}
@@ -540,41 +541,39 @@ const Footer = React.memo(function FooterComponent() {
                       backgroundSize: "cover",
                     }}
                     className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 size-5 "
-                  >
-                  </i>
+                  ></i>
                 )}
               </div>
-              <div className="mx-3 w-[60%] hidden md:block">
+              <div className="mx-3 w-[40%] hidden md:block">
                 <p className="text-base truncate w-[100%]">
                   {playSong ? playSong.song_name : null}
                 </p>
-                <p className="text-sm text-slate-300">
+                <p className="text-sm text-slate-300 truncate">
                   {playSong ? playSong.composer : null}
                 </p>
               </div>
               <div
-              onClick={() => {
-                setIsModal(!isModal);
-              }}
-              className="size-6 max-xl:size-4 cursor-pointer border border-white  rounded-full flex items-center justify-center "  
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                strokeWidth={1.5}
-                stroke="currentColor"
-                className="size-3"
+                onClick={() => {
+                  setIsModal(!isModal);
+                }}
+                className="size-6 w-[10%] flex-none max-xl:size-4 cursor-pointer border border-white  rounded-full flex items-center justify-center "
               >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="m8.25 4.5 7.5 7.5-7.5 7.5"
-                />
-              </svg>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  strokeWidth={1.5}
+                  stroke="currentColor"
+                  className="size-3"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                  />
+                </svg>
+              </div>
             </div>
-            </div>
-            
           </div>
           <div className="flex items-center justify-center ">
             <div className="relative lg:p-4 py-4 px-2 rounded-lg w-full max-w-5xl">
@@ -618,7 +617,7 @@ const Footer = React.memo(function FooterComponent() {
                     <SkipForward size={24} />
                   </button>
                 </div>
-                <div className="flex-grow mx-4 xl:w-[660px] w-[260px]">
+                <div className="flex-grow mx-4 xl:w-[460px] w-[260px]">
                   <div className="relative">
                     <input
                       type="range"
@@ -764,8 +763,14 @@ const Footer = React.memo(function FooterComponent() {
             </div>
           </div>
           <div
-            onClick={() => {
-              setIsAlbum(true);
+            onClick={(e) => {
+              if (Divlist.current && Divlist.current.contains(e.target)) {
+                if (isAlbum) {
+                  setIsAlbum(false);
+                } else {
+                  setIsAlbum(true);
+                }
+              }
             }}
             ref={Divlist}
             className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  lg:h-[40px] px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
@@ -792,7 +797,7 @@ const Footer = React.memo(function FooterComponent() {
             {isAlbum && (
               <div
                 ref={Playlist}
-                className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute bottom-0 -translate-y-[15%] right-0 overflow-hidden"
+                className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute -bottom-3 -translate-y-[15%] right-0 overflow-hidden"
               >
                 <h2 className="text-lg ml-2 mb-4">Danh sách phát</h2>
                 <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4">
@@ -844,7 +849,7 @@ const Footer = React.memo(function FooterComponent() {
                   </div>
                 </div>
                 <h3 className=" ml-2text-sm font-medium mb-2">Tiếp theo</h3>
-                <ul className="ml-2 space-y-2  h-[368px] overflow-y-auto no-scrollbar">
+                <ul className="ml-2 space-y-2  h-[328px] overflow-y-auto no-scrollbar">
                   {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
@@ -870,7 +875,7 @@ const Footer = React.memo(function FooterComponent() {
                   ))}
                 </ul>
                 {visibleCount < listsongs.length && (
-                  <div className="flex justify-center mt-2">
+                  <div className="flex justify-center mt-4">
                     <button
                       className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white px-4 py-1 rounded"
                       onClick={() => setVisibleCount(listsongs.length)}
@@ -927,7 +932,7 @@ const Footer = React.memo(function FooterComponent() {
           <div className="flex items-center justify-center ">
             <div className="relative lg:p-4 rounded-lg w-full max-w-5xl">
               <div className="flex items-center justify-between text-white">
-                <div className="flex-grow mx-4 xl:w-[660px] lg:w-[360px] md:w-[260px] min-w-[140px] ">
+                <div className="flex-grow mx-4 xl:w-[560px] lg:w-[360px] md:w-[260px] min-w-[140px] ">
                   <div className="relative">
                     <input
                       type="range"
@@ -1102,9 +1107,9 @@ const Footer = React.memo(function FooterComponent() {
                   {getAvailableQualities().map((quality) => {
                     // Kiểm tra xem nút có được phép chọn hay không
                     const isDisabled =
-                      (isAccountType === "basic" &&
+                      (isAccountType === "Basic" &&
                         quality.value !== "basic") ||
-                      (isAccountType === "plus" && quality.value === "premium");
+                      (isAccountType === "Plus" && quality.value === "Premium");
                     return (
                       <button
                         key={quality.value}
