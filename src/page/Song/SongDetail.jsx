@@ -76,7 +76,7 @@ function SongDetail() {
   const [song, setSong] = useState(null);
   const [SongFavourite, setIsSongFavourite] = useState([]);
   const handleSongFavourite = (song_id, check) => {
-    if (!user.id) {
+    if (!user) {
       // Kiểm tra đã đăng nhập chưa
       toast.error(
         "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào yêu thích."
@@ -167,7 +167,7 @@ function SongDetail() {
         console.log(err);
       }
     };
-    if (user.id) {
+    if (user) {
       FavouriteSong();
     }
 

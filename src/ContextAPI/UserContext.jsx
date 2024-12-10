@@ -67,6 +67,10 @@ export const UserProvider = ({ children }) => {
           fetchedSongs = await fetch(`${API_URL}/the-loai/${id}/bai-hat`);
           setIsUpdate(true)
           break;
+        case "quocgia":
+          fetchedSongs = await fetch(`${API_URL}/quoc-gia/${id}/bai-hat`);
+          setIsUpdate(true)
+          break;
         case "casi":
           fetchedSongs = await fetch(`${API_URL}/ca-si/${id}/bai-hat`);
           setIsUpdate(true)
@@ -185,7 +189,7 @@ export const UserProvider = ({ children }) => {
         handleListSongs,
         playSong, setPlaySong,
         isAccountType, setIsAccountType,
-        isUpdate,setIsUpdate,
+        isUpdate, setIsUpdate,
         isSidebar, setIsSidebar
       }}
     >

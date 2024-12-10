@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { API_URL } from '../services/apiService';
+import { API_URL } from '../../services/apiService';
 import { Link } from 'react-router-dom';
 
 function Genre() {
@@ -107,7 +107,7 @@ function Genre() {
                                 {category.categorie_name}
                             </h1>
                             <div className='flex items-center text-slate-500 hover:text-white cursor-pointer duration-300'>
-                                <p className='text-sm'>Xem Thêm</p>
+                                <Link className='text-sm' to={`/GenreSongs/${category.id}`}>Xem Thêm</Link>
                                 <svg
                                     xmlns='http://www.w3.org/2000/svg'
                                     fill='none'

@@ -10,7 +10,7 @@ import { useOutletContext } from 'react-router-dom';
 const LibraryPage = () => {
     const songs = JSON.parse(localStorage.getItem("songHistory"));
     const user = JSON.parse(localStorage.getItem("user"));
-    const { handleAddSong,handleListSongs } = useContext(UserContext);
+    const { handleAddSong, handleListSongs } = useContext(UserContext);
     const navigate = useNavigate();
     const [SongFavourite, setIsSongFavourite] = useState([]);
     const { settext } = useOutletContext();
@@ -51,7 +51,7 @@ const LibraryPage = () => {
         };
         if (user.id) {
             FavouriteSong();
-            settext(`${songs.length} Bài hát vừa nghe`)
+            settext(`${songs ? songs.length : 0} Bài hát vừa nghe`)
         }
     }, [user.id]);
 
@@ -98,10 +98,10 @@ const LibraryPage = () => {
     return (
         <>
             <div className="flex items-center text-white justify-end text-sm py-1 px-3 rounded-lg cursor-pointer duration-300">
-                <button className='text-white group py-2 px-7 rounded-md w-[160px] bg-gradient-to-r from-[#FF0065] to-[#FF553E] lg:opacity-80 cursor-pointer hover:opacity-100 flex' 
-                onClick={() => handleListSongs("history")}
+                <button className='text-white group py-2 px-7 rounded-md w-[160px] bg-gradient-to-r from-[#FF0065] to-[#FF553E] lg:opacity-80 cursor-pointer hover:opacity-100 flex'
+                    onClick={() => handleListSongs("history")}
                 >
-                <Play size={18} className="duration-300 md:hidden group-hover:inline  mr-2" />
+                    <Play size={18} className="duration-300 md:hidden group-hover:inline  mr-2" />
                     Nghe tất cả</button>
             </div>
             <div className="flex items-center text-white justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300">
@@ -119,25 +119,36 @@ const LibraryPage = () => {
                 </div>
             </div>
 
-            {songs.map((song, index) => (
-                <div
-                    key={song.id}
-                    className="flex items-center justify-between text-white text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300"
-                >
-                    <div className="flex items-center gap-3 w-1/3 justify-start" onDoubleClick={() => handleAddSong("song", song.id)}  >
-                        <Play size={18} className="hidden  group-hover:block duration-300" />
-                        <p className="text-xs w-[18px] h-[18px] group-hover:hidden duration-300">
-                            {index + 1}
-                        </p>
-                        <img className="size-10 rounded-lg" src={song.song_image} onClick={() => navigate(`/SongDetail/${song.id}`)} />
-                        <p className="w-full truncate " >{song.song_name}</p>
-                    </div>
-                    <div className="w-1/3 flex items-center justify-center">
-                        <p>{song.listen_count}</p>
-                    </div>
-                    <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">
-                        {SongFavourite != [] ? (
-                            SongFavourite.includes(song.id) ? (
+            {songs ? (
+                songs.map((song, index) => (
+                    <div
+                        key={song.id}
+                        className="flex items-center justify-between text-white text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300"
+                    >
+                        <div
+                            className="flex items-center gap-3 w-1/3 justify-start"
+                            onDoubleClick={() => handleAddSong("song", song.id)}
+                        >
+                            <Play
+                                size={18}
+                                className="hidden group-hover:block duration-300"
+                            />
+                            <p className="text-xs w-[18px] h-[18px] group-hover:hidden duration-300">
+                                {index + 1}
+                            </p>
+                            <img
+                                className="size-10 rounded-lg"
+                                src={song.song_image}
+                                alt={song.song_name}
+                                onClick={() => navigate(`/SongDetail/${song.id}`)}
+                            />
+                            <p className="w-full truncate">{song.song_name}</p>
+                        </div>
+                        <div className="w-1/3 flex items-center justify-center">
+                            <p>{song.listen_count}</p>
+                        </div>
+                        <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">
+                            {SongFavourite && SongFavourite.includes(song.id) ? (
                                 <Heart
                                     size={22}
                                     fill="red"
@@ -150,22 +161,23 @@ const LibraryPage = () => {
                                     onClick={() => handleSongFavourite(song.id, false)}
                                     className="text-red-500 lg:opacity-0 group-hover:opacity-100 duration-300"
                                 />
-                            )
-                        ) : (
-                            ""
-                        )}
-                        <CirclePlus
-                            size={22}
-                            className="text-slate-500 lg:opacity-0 group-hover:opacity-100 duration-300"
-                        />
-                        <p>{formatTime(song.time)}</p>
-                        <Ellipsis
-                            size={22}
-                            className="lg:opacity-0 group-hover:opacity-100 duration-300"
-                        />
+                            )}
+                            <CirclePlus
+                                size={22}
+                                className="text-slate-500 lg:opacity-0 group-hover:opacity-100 duration-300"
+                            />
+                            <p>{formatTime(song.time)}</p>
+                            <Ellipsis
+                                size={22}
+                                className="lg:opacity-0 group-hover:opacity-100 duration-300"
+                            />
+                        </div>
                     </div>
-                </div>
-            ))}
+                ))
+            ) : (
+                <p className="text-xs text-white duration-300">Không có bài hát nào</p>
+            )}
+
 
         </>
     );
