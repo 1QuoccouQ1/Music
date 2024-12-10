@@ -36,7 +36,7 @@ export const UserProvider = ({ children }) => {
   const [playSong, setPlaySong] = useState(null);
   const [isAccountType, setIsAccountType] = useState(() => {
     const savedAccountType = localStorage.getItem("user");
-    return savedAccountType ? JSON.parse(savedAccountType).users_type : "Basic";
+    return savedAccountType ? JSON.parse(savedAccountType).users_type : "basic";
   });
   const [isUpdate, setIsUpdate] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);

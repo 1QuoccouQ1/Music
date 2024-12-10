@@ -72,6 +72,8 @@ function Login() {
 
     if (!password) {
       newErrors.password = language === "vi" ? "Mật khẩu không được để trống." : "Password cannot be empty.";
+    } else if (password.length < 8) {
+      newErrors.password = language === "vi" ? "Mật khẩu phải có ít nhất 8 ký tự." : "Password must be at least 8 characters.";
     }
 
     setErrors(newErrors);
@@ -97,14 +99,10 @@ function Login() {
         // Kiểm tra trạng thái của phản hồi
         if (response.status === 200) {
           const data = await response.json();
-
           localStorage.setItem('access_token',data.access_token);
           localStorage.setItem('user',JSON.stringify(data.user) );
-          
-          // Lưu thông tin người dùng vào Context
-          // setUser(data.user);  // data.user là thông tin người dùng trả về từ API
+          localStorage.setItem('isAccountType',(data.user.users_type) );
           localStorage.setItem('isSetting',false );
-
           navigate('/');
         } else {
           setErrors({
