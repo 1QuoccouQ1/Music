@@ -59,6 +59,30 @@ export default function PasswordCode() {
       setErrorMessage("Lỗi kết nối. Vui lòng kiểm tra lại mạng của bạn.");
     }
   };
+
+  const handleResetOtp = async (e) => {
+    setErrorMessage("");
+    try {
+      // Gửi request POST đến /resetpass với email
+      const response = await fetch(`${API_URL}/resetpassword`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),  // Gửi email trong body request
+      });
+
+      if (response.status === 200) {
+        // Nếu API trả về thành công, điều hướng tới trang /passcode
+        navigate('/PasswordCode', { state: { email } });
+      } else {
+        const data = await response.json(); // Lấy dữ liệu từ API
+        setErrorMessage(data.message || "Có lỗi xảy ra. Vui lòng thử lại."); // Hiển thị thông báo lỗi từ API hoặc lỗi mặc định
+      }
+    } catch (error) {
+      setErrorMessage("Lỗi kết nối. Vui lòng kiểm tra lại mạng của bạn.");
+    }
+  };
   return (
     <div className="min-h-screen bg-[#0a0e17] flex flex-col items-center justify-center p-4">
       <div className="absolute top-4 right-4">
@@ -156,6 +180,7 @@ export default function PasswordCode() {
 
               <button
                 type="button"
+                onClick={() => handleResetOtp()}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white rounded-md text-sm"
               >
                 gửi mã
