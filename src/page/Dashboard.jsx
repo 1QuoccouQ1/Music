@@ -288,13 +288,13 @@ function Dashboard() {
         </div>
       </section>
       <section className=" bg-medium pt-24 text-white px-10 h-auto">
-        <h1 className="text-3xl font-medium ">Bảng Xếp Hạng Hàng Tuần </h1>
+        <h1 className="text-3xl font-medium ">Bài Hát Mới Nhất Hàng Tuần </h1>
         <div className="flex items-center justify-between my-7">
           <div className="flex items-center text-sm tracking-wide ">
             {renderCountries()}
           </div>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={"/BXH"}><p className="text-sm cursor-pointer">Xem Thêm </p></Link>
+            <Link to={"/Genre"}><p className="text-sm cursor-pointer">Xem Thêm </p></Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
