@@ -6,7 +6,7 @@ import ReactDOM from "react-dom/client";
 import Dashboard from "./page/Dashboard.jsx";
 import ArtistGallery from "./page/Artist/ArtistGallery.jsx";
 import RankingBoard from "./page/BXH/RankingBoard.jsx";
-import Genre from "./page/genre.jsx";
+import Genre from "./page/Genre/genre.jsx";
 import History from "./page/History.jsx";
 import Albums from "./page/Albums.jsx";
 import MusicLibrary from "./page/Library/MusicLibrary.jsx";
@@ -45,6 +45,7 @@ import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
+import GenreSongs from "./page/Genre/GenreSongs.jsx";
 
 
 
@@ -211,7 +212,7 @@ const router = createBrowserRouter([
         element: <Privacy />,
       },
       {
-        path: "/SongGlobal/:id",
+        path: "/SongGlobal/:id/",
         loader: changeDashboard,
         element: <SongGlobal />,
       },
@@ -219,6 +220,11 @@ const router = createBrowserRouter([
         path: "/SongDetail/:id",
         loader: changeDashboard,
         element: <SongDetail />,
+      },
+      {
+        path: "/GenreSongs/:id/",
+        loader: changeDashboard,
+        element: <GenreSongs />,
       },
     ],
   },
