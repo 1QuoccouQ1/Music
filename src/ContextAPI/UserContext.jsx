@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
   });
   const [currentTime, setCurrentTime] = useState(() => {
     const savedTime = localStorage.getItem("currentTime");
-    return savedTime ? JSON.parse(savedTime) : 10;
+    return savedTime ? JSON.parse(savedTime) : 0;
   });
   const [isModal, setIsModal] = useState(false);
   const [user, setUser] = useState(() => {
@@ -36,7 +36,7 @@ export const UserProvider = ({ children }) => {
   const [playSong, setPlaySong] = useState(null);
   const [isAccountType, setIsAccountType] = useState(() => {
     const savedAccountType = localStorage.getItem("user");
-    return savedAccountType ? JSON.parse(savedAccountType).users_type : "basic";
+    return savedAccountType ? JSON.parse(savedAccountType).users_type : "Basic";
   });
   const [isUpdate, setIsUpdate] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);

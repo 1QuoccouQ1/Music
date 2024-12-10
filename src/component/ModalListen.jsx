@@ -58,7 +58,7 @@ function ModalListen() {
               : "opacity-0 translate-y-full"
           }`}
       >
-        <div className="flex items-start justify-between">
+        <div className="flex items-start justify-between  absolute top-0 w-full left-0 p-5 z-20">
           <div>
             <p className="text-4xl font-semibold tracking-wide">
               {currentSong.song_name}
@@ -112,7 +112,7 @@ function ModalListen() {
                 />
               </div>
               <img
-                className={`absolute w-60 h-90 top-0 right-0  -translate-y-1/2  ${
+                className={`absolute w-60 h-90  top-0 right-0  -translate-y-1/2  ${
                   isPlay ? "" : "rotate-90"
                 } duration-700  `}
                 src="../imgs/Turntable (4) 1.png"
@@ -125,7 +125,7 @@ function ModalListen() {
                 {" "}
                 <ChevronUp size={18} />
               </div>
-              <ul className="flex flex-col gap-10 h-[550px] overflow-y-auto no-scrollbar">
+              <ul className="flex flex-col gap-10 h-[450px] overflow-y-auto no-scrollbar">
                 {singers.map((singer) => (
                   <li key={singer.id} >
                   <Link to={`/ProfileArtist/${singer.id}`} onClick={()=>{
