@@ -60,7 +60,7 @@ function ModalListen() {
       >
         <div className="flex items-start justify-between  absolute top-0 w-full left-0 p-5 z-20">
           <div>
-            <p className="text-4xl font-semibold tracking-wide">
+            <p className="text-4xl font-semibold tracking-wide capitalize">
               {currentSong.song_name}
             </p>
             <p className="text-lg font-medium mt-2  ">
@@ -77,8 +77,8 @@ function ModalListen() {
             <ChevronDown size={18} />
           </div>
         </div>
-        <div className="flex items-center h-[600px] ">
-          <div className="md:w-1/4 md:block  hidden">
+        <div className="flex items-center h-full ">
+          <div className="md:w-1/4 md:block  hidden h-[80%]">
             {!hasSongs && (
               <div className="text-slate-300 text-2xl   text-center mb-4">
                 Bài hát chưa có Lyric
@@ -93,7 +93,7 @@ function ModalListen() {
               ></div>
             </div>
           </div>
-          <div className="w-full md:w-3/4 xl:w-2/4  flex items-center justify-center ">
+          <div className="w-full md:w-3/4 xl:w-2/4  flex items-center justify-center h-[80%] ">
             <div
               style={{
                 backgroundImage: `url("../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3 (1).png")`,
@@ -119,13 +119,13 @@ function ModalListen() {
               />
             </div>
           </div>
-          <div className="xl:w-1/4 flex flex-col items-end mr-10  gap-10 hidden xl:block">
-            <div className="flex flex-col items-center gap-5">
+          <div className="xl:w-1/4 flex flex-col items-end mr-10  gap-10 hidden xl:block h-[80%]">
+            <div className="flex flex-col items-center gap-5 h-[90%]">
               <div className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center">
                 {" "}
                 <ChevronUp size={18} />
               </div>
-              <ul className="flex flex-col gap-10 h-[450px] overflow-y-auto no-scrollbar">
+              <ul className="flex flex-col gap-10 h-full overflow-y-auto no-scrollbar">
                 {singers.map((singer) => (
                   <li key={singer.id} >
                   <Link to={`/ProfileArtist/${singer.id}`} onClick={()=>{

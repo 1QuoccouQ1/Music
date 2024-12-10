@@ -124,7 +124,7 @@ function Dashboard() {
     return countries.map((country) => (
       <p
         key={country.id}
-        className={`cursor-pointer duration-300 py-2 px-8 rounded-full mr-10 ${
+        className={`cursor-pointer duration-300 truncate py-2 px-4 lg:px-8 rounded-full mr-6 lg:mr-10 ${
           activeTab === country.id
             ? "bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
             : "bg-slate-800 hover:bg-gradient-to-r from-[#FF0065] to-[#FF553E]"
@@ -146,7 +146,7 @@ function Dashboard() {
     }
     const limitedSongs = songs.slice(0, 9);
     return limitedSongs.map((song, index) => (
-      <div className="w-1/3 pr-10 mb-10" key={song.id}>
+      <div className="w-full lg:w-1/2 xl:w-1/3 pr-10 mb-10" key={song.id}>
         <div
           className="w-full flex items-center border-b border-slate-700 pb-2 cursor-pointer"
           onDoubleClick={() => {
@@ -159,16 +159,16 @@ function Dashboard() {
             src={song.song_image}
             alt={song.description}
           />
-          <p className="text-base ml-3">
+          <p className="text-base ml-3 truncate">
             {song.song_name}
             <br />
-            <span className="text-xs text-slate-600">{song.composer}</span>
+            <span className="text-xs text-slate-600 truncate">{song.composer}</span>
           </p>
         </div>
       </div>
     ));
   };
-
+  
   if (loadingGlobal) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -178,16 +178,16 @@ function Dashboard() {
   }
   return (
     <>
-      <section className="bg-medium w-full h-[1000px] text-white ">
+      <section className="bg-medium w-full h-auto text-white ">
         <div className="relative  ">
-          <img src="../imgs/Group 92.png" />
-          <div className="absolute top-1/2 px-10 w-full">
-            <h1 className="text-7xl font-medium w-full md:w-3/4 lg:w-2/4 pr-10 italic tracking-wide">
+          <img src="../imgs/Group 92.png"/>
+          <div className="absolute top-1/2 px-10 w-full " >
+            <h1 className=" md:text-5xl xl:text-7xl text-4xl  font-medium w-full md:w-3/4 lg:w-2/4 pr-10 italic tracking-wide">
               Các bản hit cuối tuần này là gì?
             </h1>
-            <div className="flex items-center justify-start my-10  ">
+            <div className="flex items-center justify-start lg:my-10 my-7  ">
               <div
-                className="flex items-center text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer"
+                className="flex items-center text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer  lg:text-base text-sm"
                 onClick={() => {
                   handleFetchSongs("new");
                 }}
@@ -196,7 +196,11 @@ function Dashboard() {
                 Phát Tất Cả
               </div>
             </div>
-            <div className="flex items-center flex-col lg:flex-row ">
+          </div>
+        </div>
+      </section>
+      <section className=" bg-medium pt-16 text-white px-10 h-auto">
+      <div className="flex items-center flex-col lg:flex-row ">
               <div className="w-full sm:w-[80%] lg:w-1/3 px-5 relative my-5 ">
                 {trending.length > 0 && (
                   <>
@@ -232,7 +236,7 @@ function Dashboard() {
               <div className="w-full sm:w-[80%] lg:w-1/3 px-5 relative  my-5">
                 {topListen.length > 0 && (
                   <>
-                    <img className="" src="../imgs/image (4).png" />
+                    <img className=" w-full" src="../imgs/image (4).png" />
                     <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
                       Top Lượt Nghe
                     </p>
@@ -264,7 +268,7 @@ function Dashboard() {
               <div className="w-full sm:w-[80%] lg:w-1/3 px-5 relative  my-5">
                 {topLike.length > 0 && (
                   <>
-                    <img className="" src="../imgs/image (1).png" />
+                    <img className=" w-full" src="../imgs/image (1).png" />
                     <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
                       Top Yêu Thích
                     </p>
@@ -294,8 +298,6 @@ function Dashboard() {
                 )}
               </div>
             </div>
-          </div>
-        </div>
       </section>
       <section className=" bg-medium pt-24 text-white px-10 h-auto">
         <h1 className="text-3xl font-medium ">Bài Hát Mới Nhất Hàng Tuần </h1>
@@ -304,7 +306,7 @@ function Dashboard() {
             {renderCountries()}
           </div>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={"/Genre"}><p className="text-sm cursor-pointer">Xem Thêm </p></Link>
+            <Link to={"/Genre"}><p className="text-sm cursor-pointer truncate">Xem Thêm </p></Link>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -362,7 +364,7 @@ function Dashboard() {
       <section className="bg-medium pt-20 text-white px-10 h-auto tracking-wide w-full max-w-full">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-medium mb-16">
-            Top Nghệ Sĩ Được Yêu Thích
+            Top Ca Sĩ Được Yêu Thích
           </h1>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
             <p className="text-sm  ">Xem Thêm </p>
@@ -451,7 +453,7 @@ function Dashboard() {
           </Swiper>
         </div>
       </section>
-      <section className="bg-medium pt-20 text-white px-10 h-auto pb-48 tracking-wide">
+      <section className="bg-medium pt-20 text-white px-10 h-auto  tracking-wide">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-medium mb-16">Thể Loại</h1>
           <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
@@ -474,7 +476,34 @@ function Dashboard() {
             </svg>
           </div>
         </div>
-        <div className="flex items-center  flex-wrap ">
+        <Swiper
+          spaceBetween={20}
+          slidesPerView="auto" // Số item hiện trong 1 lần
+          className="mySwiper "
+        >
+          {genres.map((genre) => (
+            <SwiperSlide key={genre.id} style={{ width: "auto" }}>
+            <div
+              key={genre.id}
+              className="pr-3 pb-3 group"
+              onDoubleClick={() => handleFetchSongs("theloai", genre.id)}
+            >
+              <Link
+                to={`/GenreSongs/${genre.id}`}
+                className="w-64 h-64 rounded-xl flex items-center justify-center bg-cover bg-center brightness-100 transition-all duration-300 group-hover:brightness-125"
+                style={{
+                  backgroundImage: `url(${genre.background})`,
+                }}
+              >
+                <p className="font-bold text-2xl  p-2 rounded-lg">
+                  {genre.categorie_name}
+                </p>
+              </Link>
+            </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+        {/* <div className="flex items-center  flex-wrap ">
           {genres.map((genre) => (
             <div
               key={genre.id}
@@ -494,7 +523,7 @@ function Dashboard() {
               </Link>
             </div>
           ))}
-        </div>
+        </div> */}
       </section>
     </>
   );
