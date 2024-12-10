@@ -6,11 +6,12 @@ import ReactDOM from "react-dom/client";
 import Dashboard from "./page/Dashboard.jsx";
 import ArtistGallery from "./page/Artist/ArtistGallery.jsx";
 import RankingBoard from "./page/BXH/RankingBoard.jsx";
-import Genre from "./page/genre.jsx";
+import Genre from "./page/Genre/genre.jsx";
 import History from "./page/History.jsx";
 import Albums from "./page/Albums.jsx";
 import MusicLibrary from "./page/Library/MusicLibrary.jsx";
 import ShowChart from "./page/MeChart/ShowChart.jsx";
+import SongGlobal from "./page/BXH/SongGlobal.jsx";
 
 import Information from "./page/information/Information.jsx";
 import InfoLibrary from "./page/information/Profile/infoLibrary.jsx";
@@ -39,67 +40,29 @@ import AboutUs from "./page/Setting/AboutUs.jsx";
 import Privacy from "./page/Setting/Privacy.jsx";
 
 import PayNotification from "./page/Payment/PayNotification.jsx";
-import PaySuccess from "./page/Payment/PaySuccess.jsx";
-import PayFail from "./page/Payment/PayFail.jsx";
-import PayError from "./page/Payment/PayError.jsx";
 import Payment from "./page/Payment/Payment.jsx";
 import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
+import GenreSongs from "./page/Genre/GenreSongs.jsx";
 
-export async function changeIsSetting() {
-  const authCheck = await checkAuth();
-  if (authCheck) return authCheck;
 
+
+function changeIsSetting() {
   localStorage.setItem("isSetting", true);
   sessionStorage.removeItem("reloaded");
-  return null;
+  return null
 }
 
-export async function changeDashboard() {
-  const authCheck = await checkAuth();
-  if (authCheck) return authCheck;
-
+function changeDashboard() {
+  localStorage.setItem("isSetting", false);
+  return null
+}
+function changeLogo() {
   localStorage.setItem("isSetting", false);
   return null;
 }
-export async function changeLogo() {
-  const authCheck = await checkAuth();
-  if (authCheck) return authCheck;
-
-  localStorage.setItem("isSetting", false);
-  return null;
-}
-
-export async function checkAuth() {
-  const token = localStorage.getItem("access_token");
-  const User = localStorage.getItem("user");
-
-  if (token && User) {
-    const decodedToken = decodeJwt(token);
-    if (isTokenExpired(decodedToken)) {
-      localStorage.removeItem("access_token");
-      localStorage.removeItem("user");
-    }
-  }
-  
-}
-function decodeJwt(token) {
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/'); // Đảm bảo chuỗi base64 hợp lệ
-  const jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
-    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-  }).join(''));
-
-  return JSON.parse(jsonPayload);
-}
-
-function isTokenExpired(decodedToken) {
-  const currentTime = Math.floor(Date.now() / 1000); 
-  return decodedToken.exp < currentTime; 
-}
-
 
 const router = createBrowserRouter([
   {
@@ -183,8 +146,8 @@ const router = createBrowserRouter([
           { path: "InfoAlbums", element: <InfoAlbums /> },
           { path: "Artist", element: <Artist /> },
           { path: "Downloaded", element: <Downloaded /> },
-          { path: "Followed", element: <Followed /> },
-        ],
+          { path: "Followed", element: <Followed /> }
+        ]
       },
 
       {
@@ -193,8 +156,8 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <ManagePayment /> },
           { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
-          { path: "ManagePayment", element: <ManagePayment /> },
-        ],
+          { path: "ManagePayment", element: <ManagePayment /> }
+        ]
       },
       //Route for Setting
       {
@@ -249,9 +212,19 @@ const router = createBrowserRouter([
         element: <Privacy />,
       },
       {
+        path: "/SongGlobal/:id/",
+        loader: changeDashboard,
+        element: <SongGlobal />,
+      },
+      {
         path: "/SongDetail/:id",
         loader: changeDashboard,
         element: <SongDetail />,
+      },
+      {
+        path: "/GenreSongs/:id/",
+        loader: changeDashboard,
+        element: <GenreSongs />,
       },
     ],
   },
@@ -275,10 +248,13 @@ const router = createBrowserRouter([
     path: "/NewPassword",
     element: <NewPassword />,
   },
+
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+
+    <RouterProvider router={router}>
+    </RouterProvider>
   </React.StrictMode>
 );

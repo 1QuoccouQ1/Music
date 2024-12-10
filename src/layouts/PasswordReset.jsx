@@ -2,6 +2,7 @@ import { ArrowLeft } from 'lucide-react'
 import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";  
+import { API_URL } from '../services/apiService';
 
 export default function PasswordReset() {
     const [language, setLanguage] = useState("vi");
@@ -33,7 +34,7 @@ export default function PasswordReset() {
     setErrorMessage("");
     try {
       // Gửi request POST đến /resetpass với email
-      const response = await fetch('https://soundwave.io.vn/admin/public/api/resetpassword', {
+      const response = await fetch(`${API_URL}/resetpassword`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

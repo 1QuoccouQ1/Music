@@ -1,14 +1,17 @@
 import { Facebook, Apple } from "lucide-react";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef, useEffect,useContext } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from '../ContextAPI/UserContext';
 import { Undo2 } from 'lucide-react';
 import { API_URL } from "../services/apiService";
 function Login() {
+  // const { setUser } = useContext(UserContext); 
   const [language, setLanguage] = useState("vi");
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const navigate = useNavigate();
+  // State cho các trường và lỗi
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -96,13 +99,10 @@ function Login() {
         // Kiểm tra trạng thái của phản hồi
         if (response.status === 200) {
           const data = await response.json();
-
           localStorage.setItem('access_token',data.access_token);
           localStorage.setItem('user',JSON.stringify(data.user) );
           localStorage.setItem('isAccountType',(data.user.users_type) );
-          
           localStorage.setItem('isSetting',false );
-
           navigate('/');
         } else {
           setErrors({

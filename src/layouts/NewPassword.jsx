@@ -1,7 +1,8 @@
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { useLocation ,useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Globe, ChevronDown } from "lucide-react";
+import { API_URL } from "../services/apiService";
 
 function NewPassword() {
   const [showPassword, setShowPassword] = useState(false);
@@ -12,7 +13,7 @@ function NewPassword() {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef(null);
   const location = useLocation();
-  const { email } = location.state || {}; 
+  const { email } = location.state || {};
   const [hasLetter, setHasLetter] = useState(false);
   const [hasNumberOrSpecialChar, setHasNumberOrSpecialChar] = useState(false);
   const [isLongEnough, setIsLongEnough] = useState(false);
@@ -30,13 +31,12 @@ function NewPassword() {
   const validatePassword = (value) => {
     setHasLetter(/[a-zA-Z]/.test(value));
     setHasNumberOrSpecialChar(/[0-9!@#\$%\^&]/.test(value));
-    setIsLongEnough(value.length >= 8);
+    setIsLongEnough(value.length >= 10);
   };
 
   const checkPasswordsMatch = (confirmValue) => {
     setIsMatching(password === confirmValue);
   };
-
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -48,16 +48,19 @@ function NewPassword() {
 
     try {
       // Gọi API bằng fetch
-      const response = await fetch("https://soundwave.io.vn/admin/public/api/newpassword", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-        }),
-      });
+      const response = await fetch(
+        `${API_URL}/newpassword`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+          }),
+        }
+      );
 
       if (response.ok) {
         // Nếu thành công, chuyển hướng về trang đăng nhập
@@ -81,7 +84,6 @@ function NewPassword() {
     document.addEventListener("mousedown", handleClickOutside);
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
-
 
   return (
     <>
@@ -121,98 +123,140 @@ function NewPassword() {
           </div>
         </div>
         <div className="bg-white rounded-lg shadow-lg w-full max-w-md p-6 relative">
-        <button className="absolute top-4 left-4 text-gray-600 hover:text-gray-800">
-          <ArrowLeft size={24} />
-        </button>
-        <h1 className="text-2xl font-bold mb-4 mt-8">Tạo mật khẩu mới</h1>
-        <p className="text-gray-600 mb-6">
-          Vui lòng nhập mật khẩu mới của bạn dưới đây cho tài khoản Spotify của bạn.
-        </p>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label htmlFor="new-password" className="block text-sm font-bold text-gray-700 mb-1">
-              Mật khẩu mới
-            </label>
-            <div className="relative">
-              <input
-                type={showPassword ? "text" : "password"}
-                id="new-password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                placeholder="••••••••••••••••••••"
-                value={password}
-                onChange={(e) => {
-                  setPassword(e.target.value);
-                  validatePassword(e.target.value);
-                  checkPasswordsMatch(confirmPassword); // Check xem mật khẩu có khớp không mỗi khi thay đổi
-                }}
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowPassword(!showPassword)}
-              >
-                {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-          </div>
-          <div className="mb-6">
-            <p className="text-sm font-bold text-gray-700 mb-2">Mật khẩu của bạn phải có ít nhất</p>
-            <div className="space-y-2">
-              <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox text-pink-500 " checked={hasLetter} readOnly />
-                <span className="ml-2 text-sm text-gray-600 font-bold">1 chữ cái</span>
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox text-pink-500  " checked={hasNumberOrSpecialChar} readOnly />
-                <span className="ml-2 text-sm text-gray-600 font-bold">1 chữ số hoặc ký tự đặc biệt (ví dụ: # ? ! &)</span>
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" className="form-checkbox text-pink-500" checked={isLongEnough} readOnly />
-                <span className="ml-2 text-sm text-gray-600 font-bold">8 ký tự</span>
-              </label>
-            </div>
-          </div>
-          <div className="mb-6">
-            <label htmlFor="confirm-password" className="block text-sm font-bold text-gray-700 mb-1">
-              Xác nhận mật khẩu mới
-            </label>
-            <div className="relative">
-              <input
-                type={showConfirmPassword ? "text" : "password"}
-                id="confirm-password"
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
-                placeholder="••••••••••••••••••••"
-                value={confirmPassword}
-                onChange={(e) => {
-                  setConfirmPassword(e.target.value);
-                  checkPasswordsMatch(e.target.value); // Cập nhật trạng thái khớp khi người dùng nhập lại mật khẩu
-                }}
-              />
-              <button
-                type="button"
-                className="absolute inset-y-0 right-0 pr-3 flex items-center"
-                onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              >
-                {showConfirmPassword ? <EyeOff size={20} /> : <Eye size={20} />}
-              </button>
-            </div>
-            {!isMatching && (
-              <p className="text-sm text-red-500 mt-2">Mật khẩu không khớp. Vui lòng kiểm tra lại.</p>
-            )}
-          </div>
-          {error && <p className="text-sm text-red-500 mb-4">{error}</p>} {/* Hiển thị lỗi */}
-          <button
-            type="submit"
-            className="w-full bg-pink-500 text-white py-2 px-4 rounded-full font-semibold hover:bg-pink-600 transition duration-300"
-            disabled={!hasLetter || !hasNumberOrSpecialChar || !isLongEnough || !isMatching}
-          >
-            Tiếp tục
+          <button className="absolute top-4 left-4 text-gray-600 hover:text-gray-800">
+            <ArrowLeft size={24} />
           </button>
-        </form>
-        <p className="text-center mt-6 text-sm text-pink-500 hover:underline cursor-pointer">
-          Quay lại Đăng Nhập
-        </p>
-      </div>
+          <h1 className="text-2xl font-bold mb-4 mt-8">Tạo mật khẩu mới</h1>
+          <p className="text-gray-600 mb-6">
+            Vui lòng nhập mật khẩu mới của bạn dưới đây cho tài khoản Spotify
+            của bạn.
+          </p>
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label
+                htmlFor="new-password"
+                className="block text-sm font-bold text-gray-700 mb-1"
+              >
+                Mật khẩu mới
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="new-password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  placeholder="••••••••••••••••••••"
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                    validatePassword(e.target.value);
+                    checkPasswordsMatch(confirmPassword); // Check xem mật khẩu có khớp không mỗi khi thay đổi
+                  }}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
+                </button>
+              </div>
+            </div>
+            <div className="mb-6">
+              <p className="text-sm font-bold text-gray-700 mb-2">
+                Mật khẩu của bạn phải có ít nhất
+              </p>
+              <div className="space-y-2">
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox text-pink-500 "
+                    checked={hasLetter}
+                    readOnly
+                  />
+                  <span className="ml-2 text-sm text-gray-600 font-bold">
+                    1 chữ cái
+                  </span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox text-pink-500  "
+                    checked={hasNumberOrSpecialChar}
+                    readOnly
+                  />
+                  <span className="ml-2 text-sm text-gray-600 font-bold">
+                    1 chữ số hoặc ký tự đặc biệt (ví dụ: # ? ! &)
+                  </span>
+                </label>
+                <label className="flex items-center">
+                  <input
+                    type="checkbox"
+                    className="form-checkbox text-pink-500"
+                    checked={isLongEnough}
+                    readOnly
+                  />
+                  <span className="ml-2 text-sm text-gray-600 font-bold">
+                    10 ký tự
+                  </span>
+                </label>
+              </div>
+            </div>
+            <div className="mb-6">
+              <label
+                htmlFor="confirm-password"
+                className="block text-sm font-bold text-gray-700 mb-1"
+              >
+                Xác nhận mật khẩu mới
+              </label>
+              <div className="relative">
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  id="confirm-password"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-pink-500"
+                  placeholder="••••••••••••••••••••"
+                  value={confirmPassword}
+                  onChange={(e) => {
+                    setConfirmPassword(e.target.value);
+                    checkPasswordsMatch(e.target.value); // Cập nhật trạng thái khớp khi người dùng nhập lại mật khẩu
+                  }}
+                />
+                <button
+                  type="button"
+                  className="absolute inset-y-0 right-0 pr-3 flex items-center"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? (
+                    <EyeOff size={20} />
+                  ) : (
+                    <Eye size={20} />
+                  )}
+                </button>
+              </div>
+              {!isMatching && (
+                <p className="text-sm text-red-500 mt-2">
+                  Mật khẩu không khớp. Vui lòng kiểm tra lại.
+                </p>
+              )}
+            </div>
+            {error && <p className="text-sm text-red-500 mb-4">{error}</p>}{" "}
+            {/* Hiển thị lỗi */}
+            <button
+              type="submit"
+              className="w-full bg-pink-500 text-white py-2 px-4 rounded-full font-semibold hover:bg-pink-600 transition duration-300"
+              disabled={
+                !hasLetter ||
+                !hasNumberOrSpecialChar ||
+                !isLongEnough ||
+                !isMatching
+              }
+            >
+              Tiếp tục
+            </button>
+          </form>
+          <p className="text-center mt-6 text-sm text-pink-500 hover:underline cursor-pointer">
+            Quay lại Đăng Nhập
+          </p>
+        </div>
       </div>
     </>
   );

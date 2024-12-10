@@ -15,7 +15,7 @@ export const UserProvider = ({ children }) => {
   });
   const [currentTime, setCurrentTime] = useState(() => {
     const savedTime = localStorage.getItem("currentTime");
-    return savedTime ? JSON.parse(savedTime) : 10;
+    return savedTime ? JSON.parse(savedTime) : 0;
   });
   const [isModal, setIsModal] = useState(false);
   const [user, setUser] = useState(() => {
@@ -35,8 +35,8 @@ export const UserProvider = ({ children }) => {
   });
   const [playSong, setPlaySong] = useState(null);
   const [isAccountType, setIsAccountType] = useState(() => {
-    const savedAccountType = localStorage.getItem("isAccountType");
-    return savedAccountType ? (savedAccountType) : "basic";
+    const savedAccountType = localStorage.getItem("user");
+    return savedAccountType ? JSON.parse(savedAccountType).users_type : "Basic";
   });
   const [isUpdate, setIsUpdate] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);
@@ -65,6 +65,10 @@ export const UserProvider = ({ children }) => {
           break;
         case "theloai":
           fetchedSongs = await fetch(`${API_URL}/the-loai/${id}/bai-hat`);
+          setIsUpdate(true)
+          break;
+        case "quocgia":
+          fetchedSongs = await fetch(`${API_URL}/quoc-gia/${id}/bai-hat`);
           setIsUpdate(true)
           break;
         case "casi":
@@ -185,9 +189,8 @@ export const UserProvider = ({ children }) => {
         handleListSongs,
         playSong, setPlaySong,
         isAccountType, setIsAccountType,
-        isUpdate,setIsUpdate,
+        isUpdate, setIsUpdate,
         isSidebar, setIsSidebar
-
       }}
     >
       {children}
