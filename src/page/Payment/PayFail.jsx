@@ -1,4 +1,8 @@
+import { Link } from "react-router-dom";
+
 function PayFail() {
+    localStorage.removeItem('payment');
+    
     return ( <>
          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-4 tracking-wide">
         <h1 className="text-2xl md:text-3xl text-center mb-8 font-medium" >
@@ -27,9 +31,9 @@ function PayFail() {
         Có vẻ như giao dịch của bạn đã gặp sự cố vui lòng thử lại.
         </p>
         
-        <button className="mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 min-w-[600px] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
+        <Link to={'/Upgrade'} className="text-center mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 min-w-[600px] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
         Thử Lại
-        </button>
+        </Link>
       </div>
     </> );
 }

@@ -1,4 +1,12 @@
+import { useNavigate } from "react-router-dom";
 function PayError() {
+  const payment = JSON.parse(localStorage.getItem('payment'));
+  const navigate = useNavigate();
+  const handleHome = () => {
+    localStorage.removeItem('payment');
+    navigate('/');
+  }
+
     return ( <>
          <div className="min-h-screen flex flex-col items-center justify-center bg-gray-900 text-white p-4 tracking-wide">
         <h1 className="text-2xl md:text-3xl text-center mb-8 font-medium" >
@@ -27,8 +35,10 @@ function PayError() {
         Đường dẫn không hợp lệ hoặc hết hạn.
         </p>
         
-        <button className="mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 min-w-[600px] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
-        Về Trang Dịch Vụ
+        <button 
+         onClick={handleHome}
+         className="mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 min-w-[600px] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
+        Về Trang chủ
         </button>
       </div>
     </>  );

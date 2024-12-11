@@ -7,22 +7,24 @@ import {  toast } from 'react-toastify';
 import { useState } from 'react';
 
 
+
 function PayNotification() {
     const [notifi,setnotifi] = useState(true);
     const [loading, setLoading] = useState(true); // Hiển thị spinner khi đang chờ API
-    const user_type = localStorage.getItem('payment');
-    const month = localStorage.getItem('month');
-    const datasub = `user_type=${user_type}&month=${month}&`;
+    const payment = JSON.parse(localStorage.getItem('payment'));
+    
     // console.log(datasub);
-
-
+    if(!payment){
+        return <PayError/>;
+      }
+    const datasub = `user_type=${payment.type}&month=${payment.month}&`;
     useEffect(() => {
+        let isMounted = true; // Đảm bảo component vẫn được mount
         const queryParams = new URLSearchParams(window.location.search);
-        // console.log(queryParams.toString());
-        // Gửi dữ liệu trả về từ VNPAY đến backend để xác minh
+        
         const checkPayment = async () => {
             try {
-                const response = await fetch(API_URL +`/vnpay-return?`+datasub + queryParams.toString(), {
+                const response = await fetch(API_URL + `/vnpay-return?` + datasub + queryParams.toString(), {
                     method: 'get',
                     headers: {
                         'Content-Type': 'application/json',
@@ -30,33 +32,38 @@ function PayNotification() {
                     },
                 });
                 const data = await response.json();
-
-                if (data.success) {
-                    // console.log(data);
-                    toast.success(data.message);
-                    setnotifi(true)
-                    localStorage.removeItem('payment');
-                    localStorage.removeItem('month');
-                    localStorage.setItem('user',JSON.stringify(data.user));
-
-                    // Cập nhật URL, xóa tất cả các tham số sau dấu "?"
-                    const currentUrl = new URL(window.location);
-                    currentUrl.search = ''; // Xóa tất cả query string
-
-                    // Cập nhật lại URL mà không reload
-                    window.history.replaceState(null, '', currentUrl.toString());
-                } else{
-                    toast.error(data.message);
-                    setnotifi(false)
+    
+                if (isMounted) { // Chỉ thực thi khi component chưa bị unmount
+                    if (data.success) {
+                        toast.success(data.message, { toastId: 'success-toast' }); // Sử dụng toastId để tránh trùng lặp
+                        setnotifi(true);
+                        localStorage.setItem('user', JSON.stringify(data.user));
+    
+                        const currentUrl = new URL(window.location);
+                        currentUrl.search = ''; 
+                        window.history.replaceState(null, '', currentUrl.toString());
+                    } else {
+                        toast.error(data.message, { toastId: 'error-toast' }); // Sử dụng toastId
+                        setnotifi(false);
+    
+                        const currentUrl = new URL(window.location);
+                        currentUrl.search = ''; 
+                        window.history.replaceState(null, '', currentUrl.toString());
+                    }
                 }
             } catch (err) {
-                console.log(err.message); // Cập nhật state lỗi
+                console.log(err.message);
             } finally {
-                setLoading(false); // Tắt spinner
+                if (isMounted) setLoading(false); 
             }
-        }
+        };
         checkPayment();
+    
+        return () => {
+            isMounted = false; // Cleanup effect
+        };
     }, []);
+    
 
     return (
         <>
@@ -65,7 +72,7 @@ function PayNotification() {
                     <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
                 </div>
             ) : notifi ? (
-                <PaySuccess />
+                <PaySuccess type={payment.type}/>
             ) : (
                 <PayFail />
             )}

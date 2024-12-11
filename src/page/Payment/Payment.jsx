@@ -8,15 +8,27 @@ function Payment() {
     const payment = JSON.parse(localStorage.getItem('payment'));
     // Tạo state để lưu trữ phương thức thanh toán được chọn
     const [selectedMethod, setSelectedMethod] = useState('');
+    const [check , setCheck] = useState(true);
 
     // Hàm xử lý khi người dùng chọn phương thức thanh toán
     const handleSelectMethod = (method) => {
         setSelectedMethod(method);
+
+    };
+    // Hàm xử lý khi người dùng chọn xác nhận
+    const handleCheck = (ischeck) => {
+            setCheck(!ischeck);
+            console.log(ischeck);
     };
     const handlePayment = () =>{
         if(!user){
             toast.error('Vui lòng đăng nhập để thanh toán.');
             return false;
+        } else {
+            if(selectedMethod == ''){
+                toast.error('Vui lòng chọn phương thức thanh toán.');
+                return false;
+            }
         }
         fetch(API_URL + '/create-vnpay-url', {
             method: 'POST',
@@ -36,8 +48,6 @@ function Payment() {
             .then(data => {
                 // Xử lý dữ liệu trả về từ API (nếu cần)
                 // console.log('Đã đánh dấu ', data);
-                localStorage.setItem('payment',data.user_type);
-                localStorage.setItem('month',data.month);
                 // toast.success(data.message);
                 window.location.href = data.data;
             })
@@ -176,12 +186,15 @@ function Payment() {
                             </div>
                         )} */}
                         <div className="flex items-center mt-4">
-                            <input type="checkbox" id="terms" className="mr-2" />
+                            <input type="checkbox" id="terms" className="mr-2" onChange={(event) => handleCheck(event.target.checked)} />
                             <label htmlFor="terms" className="text-sm text-slate-500">
                                 Khi tiếp tục thanh toán, bạn đồng ý với thỏa thuận sử dụng dịch vụ
                             </label>
                         </div>
-                        <button className="w-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white py-3 rounded-full mt-6" onClick={handlePayment}>
+                        <button className="w-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white py-3 rounded-full mt-6"
+                         onClick={handlePayment}
+                         disabled={check}
+                        >
                             Tiếp tục thanh toán
                         </button>
                         <button className="w-full text-center text-gray-400 mt-4">

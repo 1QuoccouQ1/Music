@@ -196,7 +196,7 @@ export default function PasswordCode() {
             type="submit"
             className="w-full py-2 px-4 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-80 text-white font-semibold rounded-md transition duration-300 ease-in-out"
           >
-            Gửi mã
+            Tiếp tục
           </button>
         </form>
         <div className="mt-6 text-center">
