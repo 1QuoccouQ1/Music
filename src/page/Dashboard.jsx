@@ -196,7 +196,7 @@ function Dashboard() {
                 Phát Tất Cả
               </div>
             </div>
-          </div>
+          </div>  
         </div>
       </section>
       <section className=" bg-medium pt-16 text-white px-10 h-auto">
