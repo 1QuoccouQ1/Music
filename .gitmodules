@@ -1,0 +1,3 @@
+[submodule "Music"]
+	path = Music
+	url = https://github.com/1QuoccouQ1/Music.git
