@@ -46,7 +46,7 @@ const Footer = React.memo(function FooterComponent() {
   const [isLoading, setIsLoading] = useState(true);
   // Thêm hàm để lọc các chất lượng dựa trên file_paths của bài hát hiện tại
   const getAvailableQualities = () => {
-    const currentSong = listsongs[currentSongIndex];
+    const currentSong = playSong;
     if (!currentSong.file_paths) return []; // Không có tùy chọn nào nếu file_paths không tồn tại
 
     // Lọc các quality mà có giá trị trùng với file_paths của bài hát hiện tại
@@ -443,6 +443,7 @@ const Footer = React.memo(function FooterComponent() {
     const handleClickOutside = (event) => {
       if (
         Playlist.current &&
+        Divlist.current &&
         !Playlist.current.contains(event.target) &&
         !Divlist.current.contains(event.target)
       ) {
@@ -485,9 +486,13 @@ const Footer = React.memo(function FooterComponent() {
         if (optionSongIndex == currentSongIndex) {
           audioRef.current.currentTime = currentTime;
         }
-        if (!isPlaying) {
-          audioRef.current.play();
-        }
+        audioRef.current.addEventListener("canplay", () => {
+          if (!isPlaying) {
+            audioRef.current.play().catch((error) => {
+              console.error("Error playing audio:", error);
+            });
+          }
+        });
       }
       return;
     }
@@ -500,9 +505,13 @@ const Footer = React.memo(function FooterComponent() {
         audioRef.current.currentTime = currentTime;
       }
 
-      if (isPlaying) {
-        audioRef.current.play();
-      }
+      audioRef.current.addEventListener("canplay", () => {
+        if (isPlaying) {
+          audioRef.current.play().catch((error) => {
+            console.error("Error playing audio:", error);
+          });
+        }
+      });
     }
   }, [currentSongIndex, selectedQuality, playSong]);
 
@@ -801,6 +810,7 @@ const Footer = React.memo(function FooterComponent() {
             {isAlbum && (
               <div
                 ref={Playlist}
+                onClick={(e) => e.stopPropagation()}
                 className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute -bottom-3 -translate-y-[15%] right-0 overflow-hidden"
               >
                 <h2 className="text-lg ml-2 mb-4">Danh sách phát</h2>
