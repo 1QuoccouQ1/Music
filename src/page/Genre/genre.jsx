@@ -78,7 +78,7 @@ function Genre() {
                 >
                   {/* Ảnh nền */}
                   <div
-                    className={`w-[300px] h-[300px] rounded-lg cursor-pointer opacity-60 group-hover:opacity-100 duration-300`}
+                    className={`min-w-[300px] w-1/4 h-[300px] rounded-lg cursor-pointer opacity-60 group-hover:opacity-100 duration-300`}
                     style={{
                       backgroundImage: `url(${country.background})`,
                       backgroundSize: "cover",

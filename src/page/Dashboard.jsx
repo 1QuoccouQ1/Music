@@ -199,7 +199,7 @@ function Dashboard() {
           </div>  
         </div>
       </section>
-      <section className=" bg-medium pt-16 text-white px-10 h-auto">
+      <section className=" bg-medium pt-16 text-white px-10 h-auto ">
       <div className="flex items-center flex-col lg:flex-row ">
               <div className="w-full sm:w-[80%] lg:w-1/3 px-5 relative my-5 ">
                 {trending.length > 0 && (
