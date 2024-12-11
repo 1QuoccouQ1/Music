@@ -183,7 +183,7 @@ export default function PasswordCode() {
                 onClick={() => handleResetOtp()}
                 className="absolute right-2 top-1/2 transform -translate-y-1/2 px-3 py-1 bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white rounded-md text-sm"
               >
-                gửi mã
+                gửi lại mã
               </button>
             </div>
           </div>
