@@ -797,7 +797,7 @@ const Footer = React.memo(function FooterComponent() {
               </svg>
             </div>
 
-            <p className="truncate min-h-fit ">Play List</p>
+            <p className="truncate min-h-fit ">Danh Sách</p>
             {isAlbum && (
               <div
                 ref={Playlist}
