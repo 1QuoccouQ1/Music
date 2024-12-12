@@ -10,12 +10,14 @@ import { ToastContainer } from 'react-toastify';
 import AuthChecker from './component/checkAuth';
 
 
+
 function App() {
 
   
   
   return (
     <>
+     
       <AuthChecker/>
       <UserProvider>
         <div className="flex h-auto bg-[#f4f7fe] w-full">

@@ -99,14 +99,15 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
         <div
             key={song.id}
             className="flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300"
+            onDoubleClick={() => handleAddSong("song", song.id)}
         >
-            <div className="flex items-center gap-3 w-1/3 justify-start" onDoubleClick={() => handleAddSong("song", song.id)}  >
+            <div className="flex items-center gap-3 w-1/3 justify-start"   >
                 <Play size={18} className="hidden  group-hover:block duration-300" />
                 <p className="text-xs w-[18px] h-[18px] group-hover:hidden duration-300">
                     {index + 1}
                 </p>
                 <img className="size-10 rounded-lg" src={song.song_image} onClick={() => navigate(`/SongDetail/${song.id}`)}/>
-                <p className="w-full truncate " >{song.song_name}</p>
+                <p className="w-full truncate" onClick={() => navigate(`/SongDetail/${song.id}`)} >{song.song_name}</p>
             </div>
             <div className="w-1/3 flex items-center justify-center">
                 <p>{song.listen_count}</p>

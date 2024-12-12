@@ -8,6 +8,7 @@ import { API_URL, getArtist } from '../../services/apiService';
 import { toast } from 'react-toastify';
 import ProfileArtistSong from './ProfileArtistSong';
 import { UserContext } from '../../ContextAPI/UserContext';
+import { useNavigate } from "react-router-dom";
 
 
 function ProfileArtist() {
@@ -21,10 +22,14 @@ function ProfileArtist() {
     const [artistSong, setArtistSong] = useState([]);
     const [loading, setLoading] = useState(true); // Theo dõi trạng thái loading
     const { handleFetchSongs } = useContext(UserContext);
-    
+    const [albumSinger, setAlbumSinger] = useState([]);
+    const navigate = useNavigate();
+    const [albumFavorite, setAlbumFavorite] = useState([]);
+
     const user = JSON.parse(localStorage.getItem('user'));
     // console.log(user_id.id);
     useEffect(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' }); // Cuộn lên đầu trang
         const fetchArtistData = async () => {
             try {
                 const response = await fetch(API_URL + `/ca-si/${id}`);
@@ -47,6 +52,23 @@ function ProfileArtist() {
 
                 } else {
                     setArtistSong(data); // Cập nhật state `artist`
+                }
+            } catch (error) {
+                console.error('Error fetching artist data:', error.message);
+            } finally {
+                setLoading(false); // Đặt loading = false
+            }
+        };
+        const fetchArtistAlbum = async () => {
+            try {
+                const response = await fetch(API_URL + `/album/${id}/ca-si`);
+                const data = await response.json();
+
+                if (response.status == false) {
+                    console.error('Error fetching artist data:', data.message);
+
+                } else {
+                    setAlbumSinger(data); // Cập nhật state `artist`
                 }
             } catch (error) {
                 console.error('Error fetching artist data:', error.message);
@@ -82,9 +104,10 @@ function ProfileArtist() {
         if (user) {
             folow();
         }
-
         fetchArtistsong();
         fetchArtistData();
+        fetchArtistAlbum()
+
     }, [id]);
 
     // theo thích ca sĩ
@@ -202,7 +225,7 @@ function ProfileArtist() {
 
         }
     }
-
+    
     const handleModal = () => {
         setIsModal(!isModal);
     }
@@ -224,6 +247,71 @@ function ProfileArtist() {
         };
     }, [isModal]);
 
+    const fetchAlbumFAvorite = async (user_id) => {
+        try {
+            const response = await fetch(API_URL + `/${user_id}/album-yeu-thich`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('access_token')}`
+                }
+            });
+            const data = await response.json();
+
+            if (response.status == false) {
+                console.error('Error fetching artist data:', data.message);
+
+            } else {
+                const ids = data.map((album) => album.id)
+                setAlbumFavorite(ids); // Cập nhật state `artist`
+            }
+        } catch (error) {
+            console.error('Error fetching artist data:', error.message);
+        } finally {
+            setLoading(false); // Đặt loading = false
+        }
+    }
+    if (user) {
+        useEffect(() => {
+            fetchAlbumFAvorite(user.id);
+        }, [user.id]);
+    }
+    const handleAlbumFavourite = (albumId, like) => {
+        if (!user) {
+            toast.error('Vui lòng đăng nhập để thêm yêu thích');
+            return false;
+        }
+        // Gửi request API khi người dùng nhấn "Theo giỏi"
+        fetch(API_URL + "/album-yeu-thich", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+            body: JSON.stringify({
+                liked: !like,
+                album_id: albumId,
+                user_id: user.id,
+            }),
+        })
+            .then((response) => response.json())
+            .then((data) => {
+                // Xử lý dữ liệu trả về từ API (nếu cần)
+                // console.log('Đã đánh dấu yêu thích:', data.message);
+                if (like) {
+                    setAlbumFavorite((set) => {
+                        return set.filter((id) => id !== albumId);
+                    });
+                } else {
+                    setAlbumFavorite((set) => {
+                        return [...set, albumId];
+                    });
+                }
+                toast.success(data.message);
+            })
+            .catch((error) => {
+                console.error("Lỗi khi gửi yêu cầu:", error);
+            });
+    }
 
     const limitCharacters = (str, charCount) => {
         if (str.length > charCount) {
@@ -232,12 +320,20 @@ function ProfileArtist() {
         return str; // Nếu chuỗi ít hơn hoặc bằng số ký tự giới hạn, trả lại nguyên chuỗi
     };
 
+    // Hàm chuyển đổi datetime thành năm
+    const extractYearFromDate = (dateString) => {
+        if (!dateString) return 'Invalid date';
+        const date = new Date(dateString); // Tạo đối tượng Date từ chuỗi
+        if (isNaN(date.getTime())) return 'Invalid date'; // Kiểm tra nếu ngày không hợp lệ
+        return date.getFullYear(); // Lấy năm
+    };
     // Ngăn render cho đến khi `artist` có dữ liệu
     if (!artist) {
         return (<div className="flex items-center justify-center h-screen">
             <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
         </div>); // Hiển thị loading khi chưa có dữ liệu
     }
+    // console.log(albumFavorite);
 
     return (<>
         <div className='bg-medium w-full h-auto pb-40'>
@@ -257,7 +353,7 @@ function ProfileArtist() {
                                 <p className='flex  items-center  text-sm font-semibold gap-2 '><UserRoundPlus size={18} className='text-red-600 ' /> 5.940.438 người  theo dõi</p>
                             </div>
                             <div className='flex items-center justify-between md:justify-start  gap-5 mt-5'>
-                                <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1' onClick={()=> handleFetchSongs("casi",artist.id )}>  <Play /> Phát tất cả</button>
+                                <button className='flex items-center bg-gradient-to-r from-[#FF553E] to-[#FF0065] border-2 box-border border-red-500 px-5 py-2 rounded-full font-semibold gap-1' onClick={() => handleFetchSongs("casi", artist.id)}>  <Play /> Phát tất cả</button>
 
                                 {isFollowing ?
                                     <button onClick={handleFollowing} className='flex items-center border-2 box-border border-red-500 px-4 py-2 rounded-full font-medium gap-1'>  <Check size={20} /> Đang theo dõi</button>
@@ -350,34 +446,65 @@ function ProfileArtist() {
                         </div>
 
                     </div>
-                    <div className="flex items-center ">
-                        <Swiper
-                            spaceBetween={20}
-                            slidesPerView="auto" // Số item hiện trong 1 lần
-                            className="mySwiper "
 
-                        >
-                            {['Wean', 'Tăng Duy Tân', 'Wean', 'Wean', 'Wean', 'Wean', 'Wean'].map((item, index) => (
+                    <Swiper
+                        spaceBetween={20}
+                        slidesPerView="auto" // Số item hiện trong 1 lần
+                        className="mySwiper "
+
+                    >
+                        {albumSinger && albumSinger.length > 0 ? (
+                            albumSinger.map((album, index) => (
                                 <SwiperSlide key={(index)} style={{ width: 'auto' }} >
-                                    <div className="w-1/6 flex flex-col w-full" key={index}>
-                                        <div className="w-full relative flex w-full">
-                                            <img src="../imgs/image 8.png" className="  z-10" style={{
-                                                width: '180px',
-                                                height: '180px',
+                                    <div className="w-full flex flex-col w-full" key={index} >
+                                        <div className="w-full relative group flex w-full">
+                                            <img src={album.image} className="cursor-pointer  z-10" style={{
+                                                width: '190px',
+                                                height: '190px',
                                                 borderRadius: '15px',
+                                            }}
+                                                onClick={() => navigate(`/AlbumDetail/${album.id}`)}
+                                            />
+                                            <img
+                                                src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png"
+                                                className="absolute translate-x-1/5 w-full h-full"
+                                            />
+                                            <div
+                                                className="absolute cursor-pointer top-2 z-20 right-2 bg-white text-red-500 p-2 rounded-full shadow-lg transform lg:scale-0 group-hover:scale-100 transition duration-300 ease-in-out"
+                                            >
 
-                                            }} />
-
+                                                {albumFavorite != [] ? (
+                                                    albumFavorite.includes(album.id) ? (
+                                                        <Heart
+                                                            size={22}
+                                                            fill="red"
+                                                            onClick={() => handleAlbumFavourite(album.id, true)}
+                                                            className="text-red-500 opacity-100 lg:opacity-0 group-hover:opacity-100 duration-300"
+                                                        />
+                                                    ) : (
+                                                        <Heart
+                                                            size={22}
+                                                            onClick={() => handleAlbumFavourite(album.id, false)}
+                                                            className="text-red-500 opacity-100 lg:opacity-0 group-hover:opacity-100 duration-300"
+                                                        />
+                                                    )
+                                                ) : (
+                                                    ""
+                                                )}
+                                            </div>
                                         </div>
-                                        <p className="text-base font-medium ml-2 mt-1 mt-3 w-56 truncate">Sky Tour (Original Motion .....</p>
-                                        <p className="text-sm font-medium ml-2 text-slate-500">2022</p>
+                                        <p className="text-base font-medium ml-2 mt-1 mt-3 w-56 truncate">{album.album_name}</p>
+                                        <p className="text-sm font-medium ml-2 text-slate-500">{extractYearFromDate(album.creation_date)}</p>
                                     </div>
                                 </SwiperSlide>
-                            ))}
-
-
-                        </Swiper>
-                    </div>
+                            ))) : (
+                            <SwiperSlide style={{ width: 'auto' }} >
+                                <div className="w-1/6 flex flex-col w-full">
+                                    Không có Album nào.
+                                </div>
+                            </SwiperSlide>
+                        )}
+                    </Swiper>
                 </section>
                 <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
@@ -494,7 +621,7 @@ function ProfileArtist() {
 
 
                         {artistSong && artistSong.length > 0 ? (
-                            artistSong.map((song, index ) => (
+                            artistSong.map((song, index) => (
                                 <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
                                     <div className="text-center flex flex-col  items-start ">
                                         <img src={song.song_image} className=" mb-3 rounded-xl w-44 h-44" />

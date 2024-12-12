@@ -128,7 +128,7 @@ function Information() {
                                 >
                                     {({ isActive }) => (
                                         <>
-                                            Albums
+                                            Albums đã thích
                                             <span
                                                 className={`absolute bottom-0 left-0 w-full h-[0.4px] bg-pink-500 ${
                                                     isActive
@@ -151,7 +151,7 @@ function Information() {
                                 >
                                     {({ isActive }) => (
                                         <>
-                                            Nghệ sĩ
+                                            Nghệ sĩ đã thích
                                             <span
                                                 className={`absolute bottom-0 left-0 w-full h-[0.4px] bg-pink-500 ${
                                                     isActive
