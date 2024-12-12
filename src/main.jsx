@@ -253,11 +253,6 @@ const router = createBrowserRouter([
     path: "/NewPassword",
     element: <NewPassword />,
   },
-  {
-    path: "/PlaylistDiv",
-    loader: changeDashboard,
-    element: <PlaylistDiv />,
-  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
