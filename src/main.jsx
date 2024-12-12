@@ -8,7 +8,7 @@ import ArtistGallery from "./page/Artist/ArtistGallery.jsx";
 import RankingBoard from "./page/BXH/RankingBoard.jsx";
 import Genre from "./page/Genre/genre.jsx";
 import History from "./page/History.jsx";
-import Albums from "./page/Albums.jsx";
+import Albums from "./page/Albums/Albums.jsx";
 import MusicLibrary from "./page/Library/MusicLibrary.jsx";
 import ShowChart from "./page/MeChart/ShowChart.jsx";
 import SongGlobal from "./page/BXH/SongGlobal.jsx";
@@ -46,6 +46,7 @@ import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
 import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
 import GenreSongs from "./page/Genre/GenreSongs.jsx";
+import AlbumDetail from "./page/Albums/AlbumDetail.jsx"
 import PlaylistDiv from "./page/Play-list/PlayList.jsx";
 
 function changeIsSetting() {
@@ -87,6 +88,11 @@ const router = createBrowserRouter([
         path: "/Albums",
         loader: changeDashboard,
         element: <Albums />,
+      },
+      {
+        path: "/AlbumDetail/:id",
+        loader: changeDashboard,
+        element: <AlbumDetail />,
       },
       {
         path: "/Artist",

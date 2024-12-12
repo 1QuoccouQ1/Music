@@ -7,6 +7,7 @@ import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
 import { Link } from "react-router-dom";
+import SlideAlbum from "./Albums/SlideAlbum.jsx"
 
 function Dashboard() {
   const { handleFetchSongs, handleAddSong } = useContext(UserContext);
@@ -431,26 +432,7 @@ function Dashboard() {
           </div>
         </div>
         <div className="flex items-center ">
-          <Swiper
-            spaceBetween={20}
-            slidesPerView="auto" // Số item hiện trong 1 lần
-            className="mySwiper "
-          >
-            {["Wean", "Tăng Duy Tân", "Wean", "Wean"].map((item, index) => (
-              <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div className="mr-36 flex flex-col">
-                  <div className="w-full relative flex    ">
-                    <img src="../imgs/image 8.png" className="  z-10" />
-                    <img
-                      src="../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3.png"
-                      className="absolute translate-x-1/2 w-full h-full"
-                    />
-                  </div>
-                  <p className="text-lg font-medium ml-24 mt-5 mt-3">{item}</p>
-                </div>
-              </SwiperSlide>
-            ))}
-          </Swiper>
+          <SlideAlbum/>
         </div>
       </section>
       <section className="bg-medium pt-20 text-white px-10 h-auto  tracking-wide">
