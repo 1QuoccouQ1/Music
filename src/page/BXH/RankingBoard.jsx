@@ -268,6 +268,7 @@ const RankingBoard = () => {
                                             size={22}
                                             className='text-slate-500'
                                         />
+                                        
                                     </div>
 
                                     <span>{formatTime(song.time) || 'N/A'}</span>

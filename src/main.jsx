@@ -47,18 +47,17 @@ import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
 import GenreSongs from "./page/Genre/GenreSongs.jsx";
 import AlbumDetail from "./page/Albums/AlbumDetail.jsx"
-
-
+import PlaylistDiv from "./page/Play-list/PlayList.jsx";
 
 function changeIsSetting() {
   localStorage.setItem("isSetting", true);
   sessionStorage.removeItem("reloaded");
-  return null
+  return null;
 }
 
 function changeDashboard() {
   localStorage.setItem("isSetting", false);
-  return null
+  return null;
 }
 function changeLogo() {
   localStorage.setItem("isSetting", false);
@@ -152,8 +151,8 @@ const router = createBrowserRouter([
           { path: "InfoAlbums", element: <InfoAlbums /> },
           { path: "Artist", element: <Artist /> },
           { path: "Downloaded", element: <Downloaded /> },
-          { path: "Followed", element: <Followed /> }
-        ]
+          { path: "Followed", element: <Followed /> },
+        ],
       },
 
       {
@@ -162,8 +161,8 @@ const router = createBrowserRouter([
         children: [
           { index: true, element: <ManagePayment /> },
           { path: "PurchaseHistoryPage", element: <PurchaseHistoryPage /> },
-          { path: "ManagePayment", element: <ManagePayment /> }
-        ]
+          { path: "ManagePayment", element: <ManagePayment /> },
+        ],
       },
       //Route for Setting
       {
@@ -254,13 +253,15 @@ const router = createBrowserRouter([
     path: "/NewPassword",
     element: <NewPassword />,
   },
-
+  {
+    path: "/PlaylistDiv",
+    loader: changeDashboard,
+    element: <PlaylistDiv />,
+  },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-
-    <RouterProvider router={router}>
-    </RouterProvider>
+    <RouterProvider router={router}></RouterProvider>
   </React.StrictMode>
 );
