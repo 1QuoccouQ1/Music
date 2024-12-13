@@ -7,6 +7,7 @@ import ArtistRankingCard from './ArtistRankingCard';
 import { Link } from 'react-router-dom';
 import { UserContext } from "../../ContextAPI/UserContext";
 import { useNavigate } from "react-router-dom";
+import PlaylistDiv from '../Play-list/PlayList';
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
@@ -171,7 +172,7 @@ const RankingBoard = () => {
                         />
                     </div>
                 )}
-
+                <PlaylistDiv/>
                 {rankings[2] && (
                     <div className='transform flex justify-center lg:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard

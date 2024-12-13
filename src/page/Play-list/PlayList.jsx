@@ -18,7 +18,7 @@ function PlaylistDiv() {
             </div>
           </nav>
           <div className="flex items-center h-[250px] px-7 py-4">
-            <div className="flex-none border border-solid border-slate-200 rounded-md h-full w-[170px] flex flex-col items-center justify-center space-y-4 hover:border-red-400 cursor-pointer group duration-300">
+            <div className="mr-3 flex-none border border-solid border-slate-200 rounded-md h-full w-[170px] flex flex-col items-center justify-center space-y-4 hover:border-red-400 cursor-pointer group duration-300">
               <CirclePlus className="group-hover:text-red-400" />
               <p className="text-sm truncate group-hover:text-red-400">
                 Tạo playlist mới
