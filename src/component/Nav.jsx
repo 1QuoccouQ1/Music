@@ -29,7 +29,7 @@ function Nav() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-
+  const [query, setQuery] = useState("");
   const fetchSearchResults = async (query) => {
     if (!query) {
       setSongs([]);
@@ -110,6 +110,7 @@ function Nav() {
             onBlur={() => {
               setTimeout(() => setIsFocused(false), 200);
             }}
+            onQueryChange={setQuery}
           />
 
           {isFocused && (
@@ -117,7 +118,7 @@ function Nav() {
               {loading ? (
                 <p className="text-center text-gray-400">Đang tìm kiếm...</p>
               ) : songs.length === 0 && singers.length === 0 ? (
-                <p className="text-center text-gray-400 mt-10">
+                <p className="text-center text-gray-400 mt-3">
                   Không tìm thấy kết quả.
                 </p>
               ) : (
@@ -190,6 +191,9 @@ function Nav() {
                   )}
                 </>
               )}
+              <div className="text-left text-gray-300 mt-5 text-sm">
+                      Tìm kiếm  <strong>&quot;{query}&quot;</strong>
+                    </div>
             </div>
           )}
         </div>
@@ -311,11 +315,6 @@ function Nav() {
                             label: "Nâng cấp tài khoản",
                           },
                           {
-                            icon: CloudDownload,
-                            href: "https://example.com",
-                            label: "Nhạc đã tải xuống",
-                          }, // Ví dụ link ngoại vi
-                          {
                             icon: LockKeyhole,
                             href: "Privacy",
                             label: "Quyền riêng tư",
@@ -330,29 +329,54 @@ function Nav() {
                             href: "ContactForm",
                             label: "Liên hệ",
                           },
-                        ].map((item, index) => (
-                          <button
-                            key={index}
-                            className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl"
-                          >
-                            <item.icon
-                              className={`w-5 h-5 mr-4 ${
-                                index === 0
-                                  ? "text-yellow-500"
-                                  : "text-gray-400"
-                              }`}
-                            />
-                            <span className="flex-grow text-left text-sm">
-                              {/* Kiểm tra href có phải là đường dẫn nội bộ */}
-                              {item.href && item.href.startsWith("/") ? (
-                                <Link to={item.href}>{item.label}</Link> // Dùng Link cho đường dẫn nội bộ
-                              ) : (
-                                <a href={item.href}>{item.label}</a> // Dùng thẻ a cho liên kết ngoại vi
-                              )}
-                            </span>
-                            <ChevronRight className="w-5 h-5 text-gray-400" />
-                          </button>
-                        ))}
+                        ].map((item, index) => {
+                          const isInternalLink = item.href.startsWith("/"); // Kiểm tra xem liên kết là nội bộ hay ngoại vi
+
+                          return isInternalLink ? (
+                            // Nếu là liên kết nội bộ, dùng Link
+                            <Link
+                              to={item.href}
+                              key={index}
+                              className="block w-full" // Block để bao bọc toàn bộ button
+                            >
+                              <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
+                                <item.icon
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
+                                      ? "text-yellow-500"
+                                      : "text-gray-400"
+                                  }`}
+                                />
+                                <span className="flex-grow text-left text-sm">
+                                  {item.label}
+                                </span>
+                                <ChevronRight className="w-5 h-5 text-gray-400" />
+                              </button>
+                            </Link>
+                          ) : (
+                            // Nếu là liên kết ngoại vi, dùng thẻ a
+                            <a
+                              href={item.href}
+                              key={index}
+                              rel="noopener noreferrer"
+                              className="block w-full" // Block để bao bọc toàn bộ button
+                            >
+                              <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
+                                <item.icon
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
+                                      ? "text-yellow-500"
+                                      : "text-gray-400"
+                                  }`}
+                                />
+                                <span className="flex-grow text-left text-sm">
+                                  {item.label}
+                                </span>
+                                <ChevronRight className="w-5 h-5 text-gray-400" />
+                              </button>
+                            </a>
+                          );
+                        })}
                         <button
                           onClick={handleLogout}
                           className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl"

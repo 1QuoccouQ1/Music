@@ -4,10 +4,14 @@ import { API_URL } from "../../services/apiService";
 import { toast } from "react-toastify";
 import { UserContext } from "../../ContextAPI/UserContext";
 import { useNavigate } from "react-router-dom";
+import PlaylistDiv from '../Play-list/PlayList';
 
 const ProfileArtistSong = ({ artistSong, user_id, length }) => {
     const [SongFavourite, setIsSongFavourite] = useState([]);
     const { handleAddSong } = useContext(UserContext);
+    const [showModal, setShowModal] = useState(false); // Quản lý trạng thái hiển thị Modal
+    const [selectedSongId, setSelectedSongId] = useState(null); // Lưu songId được chọn
+
     const navigate = useNavigate();
     useEffect(() => {
         const FavouriteSong = async () => {
@@ -39,6 +43,17 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
             FavouriteSong();
         }
     }, [user_id]);
+
+    const openModal = (songId) => {
+        setSelectedSongId(songId);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedSongId(null);
+    };
+
 
     const handleSongFavourite = (song_id, check) => {
         if (!user_id) {
@@ -134,6 +149,16 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                 <CirclePlus
                     size={22}
                     className="text-slate-500 lg:opacity-0 group-hover:opacity-100 duration-300"
+                    onClick={() => {
+                        if (JSON.parse(localStorage.getItem("user"))) {
+                            openModal(song.id)
+                        } else {
+                            toast.error(
+                                "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào playlist."
+                            );
+                        }
+                    }}
+                        
                 />
                 <p>{formatTime(song.time)}</p>
                 <Ellipsis
@@ -141,6 +166,12 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                     className="lg:opacity-0 group-hover:opacity-100 duration-300"
                 />
             </div>
+            {showModal && (
+                    <PlaylistDiv
+                    songId={selectedSongId} // Truyền songId vào PlaylistDiv
+                    onClose={closeModal} // Truyền hàm đóng Modal
+                    />
+                )}
         </div>
     ));
 };
