@@ -8,15 +8,12 @@ import { Link } from 'react-router-dom';
 import { UserContext } from "../../ContextAPI/UserContext";
 import { useNavigate } from "react-router-dom";
 import PlaylistDiv from '../Play-list/PlayList';
-import PlayListCreate from '../Play-list/PlayListCreate';
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
     const [songs, setSongs] = useState([]);
     const [favouriteSongIds, setFavouriteSongIds] = useState([]);
     const [error, setError] = useState(null);
-    const [showModal, setShowModal] = useState(false); // Quản lý trạng thái hiển thị Modal
-    const [selectedSongId, setSelectedSongId] = useState(null); // Lưu songId được chọn
     const user = JSON.parse(localStorage.getItem('user'));
     const { handleAddSong, handleFetchSongs } = useContext(UserContext);
     const navigate = useNavigate();
@@ -110,16 +107,7 @@ const RankingBoard = () => {
     };
 
 
-    const openModal = (songId) => {
-        setSelectedSongId(songId);
-        setShowModal(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-        setSelectedSongId(null);
-    };
-
+   
     useEffect(() => {
         fetchRankings();
         if (user) fetchFavouriteSongs();
@@ -284,7 +272,7 @@ const RankingBoard = () => {
                                         <CirclePlus
                                             size={22}
                                              className='text-slate-500 cursor-pointer hover:scale-110 duration-300'
-                                            onClick={() => openModal(song.id)} 
+                                           
                                         />
                                         {/* <PlaylistDiv  songId = {33}/> */}
                                     </div>
@@ -296,13 +284,6 @@ const RankingBoard = () => {
                     </tbody>
                 </table>
             </div>
-             {/* Modal */}
-             {showModal && (
-                    <PlaylistDiv
-                    songId={selectedSongId} // Truyền songId vào PlaylistDiv
-                    onClose={closeModal} // Truyền hàm đóng Modal
-                    />
-                )}
             <ToastContainer />
         </div>
     );
