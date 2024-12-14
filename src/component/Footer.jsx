@@ -20,7 +20,6 @@ import { Helmet } from "react-helmet";
 
 const Footer = React.memo(function FooterComponent() {
   const {
-    currentSong,
     setCurrentSong,
     volume,
     setVolume,
@@ -42,8 +41,6 @@ const Footer = React.memo(function FooterComponent() {
     isAccountType,
     isUpdate,
     setIsUpdate,
-    setListSongs,
-    isLoader
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);

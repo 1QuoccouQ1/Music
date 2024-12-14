@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { CirclePlus, X } from "lucide-react";
+import  { useEffect, useState } from "react";
+import { CirclePlus } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { API_URL } from "../../services/apiService";
 import { toast } from "react-toastify";
