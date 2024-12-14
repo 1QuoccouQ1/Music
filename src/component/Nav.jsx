@@ -29,7 +29,7 @@ function Nav() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
-
+  const [query, setQuery] = useState("");
   const fetchSearchResults = async (query) => {
     if (!query) {
       setSongs([]);
@@ -110,6 +110,7 @@ function Nav() {
             onBlur={() => {
               setTimeout(() => setIsFocused(false), 200);
             }}
+            onQueryChange={setQuery}
           />
 
           {isFocused && (
@@ -117,7 +118,7 @@ function Nav() {
               {loading ? (
                 <p className="text-center text-gray-400">Đang tìm kiếm...</p>
               ) : songs.length === 0 && singers.length === 0 ? (
-                <p className="text-center text-gray-400 mt-10">
+                <p className="text-center text-gray-400 mt-3">
                   Không tìm thấy kết quả.
                 </p>
               ) : (
@@ -190,6 +191,9 @@ function Nav() {
                   )}
                 </>
               )}
+              <div className="text-left text-gray-300 mt-5 text-sm">
+                      Tìm kiếm  <strong>&quot;{query}&quot;</strong>
+                    </div>
             </div>
           )}
         </div>
