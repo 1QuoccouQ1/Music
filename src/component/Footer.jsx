@@ -9,6 +9,7 @@ import {
   Shuffle,
   Repeat,
   Clock,
+  CloudDownload,
 } from "lucide-react";
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
@@ -41,6 +42,8 @@ const Footer = React.memo(function FooterComponent() {
     isAccountType,
     isUpdate,
     setIsUpdate,
+    setListSongs,
+    isLoader
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,6 +80,7 @@ const Footer = React.memo(function FooterComponent() {
     },
   ];
   const [isOpen, setIsOpen] = useState(false);
+  const [isOpenDownload, setIsOpenDownload] = useState(false);
   const [selectedQuality, setSelectedQuality] = useState("basic");
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
 
@@ -98,16 +102,15 @@ const Footer = React.memo(function FooterComponent() {
   const offset = circumference - Number(volume) * circumference;
   const [visibleCount, setVisibleCount] = useState(10);
 
-  
   const fetchAd = async () => {
     if (isAccountType === "Plus" || isAccountType === "Premium") {
       handleNextSong(); // Nếu không có quảng cáo, chuyển bài
-      
+
       return;
     }
     try {
-      console.log('Phát quảng cáo');
-       // Bật trạng thái phát quảng cáo
+      console.log("Phát quảng cáo");
+      // Bật trạng thái phát quảng cáo
       const response = await fetch(`${API_URL}/quang-cao`, {
         method: "GET",
         headers: {
@@ -417,6 +420,33 @@ const Footer = React.memo(function FooterComponent() {
   const toggleVolume = () => {
     setIsVolumeVisible(!isVolumeVisible);
   };
+  const handleDownload = (qualityValue) => {
+    if (isAccountType === "Basic" && qualityValue !== "basic") {
+      toast.error(
+        "Bạn cần nâng cấp tài khoản Plus hoặc Premium để tải chất lượng cao."
+      );
+      return;
+    }
+
+    if (isAccountType === "Plus" && qualityValue === "premium") {
+      toast.error("Bạn cần tài khoản Premium để tải Lossless.");
+      return;
+    }
+
+    const fileUrl = playSong.file_paths[qualityValue];
+    if (fileUrl) {
+      const link = document.createElement("a");
+      link.href = fileUrl;
+      link.target = "_blank";
+      link.download = `${playSong.song_name}-${qualityValue}.mp3`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setIsOpen(false);
+    } else {
+      toast.error("Không tìm thấy file tải về.");
+    }
+  };
 
   useEffect(() => {
     setIsPlaying(false);
@@ -425,13 +455,8 @@ const Footer = React.memo(function FooterComponent() {
       // Gọi API để lấy danh sách bài hát
       await handleFetchSongs("rank");
       setIsLoading(false);
-
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
-      if (currentSong) {
-        setPlaySong(currentSong);
-      } else {
-        setCurrentSongIndex(0); // Nếu không có `currentSong`, bắt đầu từ bài đầu tiên
-      }
+      
     };
 
     // Gọi hàm fetchData
@@ -439,6 +464,7 @@ const Footer = React.memo(function FooterComponent() {
     if (JSON.parse(localStorage.getItem("user"))) {
       fetchFavoriteSongs();
     }
+
 
     const handleClickOutside = (event) => {
       if (
@@ -722,6 +748,39 @@ const Footer = React.memo(function FooterComponent() {
                   >
                     <Clock size={20} />
                   </button>
+                  {(isAccountType === "Premium" ||
+                    isAccountType === "Plus") && (
+                    <button
+                      className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
+                 text-white
+                `}
+                      onClick={() => setIsOpenDownload(!isOpenDownload)}
+                    >
+                      <CloudDownload size={20} />
+                      {isOpenDownload && (
+                        <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                          {getAvailableQualities().map((quality) => (
+                            <button
+                              key={quality.value}
+                              onClick={() => handleDownload(quality.value)}
+                              className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
+                            >
+                              <div className="flex items-center space-x-2 py-0.5">
+                                <span>{quality.name}</span>
+                                {quality.value && (
+                                  <span
+                                    className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
+                                  >
+                                    {quality.value}
+                                  </span>
+                                )}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -811,11 +870,11 @@ const Footer = React.memo(function FooterComponent() {
               <div
                 ref={Playlist}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px] h-[584px] mx-auto absolute -bottom-3 -translate-y-[15%] right-0 overflow-hidden"
+                className="bg-[#1a1b26] text-white p-4 rounded-lg min-w-[350px]  max-w-[450px] h-[584px] mx-auto absolute -bottom-3 -translate-y-[15%] right-0 overflow-hidden"
               >
                 <h2 className="text-lg ml-2 mb-4">Danh sách phát</h2>
                 <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4">
-                  <div className="w-12 h-12 mr-3 relative">
+                  <div className="w-12 h-12 mr-3 relative flex-none">
                     <img
                       src={playSong.song_image}
                       alt="Song thumbnail"
@@ -839,13 +898,13 @@ const Footer = React.memo(function FooterComponent() {
                       />
                     )}
                   </div>
-                  <div>
-                    <h3 className="font-medium">{playSong.song_name}</h3>
-                    <p className="text-[11px] opacity-60 mt-1">
+                  <div className=" w-[60%]">
+                    <h3 className="font-medium truncate w-[80%]">{playSong.song_name}</h3>
+                    <p className="text-[11px] opacity-60 mt-1 truncate w-[80%]" >
                       {playSong.composer}
                     </p>
                   </div>
-                  <div className="ml-auto flex items-center space-x-3">
+                  <div className="ml-auto flex items-center space-x-3 flex-none">
                     {favoriteSongs.includes(playSong.id) ? (
                       <Heart
                         fill="white"
@@ -867,7 +926,7 @@ const Footer = React.memo(function FooterComponent() {
                   {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
-                      className="flex items-center space-x-3"
+                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`} 
                       onClick={() => {
                         setCurrentSongIndex(index);
                         setPlaySong(song);
@@ -880,7 +939,7 @@ const Footer = React.memo(function FooterComponent() {
                         className="w-10 h-10 rounded object-cover"
                       />
                       <div>
-                        <h4 className="font-medium">{song.song_name}</h4>
+                        <h4 className="font-medium truncate w-full">{song.song_name}</h4>
                         <p className="text-xs text-gray-400 mt-2">
                           {song.composer}
                         </p>
@@ -913,7 +972,7 @@ const Footer = React.memo(function FooterComponent() {
                 <SkipBack size={24} />
               </button>
               <button
-                className="p-4 bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full "
+                className="p-4 bg-gradient-to-r from-[#88716e] to-[#FF0065] rounded-full "
                 onClick={togglePlayPause}
               >
                 {isPlaying ? (
@@ -1089,6 +1148,38 @@ const Footer = React.memo(function FooterComponent() {
               >
                 <Clock size={20} />
               </button>
+              {(isAccountType === "Premium" || isAccountType === "Plus") && (
+                <button
+                  className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
+                 text-white
+                `}
+                  onClick={() => setIsOpenDownload(!isOpenDownload)}
+                >
+                  <CloudDownload size={20} />
+                  {isOpenDownload && (
+                    <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                      {getAvailableQualities().map((quality) => (
+                        <button
+                          key={quality.value}
+                          onClick={() => handleDownload(quality.value)}
+                          className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
+                        >
+                          <div className="flex items-center space-x-2 py-0.5">
+                            <span>{quality.name}</span>
+                            {quality.value && (
+                              <span
+                                className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
+                              >
+                                {quality.value}
+                              </span>
+                            )}
+                          </div>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </button>
+              )}
             </div>
             <div
               onClick={() => setIsOpen(!isOpen)}

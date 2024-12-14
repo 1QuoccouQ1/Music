@@ -40,6 +40,7 @@ export const UserProvider = ({ children }) => {
   });
   const [isUpdate, setIsUpdate] = useState(false);
   const [isSidebar, setIsSidebar] = useState(false);
+  const [isLoader, setIsLoader] = useState(false);
 
   const handleFetchSongs = async (type, id) => {
     try {
@@ -53,27 +54,27 @@ export const UserProvider = ({ children }) => {
           break;
         case "trending":
           fetchedSongs = await fetch(`${API_URL}/trending`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         case "toplisten":
           fetchedSongs = await fetch(`${API_URL}/top-listen`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         case "yeuthich":
           fetchedSongs = await fetch(`${API_URL}/top-like`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         case "theloai":
           fetchedSongs = await fetch(`${API_URL}/the-loai/${id}/bai-hat`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         case "quocgia":
           fetchedSongs = await fetch(`${API_URL}/quoc-gia/${id}/bai-hat`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         case "casi":
           fetchedSongs = await fetch(`${API_URL}/ca-si/${id}/bai-hat`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         case "favorite":
           fetchedSongs = await fetch(`${API_URL}/${id}/bai-hat-yeu-thich`, {
@@ -81,22 +82,35 @@ export const UserProvider = ({ children }) => {
             headers: {
               "Content-Type": "application/json",
               Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            }
+            },
           });
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         case "bxh":
           fetchedSongs = await fetch(`${API_URL}/bxh-100`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         default:
           console.error("Unknown type");
           return;
       }
       const dataList = await fetchedSongs.json();
-      setListSongs(dataList);
-      setPlaySong(dataList[0]);
-      setCurrentSongIndex(0);
+      if (!isLoader) {
+        if (currentSong) {
+          const updatedList = [
+            currentSong,
+            ...dataList.filter((song) => song.id !== currentSong.id),
+          ];
+          setListSongs(updatedList);
+          setPlaySong(currentSong);
+          setCurrentSongIndex(0);
+          setIsLoader(true);
+        }
+      } else {
+        setListSongs(dataList);
+        setPlaySong(dataList[0]);
+        setCurrentSongIndex(0);
+      }
     } catch (error) {
       console.error("Error fetching songs:", error);
     }
@@ -107,7 +121,7 @@ export const UserProvider = ({ children }) => {
       switch (type) {
         case "history":
           fetchedSongs = JSON.parse(localStorage.getItem("songHistory"));
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         default:
           console.error("Unknown type");
@@ -127,15 +141,16 @@ export const UserProvider = ({ children }) => {
       switch (type) {
         case "song":
           fetchedSong = await fetch(`${API_URL}/${id}/play`);
-          setIsUpdate(true)
+          setIsUpdate(true);
           break;
         default:
           console.error("Unknown type");
           return;
       }
-      const dataSong = await fetchedSong.json();
-      setListSongs(dataSong.rand);
-      setPlaySong(dataSong.song);
+      const dataList = await fetchedSong.json();
+      setListSongs(dataList);
+      setPlaySong(dataList[0]);
+      setCurrentSongIndex(0);
     } catch (error) {
       console.error("Error fetching songs:", error);
     }
@@ -146,7 +161,6 @@ export const UserProvider = ({ children }) => {
   }, [isSetting]);
   useEffect(() => {
     localStorage.setItem("volume", JSON.stringify(volume));
-
   }, [volume]);
   useEffect(() => {
     localStorage.setItem("currentTime", JSON.stringify(currentTime));
@@ -154,7 +168,6 @@ export const UserProvider = ({ children }) => {
   useEffect(() => {
     if (user) {
       localStorage.setItem("user", JSON.stringify(user));
-
     } else {
       localStorage.removeItem("user");
     }
@@ -178,19 +191,29 @@ export const UserProvider = ({ children }) => {
         setVolume,
         currentTime,
         setCurrentTime,
-        isPlay, setIsPlay,
-        isSetting, setIsSetting,
+        isPlay,
+        setIsPlay,
+        isSetting,
+        setIsSetting,
         audioRef,
-        listsongs, setListSongs,
-        currentSongIndex, setCurrentSongIndex,
-        isPlaying, setIsPlaying,
+        listsongs,
+        setListSongs,
+        currentSongIndex,
+        setCurrentSongIndex,
+        isPlaying,
+        setIsPlaying,
         handleFetchSongs,
         handleAddSong,
         handleListSongs,
-        playSong, setPlaySong,
-        isAccountType, setIsAccountType,
-        isUpdate, setIsUpdate,
-        isSidebar, setIsSidebar
+        playSong,
+        setPlaySong,
+        isAccountType,
+        setIsAccountType,
+        isUpdate,
+        setIsUpdate,
+        isSidebar,
+        setIsSidebar,
+        isLoader,
       }}
     >
       {children}

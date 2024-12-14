@@ -1,8 +1,8 @@
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { useContext, useState, useEffect } from "react";
+import { ChevronDown, ChevronUp, X } from "lucide-react";
+import { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 function ModalListen() {
   const { currentSong, isPlay } = useContext(UserContext);
@@ -12,6 +12,36 @@ function ModalListen() {
   const formattedLyrics = songs.replace(/\n/g, "<br>");
   const hasSongs = songs.length > 0;
   const [singers, setSingers] = useState([]);
+  const listRef = useRef(null); 
+  const [isDragging, setIsDragging] = useState(false); 
+  const [startY, setStartY] = useState(0); 
+  const [startScrollTop, setStartScrollTop] = useState(0); 
+
+  const handleMouseDown = (e) => {
+    e.preventDefault();
+    setIsDragging(true); // Bật trạng thái đang kéo
+    setStartY(e.clientY || e.touches?.[0]?.clientY); // Ghi lại vị trí Y ban đầu
+    setStartScrollTop(listRef.current.scrollTop); // Ghi lại scrollTop tại thời điểm bắt đầu
+  };
+
+  const handleMouseMove = (e) => {
+    if (!isDragging) return; // Nếu không trong trạng thái kéo thì bỏ qua
+    const currentY = e.clientY || e.touches?.[0]?.clientY; // Lấy vị trí Y hiện tại
+    const deltaY = startY - currentY; // Tính khoảng cách kéo
+    listRef.current.scrollTop = startScrollTop + deltaY; // Điều chỉnh scrollTop
+  };
+
+  const handleMouseUp = () => {
+    setIsDragging(false); 
+  };
+
+  const scrollUp = () => {
+    listRef.current.scrollBy({ top: -300, behavior: "smooth" }); 
+  };
+
+  const scrollDown = () => {
+    listRef.current.scrollBy({ top: 300, behavior: "smooth" }); 
+  };
 
   useEffect(() => {
     if (isModal) {
@@ -23,7 +53,6 @@ function ModalListen() {
     }
   }, [isModal]);
 
-  // Hàm gọi API
   useEffect(() => {
     const fetchSingers = async () => {
       try {
@@ -74,7 +103,7 @@ function ModalListen() {
             }}
             className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center mr-5"
           >
-            <ChevronDown size={18} />
+            <X size={18} />
           </div>
         </div>
         <div className="flex items-center h-full ">
@@ -119,31 +148,50 @@ function ModalListen() {
               />
             </div>
           </div>
-          <div className="xl:w-1/4 flex flex-col items-end mr-10  gap-10 hidden xl:block h-[80%]">
+          <div
+            className="xl:w-1/4 flex flex-col items-end mr-10 gap-10 hidden xl:block h-[80%]"
+            onMouseMove={handleMouseMove} // Lắng nghe khi di chuyển chuột
+            onMouseUp={handleMouseUp} // Dừng kéo khi thả chuột
+            onMouseLeave={handleMouseUp} // Dừng kéo khi rời khỏi vùng danh sách
+            onTouchMove={handleMouseMove} // Hỗ trợ kéo trên thiết bị cảm ứng
+            onTouchEnd={handleMouseUp} // Dừng kéo trên cảm ứng
+          >
             <div className="flex flex-col items-center gap-5 h-[90%]">
-              <div className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center">
-                {" "}
-                <ChevronUp size={18} />
+              <div
+                className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center py-1"
+                onClick={scrollUp}
+              >
+                <ChevronUp size={18}  className="cursor-pointer"/>
               </div>
-              <ul className="flex flex-col gap-10 h-full overflow-y-auto no-scrollbar">
+              <ul
+                className="flex flex-col gap-10 h-full overflow-y-auto no-scrollbar"
+                ref={listRef}
+                onMouseDown={handleMouseDown} // Bắt đầu kéo khi nhấn chuột
+                onTouchStart={handleMouseDown} // Bắt đầu kéo khi chạm trên thiết bị cảm ứng
+              >
                 {singers.map((singer) => (
-                  <li key={singer.id} >
-                  <Link to={`/ProfileArtist/${singer.id}`} onClick={()=>{
-                    window.scrollTo(0, 0);
-                    setIsModal(!isModal);
-                  }}>
-                    <img
-                      className="size-60 rounded-full shadow-medium"
-                      src={singer.singer_image}
-                      alt={singer.singer_name}
-                    />
+                  <li key={singer.id}>
+                    <Link
+                      to={`/ProfileArtist/${singer.id}`}
+                      onClick={() => {
+                        window.scrollTo(0, 0);
+                        setIsModal((prev) => !prev);
+                      }}
+                    >
+                      <img
+                        className="size-60 rounded-full shadow-medium"
+                        src={singer.singer_image}
+                        alt={singer.singer_name}
+                      />
                     </Link>
                   </li>
                 ))}
               </ul>
-              <div className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center">
-                {" "}
-                <ChevronDown size={18} />
+              <div
+                className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center py-1"
+                onClick={scrollDown}
+              >
+                <ChevronDown size={18} className="cursor-pointer" />
               </div>
             </div>
           </div>

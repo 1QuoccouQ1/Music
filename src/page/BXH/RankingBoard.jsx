@@ -296,7 +296,6 @@ const RankingBoard = () => {
                     </tbody>
                 </table>
             </div>
-            <PlayListCreate/>
              {/* Modal */}
              {showModal && (
                     <PlaylistDiv
