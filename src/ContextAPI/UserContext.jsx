@@ -114,6 +114,11 @@ export const UserProvider = ({ children }) => {
           setPlaySong(currentSong);
           setCurrentSongIndex(0);
           setIsLoader(true);
+        } else {
+          setListSongs(dataList);
+          setPlaySong(dataList[0]);
+          setCurrentSongIndex(0);
+          setIsLoader(true);
         }
       } else {
         setListSongs(dataList);
