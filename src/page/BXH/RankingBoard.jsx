@@ -14,6 +14,8 @@ const RankingBoard = () => {
     const [songs, setSongs] = useState([]);
     const [favouriteSongIds, setFavouriteSongIds] = useState([]);
     const [error, setError] = useState(null);
+    const [showModal, setShowModal] = useState(false); // Quản lý trạng thái hiển thị Modal
+    const [selectedSongId, setSelectedSongId] = useState(null); // Lưu songId được chọn
     const user = JSON.parse(localStorage.getItem('user'));
     const { handleAddSong, handleFetchSongs } = useContext(UserContext);
     const navigate = useNavigate();
@@ -87,7 +89,8 @@ const RankingBoard = () => {
                 const data = await response.json();
                 toast.success(data.message || 'Cập nhật thành công!');
             } else {
-                toast.error('Không thể cập nhật trạng thái bài hát!');
+                const data = await response.json();
+                toast.error(data.message || 'Không thể cập nhật trạng thái bài hát!');
             }
         } catch (error) {
             console.error('Lỗi khi cập nhật trạng thái yêu thích:', error);
@@ -103,6 +106,17 @@ const RankingBoard = () => {
             remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
 
         return `${formattedMinutes}:${formattedSeconds}`;
+    };
+
+
+    const openModal = (songId) => {
+        setSelectedSongId(songId);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedSongId(null);
     };
 
     useEffect(() => {
@@ -130,6 +144,7 @@ const RankingBoard = () => {
               </div>
 
             </div>
+            
 
             {/* Top 3 Ranking Cards */}
             <div className='flex flex-col lg:flex-row  justify-center items-center md:items-start w-full space-y-6 md:space-y-0 md:space-x-8 mb-12'>
@@ -172,7 +187,6 @@ const RankingBoard = () => {
                         />
                     </div>
                 )}
-                <PlaylistDiv/>
                 {rankings[2] && (
                     <div className='transform flex justify-center lg:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard
@@ -267,9 +281,9 @@ const RankingBoard = () => {
 
                                         <CirclePlus
                                             size={22}
-                                            className='text-slate-500'
+                                             className='text-slate-500 cursor-pointer hover:scale-110 duration-300'
+                                            onClick={() => openModal(song.id)} 
                                         />
-                                        
                                     </div>
 
                                     <span>{formatTime(song.time) || 'N/A'}</span>
@@ -279,6 +293,13 @@ const RankingBoard = () => {
                     </tbody>
                 </table>
             </div>
+             {/* Modal */}
+             {showModal && (
+                    <PlaylistDiv
+                    songId={selectedSongId} // Truyền songId vào PlaylistDiv
+                    onClose={closeModal} // Truyền hàm đóng Modal
+                    />
+                )}
             <ToastContainer />
         </div>
     );
