@@ -1,7 +1,7 @@
 import { ArrowLeft } from 'lucide-react'
 import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
-import { useNavigate } from "react-router-dom";  
+import { useNavigate, Link } from "react-router-dom";  
 import { API_URL } from '../services/apiService';
 
 export default function PasswordReset() {
@@ -30,7 +30,12 @@ export default function PasswordReset() {
 
      // Xử lý submit form
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Ngăn chặn hành vi mặc định của form
+    e.preventDefault(); 
+    if(!email){
+      setErrorMessage("Vui lòng nhập email.");
+      return;
+    }
+    // Ngăn chặn hành vi mặc định của form
     setErrorMessage("");
     try {
       // Gửi request POST đến /resetpass với email
@@ -92,11 +97,11 @@ export default function PasswordReset() {
           </div>
       </div>
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8 relative">
-        <a href='/login'>
+        <Link to='/login'>
             <button className="absolute left-4 top-4 text-gray-600 hover:text-gray-800" aria-label="Go back">
             <ArrowLeft className="h-6 w-6" />
             </button>
-        </a>
+        </Link>
         <h1 className="text-2xl font-bold text-center mb-6">Đặt lại mật khẩu</h1>
         <p className="text-sm text-gray-600 text-left mb-6 pr-4">
         Nhập địa chỉ email hoặc tên người dùng được liên kết với tài khoản SoundWave của bạn và chúng tôi sẽ gửi email cho bạn.
@@ -127,9 +132,9 @@ export default function PasswordReset() {
             </button>
         </form>
         <div className="mt-6 text-center">
-          <a href="/login" className="text-pink-500 hover:underline text-sm">
+          <Link to="/login" className="text-pink-500 hover:underline text-sm">
             Quay lại Đăng Nhập
-          </a>
+          </Link>
         </div>
       </div>
     </div>

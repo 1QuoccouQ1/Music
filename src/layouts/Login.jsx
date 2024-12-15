@@ -1,7 +1,7 @@
 import { Facebook, Apple } from "lucide-react";
 import { useState, useRef, useEffect,useContext } from "react";
 import { Globe, ChevronDown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { UserContext } from '../ContextAPI/UserContext';
 import { Undo2 } from 'lucide-react';
 import { API_URL } from "../services/apiService";
@@ -155,7 +155,7 @@ function Login() {
           </div>
         </div>
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-          <a href="/" className="cursor-pointer mb-4"><Undo2 /></a>
+          <Link to="/" className="cursor-pointer mb-4"><Undo2 /></Link>
           <h1 className="text-2xl font-bold text-center mb-6">{texts[language].title}</h1>
           <form className="space-y-4" onSubmit={handleSubmit}>
             <div>
@@ -202,9 +202,9 @@ function Login() {
               )}
             </div>
             <div className="text-right">
-              <a href="/PasswordReset" className="text-sm text-slate-700 ">
+              <Link to="/PasswordReset" className="text-sm text-slate-700 ">
                 {texts[language].forgotPassword}
-              </a>
+              </Link>
             </div>
             <button
               type="submit"
@@ -216,12 +216,12 @@ function Login() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               {texts[language].noAccount}{" "}
-              <a href="/register" className="text-pink-500 hover:underline">
+              <Link to="/register" className="text-pink-500 hover:underline">
                 {texts[language].register}
-              </a>
+              </Link>
             </p>
           </div>
-          <div className="mt-6 flex justify-center space-x-4">
+          {/* <div className="mt-6 flex justify-center space-x-4">
             <button className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition duration-300 ease-in-out">
               <Facebook className="h-5 w-5 text-blue-600" />
             </button>
@@ -249,7 +249,7 @@ function Login() {
             <button className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition duration-300 ease-in-out">
               <Apple className="h-5 w-5" />
             </button>
-          </div>
+          </div> */}
         </div>
         <div className="mt-8 text-center text-sm text-gray-400">
           <p>{texts[language].footer}</p>

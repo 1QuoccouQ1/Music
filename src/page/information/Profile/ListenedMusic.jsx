@@ -1,8 +1,8 @@
 import { useState, useEffect, useContext } from "react";
 import { Play } from "lucide-react";
-import { API_URL } from "../../../services/apiService";
-import { useOutletContext } from "react-router-dom";
-import { UserContext } from "../../../ContextAPI/UserContext";
+import { API_URL } from '../../../services/apiService';
+import { useOutletContext } from 'react-router-dom';
+import { UserContext } from '../../../ContextAPI/UserContext';
 import ProfileArtistSong from "../../BXH/ProfileArtistSong";
 
 function ListenedMusic() {

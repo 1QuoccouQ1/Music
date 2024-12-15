@@ -104,6 +104,7 @@ function ListTopSongs() {
                 {listSongs.length > 0 ? (
                     <ListSongs
                         songs={listSongs}
+                        start={1}
                     />
                 ) : (
                     <p className='text-center text-gray-400 mt-10'>

@@ -8,7 +8,7 @@ import { API_URL } from "../../services/apiService";
 import { toast } from "react-toastify";
 import PlaylistDiv from '../Play-list/PlayList';
 
-function ListSongs({ songs }) {
+function ListSongs({ songs, start }) {
 
     const { handleAddSong, handleClick } = useContext(UserContext);
     const [SongFavourite, setIsSongFavourite] = useState([]);
@@ -133,7 +133,7 @@ function ListSongs({ songs }) {
                                 className='hidden group-hover:block duration-300'
                             />
                             <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>
-                                {index + 4}
+                                {index + start}
                             </p>
                         </td>
                         <td className='flex items-center space-x-4 px-1 md:px-4 ' >

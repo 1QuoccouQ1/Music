@@ -123,7 +123,8 @@ function ListPlayLists() {
 
       {/* Bảng bài hát */}
       {songs.length > 0 ? (
-        <ListSongs songs={songs} />
+        <ListSongs songs={songs}
+        start={1} />
       ) : (
         <p className="text-center text-gray-400 mt-10">
           Không có bài hát nào để hiển thị.
