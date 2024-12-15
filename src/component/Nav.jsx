@@ -23,7 +23,7 @@ function Nav() {
   const user = JSON.parse(localStorage.getItem("user"));
   const isProfile = user ? true : false;
   const profileRef = useRef(null);
-
+  const searchRef = useRef(null);
   const [songs, setSongs] = useState([]);
   const [singers, setSingers] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -92,6 +92,22 @@ function Nav() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+
+   
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutsideInput = (event) => {
+      // Kiểm tra nếu click không thuộc vùng InputSearch hoặc kết quả
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutsideInput);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideInput);
+    };
   }, []);
 
   return (
@@ -103,13 +119,10 @@ function Nav() {
         >
           {isSidebar ? <CloseIcon /> : <MenuIcon />}
         </button>
-        <div className="relative w-[80%] md:w-auto">
+        <div className="relative w-[80%] md:w-auto" ref={searchRef}>
           <InputSearch
             onSearch={fetchSearchResults}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => {
-              setTimeout(() => setIsFocused(false), 200);
-            }}
             onQueryChange={setQuery}
           />
 
@@ -137,7 +150,7 @@ function Nav() {
                             onDoubleClick={() =>  handleAddSong("song", song.id)}
                             onClick={(e) =>{e.stopPropagation(); handleClick(song.id)}}
                           >
-                            <div>
+                            <Link to={`/SongDetail/${song.id}`} >
                               <div className="flex items-center">
                                 <img
                                   src={song.song_image}
