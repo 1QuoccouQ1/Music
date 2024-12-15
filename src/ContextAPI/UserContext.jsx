@@ -55,6 +55,7 @@ export const UserProvider = ({ children }) => {
           break;
         case "new":
           fetchedSongs = await fetch(`${API_URL}/new-song`);
+          setIsUpdate(true);
           break;
         case "trending":
           fetchedSongs = await fetch(`${API_URL}/trending`);
@@ -181,8 +182,8 @@ export const UserProvider = ({ children }) => {
           return;
       }
       const dataList = await fetchedSong.json();
-      setListSongs(dataList);
-      setPlaySong(dataList[0]);
+      setListSongs([dataList.song,...dataList.rand]);
+      setPlaySong(dataList.song);
       setCurrentSongIndex(0);
     } catch (error) {
       console.error("Error fetching songs:", error);

@@ -2,7 +2,7 @@ import { ChevronDown, ChevronUp, X } from "lucide-react";
 import { useContext, useState, useEffect, useRef } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 function ModalListen() {
   const { currentSong, isPlay } = useContext(UserContext);
@@ -16,9 +16,11 @@ function ModalListen() {
   const [isDragging, setIsDragging] = useState(false); 
   const [startY, setStartY] = useState(0); 
   const [startScrollTop, setStartScrollTop] = useState(0); 
+  const navigate = useNavigate();
 
   const handleMouseDown = (e) => {
     e.preventDefault();
+    e.stopPropagation();
     setIsDragging(true); // Bật trạng thái đang kéo
     setStartY(e.clientY || e.touches?.[0]?.clientY); // Ghi lại vị trí Y ban đầu
     setStartScrollTop(listRef.current.scrollTop); // Ghi lại scrollTop tại thời điểm bắt đầu
@@ -171,9 +173,9 @@ function ModalListen() {
               >
                 {singers.map((singer) => (
                   <li key={singer.id}>
-                    <Link
-                      to={`/ProfileArtist/${singer.id}`}
-                      onClick={() => {
+                    <div
+                      onClick={(e) => {
+                        e.stopPropagation();
                         window.scrollTo(0, 0);
                         setIsModal((prev) => !prev);
                       }}
@@ -182,8 +184,9 @@ function ModalListen() {
                         className="size-60 rounded-full shadow-medium"
                         src={singer.singer_image}
                         alt={singer.singer_name}
+                        onClick={() => navigate(`/ProfileArtist/${singer.id}`)}
                       />
-                    </Link>
+                    </div>
                   </li>
                 ))}
               </ul>
