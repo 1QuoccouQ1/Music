@@ -5,16 +5,13 @@ import 'react-toastify/dist/ReactToastify.css';
 import ArtistRankingCard from './ArtistRankingCard';
 import { UserContext } from "../../ContextAPI/UserContext";
 import PlaylistDiv from '../Play-list/PlayList';
-import PlayListCreate from '../Play-list/PlayListCreate';
-import ListSongs from '../Genre/ListSongs.jsx';
+import ListSongs from '../Genre/ListSongs';
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
     const [songs, setSongs] = useState([]);
     const [favouriteSongIds, setFavouriteSongIds] = useState([]);
     const [error, setError] = useState(null);
-    const [showModal, setShowModal] = useState(false); // Quản lý trạng thái hiển thị Modal
-    const [selectedSongId, setSelectedSongId] = useState(null); // Lưu songId được chọn
     const user = JSON.parse(localStorage.getItem('user'));
     const { handleFetchSongs } = useContext(UserContext);
     // const navigate = useNavigate();
@@ -112,16 +109,7 @@ const RankingBoard = () => {
     };
 
 
-    const openModal = (songId) => {
-        setSelectedSongId(songId);
-        setShowModal(true);
-    };
-
-    const closeModal = () => {
-        setShowModal(false);
-        setSelectedSongId(null);
-    };
-
+   
     useEffect(() => {
         fetchRankings();
         if (user) fetchFavouriteSongs();
@@ -286,14 +274,6 @@ const RankingBoard = () => {
                     </p>
                 )}
             </div>
-            {/* <PlayListCreate /> */}
-            {/* Modal */}
-            {showModal && (
-                <PlaylistDiv
-                    songId={selectedSongId} // Truyền songId vào PlaylistDiv
-                    onClose={closeModal} // Truyền hàm đóng Modal
-                />
-            )}
         </div>
     );
 };

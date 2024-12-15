@@ -5,6 +5,7 @@ import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
 import LogoutIcon from '@mui/icons-material/Logout';
 import { useNavigate } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { API_URL } from '../../services/apiService';
 
 const SettingsPage = () => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const SettingsPage = () => {
         try {
             const token = localStorage.getItem('access_token');
             if (token) {
-                await fetch('https://admin.soundwave.io.vn/api/logout', {
+                await fetch(API_URL + '/api/logout', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -58,12 +59,7 @@ const SettingsPage = () => {
         fetchUserData();
     }, []);
 
-    const settings = [
-        { name: 'Chương trình khuyến mãi' },
-        { name: 'Album và Single mới' },
-        { name: 'Cập nhật ứng dụng/Web' }
-    ];
-    const { users_type } = data;  // Retrieve user type from data
+    const { users_type } = data; // Retrieve user type from data
 
     return (
         <div className='min-h-screen bg-[#0f172a] flex flex-col items-center text-white py-10 px-5'>
@@ -234,23 +230,6 @@ const SettingsPage = () => {
                             20/09/2024 lúc 02:53:14
                         </p>
                     </div>
-                </div>
-            </div>
-
-            
-            <div className="bg-[#0f172a] p-10 flex flex-col items-center md:items-start">
-                <h2 className="text-white text-3xl font-bold mb-8 text-center md:text-left">
-                    Cài đặt thông báo
-                </h2>
-                <div className="space-y-6 w-full max-w-[912px]">
-                    {settings.map((setting, index) => (
-                        <div
-                            key={index}
-                            className="bg-[#1a1f2e] p-4 rounded-lg shadow-md"
-                        >
-                            <span className="text-lg font-medium text-white">{setting.name}</span>
-                        </div>
-                    ))}
                 </div>
             </div>
         </div>

@@ -2,7 +2,7 @@
 import { useState, useCallback, useRef } from "react";
 import { debounce } from "lodash";
 
-function InputSearch({ onSearch, onFocus, onBlur }) {
+function InputSearch({ onSearch, onFocus, onBlur , onQueryChange }) {
   const [query, setQuery] = useState("");
   const [lastQuery, setLastQuery] = useState("");
 
@@ -36,6 +36,7 @@ function InputSearch({ onSearch, onFocus, onBlur }) {
   const handleChange = (e) => {
     setQuery(e.target.value);
     debouncedSearch(e.target.value); 
+    onQueryChange(e.target.value);
   };
 
   const handleKeyDown = (e) => {
