@@ -45,7 +45,7 @@ function ListSongs({ songs }) {
         if (user) {
             FavouriteSong();
         }
-    }, [user]);
+    }, []);
     const handleSongFavourite = (song_id, check) => {
         if (!user) {
             // Kiểm tra đã đăng nhập chưa

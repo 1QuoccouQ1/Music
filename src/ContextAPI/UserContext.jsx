@@ -99,6 +99,16 @@ export const UserProvider = ({ children }) => {
           fetchedSongs = await fetch(`${API_URL}/album/${id}/bai-hat`);
           setIsUpdate(true)
           break;
+        case "playlist":
+          fetchedSongs = await fetch(`${API_URL}/playlist/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          });
+          setIsUpdate(true)
+          break;
         default:
           console.error("Unknown type");
           return;

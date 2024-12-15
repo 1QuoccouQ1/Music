@@ -48,7 +48,11 @@ function Playlists() {
     }
   };
   useEffect(() => {
-    settext(`${privatePlaylists.length} Danh sách phát`);
+    settext(
+      `${
+        privatePlaylists.length > 0 ? privatePlaylists.length : "0"
+      } Danh sách phát`
+    );
   }, [privatePlaylists]);
 
   // Hàm xử lý khi tạo playlist mới
@@ -204,35 +208,42 @@ function Playlists() {
                     slidesPerView="auto" // Số item hiện trong 1 lần
                     className="mySwiper ml-0"
                   >
-                    {privatePlaylists.map((playlist, index) => (
-                      <SwiperSlide key={index} style={{ width: "auto" }}>
-                        <Link to={`/Playlists/${playlist.id}`}>
-                          <div className="rounded-md h-full sm:w-[170px] w-[130px] sm:mx-5  relative group duration-300">
-                            <img
-                              src={playlist.background}
-                              alt={playlist.name}
-                              className="w-full rounded-md group-hover:opacity-70 "
-                            />
-                            <p className="font-medium text-sm mt-2 truncate">
-                              {playlist.playlist_name}
-                            </p>
-                            <p className="text-slate-700 text-sm truncate">
-                              {username}
-                            </p>
-                            <div className="absolute top-3 right-3 cursor-pointer group-hover:opacity-100 border border-white rounded-full p-1 lg:scale-0 group-hover:scale-100 duration-300 bg-white" onClick={(e) => e.stopPropagation()}>
-                              <X
-                                className=" cursor-pointer group-hover:opacity-100 border-1 border-white rounded-full "
-                                color="black"
-                                onClick={() => {
-                                  handleDeletePlaylist(playlist.id);
-                                }}
-                                size={15}
+                    {privatePlaylists.length > 0 &&
+                      privatePlaylists.map((playlist, index) => (
+                        <SwiperSlide key={index} style={{ width: "auto" }}>
+                         
+                            <div className="rounded-md h-full sm:w-[170px] w-[130px] sm:mx-5  relative group duration-300">
+                            <Link to={`/Playlists/${playlist.id}`}>
+                              <img
+                                src={playlist.background}
+                                alt={playlist.name}
+                                className="w-full rounded-md group-hover:opacity-70 "
                               />
+                              </Link>
+                              <p className="font-medium text-sm mt-2 truncate">
+                                {playlist.playlist_name}
+                              </p>
+                              <p className="text-slate-700 text-sm truncate">
+                                {username}
+                              </p>
+                              <div
+                                className="absolute top-3 right-3 cursor-pointer group-hover:opacity-100 border border-white rounded-full p-1 lg:scale-0 group-hover:scale-100 duration-300 bg-white"
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                <X
+                                  className=" cursor-pointer group-hover:opacity-100 border-1 border-white rounded-full "
+                                  color="black"
+                                  onClick={() => {
+                                    (e) => e.stopPropagation()
+                                    handleDeletePlaylist(playlist.id);
+                                  }}
+                                  size={15}
+                                />
+                              </div>
                             </div>
-                          </div>
-                        </Link>
-                      </SwiperSlide>
-                    ))}
+                          
+                        </SwiperSlide>
+                      ))}
                   </Swiper>
                 )}
               </div>

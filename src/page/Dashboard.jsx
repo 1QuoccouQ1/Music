@@ -20,6 +20,7 @@ function Dashboard() {
   const [loading, setLoading] = useState(false); // Trạng thái tải dữ liệu
   const [artists, setArtists] = useState([]);
   const [genres, setGenres] = useState([]);
+  const [playlists, setPlaylists] = useState([]);
   const [loadingGlobal, setLoadingGlobal] = useState(true);
   const navigate = useNavigate();
 
@@ -30,12 +31,14 @@ function Dashboard() {
       const topLikeResponse = await fetch(`${API_URL}/top-like`);
       const artistList = await fetch(`${API_URL}/ca-si`);
       const genresList = await fetch(`${API_URL}/the-loai`);
+      const playlistsList = await fetch(`${API_URL}/playlist-public`);
 
       const trendingData = await trendingResponse.json();
       const topListenData = await topListenResponse.json();
       const topLikeData = await topLikeResponse.json();
       const artistData = await artistList.json();
       const genresData = await genresList.json();
+      const playlistsData = await playlistsList.json();
 
       setTrending(trendingData);
       setTopListen(topListenData);
@@ -43,6 +46,7 @@ function Dashboard() {
       setLoadingGlobal(false);
       setArtists(artistData);
       setGenres(genresData);
+      setPlaylists(playlistsData);
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
     }
@@ -495,6 +499,36 @@ function Dashboard() {
           ))}
         </Swiper>
       </section>
+      {playlists.length > 0 && <section className="bg-medium pt-10 lg:pt-20 text-white px-1 lg:px-10 h-auto  tracking-wide">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl lg:text-3xl font-medium mb-16">Danh Sách Phát</h1>
+        </div>
+        <Swiper
+          spaceBetween={20}
+          slidesPerView="auto" // Số item hiện trong 1 lần
+          className="mySwiper "s
+        >
+          {playlists.map((genre) => (
+            <SwiperSlide key={genre.id} style={{ width: "auto" }}>
+              <div
+                key={genre.id}
+                className="pr-3 pb-3 group"
+                onDoubleClick={() => handleFetchSongs("theloai", genre.id)}
+              >
+                <Link
+                  to={`/Playlists/${genre.id}`}
+                  className="md:w-64 w-32 h-32 md:h-64 rounded-xl flex items-center justify-center bg-cover bg-center brightness-100 transition-all duration-300 group-hover:brightness-125"
+                  style={{
+                    backgroundImage: `url(${genre.background})`,
+                  }}
+                >
+                </Link>
+              </div>
+            </SwiperSlide>
+          ))}
+        </Swiper>
+      </section> }
+      
     </>
   );
 }

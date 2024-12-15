@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Play } from 'lucide-react';
+import { CirclePlus, Heart, Play } from 'lucide-react';
 import { API_URL } from '../../services/apiService';
 import 'react-toastify/dist/ReactToastify.css';
 import ArtistRankingCard from './ArtistRankingCard';
 import { UserContext } from "../../ContextAPI/UserContext";
-import PlaylistDiv from '../Play-list/PlayList';
-import ListSongs from '../Genre/ListSongs';
+import { Link } from 'react-router-dom';
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
@@ -240,7 +239,6 @@ const RankingBoard = () => {
                         />
                     </div>
                 )}
-
                 {rankings[2] && (
                     <div className='transform flex justify-center lg:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard
@@ -264,15 +262,89 @@ const RankingBoard = () => {
 
             {/* Ranking Table */}
             <div className='overflow-x-auto'>
-                {songs.length > 0 ? (
-                    <ListSongs
-                        songs={songs}
-                    />
-                ) : (
-                    <p className='text-center text-gray-400 mt-10'>
-                        Không có bài hát nào để hiển thị.
-                    </p>
-                )}
+                <table className='min-w-full text-white text-sm sm:text-base'>
+                    <thead>
+                        <tr className='text-left border-b border-gray-600 mb-2'>
+                            <th className='py-1 w-2 text-center'>#</th>
+                            <th className='py-2 px-4'>Bài hát</th>
+                            <th className='py-2 px-4'>Tên Ca Sĩ</th>
+                            <th className='py-2 px-4 text-center'>Lượt nghe</th>
+                            <th className='py-2 px-4 text-right'>Thời lượng</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {songs.map((song, index) => (
+                            <tr
+                                key={song.id}
+                                className='group border-b-[10px] border-transparent hover:bg-slate-800 duration-300'
+                            >
+                                <td className='py-2 px-4 text-center'>
+                                    <Play
+                                        size={16}
+                                        className='hidden group-hover:block duration-300'
+                                    />
+                                    <p className='text-xs w-[18px] h-[18px] group-hover:hidden duration-300'>
+                                        {index + 4}
+                                    </p>
+                                </td>
+                                <td className='flex items-center space-x-4 px-4 cursor-pointer' onDoubleClick={() => handleAddSong("song", song.id)}>
+                                    <img
+                                        src={song.song_image}
+                                        alt={song.song_name}
+                                        className='w-10 h-10 sm:w-12 sm:h-12 rounded-md'
+                                    />
+                                    <div className='w-full truncate'>
+                                        <p className='font-semibold cursor-pointer' onClick={() => navigate(`/SongDetail/${song.id}`)}>
+                                            {song.song_name}
+                                        </p>
+                                        <p className='text-gray-400'>
+                                            {song.provider}
+                                        </p>
+                                    </div>
+                                </td>
+                                <td className='px-4'>
+                                    <Link to={`/ProfileArtist/${song.singer_id}`}>
+                                        {song.singer_name}
+                                    </Link>
+                                </td>
+                                <td className='px-4 text-center'>
+                                    {song.listen_count || 'N/A'}
+                                </td>
+                                <td className='flex items-center justify-end gap-4 px-4 '>
+                                    <div className='flex items-center gap-4 opacity-0 h-full group-hover:opacity-100 duration-300'>
+                                        {favouriteSongIds.includes(song.id) ? (
+                                            <Heart
+                                                size={22}
+                                                fill='red'
+                                                className='text-red-500 cursor-pointer hover:scale-110 hover:fill-pink-600 duration-300'
+                                                onClick={() =>
+                                                    toggleFavourite(song.id, true)
+                                                }
+                                            />
+                                        ) : (
+                                            <Heart
+                                                size={22}
+                                                className='text-red-500 cursor-pointer hover:scale-110 hover:fill-pink-600 duration-300'
+                                                onClick={() =>
+                                                    toggleFavourite(song.id, false)
+                                                }
+                                            />
+                                        )}
+
+                                        <CirclePlus
+                                            size={22}
+                                             className='text-slate-500 cursor-pointer hover:scale-110 duration-300'
+                                            onClick={() => openModal(song.id)} 
+                                        />
+                                        {/* <PlaylistDiv  songId = {33}/> */}
+                                    </div>
+
+                                    <span>{formatTime(song.time) || 'N/A'}</span>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
             </div>
         </div>
     );

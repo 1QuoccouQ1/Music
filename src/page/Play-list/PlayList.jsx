@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { API_URL } from "../../services/apiService";
@@ -150,7 +150,6 @@ function PlaylistDiv({ songId, onClose }) {
             >
               Tạo Playlist
             </div>
-
           </nav>
 
           {/* Nội dung */}
@@ -200,7 +199,7 @@ function PlaylistDiv({ songId, onClose }) {
                 <Swiper
                   spaceBetween={20}
                   slidesPerView="auto" // Số item hiện trong 1 lần
-                  className="mySwiper"
+                  className="mySwiper ml-0"
                 >
                   {privatePlaylists.map((playlist, index) => (
                     <SwiperSlide key={index} style={{ width: "auto" }}>
