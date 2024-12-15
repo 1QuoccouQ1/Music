@@ -5,6 +5,11 @@ import { useParams } from "react-router-dom";
 import { API_URL } from "../../services/apiService";
 import { UserContext } from "../../ContextAPI/UserContext";
 import { toast } from "react-toastify";
+import Comment from "./Comment.jsx";
+import React from "react";
+import ReactStars from "react-stars";
+import { useLocation } from "react-router-dom";
+
 
 function SongDetail() {
   const { handleAddSong } = useContext(UserContext);
@@ -14,6 +19,10 @@ function SongDetail() {
   const [loading, setLoading] = useState(true);
   const [song, setSong] = useState(null);
   const [SongFavourite, setIsSongFavourite] = useState([]);
+  const [averageRating, setAverageRating] = useState(0);
+  const [isTotal, setIsTotal] = useState(0);
+  const location = useLocation();
+
   const handleSongFavourite = (song_id, check) => {
     if (!user) {
       // Kiểm tra đã đăng nhập chưa
@@ -112,7 +121,7 @@ function SongDetail() {
 
     fetchArtistsong();
     fetchListRamdom();
-  }, [id]);
+  }, [location]);
 
   if (loading) {
     return (
@@ -145,6 +154,19 @@ function SongDetail() {
                   <p className="text-sm mt-2 text-slate-400">
                     {song.category_name}
                   </p>
+                </div>
+                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                  <ReactStars
+                    count={5}                   // Tổng số sao
+                    value={averageRating}       // Giá trị trung bình (3.9, 4.5, ...)
+                    size={32}                   // Kích thước sao
+                    color2={"#ffd700"}          // Màu sao khi chọn
+                    half={true}                 // Cho phép sao có giá trị thập phân
+                    edit={false}                // Không cho phép người dùng tương tác
+                  />
+                  <span style={{ marginLeft: "10px", fontSize: "1.2rem" }}>
+                    {averageRating.toFixed(1)} / 5.0 ({isTotal})
+                  </span>
                 </div>
                 <p className="text-sm mt-2 text-slate-400">
                   {song.listen_count} người nghe
@@ -206,6 +228,12 @@ function SongDetail() {
             </div>
           </div>
         </div>
+        <hr className="border-pink-500 mt-10"/>
+        <Comment 
+        id={id}
+        setIsTotal={setIsTotal}
+        setAverageRating={setAverageRating}
+        />
       </section>
     </>
   );

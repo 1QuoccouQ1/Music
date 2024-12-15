@@ -4,7 +4,6 @@ import { toast } from "react-toastify";
 import { API_URL } from '../../../services/apiService';
 import { useOutletContext } from 'react-router-dom';
 import { UserContext } from '../../../ContextAPI/UserContext';
-import { Link, useNavigate } from "react-router-dom";
 import ProfileArtistSong from "../../BXH/ProfileArtistSong";
 
 
@@ -13,8 +12,7 @@ function ListenedMusic() {
     const [SongsFavourite, setIsSongsFavourite] = useState([]);
     const user = JSON.parse(localStorage.getItem("user"));
     const { settext } = useOutletContext();
-    const { handleAddSong, handleFetchSongs } = useContext(UserContext);
-    const navigate = useNavigate();
+    const { handleFetchSongs } = useContext(UserContext);
     useEffect(() => {
         const FavouriteSong = async () => {
             try {
@@ -52,53 +50,7 @@ function ListenedMusic() {
     useEffect(() => {
         settext(`${SongsFavourite.length} Bài hát yêu thích`);
     });
-    const handleSongFavourite = (song_id, check) => {
-        if (!user) {
-            // Kiểm tra đã đăng nhập chưa
-            toast.error(
-                "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào yêu thích."
-            );
-        } else {
-            // Gửi request API khi người dùng nhấn "Theo giỏi"
-            fetch(API_URL + "/bai-hat-yeu-thich", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                },
-                body: JSON.stringify({
-                    liked: !check,
-                    song_id: song_id,
-                    user_id: user.id,
-                }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    // Xử lý dữ liệu trả về từ API (nếu cần)
-                    // console.log('Đã đánh dấu yêu thích:', data.message);
-                    if (check) {
-                        setIsSongsFavourite((set) => {
-                            return set.filter((id) => id.id !== song_id);
-                        });
-                    } else {
-                        setIsSongsFavourite((set) => {
-                            return [...set, song_id];
-                        });
-                    }
-                    toast.success(data.message);
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi gửi yêu cầu:", error);
-                });
-        }
-    };
-    const formatTime = time => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes.toString().padStart(2, '0')}:${seconds
-            .toString()
-            .padStart(2, '0')}`;
-    };
+    
     // console.log(SongsFavourite);
     return (
         <>

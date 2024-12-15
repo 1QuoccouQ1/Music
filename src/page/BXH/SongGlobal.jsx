@@ -114,6 +114,7 @@ function SongGlobal() {
             {songs.length > 0 ? (
                 <ListSongs
                     songs={songs}
+                    start={1}
                 />
             ) : (
                 <p className='text-center text-gray-400 mt-10'>

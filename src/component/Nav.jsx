@@ -9,8 +9,7 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_URL } from "../services/apiService";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -30,6 +29,10 @@ function Nav() {
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
+  const location = useLocation();
+  useEffect(() => {
+    setIsFocused(false);
+  }, [location]);
   const fetchSearchResults = async (query) => {
     if (!query) {
       setSongs([]);
@@ -150,7 +153,7 @@ function Nav() {
                             onDoubleClick={() =>  handleAddSong("song", song.id)}
                             onClick={(e) =>{e.stopPropagation(); handleClick(song.id)}}
                           >
-                            <Link to={`/SongDetail/${song.id}`} >
+                            <div to={`/SongDetail/${song.id}`} >
                               <div className="flex items-center">
                                 <img
                                   src={song.song_image}
@@ -276,7 +279,7 @@ function Nav() {
                   </svg>
                 </button>
                 {isProfileOpen && (
-                  <div className="absolute z-50 right-0 mt-2 w-[340px] md:w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
+                  <div className="absolute z-50 right-0 mt-2 w-[320px] md:w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
                     <div className="flex flex-col w-full max-w-md mx-auto bg-gray-900 text-white rounded-xl">
                       <div
                         onClick={() => {
@@ -407,16 +410,16 @@ function Nav() {
             </>
           ) : (
             <div className="hidden md:flex items-center">
-              <a href="/register">
+              <Link to="/register">
                 <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
                   Đăng Ký{" "}
                 </div>
-              </a>
-              <a href="/login">
+              </Link>
+              <Link to="/login">
                 <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
                   Đăng Nhập{" "}
                 </div>
-              </a>
+              </Link>
             </div>
           )}
         </div>

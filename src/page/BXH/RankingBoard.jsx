@@ -267,6 +267,7 @@ const RankingBoard = () => {
                 {songs.length > 0 ? (
                     <ListSongs
                         songs={songs}
+                        start={4}
                     />
                 ) : (
                     <p className='text-center text-gray-400 mt-10'>
