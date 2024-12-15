@@ -96,7 +96,7 @@ function Nav() {
 
   return (
     <>
-      <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
+      <div className="fixed top-0 left-0 lg:pl-60 flex justify-between w-full h-auto flex-shrink py-4 h-[90px] px-1 lg:px-10 bg-medium text-zinc-700 items-center justify-center z-10 ">
         <button
           className=" bg-red-600 text-white p-2 rounded-md lg:hidden "
           onClick={() => setIsSidebar(!isSidebar)}
@@ -198,28 +198,28 @@ function Nav() {
           )}
         </div>
 
-        <div className="  hidden md:flex text-left items-center">
+        <div className="flex text-left items-center">
           {isProfile ? (
             <>
               {user.users_type == "Basic" ? (
                 <Link
                   to="/Upgrade"
-                  className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3"
+                  className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hidden md:block hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3"
                 >
                   Trải nghiệm Premium
                 </Link>
               ) : user.users_type == "Plus" ? (
-                <span className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
+                <span className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hidden md:block hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
                   {" "}
                   SoundWave Plus
                 </span>
               ) : (
-                <span className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
+                <span className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hidden md:block hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
                   {" "}
                   SoundWave Premium{" "}
                 </span>
               )}
-              <button className="relative size-9 flex items-center justify-center bg-gray-800 rounded-full transition duration-300 mr-3">
+              {/* <button className="relative size-9 flex items-center justify-center bg-gray-800 rounded-full transition duration-300 mr-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -234,7 +234,7 @@ function Nav() {
                     d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
                   />
                 </svg>
-              </button>
+              </button> */}
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -254,7 +254,7 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform duration-300 ${
+                    className={`transform transition-transform hidden md:block duration-300 ${
                       isProfileOpen ? "rotate-180" : ""
                     }`}
                   >
@@ -262,7 +262,7 @@ function Nav() {
                   </svg>
                 </button>
                 {isProfileOpen && (
-                  <div className="absolute z-50 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
+                  <div className="absolute z-50 right-0 mt-2 w-[340px] md:w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
                     <div className="flex flex-col w-full max-w-md mx-auto bg-gray-900 text-white rounded-xl">
                       <div
                         onClick={() => {
@@ -394,7 +394,7 @@ function Nav() {
               </div>
             </>
           ) : (
-            <>
+            <div className="hidden md:flex items-center">
               <a href="/register">
                 <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
                   Đăng Ký{" "}
@@ -405,10 +405,11 @@ function Nav() {
                   Đăng Nhập{" "}
                 </div>
               </a>
-            </>
+            </div>
           )}
         </div>
       </div>
+    
     </>
   );
 }

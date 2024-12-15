@@ -27,7 +27,7 @@ function Artist() {
                 return response.json(); // Chuyển đổi phản hồi thành JSON
             })
             .then(data => {
-                console.log(data.data); // Xử lý dữ liệu trả về
+                // console.log(data.data); // Xử lý dữ liệu trả về
                 setArtist(data.data)
             })
             .catch(error => {
@@ -84,17 +84,22 @@ function Artist() {
     }
 
     return (
-        <section className='bg-medium w-full h-auto pb-16 pt-10 text-white px-6'>
-            <div className='flex flex-wrap gap-2 md:gap-4 justify-center md:justify-start'>
+        <section className='bg-medium w-full h-auto pb-16 pt-10 text-white px-1 lg:px-6'>
+            <div className='flex flex-wrap gap-2 md:gap-4 justify-start'>
                 {artists.map((artist, index) => (
                     <div key={index +1} className="text-center mt-6">
-                        <Link to={`/ProfileArtist/${artist.id}`} className="">
+                        <Link to={`/ProfileArtist/${artist.id}`} className="group">
                             <img src={artist.singer_image} className="rounded-full mb-3 w-28 h-28 md:w-44 md:h-44 mx-auto" />
-                            <p className="font-medium mb-2 text-base">{artist.singer_name}</p>
+                            <p className="font-medium mb-2 group-hover:underline text-base">{artist.singer_name}</p>
                         </Link>
                         <p className="text-sm text-slate-700">Nghệ Sĩ</p>
 
-                        <button onClick={() => handleFollowinglistsinger(artist.id, true)} className='flex items-center border-2 box-border border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm'>  <Check size={20} /> Đang theo dõi</button>
+                        <button 
+                        onClick={() => handleFollowinglistsinger(artist.id, true)} 
+                        className='flex items-center border-2 box-border border-red-500 px-3 mt-3 mx-auto py-1 rounded-full font-medium gap-1 text-sm'>
+                            <Check size={20} /> 
+                            Đang theo dõi
+                            </button>
 
                     </div>
 

@@ -124,7 +124,7 @@ function SongDetail() {
 
   return (
     <>
-      <section className="bg-medium w-full h-auto  pt-16  text-white px-10 ">
+      <section className="bg-medium w-full h-auto  pt-16  text-white px-1 xl:px-10 ">
         <div className="lg:flex items-start w-full">
           <div className="flex flex-col lg:w-1/3 items-center justify-center ">
             {song && (

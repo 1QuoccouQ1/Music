@@ -82,14 +82,14 @@ function InfoAlbums() {
 
     return (
         <>
-            <section className='bg-medium w-full h-auto pb-16 pt-10 text-white px-6'>
+            <section className='bg-medium w-full h-auto pb-16 pt-10 text-white px-1 lg:px-6'>
                 <div className='grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4'>
                     {albumFavorite != [] ?
                         albumFavorite.map((album, index) => (
-                            <div key={index} className='cursor-pointer relative group'>
+                            <div key={index} className='cursor-pointer relative group w-full'>
                                 <img
                                     src={album.image}
-                                    className='rounded mb-2 w-full object-cover'
+                                    className='rounded-lg mb-2 w-full object-cover'
                                     alt='Album cover'
                                 />
                                 <div
@@ -102,12 +102,12 @@ function InfoAlbums() {
                                         className="text-red-500 opacity-100 lg:opacity-0 group-hover:opacity-100 duration-300"
                                     />
                                 </div>
-                                <div className='flex items-start justify-between'>
-                                    <div className='w-full'>
-                                        <p className='text-lg font-bold truncate'>
+                                <div className='flex items-start justify-between w-full'>
+                                    <div className='w-5/6'>
+                                        <p className='text-lg font-bold truncate group-hover:underline'>
                                             {album.album_name}
                                         </p>
-                                        <p className='text-sm truncate'>
+                                        <p className='text-sm text-slate-500 hover:underline truncate'>
                                             {album.singer_name}
                                         </p>
                                         <p className='text-xs text-slate-500 truncate'>

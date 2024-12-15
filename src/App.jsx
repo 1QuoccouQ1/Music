@@ -20,12 +20,14 @@ function App() {
      
       <AuthChecker/>
       <UserProvider>
-        <div className="flex h-auto bg-[#f4f7fe] w-full">
+        <div className="flex h-auto bg-[#f4f7fe] w-full select-none">
           <Sidebar></Sidebar>
           <SettingSidebar></SettingSidebar>
-          <div className="lg:pl-56 pb-[204px] bg-medium w-full">
+          <div className="lg:pl-56 pb-[204px] relative bg-medium w-full select-none pr-1">
             <Nav></Nav>
-            <Outlet />
+            <div className="pt-[64px] w-full">
+            <Outlet/>
+            </div>
           </div>
           <ModalListen />
           <Footer />
