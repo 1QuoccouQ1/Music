@@ -7,13 +7,14 @@ import { useNavigate } from "react-router-dom";
 
 const ProfileArtistSong = ({ artistSong, user_id, length }) => {
     const [SongFavourite, setIsSongFavourite] = useState([]);
-    const { handleAddSong } = useContext(UserContext);
+    const { handleAddSong, handleClick } = useContext(UserContext);
+    const user = JSON.parse(localStorage.getItem('user'));
     const navigate = useNavigate();
     useEffect(() => {
         const FavouriteSong = async () => {
             try {
                 const response = await fetch(
-                    API_URL + `/${user_id}/bai-hat-yeu-thich`,
+                    API_URL + `/${user.id}/bai-hat-yeu-thich`,
                     {
                         method: "GET",
                         headers: {
@@ -35,13 +36,13 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                 console.log(err);
             }
         };
-        if (user_id) {
+        if (user) {
             FavouriteSong();
         }
-    }, [user_id]);
+    }, []);
 
     const handleSongFavourite = (song_id, check) => {
-        if (!user_id) {
+        if (!user) {
             // Kiểm tra đã đăng nhập chưa
             toast.error(
                 "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào yêu thích."
@@ -57,7 +58,7 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                 body: JSON.stringify({
                     liked: !check,
                     song_id: song_id,
-                    user_id: user_id,
+                    user_id: user.id,
                 }),
             })
                 .then((response) => response.json())
@@ -68,6 +69,7 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                         setIsSongFavourite((set) => {
                             return set.filter((id) => id !== song_id);
                         });
+                        
                     } else {
                         setIsSongFavourite((set) => {
                             return [...set, song_id];
@@ -98,18 +100,20 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
     return artistSong.slice(0, length).map((song, index) => (
         <div
             key={song.id}
-            className="flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300"
+            className="flex items-center justify-between text-sm hover:bg-slate-800 text-white py-1 px-1 lg:px-3 rounded-lg cursor-pointer group duration-300"
             onDoubleClick={() => handleAddSong("song", song.id)}
+            onClick={() => handleClick(song.id)}
+
         >
-            <div className="flex items-center gap-3 w-1/3 justify-start"   >
+            <div className="flex items-center gap-3 w-[190px] lg:w-2/4 justify-start"   >
                 <Play size={18} className="hidden  group-hover:block duration-300" />
                 <p className="text-xs w-[18px] h-[18px] group-hover:hidden duration-300">
                     {index + 1}
                 </p>
-                <img className="size-10 rounded-lg" src={song.song_image} onClick={() => navigate(`/SongDetail/${song.id}`)}/>
-                <p className="w-full truncate" onClick={() => navigate(`/SongDetail/${song.id}`)} >{song.song_name}</p>
+                <img className="size-9 md:size-12 rounded-lg" src={song.song_image}/>
+                <p className="w-full truncate"  >{song.song_name}</p>
             </div>
-            <div className="w-1/3 flex items-center justify-center">
+            <div className=" items-center hidden lg:flex justify-center">
                 <p>{song.listen_count}</p>
             </div>
             <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">
@@ -118,13 +122,14 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                         <Heart
                             size={22}
                             fill="red"
-                            onClick={() => handleSongFavourite(song.id, true)}
+                            onClick={(e) => {e.stopPropagation();
+                                 handleSongFavourite(song.id, true)}}
                             className="text-red-500 lg:opacity-0 group-hover:opacity-100 duration-300"
                         />
                     ) : (
                         <Heart
                             size={22}
-                            onClick={() => handleSongFavourite(song.id, false)}
+                            onClick={(e) => {e.stopPropagation(); handleSongFavourite(song.id, false)}}
                             className="text-red-500 lg:opacity-0 group-hover:opacity-100 duration-300"
                         />
                     )
@@ -134,11 +139,13 @@ const ProfileArtistSong = ({ artistSong, user_id, length }) => {
                 <CirclePlus
                     size={22}
                     className="text-slate-500 lg:opacity-0 group-hover:opacity-100 duration-300"
+                    
                 />
-                <p>{formatTime(song.time)}</p>
+                <p className="hidden lg:block">{formatTime(song.time)}</p>
                 <Ellipsis
                     size={22}
                     className="lg:opacity-0 group-hover:opacity-100 duration-300"
+                    onClick={(e) => {e.stopPropagation();}}
                 />
             </div>
         </div>

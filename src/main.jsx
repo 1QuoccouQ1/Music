@@ -48,6 +48,7 @@ import SongDetail from "./page/Song/SongDetail.jsx";
 import GenreSongs from "./page/Genre/GenreSongs.jsx";
 import AlbumDetail from "./page/Albums/AlbumDetail.jsx"
 import PlaylistDiv from "./page/Play-list/PlayList.jsx";
+import ListTopSongs from "./page/Top/ListTopSongs.jsx";
 
 function changeIsSetting() {
   localStorage.setItem("isSetting", true);
@@ -139,7 +140,11 @@ const router = createBrowserRouter([
         loader: changeDashboard,
         element: <ShowChart />,
       },
-
+      {
+        path: "/Top/:param",
+        loader: changeDashboard,
+        element: <ListTopSongs />,
+      },
       {
         path: "/Information",
         element: <Information />,

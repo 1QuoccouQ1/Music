@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { API_URL } from "../../services/apiService"; // Đường dẫn API
 
-function PlayListCreate({ onClose }) {
+function PlayListCreate({ show, onClose }) {
   const [playlistName, setPlaylistName] = useState(""); // Lưu tên playlist
   const [isPublic, setIsPublic] = useState(false); // Lưu trạng thái công khai
 
@@ -42,7 +42,7 @@ function PlayListCreate({ onClose }) {
 
   return (
     <>
-      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+      <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <div className="bg-medium text-white rounded-lg w-full max-w-md p-6">
           {/* Header */}
           <div className="flex justify-between items-center mb-6">

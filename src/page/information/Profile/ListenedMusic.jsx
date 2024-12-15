@@ -5,6 +5,8 @@ import { API_URL } from '../../../services/apiService';
 import { useOutletContext } from 'react-router-dom';
 import { UserContext } from '../../../ContextAPI/UserContext';
 import { Link, useNavigate } from "react-router-dom";
+import ProfileArtistSong from "../../BXH/ProfileArtistSong";
+
 
 function ListenedMusic() {
     // const [SongIdFavourite, setIsSongIdFavourite] = useState([]);
@@ -114,7 +116,7 @@ function ListenedMusic() {
                     </p>
                     <p className="w-full truncate " >Tên bài hát</p>
                 </div>
-                <div className="w-1/3 flex items-center justify-center">
+                <div className="w-1/3 hidden lg:flex items-center justify-center">
                     <p>Lượt nghe</p>
                 </div>
                 <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">
@@ -122,43 +124,17 @@ function ListenedMusic() {
                 </div>
             </div>
 
-            {SongsFavourite.map((song, index) => (
-                <div
-                    key={song.id}
-                    className="flex items-center justify-between text-white text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300"
-                >
-                    <div className="flex items-center gap-3 w-1/3 justify-start" onDoubleClick={() => handleAddSong("song", song.id)}  >
-                        <Play size={18} className="hidden  group-hover:block duration-300" />
-                        <p className="text-xs w-[18px] h-[18px] group-hover:hidden duration-300">
-                            {index + 1}
-                        </p>
-                        <img className="size-10 rounded-lg" src={song.song_image} onClick={() => navigate(`/SongDetail/${song.id}`)} />
-                        <p className="w-full truncate " >{song.song_name}</p>
-                    </div>
-                    <div className="w-1/3 flex items-center justify-center">
-                        <p>{song.listen_count}</p>
-                    </div>
-                    <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">
-
-                        <Heart
-                            size={22}
-                            fill="red"
-                            onClick={() => handleSongFavourite(song.id, true)}
-                            className="text-red-700 lg:opacity-0 group-hover:opacity-100 duration-300"
-                        />
-
-                        <CirclePlus
-                            size={22}
-                            className="text-slate-500 lg:opacity-0 group-hover:opacity-100 duration-300"
-                        />
-                        <p>{formatTime(song.time)}</p>
-                        <Ellipsis
-                            size={22}
-                            className="lg:opacity-0 group-hover:opacity-100 duration-300"
-                        />
-                    </div>
+            {SongsFavourite != [] ? (
+                <ProfileArtistSong
+                    artistSong={SongsFavourite}
+                    user_id={1}
+                    length={'100'}
+                />
+            ) : (
+                <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">
+                    Hành động
                 </div>
-            ))}
+            )}
 
         </>
     );

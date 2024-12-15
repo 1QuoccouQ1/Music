@@ -1,5 +1,6 @@
 import React, {useContext} from 'react';
 import { FaMedal } from 'react-icons/fa';
+import { GiRank1,GiRank2,GiRank3 } from "react-icons/gi";
 import { Link } from 'react-router-dom';
 import { UserContext } from "../../ContextAPI/UserContext";
 import { useNavigate } from "react-router-dom";
@@ -15,9 +16,12 @@ function ArtistRankingCard({ rank, artist, song }) {
     };
 
     const rankIcons = {
-        1: <FaMedal className='text-yellow-500 text-5xl' />,
-        2: <FaMedal className='text-gray-400 text-5xl' />,
-        3: <FaMedal className='text-orange-500 text-5xl' />
+        // 1: <GiRank1 className='text-yellow-500 text-5xl' />,
+        // 2: <GiRank2 className='text-gray-400 text-5xl' />,
+        // 3: <GiRank3 className='text-orange-500 text-5xl' />
+        1: <img src="/1.png" alt="1" width={'60px'} />,
+        2: <img src="/2.png" alt="2" width={'60px'} />,
+        3: <img src="/3.png" alt="3" width={'60px'} />
     };
 
     return (
@@ -29,7 +33,7 @@ function ArtistRankingCard({ rank, artist, song }) {
             }`}
         >
             {/* Huy chương nằm ở góc phải bên dưới border */}
-            <div className='absolute top-0 right-3'>{rankIcons[rank]}</div>
+            <div className='absolute top-0 right-2'>{rankIcons[rank]}</div>
 
             <div className='relative flex flex-col items-center mb-3'>
                 <div className='relative group'>

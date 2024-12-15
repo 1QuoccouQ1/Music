@@ -7,7 +7,6 @@ const PurchaseHistoryPage = () => {
     const [error, setError] = useState(null);
     const [selectedPurchase, setSelectedPurchase] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [loadingGlobal, setLoadingGlobal] = useState(true);
 
     const formatCurrencyVND = (amount) => {
         if (isNaN(amount)) {
@@ -55,7 +54,7 @@ const PurchaseHistoryPage = () => {
 
                 const data = await response.json();
                 setPurchases(data);
-                console.log(data);
+                // console.log(data);
             } catch (err) {
                 setError(err.message);
             } finally {
@@ -80,11 +79,13 @@ const PurchaseHistoryPage = () => {
 
     return (
         <div className='bg-gray-900 min-h-screen flex justify-center py-5 ' >
-               <InvoiceDetail
-                isOpen={isModalOpen}
-                onClose={closeModal}
-                purchaseDetail={selectedPurchase}
-            />
+            {/* {isModalOpen && ( */}
+                <InvoiceDetail
+                 isOpen={isModalOpen}
+                 onClose={closeModal}
+                 purchaseDetail={selectedPurchase}
+             />
+            {/* )} */}
             {purchases.length > 0 ? (
                 <div className='overflow-x-auto max-w-[1000px]'>
                     <table className='min-w-full table-auto text-left text-gray-300 text-[14px]'>

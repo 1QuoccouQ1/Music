@@ -867,7 +867,7 @@ const Footer = React.memo(function FooterComponent() {
                   {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
-                      className="flex items-center space-x-3"
+                      className="flex items-center space-x-3 "
                       onClick={() => {
                         setCurrentSongIndex(index);
                         setPlaySong(song);

@@ -23,7 +23,7 @@ function Information() {
 
     return (
         <div>
-            <div className='bg-gray-900 min-h-screen p-4 md:p-8'>
+            <div className='bg-gray-900 min-h-screen p-2 md:p-8'>
                 {/* User information section */}
                 <div className='ml-0 md:ml-5'>
                     <div>
@@ -163,7 +163,7 @@ function Information() {
                                     )}
                                 </NavLink>
                             </li>
-                            <li className='relative group'>
+                            {/* <li className='relative group'>
                                 <NavLink
                                     to='Downloaded'
                                     className={({ isActive }) =>
@@ -185,7 +185,7 @@ function Information() {
                                         </>
                                     )}
                                 </NavLink>
-                            </li>
+                            </li> */}
                         </ul>
                     </nav>
                 </div>

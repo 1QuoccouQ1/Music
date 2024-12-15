@@ -3,12 +3,15 @@ import { CirclePlus, X } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { API_URL } from "../../services/apiService";
 import { toast } from "react-toastify";
+import PlaylistCreate from "./PlayListCreate"
 
 function PlaylistDiv({ songId , onClose }) {
   const [privatePlaylists, setPrivatePlaylists] = useState([]); // Dữ liệu từ API cá nhân
   const [loading, setLoading] = useState(false); // Trạng thái loading
   const user = JSON.parse(localStorage.getItem("user"));
   const username = user.name;
+  const [showCreate, setShowCreate] = useState(false); //
+
   // Gọi API ngay khi component render lần đầu
   useEffect(() => {
     const fetchPlaylists = async () => {
@@ -38,6 +41,13 @@ function PlaylistDiv({ songId , onClose }) {
     fetchPlaylists();
   }, [songId]);
 
+  const handleShowCreate = () => {
+    setShowCreate(true);
+    // console.log(showCreate);
+  };
+  const handleClose = () => {
+    setShowCreate(false);
+  };
    // Hàm xử lý thêm bài hát vào playlist
    const handleAddSongToPlaylist = async (playlistId) => {
     try {
@@ -65,7 +75,12 @@ function PlaylistDiv({ songId , onClose }) {
   };
 
   return (
-    <>
+    <>{showCreate && (
+      <PlaylistCreate
+      show = {showCreate}
+      onClose={handleClose}
+      />
+    )}
       <div className="fixed top-0 bottom-0 right-0 left-0 z-20 flex items-center justify-center text-white bg-slate-800/40" onClick={onClose}>
         <div className="w-[600px] h-[350px] rounded-md bg-medium z-20" onClick={(e) => e.stopPropagation()} >
           {/* Thanh điều hướng */}
@@ -82,7 +97,9 @@ function PlaylistDiv({ songId , onClose }) {
 
           {/* Nội dung */}
           <div className="flex items-center h-[250px] px-7 py-4">
-            <div className="flex-none border border-solid border-slate-200 rounded-md h-full w-[170px] flex flex-col items-center justify-center space-y-4 hover:border-red-400 cursor-pointer group duration-300">
+            <div 
+            onClick={handleShowCreate}
+            className="flex-none border border-solid border-slate-200 rounded-md h-full w-[170px] flex flex-col items-center justify-center space-y-4 hover:border-red-400 cursor-pointer group duration-300">
               <CirclePlus className="group-hover:text-red-400" />
               <p className="text-sm truncate group-hover:text-red-400">
                 Tạo playlist mới
@@ -96,13 +113,14 @@ function PlaylistDiv({ songId , onClose }) {
                 slidesPerView="auto" // Số item hiện trong 1 lần
                 className="mySwiper"
               >
-                {privatePlaylists.map((playlist, index) => (
+                {privatePlaylists.length > 0 ?
+                 privatePlaylists.map((playlist, index) => (
                   <SwiperSlide key={index} style={{ width: "auto" }}>
                     <div className="rounded-md h-full w-[170px] mx-5 relative group   duration-300">
                       <img
                         src={playlist.background}
                         alt={playlist.name}
-                        className="w-full rounded-md group-hover:opacity-70"
+                        className="w-full rounded-md group-hover:opacity-70 w-[170px] h-[170px]"
                       />
                       <p className="font-medium text-sm mt-2 truncate">
                         {playlist.playlist_name}
@@ -113,7 +131,13 @@ function PlaylistDiv({ songId , onClose }) {
                       <CirclePlus className="absolute top-3 right-3 cursor-pointer group-hover:opacity-100" color="red" onClick={() => handleAddSongToPlaylist(playlist.id)} />
                     </div>
                   </SwiperSlide>
-                ))}
+                )) : (
+                  <SwiperSlide style={{ width: "auto" }}>
+                    <div className="rounded-md h-full w-[170px] mx-5 relative group   duration-300">
+                      Không có playlist nào
+                    </div>
+                  </SwiperSlide>
+                )}
               </Swiper>
             )}
           </div>
