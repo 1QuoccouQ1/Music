@@ -6,7 +6,7 @@ import { Play } from "lucide-react";
 import { useContext } from "react";
 import { UserContext } from "../ContextAPI/UserContext";
 import { API_URL } from "../services/apiService";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import SlideAlbum from "./Albums/SlideAlbum.jsx"
 
 function Dashboard() {
@@ -21,6 +21,7 @@ function Dashboard() {
   const [artists, setArtists] = useState([]);
   const [genres, setGenres] = useState([]);
   const [loadingGlobal, setLoadingGlobal] = useState(true);
+  const navigate = useNavigate();
 
   const fetchData = async () => {
     try {
@@ -146,9 +147,9 @@ function Dashboard() {
     }
     const limitedSongs = songs.slice(0, 12);
     return limitedSongs.map((song, index) => (
-      <div className="w-full sm:w-1/2 md:w-1/2 xl:w-1/3 2xl:w-1/4 pr-1 sm:pr-5 lg:pr-10 mb-1 sm:mb-5 md:mb-10" key={song.id}>
+      <div className="w-full sm:w-1/2 md:w-1/2 xl:w-1/3 2xl:w-1/4 pr-1 sm:pr-5 lg:pr-10 mb-1 sm:mb-5 md:mb-10 " key={song.id}>
         <div
-          className="w-full flex items-center border-b border-slate-700 sm:pb-2 cursor-pointer"
+          className="w-full flex items-center border-b border-slate-700 sm:pb-2 cursor-pointer hover:bg-gray-800"
           onDoubleClick={() => {handleAddSong("song", song.id)}}
           onClick={() => handleClick(song.id)}
         >
@@ -202,7 +203,10 @@ function Dashboard() {
         <div className="flex items-center flex-col md:flex-row ">
           <div className="w-[80%] lg:w-1/3 px-1 lg:px-5 relative my-1 lg:my-5 ">
             {trending.length > 0 && (
-              <div>
+              <div 
+              className="cursor-pointer"
+              onClick={(e)=> navigate('/Top/trending')}
+              >
                 <img className=" w-full" src="../imgs/image.png" />
                 <p className="absolute top-2 left-7 text-black bg-yellow-500 py-1 rounded-md font-bold text-sm  px-4">
                   Top Thịnh Hành
@@ -222,7 +226,8 @@ function Dashboard() {
                   </div>
                   <div
                     className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       handleFetchSongs("trending");
                     }}
                   >
@@ -234,7 +239,10 @@ function Dashboard() {
           </div>
           <div className="w-[80%] lg:w-1/3 px-1 lg:px-5 relative  my-1 lg:my-5">
             {topListen.length > 0 && (
-              <div>
+              <div 
+              className="cursor-pointer"
+              onClick={(e)=> navigate('/Top/listen')}
+              >
                 <img className=" w-full" src="../imgs/image (4).png" />
                 <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
                   Top Lượt Nghe
@@ -254,7 +262,8 @@ function Dashboard() {
                   </div>
                   <div
                     className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer"
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       handleFetchSongs("toplisten");
                     }}
                   >
@@ -266,7 +275,10 @@ function Dashboard() {
           </div>
           <div className="w-[80%] lg:w-1/3 px-1 lg:px-5 relative  my-1 lg:my-5">
             {topLike.length > 0 && (
-              <div>
+              <div 
+              className="cursor-pointer"
+              onClick={(e)=> navigate('/Top/like')}
+              >
                 <img className=" w-full" src="../imgs/image (1).png" />
                 <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
                   Top Yêu Thích
@@ -286,7 +298,8 @@ function Dashboard() {
                   </div>
                   <div
                     className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer "
-                    onClick={() => {
+                    onClick={(e) => {
+                      e.stopPropagation();
                       handleFetchSongs("yeuthich");
                     }}
                   >

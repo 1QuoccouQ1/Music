@@ -116,11 +116,11 @@ function PlaylistDiv({ songId, onClose }) {
   return (
     <>
       <div
-        className="fixed top-0 bottom-0 right-0 left-0 z-20 flex items-center justify-center text-white bg-slate-800/40"
+        className="fixed top-0 bottom-0 right-0 left-0 z-20 flex items-center justify-center text-white bg-slate-800/50"
         onClick={onClose}
       >
         <div
-          className="w-[600px] h-[350px] rounded-md bg-medium z-20"
+          className="sm:w-[600px] w-full h-[350px] rounded-md bg-medium z-20 p-1"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Thanh điều hướng */}
@@ -210,7 +210,7 @@ function PlaylistDiv({ songId, onClose }) {
                 >
                   {privatePlaylists.map((playlist, index) => (
                     <SwiperSlide key={index} style={{ width: "auto" }}>
-                      <div className="rounded-md h-full w-[170px] mx-5 relative group   duration-300">
+                      <div className="rounded-md h-full sm:w-[170px] w-[130px] sm:mx-5  relative group duration-300">
                         <img
                           src={playlist.background}
                           alt={playlist.name}

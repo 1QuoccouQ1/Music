@@ -6,12 +6,15 @@ import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from "../../ContextAPI/UserContext";
 import { API_URL } from "../../services/apiService";
 import { toast } from "react-toastify";
+import PlaylistDiv from '../Play-list/PlayList';
 
 function ListSongs({ songs }) {
 
     const { handleAddSong, handleClick } = useContext(UserContext);
     const [SongFavourite, setIsSongFavourite] = useState([]);
     const user = JSON.parse(localStorage.getItem('user'));
+    const [showModal, setShowModal] = useState(false); // Quản lý trạng thái hiển thị Modal
+    const [selectedSongId, setSelectedSongId] = useState(null); // Lưu songId được chọn
 
     useEffect(() => {
         const FavouriteSong = async () => {
@@ -83,6 +86,17 @@ function ListSongs({ songs }) {
                 });
         }
     };
+
+    const openModal = (songId) => {
+        setSelectedSongId(songId);
+        setShowModal(true);
+    };
+
+    const closeModal = () => {
+        setShowModal(false);
+        setSelectedSongId(null);
+    };
+
     const formatTime = seconds => {
         const minutes = Math.floor(seconds / 60);
         const remainingSeconds = Math.floor(seconds % 60);
@@ -94,6 +108,7 @@ function ListSongs({ songs }) {
 
 
     return (
+        <>
         <table className='min-w-full text-white text-xs sm:text-sm md:text-base mt-8'>
             <thead>
                 <tr className='text-left border-b border-gray-600'>
@@ -176,9 +191,14 @@ function ListSongs({ songs }) {
                                         className='text-slate-500 cursor-pointer hover:scale-110 duration-300'
                                         onClick={(e) => {
                                             e.stopPropagation();
-                                            openModal(song.id)
-                                        }
-                                        }
+                                            if (JSON.parse(localStorage.getItem("user"))) {
+                                                openModal(song.id)
+                                            } else {
+                                                toast.error(
+                                                    "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào playlist."
+                                                );
+                                            }
+                                        }}
                                     />
                                     {/* <PlaylistDiv  songId = {33}/> */}
 
@@ -191,6 +211,13 @@ function ListSongs({ songs }) {
                 ))}
             </tbody>
         </table>
+        {showModal && (
+            <PlaylistDiv
+            songId={selectedSongId} // Truyền songId vào PlaylistDiv
+            onClose={closeModal} // Truyền hàm đóng Modal
+            />
+        )}
+        </>
     );
 }
 

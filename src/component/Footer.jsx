@@ -453,7 +453,7 @@ const Footer = React.memo(function FooterComponent() {
       await handleFetchSongs("rank");
       setIsLoading(false);
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
-
+      
     };
 
     // Gọi hàm fetchData
@@ -718,24 +718,27 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isShuffling ? "text-blue-500" : ""
-                      }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
+                      isShuffling ? "text-blue-500" : ""
+                    }`}
                     onClick={toggleShuffle}
                   >
                     <Shuffle size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isLooping ? "text-green-500" : ""
-                      }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
+                      isLooping ? "text-green-500" : ""
+                    }`}
                     onClick={toggleLoop}
                   >
                     <Repeat size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isTimerActive ? "text-yellow-500" : ""
-                      }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
+                      isTimerActive ? "text-yellow-500" : ""
+                    }`}
                     onClick={
                       isTimerActive ? handleCancelTimer : toggleTimerModal
                     }
@@ -744,37 +747,37 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
                   {(isAccountType === "Premium" ||
                     isAccountType === "Plus") && (
-                      <button
-                        className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
+                    <button
+                      className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
                  text-white
                 `}
-                        onClick={() => setIsOpenDownload(!isOpenDownload)}
-                      >
-                        <CloudDownload size={20} />
-                        {isOpenDownload && (
-                          <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
-                            {getAvailableQualities().map((quality) => (
-                              <button
-                                key={quality.value}
-                                onClick={() => handleDownload(quality.value)}
-                                className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
-                              >
-                                <div className="flex items-center space-x-2 py-0.5">
-                                  <span>{quality.name}</span>
-                                  {quality.value && (
-                                    <span
-                                      className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
-                                    >
-                                      {quality.value}
-                                    </span>
-                                  )}
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </button>
-                    )}
+                      onClick={() => setIsOpenDownload(!isOpenDownload)}
+                    >
+                      <CloudDownload size={20} />
+                      {isOpenDownload && (
+                        <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                          {getAvailableQualities().map((quality) => (
+                            <button
+                              key={quality.value}
+                              onClick={() => handleDownload(quality.value)}
+                              className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
+                            >
+                              <div className="flex items-center space-x-2 py-0.5">
+                                <span>{quality.name}</span>
+                                {quality.value && (
+                                  <span
+                                    className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
+                                  >
+                                    {quality.value}
+                                  </span>
+                                )}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
 
@@ -920,7 +923,7 @@ const Footer = React.memo(function FooterComponent() {
                   {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
-                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`}
+                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`} 
                       onClick={() => {
                         setCurrentSongIndex(index);
                         setPlaySong(song);
@@ -1117,24 +1120,27 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${isShuffling ? "text-blue-500" : "text-white"
-                  }`}
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
+                  isShuffling ? "text-blue-500" : "text-white"
+                }`}
                 onClick={toggleShuffle}
               >
                 <Shuffle size={20} />
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${isLooping ? "text-green-500" : "text-white"
-                  }`}
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
+                  isLooping ? "text-green-500" : "text-white"
+                }`}
                 onClick={toggleLoop}
               >
                 <Repeat size={20} />
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${isTimerActive ? "text-yellow-500" : "text-white"
-                  }`}
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
+                  isTimerActive ? "text-yellow-500" : "text-white"
+                }`}
                 onClick={isTimerActive ? handleCancelTimer : toggleTimerModal}
               >
                 <Clock size={20} />
@@ -1178,8 +1184,9 @@ const Footer = React.memo(function FooterComponent() {
             >
               <p>{selectedQualityLabel}</p>
               <div
-                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${!isOpen ? "rotate-90" : " rotate-[270deg]"
-                  } `}
+                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${
+                  !isOpen ? "rotate-90" : " rotate-[270deg]"
+                } `}
               >
                 {" "}
                 <svg
@@ -1216,10 +1223,11 @@ const Footer = React.memo(function FooterComponent() {
                           }
                         }}
                         disabled={isDisabled}
-                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${isDisabled
+                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${
+                          isDisabled
                             ? "text-gray-500 cursor-not-allowed bg-gray-800"
                             : "text-white hover:bg-gray-800"
-                          }`}
+                        }`}
                       >
                         <div className="flex items-center space-x-2 py-0.5">
                           <span>{quality.name}</span>
@@ -1233,10 +1241,11 @@ const Footer = React.memo(function FooterComponent() {
                         </div>
 
                         <span
-                          className={`w-2 h-2 rounded-full ${selectedQuality === quality.value
+                          className={`w-2 h-2 rounded-full ${
+                            selectedQuality === quality.value
                               ? "bg-pink-500"
                               : ""
-                            }`}
+                          }`}
                         ></span>
                       </button>
                     );
