@@ -489,35 +489,11 @@ function Dashboard() {
                     backgroundImage: `url(${genre.background})`,
                   }}
                 >
-                  <p className="font-bold text-2xl  p-2 rounded-lg">
-                    {genre.categorie_name}
-                  </p>
                 </Link>
               </div>
             </SwiperSlide>
           ))}
         </Swiper>
-        {/* <div className="flex items-center  flex-wrap ">
-          {genres.map((genre) => (
-            <div
-              key={genre.id}
-              className="pr-3 pb-3 group"
-              onDoubleClick={() => handleFetchSongs("theloai", genre.id)}
-            >
-              <Link
-                to={`/GenreSongs/${genre.id}`}
-                className="w-64 h-64 rounded-xl flex items-center justify-center bg-cover bg-center brightness-100 transition-all duration-300 group-hover:brightness-125"
-                style={{
-                  backgroundImage: `url(${genre.background})`,
-                }}
-              >
-                <p className="font-bold text-2xl  p-2 rounded-lg">
-                  {genre.categorie_name}
-                </p>
-              </Link>
-            </div>
-          ))}
-        </div> */}
       </section>
     </>
   );

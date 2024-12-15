@@ -18,8 +18,6 @@ import InfoLibrary from "./page/information/Profile/infoLibrary.jsx";
 import ListenedMusic from "./page/information/Profile/ListenedMusic.jsx";
 import PlayLists from "./page/information/Profile/Playlists.jsx";
 import Artist from "./page/information/Profile/Artist.jsx";
-import Downloaded from "./page/information/Profile/Downloaded.jsx";
-import Followed from "./page/information/Profile/Followed.jsx";
 import InfoAlbums from "./page/information/Profile/InfoAlbums.jsx";
 
 import Login from "./layouts/Login.jsx";
@@ -43,12 +41,11 @@ import PayNotification from "./page/Payment/PayNotification.jsx";
 import Payment from "./page/Payment/Payment.jsx";
 import Upgrade from "./page/Upgrade.jsx";
 import ProfileArtist from "./page/BXH/ProfileArtist.jsx";
-import { redirect } from "react-router-dom";
 import SongDetail from "./page/Song/SongDetail.jsx";
 import GenreSongs from "./page/Genre/GenreSongs.jsx";
 import AlbumDetail from "./page/Albums/AlbumDetail.jsx"
-import PlaylistDiv from "./page/Play-list/PlayList.jsx";
 import ListTopSongs from "./page/Top/ListTopSongs.jsx";
+import ListPlayLists from "./page/Play-list/ListPlayLists.jsx";
 
 function changeIsSetting() {
   localStorage.setItem("isSetting", true);
@@ -155,8 +152,6 @@ const router = createBrowserRouter([
           { path: "PlayLists", element: <PlayLists /> },
           { path: "InfoAlbums", element: <InfoAlbums /> },
           { path: "Artist", element: <Artist /> },
-          { path: "Downloaded", element: <Downloaded /> },
-          { path: "Followed", element: <Followed /> },
         ],
       },
 
@@ -235,6 +230,11 @@ const router = createBrowserRouter([
         path: "/GenreSongs/:id/",
         loader: changeDashboard,
         element: <GenreSongs />,
+      },
+      {
+        path: "/Playlists/:id/",
+        loader: changeDashboard,
+        element: <ListPlayLists />,
       },
     ],
   },
