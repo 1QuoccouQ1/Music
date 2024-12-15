@@ -68,7 +68,6 @@ function Genre() {
           slidesPerView="auto" // Số item hiện trong 1 lần
           className="mySwiper px-2"
         >
-          {/* <div className="mx-2"> */}
             {countries.map((country, index) => (
               <SwiperSlide key={index} style={{ width: "auto" }}>
                 <Link
@@ -78,7 +77,7 @@ function Genre() {
                 >
                   {/* Ảnh nền */}
                   <div
-                    className={`w-[150px] h-[100px] sm:w-56 sm:h-48 lg:w-80 lg:h-64 rounded-lg cursor-pointer opacity-60 group-hover:opacity-100 duration-300`}
+                    className={`w-[150px] h-[100px] sm:w-56 sm:h-48 lg:w-80 lg:h-64 rounded-lg cursor-pointer opacity-80 group-hover:opacity-100 duration-300`}
                     style={{
                       backgroundImage: `url(${country.background})`,
                       backgroundSize: "cover",
@@ -86,15 +85,9 @@ function Genre() {
                       backgroundRepeat: "no-repeat",
                     }}
                   ></div>
-
-                  {/* Tên quốc gia */}
-                  <p className="text-xl sm:text-2xl md:text-3xl font-bold tracking-wide text-center text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    {country.name_country}
-                  </p>
                 </Link>
               </SwiperSlide>
             ))}
-          {/* </div> */}
         </Swiper>
       </section>
 
@@ -138,7 +131,6 @@ function Genre() {
           slidesPerView="auto" // Số item hiện trong 1 lần
           className="mySwiper "
         >
-            {/* <div className="flex items-center"> */}
               {songs[category.id].slice(0, 5).map((song,index) => (
                  <SwiperSlide key={index} style={{ width: "auto" }}>
                 <div key={song.id} className="lg:w-[300px] md:w-[200px] h-auto w-40  px-3 rounded-md">
@@ -155,7 +147,6 @@ function Genre() {
                 </div>
                 </SwiperSlide>
               ))}
-            {/* </div> */}
             </Swiper>
           </section>
         ))}
