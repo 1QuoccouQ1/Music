@@ -269,12 +269,12 @@ function Privacy() {
                             Nếu bạn có bất kỳ câu hỏi, thắc mắc, hoặc yêu cầu
                             nào liên quan đến chính sách quyền riêng tư hoặc
                             cách chúng tôi xử lý thông tin cá nhân, vui lòng
-                            liên hệ với SoundWave qua email [hỗ
-                            trợ@soundwave.com] hoặc qua biểu mẫu liên hệ có sẵn
-                            trên trang web. Chúng tôi cam kết phản hồi mọi yêu
-                            cầu trong thời gian sớm nhất có thể và cung cấp cho
-                            bạn thông tin chi tiết về cách chúng tôi bảo vệ
-                            quyền riêng tư của bạn.
+                            liên hệ với SoundWave qua email [soundwavemusic1410@gmail.com]
+                             hoặc qua biểu mẫu liên hệ có sẵn trên
+                            trang web. Chúng tôi cam kết phản hồi mọi yêu cầu
+                            trong thời gian sớm nhất có thể và cung cấp cho bạn
+                            thông tin chi tiết về cách chúng tôi bảo vệ quyền
+                            riêng tư của bạn.
                         </p>
                     </div>
                 </div>
