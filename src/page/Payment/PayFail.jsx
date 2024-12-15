@@ -31,7 +31,7 @@ function PayFail() {
         Có vẻ như giao dịch của bạn đã gặp sự cố vui lòng thử lại.
         </p>
         
-        <Link to={'/Upgrade'} className="text-center mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 min-w-[600px] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
+        <Link to={'/Upgrade'} className="text-center mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 w-4/5 md:w-[50%] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
         Thử Lại
         </Link>
       </div>

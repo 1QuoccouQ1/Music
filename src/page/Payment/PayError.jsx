@@ -37,7 +37,7 @@ function PayError() {
         
         <button 
          onClick={handleHome}
-         className="mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 min-w-[600px] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
+         className="mt-12 bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 w-4/5 md:w-[50%] text-white px-8 py-3 rounded-full transition duration-300 ease-in-out">
         Về Trang chủ
         </button>
       </div>

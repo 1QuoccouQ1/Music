@@ -108,16 +108,11 @@ function SlideAlbum() {
         >
             {listAlbum ? listAlbum.map((item, index) => (
                 <SwiperSlide key={index + 1} style={{ width: "auto" }}>
-                    <div className="w-[260px] flex flex-col">
-                        <div className="w-[180px] group relative flex    ">
+                    <div className="md:w-[260px] w-[170px] flex flex-col">
+                        <div className="md:w-[180px] w-[120px] group relative flex    ">
                             <img
                                 src={item.image}
-                                className="cursor-pointer z-10"
-                                style={{
-                                    width: '190px',
-                                    height: '190px',
-                                    borderRadius: '15px',
-                                }}
+                                className="cursor-pointer z-10  md:w-[190px] md:h-[190px] rounded-[18px]"
                                 onClick={() => navigate(`/AlbumDetail/${item.id}`)}
                             />
                             <img
@@ -125,7 +120,7 @@ function SlideAlbum() {
                                 className="absolute translate-x-1/2 w-full h-full"
                             />
                             <div
-                                className="absolute cursor-pointer top-2 z-20 left-2 bg-white text-red-500 p-2 rounded-full shadow-lg transform lg:scale-0 group-hover:scale-100 transition duration-300 ease-in-out"
+                                className="absolute cursor-pointer top-2 z-20 left-2 bg-white text-red-500 p-1 md:p-2 rounded-full shadow-lg transform lg:scale-0 group-hover:scale-100 transition duration-300 ease-in-out"
                             >
 
                                 {albumFavorite != [] ? (
@@ -148,7 +143,11 @@ function SlideAlbum() {
                                 )}
                             </div>
                         </div>
-                        <p className="text-lg w-full  font-medium mt-5 mt-3 truncate">{item.album_name}</p>
+                        <p className="sm:text-lg text-sm hover:underline w-full  font-medium mt-5 mt-3 truncate" 
+                        onClick={() => navigate(`/AlbumDetail/${item.id}`)}
+                        >
+                            {item.album_name}
+                            </p>
                         <p className="text-sm font-medium ml-2 text-slate-500">{extractYearFromDate(item.creation_date)}</p>
                     </div>
                 </SwiperSlide>

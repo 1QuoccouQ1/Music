@@ -1,139 +1,141 @@
-import React from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import InvoiceDetail from './InvoiceDetail';
 
 const PurchaseHistoryPage = () => {
-    // Dữ liệu mẫu về sản phẩm đã mua
-    const purchases = [
-        {
-            id: 1,
-            product: 'Gói Premium 1 năm',
-            price: '1.200.000 VND',
-            date: '25/07/2023',
-            status: 'Chưa Thanh toán'
-        },
-        {
-            id: 2,
-            product: 'Gói Premium 6 tháng',
-            price: '600.000 VND',
-            date: '15/01/2023',
-            status: 'Đã Thanh toán'
-        },
-        {
-            id: 3,
-            product: 'Gói Premium 1 tháng',
-            price: '120.000 VND',
-            date: '03/09/2022',
-            status: 'Chưa Thanh toán'
-        },
-        {
-            id: 4,
-            product: 'Gói Premium 1 tháng',
-            price: '120.000 VND',
-            date: '03/09/2022',
-            status: 'Đã Thanh toán'
-        },
-        ,
-        {
-            id: 4,
-            product: 'Gói Premium 1 tháng',
-            price: '120.000 VND',
-            date: '03/09/2022',
-            status: 'Đã Thanh toán'
-        },
-        {
-            id: 1,
-            product: 'Gói Premium 1 năm',
-            price: '1.200.000 VND',
-            date: '25/07/2023',
-            status: 'Chưa Thanh toán'
-        },
-        {
-            id: 2,
-            product: 'Gói Premium 6 tháng',
-            price: '600.000 VND',
-            date: '15/01/2023',
-            status: 'Đã Thanh toán'
-        },
-        {
-            id: 3,
-            product: 'Gói Premium 1 tháng',
-            price: '120.000 VND',
-            date: '03/09/2022',
-            status: 'Chưa Thanh toán'
-        },
-        {
-            id: 4,
-            product: 'Gói Premium 1 tháng',
-            price: '120.000 VND',
-            date: '03/09/2022',
-            status: 'Đã Thanh toán'
-        },
-        ,
-        {
-            id: 4,
-            product: 'Gói Premium 1 tháng',
-            price: '120.000 VND',
-            date: '03/09/2022',
-            status: 'Đã Thanh toán'
-        },
-        
-    ];
+    const [purchases, setPurchases] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [selectedPurchase, setSelectedPurchase] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+
+    const formatCurrencyVND = (amount) => {
+        if (isNaN(amount)) {
+            return null; // Trả về null nếu không phải số
+        }
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
+    }
+    const openModal = (purchase) => {
+        setSelectedPurchase(purchase);
+        setIsModalOpen(true);
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        setSelectedPurchase(null);
+    };
+
+    useEffect(() => {
+        const fetchPurchaseHistory = async () => {
+            try {
+                const userId = JSON.parse(localStorage.getItem('user'))?.id;
+                const token = localStorage.getItem('access_token');
+
+                if (!userId || !token) {
+                    throw new Error(
+                        'Authentication details are missing. Please log in again.'
+                    );
+                }
+
+                const response = await fetch(
+                    `https://admin.soundwave.io.vn/api/${userId}/history`,
+                    {
+                        method: 'GET',
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                if (!response.ok) {
+                    throw new Error(
+                        `Failed to fetch purchase history: ${response.statusText}`
+                    );
+                }
+
+                const data = await response.json();
+                setPurchases(data);
+                // console.log(data);
+            } catch (err) {
+                setError(err.message);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchPurchaseHistory();
+    }, []);
+    
+
+    if (loading) {
+        return (
+            <div className="flex items-center justify-center h-screen">
+              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+            </div>
+          );
+    }
+    
+
+
 
     return (
-        <div className='bg-gray-900 min-h-screen flex justify-center items-center py-5'>
-            {/* Kiểm tra nếu có đơn hàng */}
+        <div className='bg-gray-900 min-h-screen flex justify-center py-5 ' >
+            {/* {isModalOpen && ( */}
+                <InvoiceDetail
+                 isOpen={isModalOpen}
+                 onClose={closeModal}
+                 purchaseDetail={selectedPurchase}
+             />
+            {/* )} */}
             {purchases.length > 0 ? (
-                // Bảng lịch sử mua hàng
-                <div className='overflow-x-auto max-w-[808px] mb-[550px]'>
-                  
-                  
-
+                <div className='overflow-x-auto max-w-[1000px]'>
                     <table className='min-w-full table-auto text-left text-gray-300 text-[14px]'>
                         <thead>
                             <tr className='border-b border-gray-700'>
                                 <th className='px-5 py-3'>Ngày thanh toán</th>
                                 <th className='px-5 py-3'>Mô tả</th>
                                 <th className='px-5 py-3'>Số tiền</th>
-                                <th className='px-5 py-3'>Trạng thái</th>
+                                <th className='px-5 py-3 text-center'>Trạng thái</th>
                                 <th className='px-5 py-3'>Biên nhận</th>
                             </tr>
                         </thead>
                         <tbody>
-                            {purchases.map(purchase => (
+                            {purchases.map((purchase, index) => (
                                 <tr
-                                    key={purchase.id}
+                                    key={index}
                                     className='border-b border-gray-800'
                                 >
                                     <td className='px-6 py-4'>
-                                        {purchase.date}
+                                        {purchase.payment_date}
                                     </td>
                                     <td className='px-6 py-4'>
-                                        {purchase.product}
+                                        {purchase.description}
                                     </td>
                                     <td className='px-6 py-4'>
-                                        {purchase.price}
+                                        {formatCurrencyVND(purchase.amount)}
                                     </td>
-                                    <td className='px-6 py-4'>
-                                        <p
+                                    <td className='px-6 py-4 w-48 text-center'>
+                                        <span
                                             className={`text-sm ${
-                                                purchase.status === 'Đã Thanh toán'
-                                                    ? 'text-green-500' // Màu xanh cho trạng thái 'Hoàn tất'
-                                                    : purchase.status ===
-                                                      'Chưa Thanh toán'
-                                                    ? 'text-red-500' // Màu đỏ cho trạng thái 'Thất Bại'
-                                                    : 'text-yellow-500' // Màu vàng cho trạng thái 'Đang xử lý'
+                                                purchase.payment_status ===
+                                                'Thành công'
+                                                    ? 'text-white bg-green-600 rounded-full p-2 w-full '
+                                                    : purchase.payment_status ===
+                                                      'Thất bại'
+                                                    ? 'text-white bg-rose-800 rounded-full p-2 w-full'
+                                                    : 'text-white bg-yellow-400 rounded-full p-2 w-full'
                                             }`}
                                         >
-                                            {purchase.status}
-                                        </p>
+                                            {purchase.payment_status}
+                                        </span>
                                     </td>
                                     <td className='px-6 py-4'>
-                                        <a
-                                            href='/InvoiceDetail'
+                                        <button
+                                           
                                             className='text-blue-400 hover:underline'
+                                            onClick={() => openModal(purchase)}
                                         >
                                             Xem hóa đơn chi tiết
-                                        </a>
+                                        </button>
                                     </td>
                                 </tr>
                             ))}
@@ -141,8 +143,7 @@ const PurchaseHistoryPage = () => {
                     </table>
                 </div>
             ) : (
-                // Trường hợp không có đơn hàng
-                <div className='bg-zinc-800 text-gray-300 p-4 rounded-lg flex items-center mb-[700px]'>
+                <div className='bg-zinc-800 text-gray-300 p-4 rounded-lg flex items-center'>
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'
@@ -159,7 +160,7 @@ const PurchaseHistoryPage = () => {
                     </svg>
                     <span>
                         Bạn không có khoản thanh toán hoặc khoản hoàn tiền nào
-                        trong 2 năm qua.
+                        trong thời gian qua.
                     </span>
                 </div>
             )}

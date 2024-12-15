@@ -59,16 +59,15 @@ function Genre() {
   return (
     <div className="bg-medium h-auto">
       {/* Quốc gia */}
-      <section className="bg-medium w-full h-auto pt-16 text-white px-10">
-        <h1 className="text-3xl font-medium mb-10">
+      <section className="bg-medium w-full h-auto pt-8 sm:pt-16 text-white px-1 md:px-10">
+        <h1 className="text-2xl lg:text-3xl font-medium mb-10">
           Thể Loại Được Nghe Nhiều Nhất
         </h1>
         <Swiper
           spaceBetween={20}
           slidesPerView="auto" // Số item hiện trong 1 lần
-          className="mySwiper "
+          className="mySwiper px-2"
         >
-          <div className="grid grid-cols-4 gap-4">
             {countries.map((country, index) => (
               <SwiperSlide key={index} style={{ width: "auto" }}>
                 <Link
@@ -78,7 +77,7 @@ function Genre() {
                 >
                   {/* Ảnh nền */}
                   <div
-                    className={`min-w-[300px] w-1/4 h-[300px] rounded-lg cursor-pointer opacity-60 group-hover:opacity-100 duration-300`}
+                    className={`w-[150px] h-[100px] sm:w-56 sm:h-48 lg:w-80 lg:h-64 rounded-lg cursor-pointer opacity-80 group-hover:opacity-100 duration-300`}
                     style={{
                       backgroundImage: `url(${country.background})`,
                       backgroundSize: "cover",
@@ -86,15 +85,9 @@ function Genre() {
                       backgroundRepeat: "no-repeat",
                     }}
                   ></div>
-
-                  {/* Tên quốc gia */}
-                  <p className="text-2xl sm:text-3xl font-bold tracking-wide text-center text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-                    {country.name_country}
-                  </p>
                 </Link>
               </SwiperSlide>
             ))}
-          </div>
         </Swiper>
       </section>
 
@@ -107,10 +100,10 @@ function Genre() {
         .map((category) => (
           <section
             key={category.id}
-            className="bg-medium w-full h-auto pt-16 text-white px-10"
+            className="bg-medium w-full h-auto pt-8 md:pt-16 text-white px-1 md:px-10"
           >
             <div className="flex items-center justify-between">
-              <h1 className="text-2xl font-medium mb-16">
+              <h1 className="text-2xl lg:text-3xl font-medium mb-8 md:mb-16">
                 {category.categorie_name}
               </h1>
               <div className="flex items-center text-slate-500 hover:text-white cursor-pointer duration-300">
@@ -138,10 +131,9 @@ function Genre() {
           slidesPerView="auto" // Số item hiện trong 1 lần
           className="mySwiper "
         >
-            <div className="flex items-center">
               {songs[category.id].slice(0, 5).map((song,index) => (
                  <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div key={song.id} className="w-[300px] h-[300px] px-3 rounded-md">
+                <div key={song.id} className="lg:w-[300px] md:w-[200px] h-auto w-40  px-3 rounded-md">
                   <div
                     style={{
                       backgroundImage: `url(${song.song_image})`,
@@ -149,12 +141,12 @@ function Genre() {
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
                     }}
-                    className="w-full h-full cursor-pointer rounded-md"
+                    className=" cursor-pointer rounded-md lg:w-[300px] md:w-[200px] w-40 lg:h-[300px] md:h-[200px] h-40"
                   />
+                  <div className="text-center text-sm lg:text-lg md:text-md text-white pt-2">{song.song_name}</div>
                 </div>
                 </SwiperSlide>
               ))}
-            </div>
             </Swiper>
           </section>
         ))}

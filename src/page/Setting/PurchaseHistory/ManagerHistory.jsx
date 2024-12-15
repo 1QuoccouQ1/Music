@@ -5,7 +5,7 @@ function ManagerHistory() {
     return (
         <div className='bg-gray-900 min-h-screen p-8 flex flex-col items-center'>
             {/* Main container for navigation */}
-            <div className='w-full max-w-[780px]'>
+            <div className='w-full max-w-[1000px]'>
                 <div className='flex items-center mb-8'>
                     <h1 className='text-4xl font-semibold text-white mb-1'>Quản Lý Đơn Hàng </h1>
                 </div>
@@ -56,7 +56,7 @@ function ManagerHistory() {
             </div>
 
             {/* Centered main content */}
-            <div className='flex-grow flex items-center justify-center w-full max-w-[777px]'>
+            <div className='flex-grow flex items-center justify-center w-full max-w-[1000px]'>
                 <Outlet />
             </div>
         </div>

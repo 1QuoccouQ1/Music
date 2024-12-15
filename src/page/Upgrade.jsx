@@ -169,9 +169,9 @@ function Upgrade() {
 
   // Use Effect to add the wheel event listener
   useEffect(() => {
-    if (showPricingPage) {
-      window.addEventListener("wheel", handleWheelEvent, { passive: false });
-    }
+    // if (showPricingPage) {
+    //   window.addEventListener("wheel", handleWheelEvent, { passive: false });
+    // }
 
     // Cleanup function to remove the event listener
     return () => {
@@ -182,11 +182,11 @@ function Upgrade() {
   return (
     <>
       <div
-        className={` bg-slate-900 text-white h-auto flex flex-col items-center justify-center px-4 pt-28 pb-56 tracking-wide  ${showPricingPage ? " blur-sm " : ""
+        className={` bg-slate-900 text-white h-auto flex flex-col items-center justify-center px-1 sm:px-4 pt-10 lg:pt-28 pb-56 tracking-wide  ${showPricingPage ? " blur-sm " : ""
           }`}
       >
         <div className="max-w-4xl w-full">
-          <h1 className="text-5xl md:text-5xl font-bold text-center mb-4 ">
+          <h1 className="text-2xl md:text-5xl font-bold text-center mb-4 ">
             Nâng cấp tài khoản để trải nghiệm các đặt quyền và lợi ích cao cấp
           </h1>
           <p className="text-center text-gray-400 mb-2 text-sm">
@@ -295,20 +295,20 @@ function Upgrade() {
         </div>
 
         <div className="max-w-5xl w-full mt-36">
-          <h1 className="text-3xl md:text-4xl font-bold text-center mb-12">
+          <h1 className="text-2xl md:text-4xl font-bold text-center mb-12">
             Đặc Quyền Khi Nâng Cấp
           </h1>
           <div className="bg-[#212121] rounded-lg overflow-hidden">
             <table className="w-full">
               <thead>
-                <tr className="border-b border-slate-700">
-                  <th className="p-4 text-left text-sm">
+                <tr className="border-b border-slate-700 pr-1">
+                  <th className="md:p-4 py-4 px-1 text-left text-sm">
                     Đặc quyền và lợi ích dành cho bạn
                   </th>
                   {plans.map((plan) => (
-                    <th key={plan.name} className="p-4 text-center">
+                    <th key={plan.name} className=" md:p-4 text-center">
                       <span
-                        className={`inline-block ${plan.color} text-white px-6 py-1 rounded-lg text-xs`}
+                        className={`inline-block ${plan.color} text-white px-1 md:px-6 py-1 rounded-lg text-xs`}
                       >
                         {plan.name}
                       </span>
@@ -363,7 +363,7 @@ function Upgrade() {
                   className="w-full p-4 text-left flex justify-between items-center"
                   onClick={() => toggleFAQ(index)}
                 >
-                  <span className="font-medium">{item.question}</span>
+                  <span className="font-medium w-full">{item.question}</span>
                   {openIndex === index ? (
                     <ChevronUp className="h-5 w-5" />
                   ) : (
@@ -383,9 +383,9 @@ function Upgrade() {
         </div>
       </div>
       {showPricingPage ? (
-        <div className="fixed top-0 bottom-0 right-0 left-0 h-screen">
-          <div className="min-h-screen  text-white flex items-center justify-center p-4 -translate-y-7">
-            <div className="max-w-2xl w-full bg-slate-800 rounded-lg p-6 space-y-6">
+        <div className="fixed top-0 bottom-0 h-900px right-0 left-0 lg:left-64 overflow-y-auto">
+          <div className="text-white flex items-center justify-center p-4 translate-y-7 pt-12 pb-28">
+            <div className="max-w-2xl w-full bg-slate-800 rounded-lg p-6 space-y-3">
               <div>
                 <h2 className="text-2xl font-bold">SoundWave {type}</h2>
                 <p className="text-slate-400 text-sm">
@@ -439,7 +439,7 @@ function Upgrade() {
 
               <hr className="border-none h-[1px] bg-slate-500" />
 
-              <div className="flex ">
+              <div className="md:flex ">
                 <div className="flex flex-1 items-start space-x-2">
                   <input
                     type="checkbox"
@@ -457,7 +457,7 @@ function Upgrade() {
                   </label>
                 </div>
 
-                <div className="flex flex-1 justify-end">
+                <div className="flex flex-1 md:justify-end justify-center mt-5 md:mt-0">
                   <button
                     className="px-6 py-2 bg-slate-700 rounded-full hover:bg-slate-600 transition-colors"
                     onClick={handleCancel} // Sự kiện hủy bỏ

@@ -1,51 +1,58 @@
 import React, { useState, useEffect } from 'react';
 import { FaEdit } from 'react-icons/fa';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import { API_URL } from '../../services/apiService';
 
 function ProfileEditPage() {
     const [profileData, setProfileData] = useState({
         name: '',
         email: '',
-        birthday: '',
+        birthDay: '',
+        birthMonth: '',
+        birthYear: '',
         gender: '',
+        phone: '',
         image: ''
     });
     const [isSubmitting, setIsSubmitting] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
-    const [successMessage, setSuccessMessage] = useState('');
+    const [isImageChanged, setIsImageChanged] = useState('/default-avatar.png');
 
     useEffect(() => {
         try {
-            const user = JSON.parse(localStorage.getItem('user'));
+            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
             if (user) {
-                const { birthday, image, name, email, gender } = user;
-                const [day, month, year] = birthday.split('-').map(Number);
+                const { birthday = '0000-00-00', image, name, email, gender, phone } = user;
+                const [year = '', month = '', day = ''] = birthday.split('-');
                 setProfileData({
                     name: name || '',
                     email: email || '',
-                    birthDay: day || '',
-                    birthMonth: month || '',
-                    birthYear: year || '',
+                    birthDay: day,
+                    birthMonth: month,
+                    birthYear: year,
                     gender: gender || '',
-                    image: image || '/default-avatar.png'
+                    image: image || '/default-avatar.png',
+                    phone: phone || ''
                 });
+                setIsImageChanged(image || '/default-avatar.png');
+            } else {
+                console.warn('No user found in localStorage');
             }
         } catch (err) {
-            console.error('Error parsing user data:', err);
+            console.error('Error parsing user data from localStorage:', err);
         }
     }, []);
 
     const handleImageChange = e => {
         const file = e.target.files[0];
         if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setProfileData(prevData => ({
-                    ...prevData,
-                    image: reader.result
-                }));
-            };
-            reader.readAsDataURL(file);
+            setProfileData(prevData => ({
+                ...prevData,
+                image: file
+            }));
+            setIsImageChanged(URL.createObjectURL(file));
         }
+        
     };
 
     const handleChange = e => {
@@ -56,76 +63,111 @@ function ProfileEditPage() {
         }));
     };
 
+    const validateForm = () => {
+        const errors = [];
+        if (!profileData.name) errors.push('Vui lòng nhập tên người dùng.');
+        if (!profileData.email) {
+            errors.push('Vui lòng nhập email.');
+        } else if (!/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(profileData.email)) {
+            errors.push('Email không đúng định dạng.');
+        }
+        if (!profileData.phone) {
+            errors.push('Vui lòng nhập số điện thoại.');
+        } else if (!/^\d{10}$/.test(profileData.phone)) {
+            errors.push('Số điện thoại phải chứa đúng 10 chữ số.');
+        }
+        if (
+            !profileData.birthDay ||
+            !profileData.birthMonth ||
+            !profileData.birthYear
+        ) {
+            errors.push('Vui lòng chọn đầy đủ ngày, tháng, năm sinh.');
+        }
+        return errors;
+    };
+
     const handleSubmit = async event => {
         event.preventDefault();
-
-        const user = JSON.parse(localStorage.getItem('user'));
-        const userId = user ? user.id : null;
-
-        if (!userId) {
-            setErrorMessage('User ID not found!');
+    
+        const validationErrors = validateForm();
+        if (validationErrors.length > 0) {
+            validationErrors.forEach(error => toast.error(error));
             return;
         }
-
+    
+        const user = JSON.parse(localStorage.getItem('user'));
+        const userId = user ? user.id : null;
+    
+        if (!userId) {
+            toast.error('User ID không tồn tại!');
+            return;
+        }
+    
         const updatedProfileData = {
             ...profileData,
-            birthday: `${profileData.birthDay}-${profileData.birthMonth}-${profileData.birthYear}`
+            birthday: `${
+                profileData.birthYear
+            }-${profileData.birthMonth.padStart(
+                2,
+                '0'
+            )}-${profileData.birthDay.padStart(2, '0')}`
         };
-
+    
+        const formData = new FormData();
+        formData.append('name', updatedProfileData.name);
+        formData.append('email', updatedProfileData.email);
+        formData.append('birthday', updatedProfileData.birthday);
+        formData.append('gender', updatedProfileData.gender);
+        formData.append('phone', updatedProfileData.phone);
+    
+        if (profileData.image instanceof File) {
+            formData.append('image', profileData.image);
+        }
+        console.log('formData:', formData);
+    
+        formData.append('_method', 'PUT');
+    
         setIsSubmitting(true);
-        setErrorMessage('');
-        setSuccessMessage('');
-
+    
         try {
-            const response = await fetch(
-                `https://admin.soundwave.io.vn/api/${userId}/update-member`,
-                {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${localStorage.getItem(
-                            'access_token'
-                        )}`
-                    },
-                    body: JSON.stringify(updatedProfileData)
-                }
-            );
-
+            const response = await fetch(`${API_URL}/${userId}/update-member`, {
+                method: 'POST', // Đặt POST thay vì PUT
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                },
+                body: formData
+            });
+    
             if (!response.ok) {
                 const errorData = await response.text();
-                setErrorMessage(`API error: ${response.status} - ${errorData}`);
+                toast.error(`API error: ${response.status} - ${errorData}`);
                 return;
             }
-
+    
             const data = await response.json();
-
-            setSuccessMessage('Hồ sơ đã được lưu thành công!');
-            localStorage.setItem(
-                'profileData',
-                JSON.stringify(updatedProfileData)
-            );
-
-            setTimeout(() => setSuccessMessage(''), 5000); // Clear success message after 5 seconds
+            toast.success('Hồ sơ đã được lưu thành công!');
+            localStorage.setItem('user', JSON.stringify(data.user));
+            setIsImageChanged(data.user.image);
         } catch (error) {
             console.error('Error while saving profile:', error);
-            setErrorMessage('Đã xảy ra lỗi. Vui lòng thử lại.');
+            toast.error('Đã xảy ra lỗi. Vui lòng thử lại.');
         } finally {
             setIsSubmitting(false);
         }
     };
-
+    
     return (
         <div className='bg-gray-900 min-h-screen flex justify-center pt-6 pb-10 px-4 sm:px-6'>
             <div className='bg-gray-900 p-6 sm:p-8 rounded-lg w-full max-w-[777px] shadow-lg'>
                 <h1 className='text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-9'>
                     Chỉnh Sửa Hồ Sơ
                 </h1>
-                <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit} enctype="multipart/form-data">
                     <div className='mb-4'>
                         <div className='flex flex-col items-center'>
                             <div className='relative'>
                                 <img
-                                    src={profileData.image}
+                                    src={isImageChanged}
                                     alt='Profile'
                                     className='rounded-full w-[255px] h-[255px] border-4 border-pink-600 object-cover'
                                 />
@@ -172,6 +214,19 @@ function ProfileEditPage() {
                         />
                     </div>
 
+                    <div className='mb-4'>
+                        <label className='block text-sm font-medium text-gray-400 mb-2'>
+                            Số điện thoại
+                        </label>
+                        <input
+                            type='text'
+                            className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
+                            value={profileData.phone}
+                            name='phone'
+                            onChange={handleChange}
+                        />
+                    </div>
+
                     <div className='mb-4 flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4'>
                         {['Ngày', 'Tháng', 'Năm'].map((label, index) => (
                             <div className='w-full sm:w-1/3' key={label}>
@@ -196,22 +251,29 @@ function ProfileEditPage() {
                                     }
                                     onChange={handleChange}
                                 >
-                                    {[
-                                        ...(index === 0
-                                            ? Array(31)
-                                            : index === 1
-                                            ? Array(12)
-                                            : Array(100))
-                                    ].map((_, i) => (
-                                        <option
-                                            key={i}
-                                            value={
-                                                index === 2 ? 2024 - i : i + 1
-                                            }
-                                        >
-                                            {index === 2 ? 2024 - i : i + 1}
-                                        </option>
-                                    ))}
+                                    {Array.from(
+                                        {
+                                            length:
+                                                index === 2
+                                                    ? 100
+                                                    : index === 1
+                                                    ? 12
+                                                    : 31
+                                        },
+                                        (_, i) => {
+                                            const value =
+                                                index === 2
+                                                    ? (2024 - i).toString()
+                                                    : (i + 1)
+                                                          .toString()
+                                                          .padStart(2, '0');
+                                            return (
+                                                <option key={i} value={value}>
+                                                    {value}
+                                                </option>
+                                            );
+                                        }
+                                    )}
                                 </select>
                             </div>
                         ))}
@@ -223,26 +285,16 @@ function ProfileEditPage() {
                         </label>
                         <select
                             className='bg-gray-900 text-white border-2 border-pink-600 rounded-lg p-3 w-full'
-                            value={profileData.gender}
+                            value={profileData.gender || ''}
                             name='gender'
                             onChange={handleChange}
                         >
+                            <option value=''>Chọn giới tính</option>
                             <option value='Nam'>Nam</option>
                             <option value='Nữ'>Nữ</option>
                             <option value='Khác'>Khác</option>
                         </select>
                     </div>
-
-                    {errorMessage && (
-                        <p className='text-red-600 text-sm mb-4'>
-                            {errorMessage}
-                        </p>
-                    )}
-                    {successMessage && (
-                        <p className='text-green-600 text-sm mb-4'>
-                            {successMessage}
-                        </p>
-                    )}
 
                     <div className='flex flex-col sm:flex-row justify-end space-y-3 sm:space-y-0 sm:space-x-4'>
                         <button
@@ -265,6 +317,7 @@ function ProfileEditPage() {
                         </button>
                     </div>
                 </form>
+                <ToastContainer />
             </div>
         </div>
     );
