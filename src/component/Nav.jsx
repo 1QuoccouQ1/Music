@@ -17,7 +17,7 @@ import { UserContext } from "../ContextAPI/UserContext";
 
 function Nav() {
   const navigate = useNavigate();
-  const { isSidebar, setIsSidebar, handleAddSong, handleClick } = useContext(UserContext);
+  const { isSidebar, setIsSidebar } = useContext(UserContext);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
   const isProfile = user ? true : false;
@@ -150,10 +150,8 @@ function Nav() {
                           <li
                             key={index}
                             className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
-                            onDoubleClick={() =>  handleAddSong("song", song.id)}
-                            onClick={(e) =>{e.stopPropagation(); handleClick(song.id)}}
                           >
-                            <div to={`/SongDetail/${song.id}`} >
+                            <Link to={`/SongDetail/${song.id}`} >
                               <div className="flex items-center">
                                 <img
                                   src={song.song_image}
@@ -169,7 +167,7 @@ function Nav() {
                                   </p>
                                 </div>
                               </div>
-                            </div>
+                            </Link>
                           </li>
                         ))}
                       </ul>
@@ -210,8 +208,8 @@ function Nav() {
                 </>
               )}
               <div className="text-left text-gray-300 mt-5 text-sm">
-                Tìm kiếm  <strong>&quot;{query}&quot;</strong>
-              </div>
+                      Tìm kiếm  <strong>&quot;{query}&quot;</strong>
+                    </div>
             </div>
           )}
         </div>
@@ -272,8 +270,9 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform hidden md:block duration-300 ${isProfileOpen ? "rotate-180" : ""
-                      }`}
+                    className={`transform transition-transform hidden md:block duration-300 ${
+                      isProfileOpen ? "rotate-180" : ""
+                    }`}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
@@ -358,10 +357,11 @@ function Nav() {
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${index === 0
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
                                       ? "text-yellow-500"
                                       : "text-gray-400"
-                                    }`}
+                                  }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
@@ -379,10 +379,11 @@ function Nav() {
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${index === 0
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
                                       ? "text-yellow-500"
                                       : "text-gray-400"
-                                    }`}
+                                  }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
@@ -424,7 +425,7 @@ function Nav() {
           )}
         </div>
       </div>
-
+    
     </>
   );
 }

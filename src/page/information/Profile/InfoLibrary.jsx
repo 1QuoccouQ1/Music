@@ -11,91 +11,16 @@ import ProfileArtistSong from "../../BXH/ProfileArtistSong";
 const LibraryPage = () => {
     const songs = JSON.parse(localStorage.getItem("songHistory"));
     const user = JSON.parse(localStorage.getItem("user"));
-    const { handleAddSong, handleListSongs } = useContext(UserContext);
-    const navigate = useNavigate();
-    const [SongFavourite, setIsSongFavourite] = useState([]);
+    const {  handleListSongs } = useContext(UserContext);
     const { settext } = useOutletContext();
 
-    const formatTime = time => {
-        const minutes = Math.floor(time / 60);
-        const seconds = Math.floor(time % 60);
-        return `${minutes.toString().padStart(2, '0')}:${seconds
-            .toString()
-            .padStart(2, '0')}`;
-    };
-
     useEffect(() => {
-        const FavouriteSong = async () => {
-            try {
-                const response = await fetch(
-                    API_URL + `/${user.id}/bai-hat-yeu-thich`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                        },
-                    }
-                );
-                const data = await response.json();
-                // console.log(response);
-                if (response.status === 200) {
-                    const songId = data.map((song) => song.id);
-                    // console.log(data);
-                    setIsSongFavourite(songId);
-                } else {
-                    console.log("Lỗi khi lấy danh sách bài hát yêu thích");
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        };
         if (user.id) {
-            FavouriteSong();
             settext(`${songs ? songs.length : 0} Bài hát vừa nghe`)
         }
-    }, [user.id]);
+    }, [songs]);  
 
-    const handleSongFavourite = (song_id, check) => {
-        if (!user) {
-            // Kiểm tra đã đăng nhập chưa
-            toast.error(
-                "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào yêu thích."
-            );
-        } else {
-            // Gửi request API khi người dùng nhấn "Theo giỏi"
-            fetch(API_URL + "/bai-hat-yeu-thich", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                },
-                body: JSON.stringify({
-                    liked: !check,
-                    song_id: song_id,
-                    user_id: user.id,
-                }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    // Xử lý dữ liệu trả về từ API (nếu cần)
-                    // console.log('Đã đánh dấu yêu thích:', data.message);
-                    if (check) {
-                        setIsSongFavourite((set) => {
-                            return set.filter((id) => id !== song_id);
-                        });
-                    } else {
-                        setIsSongFavourite((set) => {
-                            return [...set, song_id];
-                        });
-                    }
-                    toast.success(data.message);
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi gửi yêu cầu:", error);
-                });
-        }
-    };
+    
     return (
         <>
             <div className="flex items-center text-white justify-end text-sm py-1 px-1 md:px-3 rounded-lg cursor-pointer duration-300">

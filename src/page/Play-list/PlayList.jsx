@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { API_URL } from "../../services/apiService";
@@ -150,7 +150,6 @@ function PlaylistDiv({ songId, onClose }) {
             >
               Tạo Playlist
             </div>
-
           </nav>
 
           {/* Nội dung */}
@@ -194,19 +193,13 @@ function PlaylistDiv({ songId, onClose }) {
             </div>
           ) : (
             <div className="flex items-center h-[250px] py-4">
-              {/* <div className="flex-none border border-solid border-slate-200 rounded-md h-full w-[170px] flex flex-col items-center justify-center space-y-4 hover:border-red-400 cursor-pointer group duration-300">
-              <CirclePlus className="group-hover:text-red-400" />
-              <p className="text-sm truncate group-hover:text-red-400">
-                Tạo playlist mới
-              </p>
-            </div> */}
               {loading ? (
                 <div className="text-center text-white ml-10">Đang tải...</div>
               ) : (
                 <Swiper
                   spaceBetween={20}
                   slidesPerView="auto" // Số item hiện trong 1 lần
-                  className="mySwiper"
+                  className="mySwiper ml-0"
                 >
                   {privatePlaylists.map((playlist, index) => (
                     <SwiperSlide key={index} style={{ width: "auto" }}>

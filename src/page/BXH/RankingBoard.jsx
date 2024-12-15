@@ -1,11 +1,10 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { Play } from 'lucide-react';
+import { CirclePlus, Heart, Play } from 'lucide-react';
 import { API_URL } from '../../services/apiService';
 import 'react-toastify/dist/ReactToastify.css';
 import ArtistRankingCard from './ArtistRankingCard';
 import { UserContext } from "../../ContextAPI/UserContext";
-import PlaylistDiv from '../Play-list/PlayList';
-import ListSongs from '../Genre/ListSongs';
+import { Link } from 'react-router-dom';
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
@@ -32,32 +31,32 @@ const RankingBoard = () => {
         }
     };
 
-    const fetchFavouriteSongs = async () => {
-        if (!user) return;
-        try {
-            const response = await fetch(
-                `${API_URL}/${user.id}/bai-hat-yeu-thich`,
-                {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${localStorage.getItem(
-                            'access_token'
-                        )}`
-                    }
-                }
-            );
+    // const fetchFavouriteSongs = async () => {
+    //     if (!user) return;
+    //     try {
+    //         const response = await fetch(
+    //             `${API_URL}/${user.id}/bai-hat-yeu-thich`,
+    //             {
+    //                 method: 'GET',
+    //                 headers: {
+    //                     'Content-Type': 'application/json',
+    //                     'Authorization': `Bearer ${localStorage.getItem(
+    //                         'access_token'
+    //                     )}`
+    //                 }
+    //             }
+    //         );
 
-            if (response.ok) {
-                const data = await response.json();
-                setFavouriteSongIds(data.map(song => song.id));
-            } else {
-                console.error('Failed to fetch favorite songs.');
-            }
-        } catch (err) {
-            console.error('Error fetching favorite songs:', err);
-        }
-    };
+    //         if (response.ok) {
+    //             const data = await response.json();
+    //             setFavouriteSongIds(data.map(song => song.id));
+    //         } else {
+    //             console.error('Failed to fetch favorite songs.');
+    //         }
+    //     } catch (err) {
+    //         console.error('Error fetching favorite songs:', err);
+    //     }
+    // };
 
     // const toggleFavourite = async (song_id, isFavourite) => {
     //     if (!user) {
@@ -240,7 +239,6 @@ const RankingBoard = () => {
                         />
                     </div>
                 )}
-
                 {rankings[2] && (
                     <div className='transform flex justify-center lg:translate-y-4 w-full lg:w-1/3'>
                         <ArtistRankingCard

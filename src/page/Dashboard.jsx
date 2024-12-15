@@ -10,12 +10,14 @@ import SlideAlbum from "./Albums/SlideAlbum.jsx"
 import Country from "./Country/Country.jsx"
 import ArtistSlide from "./Artist/ArtistSlide.jsx"
 import GenerSlide from "./Genre/GenreSlide.jsx";
+import PlayListSlide from "./Play-list/PlayListSlide.jsx";
 
 function Dashboard() {
   const { handleFetchSongs, handleAddSong, handleClick } = useContext(UserContext);
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
   const [topLike, setTopLike] = useState([]);
+  
   const [loadingGlobal, setLoadingGlobal] = useState(true);
   const navigate = useNavigate();
 
@@ -33,6 +35,7 @@ function Dashboard() {
       setTopListen(topListenData);
       setTopLike(topLikeData);
       setLoadingGlobal(false);
+      
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
     }
@@ -317,6 +320,34 @@ function Dashboard() {
         </div>
         <GenerSlide />
       </section>
+      {/* section playlist */}
+      <section className="bg-medium pt-10 lg:pt-20 text-white px-1 lg:px-10 h-auto  tracking-wide">
+        <div className="flex items-center justify-between">
+          <h1 className="text-2xl lg:text-3xl font-medium mb-16">Danh Sách Phát</h1>
+          <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
+            <Link to={"/"} className="text-sm  ">
+              Xem Thêm
+            </Link>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={1.5}
+              stroke="currentColor"
+              className="size-4"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="m8.25 4.5 7.5 7.5-7.5 7.5"
+              />
+            </svg>
+          </div>
+        </div>
+        <PlayListSlide />
+      </section>
+      
+
     </>
   );
 }
