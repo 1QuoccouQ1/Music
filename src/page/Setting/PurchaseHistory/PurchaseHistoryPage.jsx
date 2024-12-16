@@ -82,7 +82,7 @@ const PurchaseHistoryPage = () => {
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 purchaseDetail={selectedPurchase}
-
+/>
             {purchases.length > 0 ? (
                 <div className='overflow-x-auto w-full max-w-[1400px] px-4 lg:px-10'>
                     <div className='flex flex-col text-gray-300 text-[14px]'>

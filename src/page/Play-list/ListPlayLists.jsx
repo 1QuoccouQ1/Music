@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { Play, Heart, CirclePlus } from "lucide-react";
+import { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { Play } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../../ContextAPI/UserContext";
 import { API_URL } from "../../services/apiService";
@@ -49,16 +49,13 @@ function ListPlayLists() {
         if (!id) return;
         setLoading(true);
 
-        const privateResponse = await fetch(
-          `${API_URL}/playlist/${id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        );
+        const privateResponse = await fetch(`${API_URL}/playlist/${id}`, {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+          },
+        });
         const privateData = await privateResponse.json();
         setSongs(privateData);
       } catch (err) {
@@ -94,7 +91,6 @@ function ListPlayLists() {
       {/* Quốc gia */}
       {currentCategory && (
         <div className="relative w-full h-[150px] sm:h-[200px]">
-         
           <div className="flex flex-col items-center justify-center absolute bottom-7 px-4 md:left-16 gap-4 md:gap-8">
             <div>
               <div className="flex items-center my-5">
@@ -123,14 +119,12 @@ function ListPlayLists() {
 
       {/* Bảng bài hát */}
       {songs.length > 0 ? (
-        <ListSongs songs={songs}
-        start={1} />
+        <ListSongs songs={songs} start={1} />
       ) : (
         <p className="text-center text-gray-400 mt-10">
           Không có bài hát nào để hiển thị.
         </p>
       )}
-
     </div>
   );
 }
