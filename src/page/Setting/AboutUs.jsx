@@ -10,7 +10,7 @@ function AboutUs() {
 
                 {/* Paragraph */}
                 <p className='text-sm sm:text-base leading-relaxed text-justify'>
-                    SoundWave, ra mắt vào ngày 1/8/2007, là nền tảng nghe nhạc
+                    SoundWave, ra mắt vào ngày 16/9/2024, là nền tảng nghe nhạc
                     trực tuyến miễn phí được hàng triệu người dùng Việt Nam tin
                     tưởng và yêu thích. SoundWave mang đến trải nghiệm âm nhạc
                     tốt nhất mà nhiều thiết bị âm thanh, ứng dụng, smartHome,

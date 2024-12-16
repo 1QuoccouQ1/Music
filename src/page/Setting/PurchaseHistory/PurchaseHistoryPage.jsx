@@ -8,13 +8,16 @@ const PurchaseHistoryPage = () => {
     const [selectedPurchase, setSelectedPurchase] = useState(null);
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const formatCurrencyVND = (amount) => {
+    const formatCurrencyVND = amount => {
         if (isNaN(amount)) {
             return null; // Trả về null nếu không phải số
         }
-        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
-    }
-    const openModal = (purchase) => {
+        return new Intl.NumberFormat('vi-VN', {
+            style: 'currency',
+            currency: 'VND'
+        }).format(amount);
+    };
+    const openModal = purchase => {
         setSelectedPurchase(purchase);
         setIsModalOpen(true);
     };
@@ -64,83 +67,135 @@ const PurchaseHistoryPage = () => {
 
         fetchPurchaseHistory();
     }, []);
-    
 
     if (loading) {
         return (
-            <div className="flex items-center justify-center h-screen">
-              <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid"></div>
+            <div className='flex items-center justify-center h-screen'>
+                <div className='animate-spin rounded-full h-16 w-16 border-t-4 border-blue-500 border-solid'></div>
             </div>
-          );
+        );
     }
-    
-
-
 
     return (
-        <div className='bg-gray-900 min-h-screen flex justify-center py-5 ' >
-            {/* {isModalOpen && ( */}
-                <InvoiceDetail
-                 isOpen={isModalOpen}
-                 onClose={closeModal}
-                 purchaseDetail={selectedPurchase}
-             />
-            {/* )} */}
+        <div className='bg-gray-900 min-h-screen flex justify-center py-5'>
+            <InvoiceDetail
+                isOpen={isModalOpen}
+                onClose={closeModal}
+                purchaseDetail={selectedPurchase}
+
             {purchases.length > 0 ? (
-                <div className='overflow-x-auto max-w-[1000px]'>
-                    <table className='min-w-full table-auto text-left text-gray-300 text-[14px]'>
-                        <thead>
-                            <tr className='border-b border-gray-700'>
-                                <th className='px-5 py-3'>Ngày thanh toán</th>
-                                <th className='px-5 py-3'>Mô tả</th>
-                                <th className='px-5 py-3'>Số tiền</th>
-                                <th className='px-5 py-3 text-center'>Trạng thái</th>
-                                <th className='px-5 py-3'>Biên nhận</th>
-                            </tr>
-                        </thead>
-                        <tbody>
+                <div className='overflow-x-auto w-full max-w-[1400px] px-4 lg:px-10'>
+                    <div className='flex flex-col text-gray-300 text-[14px]'>
+                        {/* Header */}
+                        <div className='hidden md:flex justify-between border-b border-gray-700 px-5 py-3 mb-2'>
+                            <div className='w-1/5 px-2 min-w-[150px]'>
+                                Ngày thanh toán
+                            </div>
+                            <div className='w-2/5 min-w-[300px]'>Mô tả</div>
+                            <div className='w-1/5 min-w-[150px]'>Số tiền</div>
+                            <div className='w-1/5 text-center min-w-[180px]'>
+                                Trạng thái
+                            </div>
+                            <div className='w-1/5 min-w-[180px]'>Biên nhận</div>
+                        </div>
+
+                        {/* Body */}
+                        <div className='flex flex-col space-y-4'>
                             {purchases.map((purchase, index) => (
-                                <tr
+                                <div
                                     key={index}
-                                    className='border-b border-gray-800'
-                                >
-                                    <td className='px-6 py-4'>
+                                    className='flex flex-col md:flex-row md:justify-between bg-gray-900 p-4 rounded-lg shadow border border-gray-900 hover:border-gray-700 transition duration-200'
+                                    >
+                                    {/* Row for small screens */}
+                                    <div className='flex md:hidden flex-col space-y-2 mb-4'>
+                                        <div>
+                                            <span className='font-bold text-gray-400'>
+                                                Ngày thanh toán:
+                                            </span>{' '}
+                                            {purchase.payment_date}
+                                        </div>
+                                        <div>
+                                            <span className='font-bold text-gray-400'>
+                                                Mô tả:
+                                            </span>{' '}
+                                            {purchase.description}
+                                        </div>
+                                        <div>
+                                            <span className='font-bold text-gray-400'>
+                                                Số tiền:
+                                            </span>{' '}
+                                            {formatCurrencyVND(purchase.amount)}
+                                        </div>
+                                        <div>
+                                            <span className='font-bold text-gray-400'>
+                                                Trạng thái:
+                                            </span>{' '}
+                                            <span
+                                                className={`text-sm ${
+                                                    purchase.payment_status ===
+                                                    'Thành công'
+                                                        ? 'text-white bg-green-600 rounded-full p-1 px-2'
+                                                        : purchase.payment_status ===
+                                                          'Thất bại'
+                                                        ? 'text-white bg-rose-800 rounded-full p-1 px-2'
+                                                        : 'text-white bg-yellow-400 rounded-full p-1 px-2'
+                                                }`}
+                                            >
+                                                {purchase.payment_status}
+                                            </span>
+                                        </div>
+                                        <div>
+                                            <span className='font-bold text-gray-400'>
+                                                Biên nhận:
+                                            </span>{' '}
+                                            <button
+                                                className='text-blue-400 hover:underline'
+                                                onClick={() =>
+                                                    openModal(purchase)
+                                                }
+                                            >
+                                                Xem hóa đơn chi tiết
+                                            </button>
+                                        </div>
+                                    </div>
+
+                                    {/* Row for tablet/desktop screens */}
+                                    <div className='hidden md:flex w-1/5 items-center min-w-[150px]'>
                                         {purchase.payment_date}
-                                    </td>
-                                    <td className='px-6 py-4'>
+                                    </div>
+                                    <div className='hidden md:flex w-2/5 items-center min-w-[300px]'>
                                         {purchase.description}
-                                    </td>
-                                    <td className='px-6 py-4'>
+                                    </div>
+                                    <div className='hidden md:flex w-1/5 items-center min-w-[150px]'>
                                         {formatCurrencyVND(purchase.amount)}
-                                    </td>
-                                    <td className='px-6 py-4 w-48 text-center'>
+                                    </div>
+                                    <div className='hidden md:flex w-1/5 items-center justify-center min-w-[180px]'>
                                         <span
                                             className={`text-sm ${
                                                 purchase.payment_status ===
                                                 'Thành công'
-                                                    ? 'text-white bg-green-600 rounded-full p-2 w-full '
+                                                    ? 'text-white bg-green-600 rounded-full p-1 px-2'
                                                     : purchase.payment_status ===
                                                       'Thất bại'
-                                                    ? 'text-white bg-rose-800 rounded-full p-2 w-full'
-                                                    : 'text-white bg-yellow-400 rounded-full p-2 w-full'
+                                                    ? 'text-white bg-rose-800 rounded-full p-1 px-2'
+                                                    : 'text-white bg-yellow-400 rounded-full p-1 px-2'
                                             }`}
                                         >
                                             {purchase.payment_status}
                                         </span>
-                                    </td>
-                                    <td className='px-6 py-4'>
+                                    </div>
+                                    <div className='hidden md:flex w-1/5 items-center min-w-[180px]'>
                                         <button
-                                           
                                             className='text-blue-400 hover:underline'
                                             onClick={() => openModal(purchase)}
                                         >
                                             Xem hóa đơn chi tiết
                                         </button>
-                                    </td>
-                                </tr>
+                                    </div>
+                                </div>
                             ))}
-                        </tbody>
-                    </table>
+                        </div>
+                    </div>
                 </div>
             ) : (
                 <div className='bg-zinc-800 text-gray-300 p-4 rounded-lg flex items-center'>
