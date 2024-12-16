@@ -1,7 +1,7 @@
 import { Facebook, Apple } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { ToastContainer, toast } from "react-toastify";
 import { Undo2 } from "lucide-react";
 
@@ -234,9 +234,9 @@ function Register() {
           </div>
         </div>
         <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-          <a href="/" className="cursor-pointer mb-4">
+          <Link to="/" className="cursor-pointer mb-4">
             <Undo2 />
-          </a>
+          </Link>
           <h1 className="text-2xl font-bold text-center mb-6">
             {texts[language].title}
           </h1>
@@ -387,12 +387,12 @@ function Register() {
           <div className="mt-6 text-center">
             <p className="text-sm text-gray-600">
               {texts[language].noAccount}{" "}
-              <a href="/login" className="text-pink-500 hover:underline">
+              <Link to="/login" className="text-pink-500 hover:underline">
                 {texts[language].register}
-              </a>
+              </Link>
             </p>
           </div>
-          <div className="mt-6 flex justify-center space-x-4">
+          {/* <div className="mt-6 flex justify-center space-x-4">
             <button className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition duration-300 ease-in-out">
               <Facebook className="h-5 w-5 text-blue-600" />
             </button>
@@ -420,7 +420,7 @@ function Register() {
             <button className="w-10 h-10 flex items-center justify-center rounded-full border border-gray-300 hover:bg-gray-100 transition duration-300 ease-in-out">
               <Apple className="h-5 w-5" />
             </button>
-          </div>
+          </div> */}
         </div>
         <div className="mt-8 text-center text-sm text-gray-400">
           <p>{texts[language].footer}</p>

@@ -16,7 +16,7 @@ const InvoiceDetail = ({ isOpen, onClose, purchaseDetail }) => {
     return (
         <div
             className={`fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 transform transition duration-300 ease-in-out 
-                ${isOpen ? 'opacity-100 scale-100' : 'opacity-0 scale-95'}   `}
+            ${isOpen ? 'scale-100 opacity-100' : 'scale-0 opacity-0'} `}
         >
             <div className='bg-gray-900 text-white p-8 rounded-lg max-w-[807px] w-full'>
                 <h1 className='text-3xl font-bold mb-8'>Hóa đơn chi tiết</h1>

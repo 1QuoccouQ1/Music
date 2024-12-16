@@ -337,7 +337,7 @@ function ProfileArtist() {
 
     return (<>
         <div className='bg-medium w-full h-auto pb-40'>
-            <section className='w-full   pt-7  text-white px-5'>
+            <section className='w-full pt-7 text-white px-1 lg:px-5'>
                 <div className="relative w-full lg:h-[600px] md:h-[330px] h-[500px] z-10">
                     <img src={artist.singer_background} className='rounded-t-xl  xl:h-full w-full' />
                     <div className="flex flex-wrap items-center md:mt-0 justify-center absolute bottom-0 lg:bottom-7 px-3 xl:left-16 gap-8">
@@ -370,12 +370,12 @@ function ProfileArtist() {
                     <p onClick={() => handleSelect("1")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "1" ? "text-red-500" : " text-white"} `}>Nổi Bật</p>
                     <p onClick={() => handleSelect("2")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "2" ? "text-red-500" : " text-white"} `}>Bài hát</p>
                     <p onClick={() => handleSelect("3")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "3" ? "text-red-500" : " text-white"} `}>Single & EP</p>
-                    <p onClick={() => handleSelect("4")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "4" ? "text-red-500" : " text-white"} `}>Album</p>
+                    {/* <p onClick={() => handleSelect("4")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "4" ? "text-red-500" : " text-white"} `}>Album</p> */}
                 </div>
             </section>
-            {isSelect === "1" && <><section className='w-full text-white px-5 pt-10 flex flex-wrap'>
+            {isSelect === "1" && <><section className='w-full text-white px-1 lg:px-5 pt-10 flex flex-wrap'>
                 <div className='flex w-full lg:w-2/3 flex-col gap-2' >
-                    <p className='text-right font-medium text-sm text-red-500 cursor-pointer mr-5'>Xem thêm</p>
+                    <p className='text-right font-medium text-sm text-red-500 cursor-pointer mr-5' onClick={() => handleSelect("2")}>Xem thêm</p>
                     {artistSong && artistSong.length > 0 ? (
                         <ProfileArtistSong artistSong={artistSong} user_id={user ? user.id : null} length={'5'} />
                     ) : (
@@ -391,7 +391,7 @@ function ProfileArtist() {
                     </div>
                 </div>
             </section>
-                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide">
+                <section className="bg-medium pt-10 text-white  px-1 lg:px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Single & EP</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -434,7 +434,7 @@ function ProfileArtist() {
                         )}
                     </Swiper>
                 </section>
-                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide">
+                <section className="bg-medium pt-10 text-white px-1 lg:px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Album Hot</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -506,7 +506,7 @@ function ProfileArtist() {
                         )}
                     </Swiper>
                 </section>
-                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide">
+                <section className="bg-medium pt-10 text-white px-1 lg:px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">{artist.singer_name} trong loạt hit nổi bật</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -543,7 +543,7 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section>
-                <section className="bg-medium pt-10 text-white px-5 h-auto tracking-wide w-full max-w-full">
+                <section className="bg-medium pt-10 text-white px-1 lg:px-5 h-auto tracking-wide w-full max-w-full">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Fan có thể thích</h1>
                         <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
@@ -584,7 +584,7 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section> </>}
-            {isSelect === "2" && <> <section className='w-full text-white px-5 pt-5 flex '>
+            {isSelect === "2" && <> <section className='w-full text-white px-1 lg:px-5 pt-5 flex '>
                 <div className='flex w-full flex-col gap-2' >
                     <div className='flex items-center justify-between border-b border-slate-500 pb-2'>
                         <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
@@ -592,7 +592,10 @@ function ProfileArtist() {
                         <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
                     </div>
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user.id : null} length={'20'} />) : (
+                        <ProfileArtistSong 
+                        artistSong={artistSong} 
+                        user_id={user ? user.id : null} 
+                        length={'20'} />) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             <p>Không có bài hát</p>
                         </div>
@@ -600,7 +603,7 @@ function ProfileArtist() {
 
                 </div>
             </section>
-                <section className="bg-medium pt-10 text-white px-10 h-auto tracking-wide">
+                <section className="bg-medium pt-10 text-white px-1 lg:px-10 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
 
                         <h1 className="text-xl font-medium mb-16">{artist.singer_name} trong loạt hit nổi bật</h1>
@@ -643,10 +646,13 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section></>}
-            {isSelect === "3" && <> <section className="bg-medium w-full h-auto pb-32  pt-5  text-white px-5 ">
+            {isSelect === "3" && <> <section className="bg-medium w-full h-auto pb-32 pt-5 px-1 lg:px-5 ">
                 <div className="">
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong artistSong={artistSong} user_id={user ? user.id : null} length={'20'} />) : (
+                        <ProfileArtistSong 
+                        artistSong={artistSong} 
+                        user_id={user ? user.id : null} 
+                        length={'20'} />) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             <p>Không có bài hát</p>
                         </div>
@@ -661,7 +667,7 @@ function ProfileArtist() {
                    */}
                 </div>
             </section></>}
-            {isSelect === "4" && <>
+            {/* {isSelect === "4" && <>
                 <section className='w-full flex gap-10 items-center text-white px-7 pt-10 '>
                     <div className='size-60 rounded-lg'>
                         <img className='rounded-lg w-full h-full ' src='../imgs/412544823_377358094767954_6428436036322132060_n 2.png' />
@@ -798,7 +804,7 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section>
-            </>}
+            </>} */}
         </div>
         {isModal && (<div className=" fixed top-0 bottom-0 right-0 left-0 z-20">
             <div className="bg-black h-[608px] bg-opacity-50 text-white  rounded-xl max-w-4xl w-full flex absolute top-1/2 -translate-x-1/2 -translate-y-1/2 left-1/2">

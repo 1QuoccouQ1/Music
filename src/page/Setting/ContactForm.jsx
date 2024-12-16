@@ -3,10 +3,11 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 const ContactForm = () => {
+  const user = JSON.parse(localStorage.getItem('user'));
   const [formData, setFormData] = useState({
     topic: "",
-    email: "",
-    username: "",
+    email: user.email || "",
+    username: user.name || "",
     message: "",
     acknowledge: false,
     dataProcessing: false,
@@ -100,10 +101,9 @@ const ContactForm = () => {
                   className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
                     errors.topic ? "border-red-500" : "border-pink-500"
                   }`}
-                  required
                 >
-                  <option value="">Chọn vấn đề cần liên hệ</option>
-                  <option value="technical">Hỗ trợ kỹ thuật</option>
+                  <option value="">-- Chọn vấn đề --</option>
+                  <option value="technical" selected>Hỗ trợ kỹ thuật</option>
                   <option value="billing">Hóa đơn</option>
                   <option value="general">Câu hỏi chung</option>
                 </select>
@@ -124,7 +124,7 @@ const ContactForm = () => {
                   className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
                     errors.email ? "border-red-500" : "border-pink-500"
                   }`}
-                  required
+                  
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm">{errors.email}</p>
@@ -173,12 +173,13 @@ const ContactForm = () => {
                   <input
                     type="checkbox"
                     name="acknowledge"
+                    id ="acknowledge"
                     checked={formData.acknowledge}
                     onChange={handleInputChange}
                     className="mr-2 border border-pink-500"
-                    required
+                    
                   />
-                  <label className="text-gray-400 text-sm">
+                  <label className="text-gray-400 text-sm" htmlFor="acknowledge">
                     Tôi đảm bảo rằng tất cả thông tin là đúng và chính xác.
                   </label>
                 </div>
@@ -192,9 +193,9 @@ const ContactForm = () => {
                     checked={formData.dataProcessing}
                     onChange={handleInputChange}
                     className="mr-2 border border-pink-500"
-                    required
+                    id = "dataProcessing"
                   />
-                  <label className="text-gray-400 text-sm">
+                  <label className="text-gray-400 text-sm" htmlFor="dataProcessing">
                     Tôi đồng ý với chính sách xử lý dữ liệu của SoundWave.
                   </label>
                 </div>

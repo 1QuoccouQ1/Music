@@ -9,8 +9,7 @@ import {
   LogOut,
   Sparkles,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import { API_URL } from "../services/apiService";
 import MenuIcon from "@mui/icons-material/Menu";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,13 +22,17 @@ function Nav() {
   const user = JSON.parse(localStorage.getItem("user"));
   const isProfile = user ? true : false;
   const profileRef = useRef(null);
-
+  const searchRef = useRef(null);
   const [songs, setSongs] = useState([]);
   const [singers, setSingers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
+  const location = useLocation();
+  useEffect(() => {
+    setIsFocused(false);
+  }, [location]);
   const fetchSearchResults = async (query) => {
     if (!query) {
       setSongs([]);
@@ -92,24 +95,37 @@ function Nav() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
+
+   
+  }, []);
+
+  useEffect(() => {
+    const handleClickOutsideInput = (event) => {
+      // Kiểm tra nếu click không thuộc vùng InputSearch hoặc kết quả
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsFocused(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutsideInput);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutsideInput);
+    };
   }, []);
 
   return (
     <>
-      <div className="flex justify-between  w-full h-auto flex-shrink py-4   h-[90px] px-10    bg-medium  text-zinc-700 flex items-center justify-center z-10 ">
+      <div className="fixed top-0 left-0 lg:pl-60 flex justify-between w-full h-auto flex-shrink py-4 h-[90px] px-1 lg:px-10 bg-medium text-zinc-700 items-center justify-center z-10 ">
         <button
           className=" bg-red-600 text-white p-2 rounded-md lg:hidden "
           onClick={() => setIsSidebar(!isSidebar)}
         >
           {isSidebar ? <CloseIcon /> : <MenuIcon />}
         </button>
-        <div className="relative w-[80%] md:w-auto">
+        <div className="relative w-[80%] md:w-auto" ref={searchRef}>
           <InputSearch
             onSearch={fetchSearchResults}
             onFocus={() => setIsFocused(true)}
-            onBlur={() => {
-              setTimeout(() => setIsFocused(false), 200);
-            }}
             onQueryChange={setQuery}
           />
 
@@ -135,7 +151,7 @@ function Nav() {
                             key={index}
                             className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
                           >
-                            <Link to={`/SongDetail/${song.id}`}>
+                            <Link to={`/SongDetail/${song.id}`} >
                               <div className="flex items-center">
                                 <img
                                   src={song.song_image}
@@ -198,28 +214,28 @@ function Nav() {
           )}
         </div>
 
-        <div className="  hidden md:flex text-left items-center">
+        <div className="flex text-left items-center">
           {isProfile ? (
             <>
               {user.users_type == "Basic" ? (
                 <Link
                   to="/Upgrade"
-                  className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3"
+                  className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] hidden md:block hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3"
                 >
                   Trải nghiệm Premium
                 </Link>
               ) : user.users_type == "Plus" ? (
-                <span className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
+                <span className="bg-gradient-to-r from-[#EAB308] to-[#FF0065] hidden md:block hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
                   {" "}
                   SoundWave Plus
                 </span>
               ) : (
-                <span className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
+                <span className="bg-gradient-to-r from-[#DB2777] to-[#FF0065] hidden md:block hover:opacity-85 text-white text-sm rounded-full px-4 py-2 transition duration-300 mr-3">
                   {" "}
                   SoundWave Premium{" "}
                 </span>
               )}
-              <button className="relative size-9 flex items-center justify-center bg-gray-800 rounded-full transition duration-300 mr-3">
+              {/* <button className="relative size-9 flex items-center justify-center bg-gray-800 rounded-full transition duration-300 mr-3">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -234,7 +250,7 @@ function Nav() {
                     d="M14.857 17.082a23.848 23.848 0 0 0 5.454-1.31A8.967 8.967 0 0 1 18 9.75V9A6 6 0 0 0 6 9v.75a8.967 8.967 0 0 1-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 0 1-5.714 0m5.714 0a3 3 0 1 1-5.714 0M3.124 7.5A8.969 8.969 0 0 1 5.292 3m13.416 0a8.969 8.969 0 0 1 2.168 4.5"
                   />
                 </svg>
-              </button>
+              </button> */}
               <div className="relative" ref={profileRef}>
                 <button
                   onClick={() => setIsProfileOpen(!isProfileOpen)}
@@ -254,7 +270,7 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform duration-300 ${
+                    className={`transform transition-transform hidden md:block duration-300 ${
                       isProfileOpen ? "rotate-180" : ""
                     }`}
                   >
@@ -262,7 +278,7 @@ function Nav() {
                   </svg>
                 </button>
                 {isProfileOpen && (
-                  <div className="absolute z-50 right-0 mt-2 w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
+                  <div className="absolute z-50 right-0 mt-2 w-[320px] md:w-[400px]  bg-gray-800 rounded-xl shadow-2xl ">
                     <div className="flex flex-col w-full max-w-md mx-auto bg-gray-900 text-white rounded-xl">
                       <div
                         onClick={() => {
@@ -394,21 +410,22 @@ function Nav() {
               </div>
             </>
           ) : (
-            <>
-              <a href="/register">
+            <div className="hidden md:flex items-center">
+              <Link to="/register">
                 <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
                   Đăng Ký{" "}
                 </div>
-              </a>
-              <a href="/login">
+              </Link>
+              <Link to="/login">
                 <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
                   Đăng Nhập{" "}
                 </div>
-              </a>
-            </>
+              </Link>
+            </div>
           )}
         </div>
       </div>
+    
     </>
   );
 }

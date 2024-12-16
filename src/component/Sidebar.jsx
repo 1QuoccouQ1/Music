@@ -56,10 +56,11 @@ const menuItems = [
 ];
 
 function Sidebar() {
-  const { isSetting , isSidebar, setIsSidebar } = useContext(UserContext);
+  const { isSetting, isSidebar, setIsSidebar } = useContext(UserContext);
   const isLoggedIn = Boolean(localStorage.getItem('user')); // Kiểm tra đăng nhập
   const location = useLocation();
   const sidebarRef = useRef(null);
+  const user = localStorage.getItem('user');
 
   // Đóng Sidebar khi click bên ngoài
   useEffect(() => {
@@ -78,36 +79,52 @@ function Sidebar() {
   if (isSetting) return null;
 
   return (
-    <aside ref={sidebarRef} className={`max-w-64 bg-sidebar lg:px-6 px-5 py-3 fixed top-0 left-0 h-full lg:w-56 z-20 ${isSidebar ? "translate-x-0" : "-translate-x-full"
-                    } transition-transform duration-300 lg:translate-x-0`}>
-      <div className="space-y-4 h-auto">
-        <Link to="/" className="flex justify-center">
-          <img src="../imgs/Music Brand and App Logo 1.png" alt="Logo" className='size-5 lg:size-auto' />
-        </Link>
-        <nav className="space-y-1 h-auto tracking-wide">
-          <div className="flex flex-col justify-between h-auto">
-            <div className="text-sm">
-              {menuItems.map((item, index) => {
-                if (item.requireAuth && !isLoggedIn) return null; 
-                const isActive = location.pathname === item.to; 
-                return (
-                  <Link
-                    key={index}
-                    className={`flex items-center space-x-2 py-3 px-3 hover:shadow-lg rounded-lg duration-300 cursor-pointer ${
-                      isActive ? 'text-red-600 font-semibold' : 'text-gray-400 hover:text-red-600'
-                    }`}
-                    to={item.to}
-                  >
-                    {item.icon}
-                    <span className="hidden lg:inline">{item.label}</span>
-                  </Link>
-                );
-              })}
+    <>
+      <aside ref={sidebarRef} className={`max-w-64 bg-sidebar lg:px-6 px-1 lg:px-5 py-3 fixed top-0 left-0 h-full lg:w-56 z-20 ${isSidebar ? "translate-x-0" : "-translate-x-full"
+        } transition-transform duration-300 lg:translate-x-0`}>
+        <div className="space-y-4 h-auto">
+          <Link to="/" className="flex justify-center">
+            <img src="../imgs/Music Brand and App Logo 1.png" alt="Logo" className='w-[92px] h-[70px] ' />
+          </Link>
+          <nav className="space-y-1 h-auto tracking-wide">
+            <div className="flex flex-col justify-between h-auto">
+              <div className="text-sm">
+                {menuItems.map((item, index) => {
+                  if (item.requireAuth && !isLoggedIn) return null;
+                  const isActive = location.pathname === item.to;
+                  return (
+                    <Link
+                      key={index}
+                      className={`flex items-center space-x-2 py-3 px-1 lg:px-3 hover:shadow-lg rounded-lg duration-300 cursor-pointer ${isActive ? 'text-red-600 font-semibold' : 'text-gray-400 hover:text-red-600'
+                        }`}
+                      to={item.to}
+                    >
+                      {item.icon}
+                      <span className="">{item.label}</span>
+                    </Link>
+                  );
+                })}
+              </div>
             </div>
-          </div>
-        </nav>
-      </div>
-    </aside>
+          </nav>
+          {user ? "" : (
+            <div className="block md:hidden items-center my-2">
+              <Link to="/register">
+                <div className="text-white py-2 px-7 mx-2 my-2 bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
+                  Đăng Ký{" "}
+                </div>
+              </Link>
+              <Link to="/login">
+                <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
+                  Đăng Nhập{" "}
+                </div>
+              </Link>
+            </div>
+          )}
+        </div>
+      </aside>
+      
+    </>
   );
 }
 

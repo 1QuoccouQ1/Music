@@ -2,7 +2,7 @@ import { ArrowLeft } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
 import { Globe, ChevronDown } from "lucide-react";
 import ErrorIcon from "@mui/icons-material/Error";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { API_URL } from "../services/apiService";
 
 export default function PasswordCode() {
@@ -36,6 +36,10 @@ export default function PasswordCode() {
 
   const handleSubmit = async (e) => {
     e.preventDefault(); // Ngăn hành vi mặc định của form
+    if(!otp){
+      setErrorMessage("Vui lòng nhập OTP");
+      return;
+    }
     setErrorMessage(""); // Xóa lỗi trước khi gửi
 
     try {
@@ -120,14 +124,14 @@ export default function PasswordCode() {
         </div>
       </div>
       <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8 relative">
-        <a href="/PasswordReset">
+        <Link to="/PasswordReset">
           <button
             className="absolute left-4 top-4 text-gray-600 hover:text-gray-800"
             aria-label="Go back"
           >
             <ArrowLeft className="h-6 w-6" />
           </button>
-        </a>
+        </Link>
         <h1 className="text-2xl font-bold text-center mb-4">
           Đặt lại mật khẩu
         </h1>
@@ -200,9 +204,9 @@ export default function PasswordCode() {
           </button>
         </form>
         <div className="mt-6 text-center">
-          <a href="/login" className="text-pink-500 hover:underline text-sm">
+          <Link to="/login" className="text-pink-500 hover:underline text-sm">
             Quay lại Đăng Nhập
-          </a>
+          </Link>
         </div>
       </div>
     </div>

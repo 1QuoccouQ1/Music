@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Play, Heart, CirclePlus } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from "../../ContextAPI/UserContext";
 import { API_URL } from "../../services/apiService";
-import { toast } from "react-toastify";
+import ListSongs from '../Genre/ListSongs.jsx';
 
 function SongGlobal() {
     const [countries, setCountries] = useState([]);
@@ -14,10 +14,7 @@ function SongGlobal() {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
     const { id } = useParams();
-    const { handleAddSong, handleFetchSongs } = useContext(UserContext);
-    const navigate = useNavigate();
-    const [SongFavourite, setIsSongFavourite] = useState([]);
-    const user = JSON.parse(localStorage.getItem('user'));
+    const { handleFetchSongs } = useContext(UserContext);
 
     useEffect(() => {
         const fetchCountries = async () => {
@@ -65,84 +62,6 @@ function SongGlobal() {
 
         fetchSongs();
     }, [id]);
-    useEffect(() => {
-        const FavouriteSong = async () => {
-            try {
-                const response = await fetch(
-                    API_URL + `/${user.id}/bai-hat-yeu-thich`,
-                    {
-                        method: "GET",
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                        },
-                    }
-                );
-                const data = await response.json();
-                // console.log(response);
-                if (response.status === 200) {
-                    const songId = data.map((song) => song.id);
-                    // console.log(data);
-                    setIsSongFavourite(songId);
-                } else {
-                    console.log("Lỗi khi lấy danh sách bài hát yêu thích");
-                }
-            } catch (err) {
-                console.log(err);
-            }
-        };
-        if (user) {
-            FavouriteSong();
-        }
-    }, [user]);
-    const handleSongFavourite = (song_id, check) => {
-        if (!user) {
-            // Kiểm tra đã đăng nhập chưa
-            toast.error(
-                "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào yêu thích."
-            );
-        } else {
-            // Gửi request API khi người dùng nhấn "Theo giỏi"
-            fetch(API_URL + "/bai-hat-yeu-thich", {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-                },
-                body: JSON.stringify({
-                    liked: !check,
-                    song_id: song_id,
-                    user_id: user.id,
-                }),
-            })
-                .then((response) => response.json())
-                .then((data) => {
-                    // Xử lý dữ liệu trả về từ API (nếu cần)
-                    // console.log('Đã đánh dấu yêu thích:', data.message);
-                    if (check) {
-                        setIsSongFavourite((set) => {
-                            return set.filter((id) => id !== song_id);
-                        });
-                    } else {
-                        setIsSongFavourite((set) => {
-                            return [...set, song_id];
-                        });
-                    }
-                    toast.success(data.message);
-                })
-                .catch((error) => {
-                    console.error("Lỗi khi gửi yêu cầu:", error);
-                });
-        }
-    };
-    const formatTime = seconds => {
-        const minutes = Math.floor(seconds / 60);
-        const remainingSeconds = Math.floor(seconds % 60);
-        const formattedMinutes = minutes < 10 ? `0${minutes}` : minutes;
-        const formattedSeconds =
-            remainingSeconds < 10 ? `0${remainingSeconds}` : remainingSeconds;
-        return `${formattedMinutes}:${formattedSeconds}`;
-    };
 
     if (loading) {
         return (
@@ -164,7 +83,7 @@ function SongGlobal() {
         <div className='bg-medium w-full h-auto pb-40'>
             {/* Quốc gia */}
             {currentCountry && (
-                <div className='relative w-full h-[400px] sm:h-[600px]'>
+                <div className='relative w-full px-1 h-[200px] sm:h-[400px] lg:h-[500px]'>
                     <img
                         src={currentCountry.background || ''}
                         className='rounded-t-xl h-full w-full object-cover'
@@ -193,88 +112,10 @@ function SongGlobal() {
 
             {/* Bảng bài hát */}
             {songs.length > 0 ? (
-                <table className='min-w-full text-white text-xs sm:text-sm md:text-base mt-8'>
-                    <thead>
-                        <tr className='text-left border-b border-gray-600'>
-                            <th className='py-2 w-2 text-center'>#</th>
-                            <th className='py-2 px-2 sm:px-4'>Bài hát</th>
-                            <th className='py-2 px-2 sm:px-4'>Tên Ca Sĩ</th>
-                            <th className='py-2 px-2 sm:px-4 text-center'>Lượt nghe</th>
-                            <th className='py-2 px-2 sm:px-4 text-right'>Thời lượng</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {songs.map((song, index) => (
-                            <tr
-                                key={song.id}
-                                className='group border-b-[10px] border-transparent hover:bg-slate-800 duration-300'
-                                onDoubleClick={() => handleAddSong("song", song.id)}
-                            >
-                                <td className='py-2 px-2 sm:px-4 text-center'>
-                                    <Play
-                                        size={16}
-                                        className='hidden group-hover:block duration-300'
-                                    />
-                                    <p className='text-xs w-[18px] h-[18px] group-hover:hidden'>
-                                        {index + 1}
-                                    </p>
-                                </td>
-                                <td className='flex items-center space-x-2 px-2 sm:px-4'>
-                                    <img
-                                        src={song.song_image}
-                                        alt={song.song_name}
-                                        className='w-8 h-8 sm:w-10 sm:h-10 md:w-12 cursor-pointer md:h-12 rounded-md'
-                                        onClick={() => navigate(`/SongDetail/${song.id}`)}
-                                    />
-                                    <div className='w-full truncate'>
-                                        <p className='font-semibold cursor-pointer' onClick={() => navigate(`/SongDetail/${song.id}`)}>{song.song_name}</p>
-                                        <p className='text-gray-400 text-xs sm:text-sm'>
-                                            {song.provider}
-                                        </p>
-                                    </div>
-                                </td>
-                                <td className='px-2 sm:px-4'>
-                                    <Link
-                                        to={`/ProfileArtist/${song.singer_id}`}
-                                        className='text-sm sm:text-base'
-                                    >
-                                        {song.singer_name}
-                                    </Link>
-                                </td>
-                                <td className='px-2 sm:px-4 text-center'>
-                                    {song.listen_count || '0'}
-                                </td>
-                                <td className='flex items-center justify-end gap-2 sm:gap-4 px-2 sm:px-4'>
-                                    <div className='flex items-center gap-2 sm:gap-4 opacity-0 group-hover:opacity-100 duration-300'>
-                                        {SongFavourite != [] ? (
-                                            SongFavourite.includes(song.id) ? (
-                                                <Heart
-                                                    size={22}
-                                                    fill="red"
-                                                    onClick={() => handleSongFavourite(song.id, true)}
-                                                    className="text-red-500 lg:opacity-0 group-hover:opacity-100 duration-300"
-                                                />
-                                            ) : (
-                                                <Heart
-                                                    size={22}
-                                                    onClick={() => handleSongFavourite(song.id, false)}
-                                                    className="text-red-500 lg:opacity-0 group-hover:opacity-100 duration-300"
-                                                />
-                                            )
-                                        ) : (
-                                            ""
-                                        )}
-                                        <CirclePlus
-                                            size={18}
-                                            className='text-slate-500'
-                                        />
-                                    </div>
-                                    <span>{formatTime(song.time) || 'N/A'}</span>
-                                </td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                <ListSongs
+                    songs={songs}
+                    start={1}
+                />
             ) : (
                 <p className='text-center text-gray-400 mt-10'>
                     Không có bài hát nào để hiển thị.

@@ -1,4 +1,4 @@
-import  { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { CirclePlus } from "lucide-react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { API_URL } from "../../services/apiService";
@@ -116,11 +116,11 @@ function PlaylistDiv({ songId, onClose }) {
   return (
     <>
       <div
-        className="fixed top-0 bottom-0 right-0 left-0 z-20 flex items-center justify-center text-white bg-slate-800/40"
+        className="fixed top-0 bottom-0 right-0 left-0 z-20 flex items-center justify-center text-white bg-slate-800/50"
         onClick={onClose}
       >
         <div
-          className="w-[600px] h-[350px] rounded-md bg-medium z-20"
+          className="sm:w-[600px] w-full h-[350px] rounded-md bg-medium z-20 p-1"
           onClick={(e) => e.stopPropagation()}
         >
           {/* Thanh điều hướng */}
@@ -150,7 +150,6 @@ function PlaylistDiv({ songId, onClose }) {
             >
               Tạo Playlist
             </div>
-
           </nav>
 
           {/* Nội dung */}
@@ -194,23 +193,17 @@ function PlaylistDiv({ songId, onClose }) {
             </div>
           ) : (
             <div className="flex items-center h-[250px] py-4">
-              {/* <div className="flex-none border border-solid border-slate-200 rounded-md h-full w-[170px] flex flex-col items-center justify-center space-y-4 hover:border-red-400 cursor-pointer group duration-300">
-              <CirclePlus className="group-hover:text-red-400" />
-              <p className="text-sm truncate group-hover:text-red-400">
-                Tạo playlist mới
-              </p>
-            </div> */}
               {loading ? (
                 <div className="text-center text-white ml-10">Đang tải...</div>
               ) : (
                 <Swiper
                   spaceBetween={20}
                   slidesPerView="auto" // Số item hiện trong 1 lần
-                  className="mySwiper"
+                  className="mySwiper ml-0"
                 >
                   {privatePlaylists.map((playlist, index) => (
                     <SwiperSlide key={index} style={{ width: "auto" }}>
-                      <div className="rounded-md h-full w-[170px] mx-5 relative group   duration-300">
+                      <div className="rounded-md h-full sm:w-[170px] w-[130px] sm:mx-5  relative group duration-300">
                         <img
                           src={playlist.background}
                           alt={playlist.name}

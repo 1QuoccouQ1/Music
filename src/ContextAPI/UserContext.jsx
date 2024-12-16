@@ -1,9 +1,13 @@
 import { createContext, useState, useEffect, useRef } from "react";
 import { API_URL } from "../services/apiService";
+import { useNavigate } from "react-router-dom";
+
 
 export const UserContext = createContext();
 
 export const UserProvider = ({ children }) => {
+  const navigate = useNavigate();
+
   const [isSetting, setIsSetting] = useState(() => {
     const savedIsSetting = localStorage.getItem("isSetting");
     return savedIsSetting ? JSON.parse(savedIsSetting) : false;
@@ -51,6 +55,7 @@ export const UserProvider = ({ children }) => {
           break;
         case "new":
           fetchedSongs = await fetch(`${API_URL}/new-song`);
+          setIsUpdate(true);
           break;
         case "trending":
           fetchedSongs = await fetch(`${API_URL}/trending`);
@@ -94,6 +99,16 @@ export const UserProvider = ({ children }) => {
           fetchedSongs = await fetch(`${API_URL}/album/${id}/bai-hat`);
           setIsUpdate(true)
           break;
+        case "playlist":
+          fetchedSongs = await fetch(`${API_URL}/playlist/${id}`, {
+            method: "GET",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            },
+          });
+          setIsUpdate(true)
+          break;
         default:
           console.error("Unknown type");
           return;
@@ -107,6 +122,11 @@ export const UserProvider = ({ children }) => {
           ];
           setListSongs(updatedList);
           setPlaySong(currentSong);
+          setCurrentSongIndex(0);
+          setIsLoader(true);
+        } else {
+          setListSongs(dataList);
+          setPlaySong(dataList[0]);
           setCurrentSongIndex(0);
           setIsLoader(true);
         }
@@ -138,8 +158,33 @@ export const UserProvider = ({ children }) => {
       console.error("Error fetching songs:", error);
     }
   };
+  const [clickTimeout, setClickTimeout] = useState(null);
+  const [isProcessing, setIsProcessing] = useState(false); // Cờ xử lý
+  const handleClick = (id) => {
+    if (isProcessing) return; 
+    if (clickTimeout) {
+      clearTimeout(clickTimeout);
+      setClickTimeout(null);
+      setIsProcessing(true);
+      setTimeout(() => setIsProcessing(false), 500); // Reset cờ sau thời gian xử lý
+    } else {
+      const timeout = setTimeout(() => {
+        console.log('Single Click!');
+        setClickTimeout(null);
+        setIsProcessing(false); // Kết thúc xử lý
+        navigate(`/SongDetail/${id}`)
+      }, 300); // Khoảng thời gian giữa click và double click
+      setClickTimeout(timeout);
+    }
+  };
   const handleAddSong = async (type, id) => {
+    if (clickTimeout) {
+      clearTimeout(clickTimeout);
+      setClickTimeout(null);
+      console.log('Double Click!');
+    };
     try {
+      // event.preventDefault();
       let fetchedSong;
       // Xử lý gọi API dựa trên type
       switch (type) {
@@ -152,13 +197,13 @@ export const UserProvider = ({ children }) => {
           return;
       }
       const dataList = await fetchedSong.json();
-      setListSongs(dataList);
-      setPlaySong(dataList[0]);
+      setListSongs([dataList.song,...dataList.rand]);
+      setPlaySong(dataList.song);
       setCurrentSongIndex(0);
     } catch (error) {
       console.error("Error fetching songs:", error);
     }
-  };
+  }
 
   useEffect(() => {
     localStorage.setItem("isSetting", JSON.stringify(isSetting));
@@ -208,6 +253,7 @@ export const UserProvider = ({ children }) => {
         setIsPlaying,
         handleFetchSongs,
         handleAddSong,
+        handleClick,
         handleListSongs,
         playSong,
         setPlaySong,

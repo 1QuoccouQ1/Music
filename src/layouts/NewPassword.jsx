@@ -1,6 +1,6 @@
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { useState, useRef, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Globe, ChevronDown } from "lucide-react";
 import { API_URL } from "../services/apiService";
 
@@ -253,9 +253,9 @@ function NewPassword() {
               Tiếp tục
             </button>
           </form>
-          <p className="text-center mt-6 text-sm text-pink-500 hover:underline cursor-pointer">
+          <Link to={"/login"} className="text-center mt-6 text-sm text-pink-500 hover:underline cursor-pointer">
             Quay lại Đăng Nhập
-          </p>
+          </Link>
         </div>
       </div>
     </>
