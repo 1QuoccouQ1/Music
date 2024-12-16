@@ -117,7 +117,7 @@ function Albums() {
                         <div key={index + 1} className="xl:w-1/6 lg:w-1/4 md:w-1/3 w-1/2 px-2 mb-10 group relative overflow-hidden cursor-pointer">
                             <img src={album.image} className=" rounded mb-2 w-full" onClick={() => navigate(`/AlbumDetail/${album.id}`)}/>
                             <div
-                                className="absolute cursor-pointer top-2 z-20 left-3 bg-white text-red-500 p-2 rounded-full shadow-lg transform lg:scale-0 group-hover:scale-100 transition duration-300 ease-in-out"
+                                className="absolute cursor-pointer top-2 z-10 left-4 bg-white text-red-500 p-2 rounded-full shadow-lg transform lg:scale-0 group-hover:scale-100 transition duration-300 ease-in-out"
                             >
                                 {albumFavorite != [] ? (
                                     albumFavorite.includes(album.id) ? (
@@ -138,8 +138,8 @@ function Albums() {
                                     ""
                                 )}
                             </div>
-                            <div className="flex items-center justify-between">
-                                <div>
+                            <div className="flex justify-between">
+                                <div className='w-full'>
                                     <p className="text-lg font-bold w-10/12 group-hover:underline" onClick={() => navigate(`/AlbumDetail/${album.id}`)}>{album.album_name}</p>
                                     <p className="text-sm text-slate-700 hover:underline">{album.singer_name}</p>
                                     <p className="text-xs text-slate-700">{extractYearFromDate(album.creation_date)}</p>

@@ -115,14 +115,14 @@ function Nav() {
 
   return (
     <>
-      <div className="fixed top-0 left-0 lg:pl-60 flex justify-between w-full h-auto flex-shrink py-4 h-[90px] px-1 lg:px-10 bg-medium text-zinc-700 items-center justify-center z-10 ">
+      <div className="fixed top-0 left-0 lg:pl-60 flex justify-between w-full h-auto flex-shrink py-4 h-[90px] px-1 lg:px-10 bg-medium text-zinc-700 items-center justify-center z-30 ">
         <button
-          className=" bg-red-600 text-white p-2 rounded-md lg:hidden "
+          className={`fixed z-50 bg-red-600 text-white transition-transform duration-300 ease-in-out p-2 rounded-md lg:hidden ${isSidebar ? 'translate-x-40' : ''}`}
           onClick={() => setIsSidebar(!isSidebar)}
         >
           {isSidebar ? <CloseIcon /> : <MenuIcon />}
         </button>
-        <div className="relative w-[80%] md:w-auto" ref={searchRef}>
+        <div className="relative w-[80%] ml-12 lg:ml-0 md:w-auto" ref={searchRef}>
           <InputSearch
             onSearch={fetchSearchResults}
             onFocus={() => setIsFocused(true)}

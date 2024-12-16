@@ -37,7 +37,7 @@ const LibraryPage = () => {
                     </p>
                     <p className="w-full truncate " >Tên bài hát</p>
                 </div>
-                <div className="w-1/3 hidden lg:flex items-center justify-center">
+                <div className="w-1/3 pl-44 hidden  lg:flex items-center justify-center">
                     <p>Lượt nghe</p>
                 </div>
                 <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">

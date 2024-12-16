@@ -80,7 +80,7 @@ function Sidebar() {
 
   return (
     <>
-      <aside ref={sidebarRef} className={`max-w-64 bg-sidebar lg:px-6 px-1 lg:px-5 py-3 fixed top-0 left-0 h-full lg:w-56 z-20 ${isSidebar ? "translate-x-0" : "-translate-x-full"
+      <aside ref={sidebarRef} className={`max-w-64 bg-sidebar lg:px-6 px-1 lg:px-5 py-3 fixed top-0 left-0 h-full lg:w-56 z-40 ${isSidebar ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 lg:translate-x-0`}>
         <div className="space-y-4 h-auto">
           <Link to="/" className="flex justify-center">

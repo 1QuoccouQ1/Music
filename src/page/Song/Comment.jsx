@@ -4,12 +4,12 @@ import { API_URL } from '../../services/apiService';
 import { toast } from 'react-toastify';
 import { useLocation } from "react-router-dom";
 
-function Comment({ id , setIsTotal, setAverageRating}) {
+function Comment({ id, setIsTotal, setAverageRating }) {
     const [rating, setRating] = useState(0); // Số sao được chọn
     const [comment, setComment] = useState(""); // Nội dung bình luận
     const [reviews, setReviews] = useState([]);
     const location = useLocation();
-    
+
     const user = JSON.parse(localStorage.getItem("user"));
 
     const fecthReviews = async (id) => {
@@ -21,11 +21,11 @@ function Comment({ id , setIsTotal, setAverageRating}) {
                 setIsTotal(0);
                 setAverageRating(0);
             } else {
-                
+
                 setReviews(data);
                 const total = data.length;
                 setIsTotal(total);
-                setAverageRating(data.reduce((sum, review) => sum + review.rating, 0)/total);
+                setAverageRating(data.reduce((sum, review) => sum + review.rating, 0) / total);
             }
         } catch (error) {
             console.error("Error fetching reviews:", error);
@@ -34,7 +34,7 @@ function Comment({ id , setIsTotal, setAverageRating}) {
 
     useEffect(() => {
         fecthReviews(id);
-       
+
     }, [location]);
 
 
@@ -168,10 +168,11 @@ function Comment({ id , setIsTotal, setAverageRating}) {
                                         />
                                         <p className='text-sm mt-2 text-slate-400'>{formatDateToVietnamese(review.rating_date)}</p>
                                     </div>
-                                    <div className=''>
-
-                                        <img src="/Music Brand and App Logo 1@2x.png" alt="avata"
-                                            className='w-[50px] h-[50px] p-2 rounded-full border' />
+                                    <div className='flex flex-col justify-end'>
+                                        <div>
+                                            <img src="/Music Brand and App Logo 1@2x.png" alt="avata"
+                                                className='w-[50px] h-[50px] p-2 rounded-full border float-end' />
+                                        </div>
                                         <p>{review.name}</p>
                                     </div>
                                 </div>

@@ -225,7 +225,7 @@ function ProfileArtist() {
 
         }
     }
-    
+
     const handleModal = () => {
         setIsModal(!isModal);
     }
@@ -375,7 +375,11 @@ function ProfileArtist() {
             </section>
             {isSelect === "1" && <><section className='w-full text-white px-1 lg:px-5 pt-10 flex flex-wrap'>
                 <div className='flex w-full lg:w-2/3 flex-col gap-2' >
-                    <p className='text-right font-medium text-sm text-red-500 cursor-pointer mr-5' onClick={() => handleSelect("2")}>Xem thêm</p>
+                    <div className='flex items-center justify-between border-b border-slate-500 pb-2'>
+                        <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
+                        <p className='flex items-center font-medium text-sm pl-32 cursor-pointer'>Lượt nghe</p>
+                        <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
+                    </div>
                     {artistSong && artistSong.length > 0 ? (
                         <ProfileArtistSong artistSong={artistSong} user_id={user ? user.id : null} length={'5'} />
                     ) : (
@@ -411,16 +415,16 @@ function ProfileArtist() {
                         {artistSong && artistSong.length > 0 ? (
                             artistSong.map((song, index) => (
 
-                                <SwiperSlide key={(song.id)} style={{ width: 'auto' }} >
+                                <SwiperSlide key={(song.id)} style={{ width: '200px' }} >
 
-                                    <div className="text-center flex flex-col  items-start ">
+                                    <div className="text-center flex flex-col w-full items-start ">
                                         <img src={song.song_image} className=" mb-3 " style={{
                                             width: '160px',
                                             height: '160px',
                                             borderRadius: '15px',
 
                                         }} />
-                                        <p className=''>{song.song_name}</p>
+                                        <p className='flex '>{song.song_name}</p>
                                         <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất.</p>
                                         <p className='flex text-sm text-slate-600 mt-1'>Đĩa đơn </p>
                                     </div>
@@ -588,14 +592,14 @@ function ProfileArtist() {
                 <div className='flex w-full flex-col gap-2' >
                     <div className='flex items-center justify-between border-b border-slate-500 pb-2'>
                         <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
-                        <p className='flex items-center font-medium text-sm  cursor-pointer'>Lượt nghe</p>
+                        <p className='flex items-center font-medium text-sm ml-44 cursor-pointer'>Lượt nghe</p>
                         <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
                     </div>
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong 
-                        artistSong={artistSong} 
-                        user_id={user ? user.id : null} 
-                        length={'20'} />) : (
+                        <ProfileArtistSong
+                            artistSong={artistSong}
+                            user_id={user ? user.id : null}
+                            length={'20'} />) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             <p>Không có bài hát</p>
                         </div>
@@ -646,13 +650,18 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section></>}
-            {isSelect === "3" && <> <section className="bg-medium w-full h-auto pb-32 pt-5 px-1 lg:px-5 ">
+            {isSelect === "3" && <> <section className="bg-medium text-white w-full h-auto pb-32 pt-5 px-1 lg:px-5 ">
                 <div className="">
+                    <div className='flex items-center justify-between border-b border-slate-500 pb-2'>
+                        <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
+                        <p className='flex items-center font-medium text-sm ml-44 cursor-pointer'>Lượt nghe</p>
+                        <p className='flex items-center font-medium text-sm  cursor-pointer mr-5'> <Filter size={15} className='mr-2' /> Tùy chọn</p>
+                    </div>
                     {artistSong && artistSong.length > 0 ? (
-                        <ProfileArtistSong 
-                        artistSong={artistSong} 
-                        user_id={user ? user.id : null} 
-                        length={'20'} />) : (
+                        <ProfileArtistSong
+                            artistSong={artistSong}
+                            user_id={user ? user.id : null}
+                            length={'20'} />) : (
                         <div className='flex items-center justify-between text-sm hover:bg-slate-800 py-1 px-3 rounded-lg cursor-pointer group duration-300'>
                             <p>Không có bài hát</p>
                         </div>

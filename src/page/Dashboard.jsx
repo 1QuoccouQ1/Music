@@ -17,6 +17,10 @@ function Dashboard() {
   const [trending, setTrending] = useState([]);
   const [topListen, setTopListen] = useState([]);
   const [topLike, setTopLike] = useState([]);
+  const [banner, setBanner] = useState({
+    banner_name: 'banner',
+    banner_url: "../imgs/Group 92.webp" ,
+  });
   
   const [loadingGlobal, setLoadingGlobal] = useState(true);
   const navigate = useNavigate();
@@ -25,21 +29,34 @@ function Dashboard() {
     try {
       const trendingResponse = await fetch(`${API_URL}/top-1-trending`);
       const topListenResponse = await fetch(`${API_URL}/top-1-listen`);
-      const topLikeResponse = await fetch(`${API_URL}/top-1-like`);;
+      const topLikeResponse = await fetch(`${API_URL}/top-1-like`);
+      const bannerResponse = await fetch(`${API_URL}/banner`);
 
       const trendingData = await trendingResponse.json();
       const topListenData = await topListenResponse.json();
       const topLikeData = await topLikeResponse.json();
+      const bannerData = await bannerResponse.json();
 
       setTrending(trendingData);
       setTopListen(topListenData);
       setTopLike(topLikeData);
+      if(bannerData && Object.keys(bannerData).length > 0) setBanner(bannerData);
       setLoadingGlobal(false);
-      
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
     }
   };
+  // const fetchbanner = async () => {
+  //   try {
+  //     const bannerResponse = await fetch(`${API_URL}/banner`);
+  //     const bannerData = await bannerResponse.json();
+  //     // console.log(bannerData);
+  //     if(bannerData && Object.keys(bannerData).length > 0) setBanner(bannerData);
+  //   } catch (error) {
+  //     console.error("Lỗi khi gọi API:", error);
+  //   }
+  //   setLoadingGlobal(false);
+  // };
 
   const [songHistory, setSongHistory] = useState(
     JSON.parse(localStorage.getItem("songHistory")) || []
@@ -48,13 +65,14 @@ function Dashboard() {
   useEffect(() => {
     const isSetting = localStorage.getItem("isSetting");
     if (isSetting === "false") {
-      localStorage.removeItem("isSetting"); // Remove it to prevent repeated reloads
+      localStorage.removeItem("isSetting"); 
       if (!sessionStorage.getItem("reloaded")) {
-        sessionStorage.setItem("reloaded", true); // Flag that reload has occurred
-        window.location.reload(); // Reload the page
+        sessionStorage.setItem("reloaded", true); 
+        window.location.reload(); 
       }
     }
     fetchData();
+    // fetchbanner()
   }, []);
 
 
@@ -70,7 +88,7 @@ function Dashboard() {
     <>
       <section className="bg-medium w-full h-auto text-white ">
         <div className="relative  ">
-          <img src="../imgs/Group 92.webp" className="w-full max-h-[600px]" loading="lazy" />
+          <img src={banner.banner_url} className="w-full max-h-[700px]" loading="lazy" alt={banner.banner_name} />
           <div className="absolute top-1/2 lg:top-1/4 px-2 lg:px-10 w-full " >
             <h1 className=" md:text-5xl xl:text-7xl sm:text-3xl text-lg  font-medium w-full md:w-3/4 lg:w-2/4 lg:pr-10 italic tracking-wide">
               Các bản hit cuối tuần này là gì?
@@ -132,7 +150,7 @@ function Dashboard() {
             {topListen.length > 0 && (
               <div
                 className="cursor-pointer w-full"
-                onClick={(e) => navigate('/Top/listen')}
+                onClick={(e) => navigate('/Top/toplisten')}
               >
                 <img className=" w-full h-full" src="../imgs/image (4).png" />
                 <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
@@ -168,7 +186,7 @@ function Dashboard() {
             {topLike.length > 0 && (
               <div
                 className="cursor-pointer w-full"
-                onClick={(e) => navigate('/Top/like')}
+                onClick={(e) => navigate('/Top/yeuthich')}
               >
                 <img className="w-full h-full" src="../imgs/image (1).png" />
                 <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
