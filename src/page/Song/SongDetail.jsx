@@ -10,7 +10,6 @@ import React from "react";
 import ReactStars from "react-stars";
 import { useLocation } from "react-router-dom";
 
-
 function SongDetail() {
   const { handleAddSong } = useContext(UserContext);
   const [listSong, setListSong] = useState([]);
@@ -155,16 +154,22 @@ function SongDetail() {
                     {song.category_name}
                   </p>
                 </div>
-                <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <ReactStars
-                    count={5}                   // Tổng số sao
-                    value={averageRating}       // Giá trị trung bình (3.9, 4.5, ...)
-                    size={32}                   // Kích thước sao
-                    color2={"#ffd700"}          // Màu sao khi chọn
-                    half={true}                 // Cho phép sao có giá trị thập phân
-                    edit={false}                // Không cho phép người dùng tương tác
+                    count={5}
+                    value={averageRating}
+                    size={15}
+                    color2={"#ffd700"}
+                    half={true}
+                    edit={false}
                   />
-                  <span style={{ marginLeft: "10px", fontSize: "1.2rem" }}>
+                  <span className="ml-4 text-sm">
                     {averageRating.toFixed(1)} / 5.0 ({isTotal})
                   </span>
                 </div>
@@ -209,9 +214,6 @@ function SongDetail() {
                 <p className="text-left font-medium text-sm  cursor-pointer mr-5">
                   Đề xuất cho bạn
                 </p>
-                <p className="text-right font-medium text-sm text-red-500 cursor-pointer mr-5">
-                  Xem thêm
-                </p>
               </div>
 
               {listSong && listSong.length > 0 ? (
@@ -228,11 +230,11 @@ function SongDetail() {
             </div>
           </div>
         </div>
-        <hr className="border-pink-500 mt-10"/>
-        <Comment 
-        id={id}
-        setIsTotal={setIsTotal}
-        setAverageRating={setAverageRating}
+        <hr className="border-pink-500 mt-10" />
+        <Comment
+          id={id}
+          setIsTotal={setIsTotal}
+          setAverageRating={setAverageRating}
         />
       </section>
     </>

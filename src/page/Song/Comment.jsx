@@ -96,11 +96,6 @@ function Comment({ id , setIsTotal, setAverageRating}) {
         }
 
     };
-    // // Tính toán tổng số đánh giá và trung bình số sao
-    // const totalReviews = reviews.length;
-    // const averageRating = totalReviews > 0
-    //     ? (reviews.reduce((sum, review) => sum + review.rating, 0) / totalReviews).toFixed(1)
-    //     : 0;
 
     function formatDateToVietnamese(dateInput) {
         // Chuyển dateInput thành đối tượng Date (nếu chưa phải)
@@ -125,16 +120,17 @@ function Comment({ id , setIsTotal, setAverageRating}) {
                 {/* Form đánh giá */}
                 <form
                     onSubmit={handleSubmit}
-                    className='w-full lg:w-1/2 my-10'
+                    className='w-full lg:w-1/2 '
                 >
                     <h2 className='text-xl'>Đánh giá bài hát</h2>
                     <ReactStars
                         count={5}
-                        size={40}
+                        size={17}
                         value={rating}
                         onChange={handleRatingChange}
                         activeColor="#ffd700"
                         half={false}
+                        className='mb-2'
                     />
                     <textarea
                         value={comment}
@@ -161,18 +157,18 @@ function Comment({ id , setIsTotal, setAverageRating}) {
                                     <div className="">
                                         <ReactStars
                                             count={5}
-                                            size={20}
+                                            size={15}
                                             value={review.rating}
                                             edit={false}
                                             activeColor="#ffd700"
                                         />
                                         <p className='text-sm mt-2 text-slate-400'>{formatDateToVietnamese(review.rating_date)}</p>
                                     </div>
-                                    <div className=''>
+                                    <div className='flex items-center flex-col '>
 
                                         <img src="/Music Brand and App Logo 1@2x.png" alt="avata"
-                                            className='w-[50px] h-[50px] p-2 rounded-full border' />
-                                        <p>{review.name}</p>
+                                            className='w-[40px] h-[40px] p-2 rounded-full border' />
+                                        <p className='mt-1'>{review.name}</p>
                                     </div>
                                 </div>
                                 <p>{review.comment}</p>

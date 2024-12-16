@@ -37,7 +37,7 @@ function ArtistSlide() {
                                     className="rounded-full mb-3  size-36 sm:size-44 lg:size-52"
                                 />
                             </div>
-                            <p className="font-medium mb-2 text-base text-center group-hover:underline w-full truncate">
+                            <p className="font-medium mb-2 text-base text-center group-hover:underline w-full truncate ">
                                 {artist.singer_name}
                             </p>
                             <p className="text-sm text-slate-700 w-fulltext-center">Ca Sĩ</p>

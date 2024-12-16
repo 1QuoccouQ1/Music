@@ -88,7 +88,7 @@ function ListTopSongs() {
                         <h1 className="lg:text-5xl text-3xl font-bold">{selectedValue}</h1>
                         <p className="my-5 flex items-center text-sm">SoundWave · {listSongs.length} bài hát</p>
                         <div
-                            className="flex items-center justify-center text-white lg:w-2/3 w-2/4 py-2 px-1 lg:px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer  lg:text-base text-sm"
+                            className="whitespace-nowrap flex items-center justify-center text-white lg:w-2/3 w-2/4 py-2 px-1 lg:px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer  lg:text-base text-sm"
                             onClick={() => {
                                 handleFetchSongs("new");
                             }}
