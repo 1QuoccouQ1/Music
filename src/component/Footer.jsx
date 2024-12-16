@@ -595,7 +595,7 @@ const Footer = React.memo(function FooterComponent() {
                 onClick={() => {
                   setIsModal(!isModal);
                 }}
-                className="size-6 w-[10%] flex-none max-xl:size-4 cursor-pointer border border-white  rounded-full flex items-center justify-center "
+                className="size-6 w-[24px] flex-none max-xl:size-4 cursor-pointer border border-white  rounded-full flex items-center justify-center "
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -845,7 +845,7 @@ const Footer = React.memo(function FooterComponent() {
               }
             }}
             ref={Divlist}
-            className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  lg:h-[40px] md:px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-1 sm:mr-5 relative cursor-pointer "
+            className="bg-gradient-to-r from-[#FF553E] to-[#FF0065] text-white  lg:h-[40px] md:px-2 py-2 rounded-full text-sm  flex items-center justify-center mr-1 sm:mr-5 relative cursor-pointer flex-none min-w-[36px] "
           >
             <div className="border border-white size-4 flex lg:block hidden items-center justify-center rounded-full mr-2 rotate-90">
               {" "}
@@ -866,8 +866,8 @@ const Footer = React.memo(function FooterComponent() {
             </div>
 
             <p className="truncate lg:block hidden min-h-fit ">Danh Sách</p>
-            <AlignLeft className="w-7 h-7 lg:hidden block text-white"
-                        fontSize="large" />
+            <AlignLeft size={20} className=" lg:hidden block text-white"
+                         />
             {isAlbum && (
               <div
                 ref={Playlist}
@@ -964,14 +964,14 @@ const Footer = React.memo(function FooterComponent() {
           </div>
         </div>
       ) : (
-        <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 py-3">
+        <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 md:py-3 flex-col sm:flex-row ">
           <div className="flex items-center justify-between  p-3 text-white  max-w-[350px] w-fit  rounded-r-lg">
             <div className="flex items-center space-x-4 xl:ml-14">
               <button
                 className="p-3 bg-gray-800 rounded-full "
                 onClick={handlePreviousSong}
               >
-                <SkipBack size={24} />
+                <SkipBack className="md:size-[24px] size-[15px]" />
               </button>
               <button
                 className="p-4 bg-gradient-to-r from-[#88716e] to-[#FF0065] rounded-full "
@@ -984,7 +984,7 @@ const Footer = React.memo(function FooterComponent() {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="size-6"
+                    className="md:size-[24px] size-[12px]"
                   >
                     <path
                       strokeLinecap="round"
@@ -993,21 +993,21 @@ const Footer = React.memo(function FooterComponent() {
                     />
                   </svg>
                 ) : (
-                  <Play size={24} />
+                  <Play className="md:size-[24px] size-[12px]" />
                 )}
               </button>
               <button
                 className="p-3 bg-gray-800 rounded-full"
                 onClick={handleNextSong}
               >
-                <SkipForward size={24} />
+                <SkipForward  className="md:size-[24px] size-[12px]" />
               </button>
             </div>
           </div>
-          <div className="flex items-center justify-center ">
+          <div className="flex items-center justify-center  w-full ">
             <div className="relative lg:p-4 rounded-lg w-full max-w-5xl">
               <div className="flex items-center justify-between text-white">
-                <div className="flex-grow mx-4 xl:w-[560px] lg:w-[360px] md:w-[260px] min-w-[140px] ">
+                <div className="flex-grow mx-4 xl:w-[560px] lg:w-[360px] md:w-[360px]  min-w-[140px] ">
                   <div className="relative">
                     <input
                       type="range"
@@ -1077,10 +1077,10 @@ const Footer = React.memo(function FooterComponent() {
               )}
             </div>
           </div>
-          <div className="flex items-center justify-center ">
+          <div className="flex items-center justify-center h-min ">
             <div className="flex mr-5 items-center space-x-3">
               <button
-                className="p-3  rounded-full relative"
+                className="md:p-3 p-1  rounded-full relative"
                 onClick={toggleVolume}
               >
                 <svg

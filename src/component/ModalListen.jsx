@@ -90,11 +90,11 @@ function ModalListen() {
           }`}
       >
         <div className="flex items-start justify-between  absolute top-0 w-full left-0 p-5 z-20">
-          <div>
-            <p className="text-4xl font-semibold tracking-wide capitalize">
+          <div className="w-1/2">
+            <p className="text-2xl sm:text-4xl font-semibold tracking-wide capitalize truncate">
               {currentSong.song_name}
             </p>
-            <p className="text-lg font-medium mt-2  ">
+            <p className="text-sm sm:text-lg font-medium mt-2 truncate  ">
               {" "}
               {currentSong.composer}
             </p>
@@ -103,7 +103,7 @@ function ModalListen() {
             onClick={() => {
               setIsModal(!isModal);
             }}
-            className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center mr-5"
+            className="bg-black size-7 rounded-full cursor-pointer flex items-center justify-center mr-5 w-[28px]"
           >
             <X size={18} />
           </div>
@@ -131,19 +131,19 @@ function ModalListen() {
                 backgroundPosition: "center",
                 backgroundSize: "cover",
               }}
-              className="relative size-[450px] md:size-[550px]  "
+              className="relative size-[250px] md:size-[550px]  "
             >
               <div className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">
                 <img
                   style={{
                     animationPlayState: isPlay ? "running" : "paused",
                   }}
-                  className={` size-36 md:size-44  rounded-full animate-[spin_8s_linear_infinite]`}
+                  className={` size-24 md:size-44  rounded-full animate-[spin_8s_linear_infinite]`}
                   src={currentSong.song_image}
                 />
               </div>
               <img
-                className={`absolute w-60 h-90  top-0 right-0  -translate-y-1/2  ${
+                className={`absolute md:w-60 md:h-96 w-[120px] h-[180px]   top-0 right-0  -translate-y-1/2  ${
                   isPlay ? "" : "rotate-90"
                 } duration-700  `}
                 src="../imgs/Turntable (4) 1.png"

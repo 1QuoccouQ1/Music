@@ -244,7 +244,7 @@ function Dashboard() {
                     src={song.song_image} // URL hình ảnh của bài hát
                     className="rounded-full mb-2 lg:mb-7 size-36 sm:size-44 lg:size-52 "
                   />
-                  <p className="font-medium mb-2 text-sm sm:text-base group-hover:underline text-center w-4/5 truncate">
+                  <p className="font-medium mb-2 text-sm sm:text-base group-hover:underline text-center w-4/5 truncate max-w-[150px]">
                     {song.song_name}
                   </p>
                   <p className="text-sm text-slate-700 truncate w-3/4">

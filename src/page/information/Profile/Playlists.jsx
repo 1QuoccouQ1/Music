@@ -3,7 +3,6 @@ import { useEffect, useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { toast } from "react-toastify";
 import { API_URL } from "../../../services/apiService";
-import { ToastContainer } from "react-toastify";
 import { Link, useOutletContext } from "react-router-dom";
 
 function Playlists() {

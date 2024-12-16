@@ -1,6 +1,6 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
-import { Play, Heart, CirclePlus } from "lucide-react";
+import { useEffect, useState, useContext } from "react";
+import { useParams } from "react-router-dom";
+import { Play } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 import { UserContext } from "../../ContextAPI/UserContext";
 import { API_URL } from "../../services/apiService";

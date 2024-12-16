@@ -1,12 +1,11 @@
-import React, { useEffect, useState, useContext } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import  { useEffect, useState, useContext } from 'react';
+import { useParams } from 'react-router-dom';
 import axios from 'axios';
-import { Play, Heart, CirclePlus } from 'lucide-react';
+import { Play } from 'lucide-react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { UserContext } from "../../ContextAPI/UserContext";
 import { API_URL } from "../../services/apiService";
-import { toast } from "react-toastify";
 import ListSongs from './ListSongs.jsx';
 
 function SongGlobal() {
@@ -16,7 +15,6 @@ function SongGlobal() {
     const [error, setError] = useState(null);
     const { id } = useParams();
     const { handleFetchSongs } = useContext(UserContext);
-    const user = JSON.parse(localStorage.getItem('user'));
 
     useEffect(() => {
         const fetchCategories = async () => {

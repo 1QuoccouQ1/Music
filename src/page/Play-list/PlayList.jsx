@@ -14,8 +14,6 @@ function PlaylistDiv({ songId, onClose }) {
   const user = JSON.parse(localStorage.getItem("user"));
   const username = user?.name;
 
-  
-
   const fetchPlaylists = async () => {
     if (localStorage.getItem("user")) {
       try {
@@ -202,7 +200,7 @@ function PlaylistDiv({ songId, onClose }) {
                   slidesPerView="auto" // Số item hiện trong 1 lần
                   className="mySwiper ml-0"
                 >
-                  {privatePlaylists.map((playlist, index) => (
+                  {privatePlaylists.length > 0 ? privatePlaylists.map((playlist, index) => (
                     <SwiperSlide key={index} style={{ width: "auto" }}>
                       <div className="rounded-md h-full sm:w-[170px] w-[130px] sm:mx-5  relative group duration-300">
                         <img
@@ -223,7 +221,7 @@ function PlaylistDiv({ songId, onClose }) {
                         />
                       </div>
                     </SwiperSlide>
-                  ))}
+                  )) : <div>Tài Khoản không có play list nào!</div>}
                 </Swiper>
               )}
             </div>
