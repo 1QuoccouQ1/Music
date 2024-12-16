@@ -5,6 +5,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import ArtistRankingCard from './ArtistRankingCard';
 import { UserContext } from "../../ContextAPI/UserContext";
 import { Link } from 'react-router-dom';
+import ListSongs from '../Genre/ListSongs';
 
 const RankingBoard = () => {
     const [rankings, setRankings] = useState([]);
@@ -111,7 +112,7 @@ const RankingBoard = () => {
    
     useEffect(() => {
         fetchRankings();
-        if (user) fetchFavouriteSongs();
+        
     }, []);
 
 

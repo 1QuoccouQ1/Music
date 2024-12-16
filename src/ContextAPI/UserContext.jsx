@@ -100,7 +100,7 @@ export const UserProvider = ({ children }) => {
           setIsUpdate(true)
           break;
         case "playlist":
-          fetchedSongs = await fetch(`${API_URL}/playlist/${id}`, {
+          fetchedSongs = await fetch(`${API_URL}/playlist-public/${id}/song`, {
             method: "GET",
             headers: {
               "Content-Type": "application/json",
@@ -114,26 +114,28 @@ export const UserProvider = ({ children }) => {
           return;
       }
       const dataList = await fetchedSongs.json();
-      if (!isLoader) {
-        if (currentSong) {
-          const updatedList = [
-            currentSong,
-            ...dataList.filter((song) => song.id !== currentSong.id),
-          ];
-          setListSongs(updatedList);
-          setPlaySong(currentSong);
-          setCurrentSongIndex(0);
-          setIsLoader(true);
+      if (dataList.length) {
+        if (!isLoader) {
+          if (currentSong) {
+            const updatedList = [
+              currentSong,
+              ...dataList.filter((song) => song.id !== currentSong.id),
+            ];
+            setListSongs(updatedList);
+            setPlaySong(currentSong);
+            setCurrentSongIndex(0);
+            setIsLoader(true);
+          } else {
+            setListSongs(dataList);
+            setPlaySong(dataList[0]);
+            setCurrentSongIndex(0);
+            setIsLoader(true);
+          }
         } else {
           setListSongs(dataList);
           setPlaySong(dataList[0]);
           setCurrentSongIndex(0);
-          setIsLoader(true);
         }
-      } else {
-        setListSongs(dataList);
-        setPlaySong(dataList[0]);
-        setCurrentSongIndex(0);
       }
     } catch (error) {
       console.error("Error fetching songs:", error);
@@ -161,7 +163,7 @@ export const UserProvider = ({ children }) => {
   const [clickTimeout, setClickTimeout] = useState(null);
   const [isProcessing, setIsProcessing] = useState(false); // Cờ xử lý
   const handleClick = (id) => {
-    if (isProcessing) return; 
+    if (isProcessing) return;
     if (clickTimeout) {
       clearTimeout(clickTimeout);
       setClickTimeout(null);
@@ -197,7 +199,7 @@ export const UserProvider = ({ children }) => {
           return;
       }
       const dataList = await fetchedSong.json();
-      setListSongs([dataList.song,...dataList.rand]);
+      setListSongs([dataList.song, ...dataList.rand]);
       setPlaySong(dataList.song);
       setCurrentSongIndex(0);
     } catch (error) {

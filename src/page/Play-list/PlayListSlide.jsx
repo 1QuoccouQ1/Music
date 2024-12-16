@@ -33,10 +33,9 @@ function PlayListSlide() {
                         <div
                             key={genre.id}
                             className="pr-3 pb-3 group"
-                            onDoubleClick={() => handleFetchSongs("theloai", genre.id)}
                         >
                             <Link
-                                to={`/Playlists/${genre.id}`}
+                                to={`/Playlists/${genre.id}/public`}
                                 className="md:w-64 w-32 h-32 md:h-64 rounded-xl flex items-center justify-center bg-cover bg-center brightness-100 transition-all duration-300 group-hover:brightness-125"
                                 style={{
                                     backgroundImage: `url(${genre.background})`,

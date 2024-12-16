@@ -82,7 +82,7 @@ const PurchaseHistoryPage = () => {
                 isOpen={isModalOpen}
                 onClose={closeModal}
                 purchaseDetail={selectedPurchase}
-/>
+            />
             {purchases.length > 0 ? (
                 <div className='overflow-x-auto w-full max-w-[1400px] px-4 lg:px-10'>
                     <div className='flex flex-col text-gray-300 text-[14px]'>
@@ -105,7 +105,7 @@ const PurchaseHistoryPage = () => {
                                 <div
                                     key={index}
                                     className='flex flex-col md:flex-row md:justify-between bg-gray-900 p-4 rounded-lg shadow border border-gray-900 hover:border-gray-700 transition duration-200'
-                                    >
+                                >
                                     {/* Row for small screens */}
                                     <div className='flex md:hidden flex-col space-y-2 mb-4'>
                                         <div>
@@ -131,15 +131,14 @@ const PurchaseHistoryPage = () => {
                                                 Trạng thái:
                                             </span>{' '}
                                             <span
-                                                className={`text-sm ${
-                                                    purchase.payment_status ===
-                                                    'Thành công'
+                                                className={`text-sm ${purchase.payment_status ===
+                                                        'Thành công'
                                                         ? 'text-white bg-green-600 rounded-full p-1 px-2'
                                                         : purchase.payment_status ===
-                                                          'Thất bại'
-                                                        ? 'text-white bg-rose-800 rounded-full p-1 px-2'
-                                                        : 'text-white bg-yellow-400 rounded-full p-1 px-2'
-                                                }`}
+                                                            'Thất bại'
+                                                            ? 'text-white bg-rose-800 rounded-full p-1 px-2'
+                                                            : 'text-white bg-yellow-400 rounded-full p-1 px-2'
+                                                    }`}
                                             >
                                                 {purchase.payment_status}
                                             </span>
@@ -171,15 +170,14 @@ const PurchaseHistoryPage = () => {
                                     </div>
                                     <div className='hidden md:flex w-1/5 items-center justify-center min-w-[180px]'>
                                         <span
-                                            className={`text-sm ${
-                                                purchase.payment_status ===
-                                                'Thành công'
+                                            className={`text-sm ${purchase.payment_status ===
+                                                    'Thành công'
                                                     ? 'text-white bg-green-600 rounded-full p-1 px-2'
                                                     : purchase.payment_status ===
-                                                      'Thất bại'
-                                                    ? 'text-white bg-rose-800 rounded-full p-1 px-2'
-                                                    : 'text-white bg-yellow-400 rounded-full p-1 px-2'
-                                            }`}
+                                                        'Thất bại'
+                                                        ? 'text-white bg-rose-800 rounded-full p-1 px-2'
+                                                        : 'text-white bg-yellow-400 rounded-full p-1 px-2'
+                                                }`}
                                         >
                                             {purchase.payment_status}
                                         </span>

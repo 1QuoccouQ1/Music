@@ -232,7 +232,7 @@ const router = createBrowserRouter([
         element: <GenreSongs />,
       },
       {
-        path: "/Playlists/:id/",
+        path: "/Playlists/:id/:param",
         loader: changeDashboard,
         element: <ListPlayLists />,
       },

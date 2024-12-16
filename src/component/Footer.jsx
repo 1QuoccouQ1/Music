@@ -563,7 +563,7 @@ const Footer = React.memo(function FooterComponent() {
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 h-[80px] lg:h-[100px]">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white w-[200px] md:w-[350px] rounded-r-lg h-full">
-            <div className="flex items-center h-full justify-between w-full" 
+            <div className="flex items-center h-full justify-between w-full cursor-pointer" 
             onClick={() => {
                   setIsModal(!isModal);
                 }} >

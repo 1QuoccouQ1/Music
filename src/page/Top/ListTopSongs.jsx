@@ -19,10 +19,10 @@ function ListTopSongs() {
                 case "trending":
                     fetchedSongs = await fetch(`${API_URL}/trending`);
                     break;
-                case "listen":
+                case "toplisten":
                     fetchedSongs = await fetch(`${API_URL}/top-listen`);
                     break;
-                case "like":
+                case "yeuthich":
                     fetchedSongs = await fetch(`${API_URL}/top-like`);
                     break;
                 default:
@@ -48,18 +48,18 @@ function ListTopSongs() {
 
     const gradients = {
         trending: "bg-gradient-to-b from-orange-500 to-gray-900",
-        listen: "bg-gradient-to-b from-green-500 to-gray-900",
-        like: "bg-gradient-to-b from-purple-500 to-gray-900",
+        toplisten: "bg-gradient-to-b from-green-500 to-gray-900",
+        yeuthich: "bg-gradient-to-b from-purple-500 to-gray-900",
     };
     const images = {
         trending: "../imgs/image.png",
-        listen: "../imgs/image (1).png",
-        like: "../imgs/image (4).png",
+        toplisten: "../imgs/image (4).png",
+        yeuthich: "../imgs/image (1).png",
     };
     const values = {
         trending: "Top thịnh hành",
-        listen: "Top lượt nghe",
-        like: "Top lượt thích",
+        toplisten: "Top lượt nghe",
+        yeuthich: "Top lượt thích",
     };
     // Lấy gradient dựa trên giá trị của param, nếu không có thì mặc định là 'trending'
     const selectedGradient = gradients[param] || gradients.trending;
@@ -90,7 +90,7 @@ function ListTopSongs() {
                         <div
                             className="whitespace-nowrap flex items-center justify-center text-white lg:w-2/3 w-2/4 py-2 px-1 lg:px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer  lg:text-base text-sm"
                             onClick={() => {
-                                handleFetchSongs("new");
+                                handleFetchSongs(param);
                             }}
                         >
                             <Play size={18} className="mr-2" />

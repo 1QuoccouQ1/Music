@@ -11,29 +11,47 @@ function ListPlayLists() {
   const [songs, setSongs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const { id } = useParams();
-  const { handleFetchSongs } = useContext(UserContext);
+  const { id,param } = useParams();
   const user = JSON.parse(localStorage.getItem("user"));
+  const [currentGradient, setCurrentGradient] = useState("");
+  const { handleFetchSongs } = useContext(UserContext);
+
 
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const user_id = user?.id;
-        // Gọi API cá nhân
-        const privateResponse = await fetch(
-          `${API_URL}/playlist-user/${user_id}`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-              Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-            },
-          }
-        );
+        let privateResponse;
+        switch(param){
+          case "private":
+            privateResponse = await fetch(
+              `${API_URL}/playlist-private/${id}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                },
+              }
+            );
+            break;
+          case "public":
+            privateResponse = await fetch(
+              `${API_URL}/playlist-public/${id}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            break;
+          default:
+        }
+        
         const privateData = await privateResponse.json();
         setCategories(privateData);
       } catch (err) {
-        setError(err.message);
+        
         console.error("Lỗi khi gọi API:", err);
       } finally {
         setLoading(false);
@@ -47,28 +65,76 @@ function ListPlayLists() {
     const fetchSongs = async () => {
       try {
         if (!id) return;
-        setLoading(true);
-
-        const privateResponse = await fetch(`${API_URL}/playlist/${id}`, {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
-          },
-        });
+        let privateResponse;
+        switch(param){
+          case "private":
+            privateResponse = await fetch(
+              `${API_URL}/playlist-song/${id}`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                  Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+                },
+              }
+            );
+            break;
+          case "public":
+            privateResponse = await fetch(
+              `${API_URL}/playlist-public/${id}/song`,
+              {
+                method: "GET",
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              }
+            );
+            break;
+          default:
+        }
+        
         const privateData = await privateResponse.json();
         setSongs(privateData);
       } catch (err) {
         setSongs([]);
-        setError(err.message);
         console.error("Lỗi khi gọi API bài hát:", err);
       } finally {
-        setLoading(false);
+        
       }
     };
 
     fetchSongs();
   }, [id]);
+
+  const gradients = [
+    "bg-gradient-to-b from-orange-500 to-gray-900",
+    "bg-gradient-to-b from-green-500 to-gray-900",
+    "bg-gradient-to-b from-purple-500 to-gray-900",
+    "bg-gradient-to-b from-lime-500 to-gray-900",
+    "bg-gradient-to-b from-sky-500 to-gray-900",
+    "bg-gradient-to-b from-indigo-500 to-gray-900",
+    "bg-gradient-to-b from-violet-500 to-gray-900",
+    "bg-gradient-to-b from-fuchsia-500 to-gray-900",
+    "bg-gradient-to-b from-pink-500 to-gray-900",
+    "bg-gradient-to-b from-rose-500 to-gray-900",
+    "bg-gradient-to-b from-blue-500 to-gray-900",
+    "bg-gradient-to-b from-cyan-500 to-gray-900",
+    "bg-gradient-to-b from-teal-500 to-gray-900",
+    "bg-gradient-to-b from-emerald-500 to-gray-900",
+    "bg-gradient-to-b from-yellow-500 to-gray-900",
+    "bg-gradient-to-b from-amber-500 to-gray-900",
+    "bg-gradient-to-b from-red-500 to-gray-900",
+    "bg-gradient-to-b from-stone-500 to-gray-900",
+  ];
+
+  const getRandomGradient = () => {
+    const randomIndex = Math.floor(Math.random() * gradients.length);
+    return gradients[randomIndex];
+  };
+
+  useEffect(() => {
+    setCurrentGradient(getRandomGradient());
+  }, []);
 
   if (loading) {
     return (
@@ -82,50 +148,46 @@ function ListPlayLists() {
     return <p className="text-center mt-10 text-red-500">{error}</p>;
   }
 
-  const currentCategory = Categories.find(
-    (category) => category.id === parseInt(id)
-  );
 
   return (
-    <div className="bg-medium w-full h-auto pb-40 min-h-screen">
-      {/* Quốc gia */}
-      {currentCategory && (
-        <div className="relative w-full h-[150px] sm:h-[200px]">
-          <div className="flex flex-col items-center justify-center absolute bottom-7 px-4 md:left-16 gap-4 md:gap-8">
-            <div>
-              <div className="flex items-center my-5">
-                <p className="text-3xl lg:text-5xl font-semibold text-white">
-                  {currentCategory.playlist_name || "Quốc Gia"}
-                </p>
-                <img
-                  className="w-6 h-6 ml-2"
-                  src="../imgs/pepicons-pop_checkmark-filled.png"
-                  alt="Checkmark"
-                />
-              </div>
-              <div
-                className="flex items-center text-white py-2 px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer"
-                onClick={() => {
-                  handleFetchSongs("playlist", currentCategory.id);
-                }}
-              >
-                <Play size={18} className="mr-2" />
-                Phát Tất Cả
-              </div>
+    <>
+      <div className={`${currentGradient} text-white font-sans pb-[300px] pt-10`}>
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-4 p-1 md:p-8">
+          <img
+            src={Categories.background}
+            alt="Playlist"
+            className="w-68 h-48 rounded-lg "
+          />
+          <div>
+            <p className="uppercase text-sm">PLAYLIST</p>
+            <h1 className="lg:text-5xl text-3xl font-bold">{Categories.playlist_name}</h1>
+            <p className="my-5 flex items-center text-sm">SoundWave · {songs.length} bài hát</p>
+            <div
+              className="flex items-center justify-center text-white py-2 px-1 lg:px-7 rounded-md bg-gradient-to-r from-[#FF0065] to-[#FF553E] cursor-pointer  lg:text-base text-sm"
+              onClick={() => {
+                handleFetchSongs("playlist",Categories.id);
+              }}
+            >
+              <Play size={18} className="mr-2" />
+              Phát Tất Cả
             </div>
           </div>
         </div>
-      )}
-
-      {/* Bảng bài hát */}
-      {songs.length > 0 ? (
-        <ListSongs songs={songs} start={1} />
-      ) : (
-        <p className="text-center text-gray-400 mt-10">
-          Không có bài hát nào để hiển thị.
-        </p>
-      )}
-    </div>
+      </div>
+      <div className="bg-black bg-opacity-30 rounded-lg -mt-[265px] p-1 md:p-4 mx-1 md:mx-8">
+        {/* Playlist Header */}
+        {songs.length > 0 ? (
+          <ListSongs
+            songs={songs}
+            start={1}
+          />
+        ) : (
+          <p className='text-center text-gray-400 mt-10'>
+            Không có bài hát nào để hiển thị.
+          </p>
+        )}
+      </div>
+    </>
   );
 }
 

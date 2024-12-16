@@ -81,14 +81,14 @@ function Payment() {
 
     return (
         <>
-            <div className="min-h-screen bg-gray-900 text-white p-4 md:p-8">
+            <div className="min-h-screen bg-gray-900 text-white p-2 md:p-8">
                 <div className="max-w-7xl mx-auto flex flex-col md:flex-row gap-16">
                     <div className="w-full md:w-1/2">
                         <h2 className="text-2xl font-medium mb-4">Phương thức thanh toán</h2>
                         <div className="space-y-4">
 
                             {/* Ví Momo */}
-                            <div
+                            {/* <div
                                 className={`border ${selectedMethod === 'MOMO' ? 'border-red-600' : 'border-gray-700'} rounded-lg p-4 flex items-center justify-between cursor-pointer`}
                                 onClick={() => handleSelectMethod('MOMO')}
                             >
@@ -97,7 +97,7 @@ function Payment() {
                                     <span>Ví Momo</span>
                                 </div>
                                 <img src="https://th.bing.com/th/id/OIP.1GNvjAZu4hlbE0bWflshGwHaHa?w=175&h=180&c=7&r=0&o=5&pid=1.7" alt="momo" className="w-8 h-8 rounded-md" />
-                            </div>
+                            </div> */}
                             {/* VNPAY */}
                             <div
                                 className={`border ${selectedMethod === 'VNPAY' ? 'border-red-600' : 'border-gray-700'} rounded-lg p-4 flex items-center justify-between cursor-pointer`}
@@ -203,7 +203,7 @@ function Payment() {
                     </div>
 
                     {/* Chi tiết giao dịch */}
-                    <div className="w-full md:w-1/2 bg-[#0C1B2C] p-10">
+                    <div className="w-full md:w-1/2 bg-[#0C1B2C] p-2 sm:p-10">
                         <h2 className="text-2xl font-medium mb-4">Chi tiết giao dịch</h2>
                         <div className=" mb-6 bg-medium p-3 rounded-md">
                             <p className='text-xl my-2'>Tài khoản mua dịch vụ</p>

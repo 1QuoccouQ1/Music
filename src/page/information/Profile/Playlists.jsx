@@ -212,7 +212,7 @@ function Playlists() {
                         <SwiperSlide key={index} style={{ width: "auto" }}>
                          
                             <div className="rounded-md h-full sm:w-[170px] w-[130px] sm:mx-5  relative group duration-300">
-                            <Link to={`/Playlists/${playlist.id}`}>
+                            <Link to={`/Playlists/${playlist.id}/private`}>
                               <img
                                 src={playlist.background}
                                 alt={playlist.name}

@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 
 function PlaylistDiv({ songId, onClose }) {
   const [privatePlaylists, setPrivatePlaylists] = useState([]); // Dữ liệu từ API cá nhân
-  const [loading, setLoading] = useState(false); // Trạng thái loading
+  const [loading, setLoading] = useState(true); // Trạng thái loading
   const [showCreatePlaylist, setShowCreatePlaylist] = useState(false);
   const [playlistName, setPlaylistName] = useState(""); // Tên playlist khi tạo mới
   const [isPublic, setIsPublic] = useState(false);
@@ -14,13 +14,7 @@ function PlaylistDiv({ songId, onClose }) {
   const user = JSON.parse(localStorage.getItem("user"));
   const username = user?.name;
 
-  // Gọi API ngay khi component render lần đầu
-  useEffect(() => {
-    fetchPlaylists();
-  }, []);
-
   const fetchPlaylists = async () => {
-    setLoading(true);
     if (localStorage.getItem("user")) {
       try {
         const user_id = user.id;
@@ -45,6 +39,11 @@ function PlaylistDiv({ songId, onClose }) {
       }
     }
   };
+
+  // Gọi API ngay khi component render lần đầu
+  useEffect(() => {
+    fetchPlaylists();
+  }, []);
   // Hàm xử lý thêm bài hát vào playlist
   const handleAddSongToPlaylist = async (playlistId) => {
     try {

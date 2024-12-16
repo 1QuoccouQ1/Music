@@ -10,6 +10,7 @@ function ListenedMusic() {
   const user = JSON.parse(localStorage.getItem("user"));
   const { settext } = useOutletContext();
   const { handleFetchSongs } = useContext(UserContext);
+
   useEffect(() => {
     const FavouriteSong = async () => {
       try {
@@ -33,14 +34,14 @@ function ListenedMusic() {
         console.log(err);
       }
     };
-    if (user.id) {
+    if (user) {
       FavouriteSong();
     }
-  }, [user.id]);
+  }, []);
 
   useEffect(() => {
     settext(`${SongsFavourite.length} Bài hát yêu thích`);
-  }, [SongsFavourite]);
+  }, []);
 
   return (
     <>
@@ -61,7 +62,7 @@ function ListenedMusic() {
           <p className="text-xs w-[18px] h-[18px] duration-300">#</p>
           <p className="w-full truncate ">Tên bài hát</p>
         </div>
-        <div className="w-1/3 hidden lg:flex items-center justify-center">
+        <div className="w-1/3 pl-44 hidden lg:flex items-center justify-center">
           <p>Lượt nghe</p>
         </div>
         <div className="flex items-center gap-5 duration-300 w-1/3 justify-end">
