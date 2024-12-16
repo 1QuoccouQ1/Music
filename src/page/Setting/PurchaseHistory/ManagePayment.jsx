@@ -17,33 +17,30 @@ function ManagePayment() {
 
     const getExpiryMessage = () => {
         if (expiry_date) {
-            return `Gói ${users_type === 'Plus'
-                                        ? 'SoundWave Plus'
-                                        : 'SoundWave Premium'} của bạn sẽ hết hạn vào ngày ${new Date(
-                                            expiry_date
-                                        ).toLocaleDateString()}. Để tiếp tục sử dụng gói mà không bị gián đoạn vui lòng đăng ký trước hạn.`;
+            return `Gói ${
+                users_type === 'Plus' ? 'SoundWave Plus' : 'SoundWave Premium'
+            } của bạn sẽ hết hạn vào ngày ${new Date(
+                expiry_date
+            ).toLocaleDateString()}. Để tiếp tục sử dụng gói mà không bị gián đoạn vui lòng đăng ký trước hạn.`;
         } else {
             return 'Bạn chưa đăng ký gói nào. Hãy chọn một gói để bắt đầu!';
         }
     };
 
     return (
-        <div className='bg-gray-900 min-h-screen flex justify-center items-center py-5'>
-            <div className='overflow-x-auto max-w-[808px] mb-[550px]'>
-                <div className='flex flex-col items-center gap-8 max-w-screen-lg'>
+        <div className='bg-gray-900 min-h-screen flex justify-center  py-5 px-4'>
+            <div className='overflow-x-auto max-w-full'>
+                <div className='flex flex-col items-center gap-6 max-w-screen-lg'>
                     {/* Basic Subscription */}
                     {users_type === 'Basic' && (
-                        <div
-                            className='rounded-xl overflow-hidden shadow-lg w-[780px] text-white border-gray-400'
-                            style={{ minHeight: '400px' }}
-                        >
-                            <div className='bg-gradient-to-r from-gray-400 to-gray-200 p-6 h-[193px] flex items-center'>
-                                <h2 className='text-4xl font-bold'>
+                        <div className='rounded-xl overflow-hidden shadow-lg w-full max-w-[600px] lg:max-w-[720px] text-white border-gray-400'>
+                            <div className='bg-gradient-to-r from-gray-400 to-gray-200 p-4 md:p-6 min-h-[160px] md:min-h-[180px] flex items-center'>
+                                <h2 className='text-xl md:text-2xl lg:text-3xl font-bold'>
                                     SoundWave Basic
                                 </h2>
                             </div>
-                            <div className='bg-zinc-800 p-6 flex flex-row justify-between h-[225px]'>
-                                <ul className='mb-6 space-y-2 w-1/2'>
+                            <div className='bg-zinc-800 p-4 md:p-6 flex flex-col lg:flex-row justify-between gap-4 h-auto'>
+                                <ul className='space-y-2 w-full lg:w-1/2'>
                                     <li className='flex items-start space-x-2'>
                                         <svg
                                             className='w-4 h-4 text-green-500 mt-1'
@@ -99,11 +96,11 @@ function ManagePayment() {
                                         </span>
                                     </li>
                                 </ul>
-                                <div className='flex flex-col justify-between w-1/2'>
-                                    <div className='text-xl font-bold'>
+                                <div className='flex flex-col justify-between w-full lg:w-1/2'>
+                                    <div className='text-lg font-bold'>
                                         Miễn Phí
                                     </div>
-                                    <button className='w-[128px] px-2 py-2 text-sm font-semibold rounded-full bg-zinc-800 hover:bg-pink-600 transition-colors border border-[#FF0065]'>
+                                    <button className='w-full md:w-[128px] px-2 py-2 text-sm font-semibold rounded-full bg-zinc-800 hover:bg-pink-600 transition-colors border border-[#FF0065]'>
                                         Đang sử dụng
                                     </button>
                                 </div>
@@ -114,29 +111,27 @@ function ManagePayment() {
                     {/* Plus and Premium subscriptions */}
                     {(users_type === 'Plus' || users_type === 'Premium') && (
                         <div
-                            className={`rounded-xl overflow-hidden shadow-lg w-[780px] text-white ${
+                            className={`rounded-xl overflow-hidden shadow-lg w-full max-w-[600px] lg:max-w-[720px] text-white ${
                                 users_type === 'Plus'
                                     ? 'border-yellow-400'
                                     : 'border-red-500'
                             }`}
-                            style={{ minHeight: '400px' }}
                         >
                             <div
                                 className={`bg-gradient-to-r ${
                                     users_type === 'Plus'
                                         ? 'from-[#FFA53B] to-[#F4C829]'
                                         : 'from-pink-500 to-red-500'
-                                } p-6 h-[193px] flex items-center`}
+                                } p-4 md:p-6 min-h-[160px] md:min-h-[180px] flex items-center`}
                             >
-                                <h2 className='text-4xl font-bold'>
+                                <h2 className='text-xl md:text-2xl lg:text-3xl font-bold'>
                                     {users_type === 'Plus'
                                         ? 'SoundWave Plus'
                                         : 'SoundWave Premium'}
                                 </h2>
                             </div>
-                            <div className='bg-zinc-800 p-6 flex flex-row justify-between h-[225px]'>
-                                <ul className='mb-6 space-y-2 w-1/2'>
-                                    {/* Các tính năng giống nhau cho gói Plus và Premium */}
+                            <div className='bg-zinc-800 p-4 md:p-6 flex flex-col lg:flex-row justify-between gap-4 h-auto'>
+                                <ul className='space-y-2 w-full lg:w-1/2'>
                                     <li className='flex items-start space-x-2'>
                                         <svg
                                             className='w-4 h-4 text-green-500 mt-1'
@@ -178,11 +173,11 @@ function ManagePayment() {
                                         <span>Sắp xếp danh sách phát</span>
                                     </li>
                                 </ul>
-                                <div className='flex flex-col justify-between w-1/2'>
-                                    <div className='bg-gray-700 text-gray-300 p-4 rounded-lg mb-4 text-sm w-[324px] h-[108px]'>
+                                <div className='flex flex-col justify-between w-full lg:w-1/2'>
+                                    <div className='bg-gray-700 text-gray-300 p-4 rounded-lg mb-4 text-sm'>
                                         {getExpiryMessage()}
                                     </div>
-                                    <button className='w-[128px] px-2 py-2 text-sm font-semibold rounded-full bg-zinc-800 hover:bg-pink-600 transition-colors border border-[#FF0065]'>
+                                    <button className='w-full md:w-[128px] px-2 py-2 text-sm font-semibold rounded-full bg-zinc-800 hover:bg-pink-600 transition-colors border border-[#FF0065]'>
                                         Gia Hạn
                                     </button>
                                 </div>
