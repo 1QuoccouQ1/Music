@@ -317,7 +317,6 @@ function ProfileEditPage() {
                         </button>
                     </div>
                 </form>
-                <ToastContainer />
             </div>
         </div>
     );

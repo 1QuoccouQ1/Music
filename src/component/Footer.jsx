@@ -453,7 +453,7 @@ const Footer = React.memo(function FooterComponent() {
       await handleFetchSongs("rank");
       setIsLoading(false);
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
-      
+
     };
 
     // Gọi hàm fetchData
@@ -563,10 +563,10 @@ const Footer = React.memo(function FooterComponent() {
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 h-[80px] lg:h-[100px]">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white w-[200px] md:w-[350px] rounded-r-lg h-full">
-            <div className="flex items-center h-full justify-between w-full cursor-pointer" 
-            onClick={() => {
-                  setIsModal(!isModal);
-                }} >
+            <div className="flex items-center h-full justify-between w-full cursor-pointer"
+              onClick={() => {
+                setIsModal(!isModal);
+              }} >
               <div className="relative h-full  flex-none ">
                 <img
                   className="inline-block rounded size-14 xl:size-20 "
@@ -721,27 +721,24 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
-                      isShuffling ? "text-blue-500" : ""
-                    }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isShuffling ? "text-blue-500" : ""
+                      }`}
                     onClick={toggleShuffle}
                   >
                     <Shuffle size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full xl:block hidden ${
-                      isLooping ? "text-green-500" : ""
-                    }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full xl:block hidden ${isLooping ? "text-green-500" : ""
+                      }`}
                     onClick={toggleLoop}
                   >
                     <Repeat size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
-                      isTimerActive ? "text-yellow-500" : ""
-                    }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isTimerActive ? "text-yellow-500" : ""
+                      }`}
                     onClick={
                       isTimerActive ? handleCancelTimer : toggleTimerModal
                     }
@@ -750,37 +747,37 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
                   {(isAccountType === "Premium" ||
                     isAccountType === "Plus") && (
-                    <button
-                      className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
+                      <button
+                        className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
                  text-white
                 `}
-                      onClick={() => setIsOpenDownload(!isOpenDownload)}
-                    >
-                      <CloudDownload size={20} />
-                      {isOpenDownload && (
-                        <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
-                          {getAvailableQualities().map((quality) => (
-                            <button
-                              key={quality.value}
-                              onClick={() => handleDownload(quality.value)}
-                              className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
-                            >
-                              <div className="flex items-center space-x-2 py-0.5">
-                                <span>{quality.name}</span>
-                                {quality.value && (
-                                  <span
-                                    className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
-                                  >
-                                    {quality.value}
-                                  </span>
-                                )}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </button>
-                  )}
+                        onClick={() => setIsOpenDownload(!isOpenDownload)}
+                      >
+                        <CloudDownload size={20} />
+                        {isOpenDownload && (
+                          <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                            {getAvailableQualities().map((quality) => (
+                              <button
+                                key={quality.value}
+                                onClick={() => handleDownload(quality.value)}
+                                className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
+                              >
+                                <div className="flex items-center space-x-2 py-0.5">
+                                  <span>{quality.name}</span>
+                                  {quality.value && (
+                                    <span
+                                      className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
+                                    >
+                                      {quality.value}
+                                    </span>
+                                  )}
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </button>
+                    )}
                 </div>
               </div>
 
@@ -867,7 +864,7 @@ const Footer = React.memo(function FooterComponent() {
 
             <p className="truncate lg:block hidden min-h-fit ">Danh Sách</p>
             <AlignLeft size={20} className=" lg:hidden block text-white"
-                         />
+            />
             {isAlbum && (
               <div
                 ref={Playlist}
@@ -928,7 +925,7 @@ const Footer = React.memo(function FooterComponent() {
                   {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
-                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`} 
+                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`}
                       onClick={() => {
                         setCurrentSongIndex(index);
                         setPlaySong(song);
@@ -964,17 +961,23 @@ const Footer = React.memo(function FooterComponent() {
           </div>
         </div>
       ) : (
-        <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 md:py-3 flex-col sm:flex-row ">
-          <div className="flex items-center justify-between  p-3 text-white  max-w-[350px] w-fit  rounded-r-lg">
+        <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 md:py-3 sm:py-1 py-3 flex-col sm:flex-row ">
+          <div className="flex items-center justify-between  p-3 text-white  sm:max-w-[350px] sm:w-[350px] w-full w-fit  rounded-r-lg">
+            <button
+              className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full block sm:hidden ${isShuffling ? "text-blue-500" : "text-white"}`}
+              onClick={toggleShuffle}
+            >
+              <Shuffle size={20} />
+            </button>
             <div className="flex items-center space-x-4 xl:ml-14">
               <button
-                className="p-3 bg-gray-800 rounded-full "
+                className="p-3 md:p-2 lg:p-3 bg-gray-800 rounded-full "
                 onClick={handlePreviousSong}
               >
-                <SkipBack className="md:size-[24px] size-[15px]" />
+                <SkipBack className="md:size-[16px] xl:size-[28px] size-[17px]" />
               </button>
               <button
-                className="p-4 bg-gradient-to-r from-[#88716e] to-[#FF0065] rounded-full "
+                className="p-4 md:p-3 lg:p-4 bg-gradient-to-r from-[#88716e] to-[#FF0065] rounded-full "
                 onClick={togglePlayPause}
               >
                 {isPlaying ? (
@@ -984,7 +987,7 @@ const Footer = React.memo(function FooterComponent() {
                     viewBox="0 0 24 24"
                     strokeWidth={1.5}
                     stroke="currentColor"
-                    className="md:size-[24px] size-[12px]"
+                    className="md:size-[20px] xl:size-[32px] size-[19px]"
                   >
                     <path
                       strokeLinecap="round"
@@ -993,21 +996,28 @@ const Footer = React.memo(function FooterComponent() {
                     />
                   </svg>
                 ) : (
-                  <Play className="md:size-[24px] size-[12px]" />
+                  <Play className="md:size-[20px] xl:size-[32px] size-[19px]" />
                 )}
               </button>
               <button
-                className="p-3 bg-gray-800 rounded-full"
+                className="p-3 md:p-2 lg:p-3 bg-gray-800 rounded-full"
                 onClick={handleNextSong}
               >
-                <SkipForward  className="md:size-[24px] size-[12px]" />
+                <SkipForward className="md:size-[16px] xl:size-[28px] size-[17px]" />
               </button>
             </div>
+            <button
+                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full block sm:hidden ${isLooping ? "text-green-500" : "text-white"
+                  }`}
+                onClick={toggleLoop}
+              >
+                <Repeat size={20} />
+              </button>
           </div>
-          <div className="flex items-center justify-center  w-full ">
+          <div className="flex items-center justify-center pb-3 sm:pb-0 w-full ">
             <div className="relative lg:p-4 rounded-lg w-full max-w-5xl">
               <div className="flex items-center justify-between text-white">
-                <div className="flex-grow mx-4 xl:w-[560px] lg:w-[360px] md:w-[360px]  min-w-[140px] ">
+                <div className="flex-grow sm:mx-2 lg:mx-4 mx-10 xl:w-[490px] lg:w-[320px] md:w-[200px]  min-w-[140px] ">
                   <div className="relative">
                     <input
                       type="range"
@@ -1078,20 +1088,48 @@ const Footer = React.memo(function FooterComponent() {
             </div>
           </div>
           <div className="flex items-center justify-center h-min ">
-            <div className="flex mr-5 items-center space-x-3">
+            <div className="flex md:mr-3 lg:mr-5 mr-3 items-center space-x-3">
               <button
-                className="md:p-3 p-1  rounded-full relative"
+                className="lg:p-3 md:p-1  rounded-full relative"
                 onClick={toggleVolume}
               >
                 <svg
-                  className="w-12 h-12 transform -rotate-90 cursor-pointer" // Giảm từ w-16 h-16 xuống w-12 h-12
+                  className="w-10 h-10 transform -rotate-90 cursor-pointer block sm:hidden"
                 >
                   <circle
-                    cx="24" // Giảm từ cx=32 xuống cx=24
-                    cy="24"
-                    r="17.5" // Giảm bán kính từ r=23.5 xuống r=17.5
+                    cx="24"
+                    cy="20"
+                    r="14"
                     stroke="#4B5563"
-                    strokeWidth="4" // Giảm độ dày đường viền từ strokeWidth=5 xuống strokeWidth=4
+                    strokeWidth="4"
+                    fill="none"
+                  />
+                  <circle
+                    cx="24"
+                    cy="20"
+                    r="14"
+                    stroke="#EF4444"
+                    strokeWidth="4"
+                    fill="none"
+                    strokeDasharray={circumference}
+                    strokeDashoffset={offset}
+                    strokeLinecap="round"
+                  />
+                  <foreignObject x="12" y="9" width="24" height="24">
+                    <div className="flex items-center justify-center w-full h-full">
+                      <Volume2 size={12} className="text-white rotate-90" />
+                    </div>
+                  </foreignObject>
+                </svg>
+                <svg
+                  className="w-12 h-12 transform -rotate-90 cursor-pointer hidden sm:block"
+                >
+                  <circle
+                    cx="24"
+                    cy="24"
+                    r="17.5"
+                    stroke="#4B5563"
+                    strokeWidth="4"
                     fill="none"
                   />
                   <circle
@@ -1119,47 +1157,44 @@ const Footer = React.memo(function FooterComponent() {
                     step="0.01"
                     value={volume}
                     onChange={handleVolumeChange}
-                    className="w-[100px] absolute -top-16 left-1/2 transform -translate-x-1/2 rotate-[-90deg] bg-gray-700"
+                    className="w-[100px] absolute -top-16 sm:left-1/2 left-2/4 transform -translate-x-1/2 rotate-[-90deg] bg-gray-700"
                   />
                 )}
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
-                  isShuffling ? "text-blue-500" : "text-white"
-                }`}
+                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full hidden sm:block  ${isShuffling ? "text-blue-500" : "text-white"
+                  }`}
                 onClick={toggleShuffle}
               >
                 <Shuffle size={20} />
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
-                  isLooping ? "text-green-500" : "text-white"
-                }`}
+                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full hidden sm:block ${isLooping ? "text-green-500" : "text-white"
+                  }`}
                 onClick={toggleLoop}
               >
                 <Repeat size={20} />
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
-                  isTimerActive ? "text-yellow-500" : "text-white"
-                }`}
+                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full ${isTimerActive ? "text-yellow-500" : "text-white"
+                  }`}
                 onClick={isTimerActive ? handleCancelTimer : toggleTimerModal}
               >
                 <Clock size={20} />
               </button>
               {(isAccountType === "Premium" || isAccountType === "Plus") && (
                 <button
-                  className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
+                  className={`p-3 relative hover:bg-gray-800 rounded-full md:block sm:hidden block
                  text-white
                 `}
                   onClick={() => setIsOpenDownload(!isOpenDownload)}
                 >
                   <CloudDownload size={20} />
                   {isOpenDownload && (
-                    <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                    <div className="absolute bottom-0 sm:right-0 -right-20 -translate-y-[90px] mt-2 w-48 md:w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
                       {getAvailableQualities().map((quality) => (
                         <button
                           key={quality.value}
@@ -1185,13 +1220,12 @@ const Footer = React.memo(function FooterComponent() {
             </div>
             <div
               onClick={() => setIsOpen(!isOpen)}
-              className="bg-gradient-to-r cursor-pointer from-[#FF553E] to-[#FF0065] text-white w-[110px]  h-[40px] px-3 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
+              className="bg-gradient-to-r cursor-pointer from-[#FF553E] to-[#FF0065] text-white lg:w-[110px] w-[90px] lg:h-[40px] h-[28px] px-3 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
             >
               <p>{selectedQualityLabel}</p>
               <div
-                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${
-                  !isOpen ? "rotate-90" : " rotate-[270deg]"
-                } `}
+                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${!isOpen ? "rotate-90" : " rotate-[270deg]"
+                  } `}
               >
                 {" "}
                 <svg
@@ -1228,11 +1262,10 @@ const Footer = React.memo(function FooterComponent() {
                           }
                         }}
                         disabled={isDisabled}
-                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${
-                          isDisabled
+                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${isDisabled
                             ? "text-gray-500 cursor-not-allowed bg-gray-800"
                             : "text-white hover:bg-gray-800"
-                        }`}
+                          }`}
                       >
                         <div className="flex items-center space-x-2 py-0.5">
                           <span>{quality.name}</span>
@@ -1246,11 +1279,10 @@ const Footer = React.memo(function FooterComponent() {
                         </div>
 
                         <span
-                          className={`w-2 h-2 rounded-full ${
-                            selectedQuality === quality.value
+                          className={`w-2 h-2 rounded-full ${selectedQuality === quality.value
                               ? "bg-pink-500"
                               : ""
-                          }`}
+                            }`}
                         ></span>
                       </button>
                     );
