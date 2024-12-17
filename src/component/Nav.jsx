@@ -132,7 +132,7 @@ function Nav() {
               onQueryChange={setQuery}
             />
             {isFocused && (
-              <div className="results mt-10 z-50 absolute top-3 bg-[#172533] rounded-xl p-5 w-full -translate-x-[15px]">
+              <div className="results mt-10 z-50 absolute top-3 bg-[#172533] rounded-xl p-5 w-full -translate-x-[15px] lg:max-h-[500px] max-h-[350px] overflow-y-auto no-scrollbar">
                 {loading ? (
                   <p className="text-center text-gray-400">Đang tìm kiếm...</p>
                 ) : songs.length === 0 && singers.length === 0 ? (
@@ -216,7 +216,7 @@ function Nav() {
                   Tìm kiếm <strong>&quot;{query}&quot;</strong>
                 </div>
               </div>
-            )}
+            )}                                  
           </div>
         </div>
 

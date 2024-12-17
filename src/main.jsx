@@ -46,6 +46,7 @@ import GenreSongs from "./page/Genre/GenreSongs.jsx";
 import AlbumDetail from "./page/Albums/AlbumDetail.jsx"
 import ListTopSongs from "./page/Top/ListTopSongs.jsx";
 import ListPlayLists from "./page/Play-list/ListPlayLists.jsx";
+import ShowPlayLists from "./page/Play-list/ShowPlayLists.jsx";
 
 function changeIsSetting() {
   localStorage.setItem("isSetting", true);
@@ -86,6 +87,11 @@ const router = createBrowserRouter([
         path: "/Albums",
         loader: changeDashboard,
         element: <Albums />,
+      },
+      {
+        path: "/PlayLists",
+        loader: changeDashboard,
+        element: <ShowPlayLists />,
       },
       {
         path: "/AlbumDetail/:id",
