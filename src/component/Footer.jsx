@@ -78,7 +78,10 @@ const Footer = React.memo(function FooterComponent() {
   ];
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDownload, setIsOpenDownload] = useState(false);
-  const [selectedQuality, setSelectedQuality] = useState("basic");
+  const [selectedQuality, setSelectedQuality] = useState(() => {
+    const savedSong = localStorage.getItem("isQuality"); // Lấy giá trị từ localStorage
+    return savedSong ? (savedSong) : "basic";
+  });
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
 
   const [duration, setDuration] = useState(0);
@@ -420,9 +423,6 @@ const Footer = React.memo(function FooterComponent() {
     setIsShuffling(!isShuffling);
   };
 
-  const toggleVolume = () => {
-    setIsVolumeVisible(!isVolumeVisible);
-  };
   const handleDownload = (qualityValue) => {
     if (isAccountType === "Basic" && qualityValue !== "basic") {
       toast.error(
