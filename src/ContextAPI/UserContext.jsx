@@ -174,6 +174,7 @@ export const UserProvider = ({ children }) => {
         console.log('Single Click!');
         setClickTimeout(null);
         setIsProcessing(false); // Kết thúc xử lý
+        window.scrollTo({ top: 0, behavior: 'smooth' });
         navigate(`/SongDetail/${id}`)
       }, 300); // Khoảng thời gian giữa click và double click
       setClickTimeout(timeout);

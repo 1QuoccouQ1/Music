@@ -82,7 +82,7 @@ function ModalListen() {
           backgroundPosition: "center",
           backgroundSize: "cover",
         }}
-        className={` w-full h-screen pt-5 text-white px-5 fixed z-50 transition-all duration-700 ease-in-out 
+        className={` w-full h-screen pt-5 text-white px-5 fixed z-50 transition-all duration-700 ease-in-out  
           ${
             isVisible
               ? "opacity-100 translate-y-0"

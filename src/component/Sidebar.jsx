@@ -80,6 +80,12 @@ function Sidebar() {
 
   return (
     <>
+      {isSidebar && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsSidebar(false)} // Đóng Sidebar khi click ra ngoài
+        ></div>
+      )}
       <aside ref={sidebarRef} className={`max-w-64 bg-sidebar lg:px-6 px-1 lg:px-5 py-3 fixed top-0 left-0 h-full lg:w-56 z-40 ${isSidebar ? "translate-x-0" : "-translate-x-full"
         } transition-transform duration-300 lg:translate-x-0`}>
         <div className="space-y-4 h-auto">
@@ -110,12 +116,12 @@ function Sidebar() {
           {user ? "" : (
             <div className="block md:hidden items-center my-2">
               <Link to="/register">
-                <div className="text-white py-2 px-7 mx-2 my-2 bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
+                <div className="text-white py-2 px-7 mx-2 my-2 bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer md:text-base text-sm text-center">
                   Đăng Ký{" "}
                 </div>
               </Link>
               <Link to="/login">
-                <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer">
+                <div className="text-white py-2 px-7 mx-2  bg-gradient-to-r from-[#FF553E] to-[#FF0065] rounded-full  cursor-pointer md:text-base text-sm text-center">
                   Đăng Nhập{" "}
                 </div>
               </Link>
@@ -123,7 +129,7 @@ function Sidebar() {
           )}
         </div>
       </aside>
-      
+
     </>
   );
 }
