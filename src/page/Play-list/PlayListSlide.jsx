@@ -1,7 +1,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { API_URL } from "../../services/apiService";
 
 
@@ -42,6 +42,7 @@ function PlayListSlide() {
                                 }}
                             >
                             </Link>
+                            <p className="text-center mt-2 truncate w-full">{genre.playlist_name}</p>
                         </div>
                     </SwiperSlide>
                 ))}

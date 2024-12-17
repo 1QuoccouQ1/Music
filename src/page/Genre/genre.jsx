@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { API_URL } from "../../services/apiService";
 import { Link } from "react-router-dom";
 import { Swiper, SwiperSlide } from "swiper/react";
+import { UserContext } from "../../ContextAPI/UserContext";
 
 function Genre() {
   const [countries, setCountries] = useState([]);
   const [loading, setLoading] = useState(true);
   const [categories, setCategories] = useState([]);
   const [songs, setSongs] = useState({});
-
+  const { handleAddSong, handleClick } = useContext(UserContext);
   useEffect(() => {
     const fetchCountries = async () => {
       try {
@@ -133,7 +134,12 @@ function Genre() {
         >
               {songs[category.id].slice(0, 5).map((song,index) => (
                  <SwiperSlide key={index} style={{ width: "auto" }}>
-                <div key={song.id} className="lg:w-[300px] md:w-[200px] h-auto w-40  px-3 rounded-md">
+                <div key={song.id} className="lg:w-[300px] md:w-[200px] h-auto w-40  px-3 rounded-md" 
+                  onDoubleClick={() => handleAddSong("song", song.id)}
+                  onClick={() => {
+                    handleClick(song.id)
+                  }}
+                >
                   <div
                     style={{
                       backgroundImage: `url(${song.song_image})`,

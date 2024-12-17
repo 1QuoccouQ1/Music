@@ -50,7 +50,7 @@ function InputSearch({ onSearch, onFocus, onBlur , onQueryChange }) {
   };
 
   return (
-    <div className="relative flex items-center bg-[#172533] py-2 px-3 h-[40px] rounded-3xl">
+    <>
       <input
         type="text"
         value={query}
@@ -58,7 +58,7 @@ function InputSearch({ onSearch, onFocus, onBlur , onQueryChange }) {
         onKeyDown={handleKeyDown}
         onFocus={onFocus}
         onBlur={onBlur}
-        className="border-none mx-2 w-full md:w-[270px] lg:w-[350px]  bg-transparent focus:outline-none text-white text-sm placeholder-gray-600"
+        className="border-none mx-2 w-full md:w-[270px] lg:w-[350px]  bg-transparent focus:outline-none text-white text-sm placeholder-gray-600 "
         placeholder="Tìm kiếm....."
       />
       <div
@@ -83,7 +83,7 @@ function InputSearch({ onSearch, onFocus, onBlur , onQueryChange }) {
           <path d="M23.707,22.293l-5.969-5.969a10.016,10.016,0,1,0-1.414,1.414l5.969,5.969a1,1,0,0,0,1.414-1.414ZM10,18a8,8,0,1,1,8-8A8.009,8.009,0,0,1,10,18Z" />
         </svg>
       </div>
-    </div>
+    </>
   );
 }
 

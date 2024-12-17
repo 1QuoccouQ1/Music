@@ -19,9 +19,9 @@ function Dashboard() {
   const [topLike, setTopLike] = useState([]);
   const [banner, setBanner] = useState({
     banner_name: 'banner',
-    banner_url: "../imgs/Group 92.webp" ,
+    banner_url: "../imgs/Group 92.webp",
   });
-  
+
   const [loadingGlobal, setLoadingGlobal] = useState(true);
   const navigate = useNavigate();
 
@@ -40,7 +40,7 @@ function Dashboard() {
       setTrending(trendingData);
       setTopListen(topListenData);
       setTopLike(topLikeData);
-      if(bannerData && Object.keys(bannerData).length > 0) setBanner(bannerData);
+      if (bannerData && Object.keys(bannerData).length > 0) setBanner(bannerData);
       setLoadingGlobal(false);
     } catch (error) {
       console.error("Lỗi khi gọi API:", error);
@@ -65,10 +65,10 @@ function Dashboard() {
   useEffect(() => {
     const isSetting = localStorage.getItem("isSetting");
     if (isSetting === "false") {
-      localStorage.removeItem("isSetting"); 
+      localStorage.removeItem("isSetting");
       if (!sessionStorage.getItem("reloaded")) {
-        sessionStorage.setItem("reloaded", true); 
-        window.location.reload(); 
+        sessionStorage.setItem("reloaded", true);
+        window.location.reload();
       }
     }
     fetchData();
@@ -150,7 +150,10 @@ function Dashboard() {
             {topListen.length > 0 && (
               <div
                 className="cursor-pointer w-full"
-                onClick={(e) => navigate('/Top/toplisten')}
+                onClick={(e) => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  navigate('/Top/toplisten')
+                }}
               >
                 <img className=" w-full h-full" src="../imgs/image (4).png" />
                 <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
@@ -173,6 +176,7 @@ function Dashboard() {
                     className="p-2 rounded-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] mr-3 cursor-pointer"
                     onClick={(e) => {
                       e.stopPropagation();
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
                       handleFetchSongs("toplisten");
                     }}
                   >
@@ -186,7 +190,10 @@ function Dashboard() {
             {topLike.length > 0 && (
               <div
                 className="cursor-pointer w-full"
-                onClick={(e) => navigate('/Top/yeuthich')}
+                onClick={(e) => {
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                  navigate('/Top/yeuthich')
+                }}
               >
                 <img className="w-full h-full" src="../imgs/image (1).png" />
                 <p className="absolute top-2 left-7 text-black bg-white py-1 rounded-md font-bold text-sm  px-4">
@@ -290,8 +297,10 @@ function Dashboard() {
       <section className="bg-medium pt-10 lg:pt-20 text-white px-1 lg:px-10 h-auto tracking-wide">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl lg:text-3xl font-medium mb-6 md:mb-16">Album Hot</h1>
-          <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <p className="text-sm  ">Xem Thêm </p>
+          <Link
+            to={"/Albums"}
+            className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
+            <p className="text-sm  " >Xem Thêm </p>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -306,7 +315,7 @@ function Dashboard() {
                 d="m8.25 4.5 7.5 7.5-7.5 7.5"
               />
             </svg>
-          </div>
+          </Link>
         </div>
         <div className="flex items-center ">
           <SlideAlbum />
@@ -342,29 +351,11 @@ function Dashboard() {
       <section className="bg-medium pt-10 lg:pt-20 text-white px-1 lg:px-10 h-auto  tracking-wide">
         <div className="flex items-center justify-between">
           <h1 className="text-2xl lg:text-3xl font-medium mb-16">Danh Sách Phát</h1>
-          <div className="flex items-center text-slate-500 hover:text-white  cursor-pointer duration-300">
-            <Link to={"/"} className="text-sm  ">
-              Xem Thêm
-            </Link>
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="size-4"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="m8.25 4.5 7.5 7.5-7.5 7.5"
-              />
-            </svg>
-          </div>
+
         </div>
         <PlayListSlide />
       </section>
-      
+
 
     </>
   );

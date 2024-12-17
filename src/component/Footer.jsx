@@ -1,4 +1,4 @@
-import { Heart, MoreHorizontal, Play, AlignLeft } from "lucide-react";
+import { Heart, MoreHorizontal, Play, AlignLeft, Download } from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
@@ -92,6 +92,12 @@ const Footer = React.memo(function FooterComponent() {
   const [optionSongIndex, setOptionSongIndex] = useState(null);
   const Playlist = useRef(null);
   const Divlist = useRef(null);
+  const DivQuality = useRef(null);
+  const QualityList = useRef(null);
+  const DivDownload = useRef(null);
+  const DownloadList = useRef(null);
+  const DivVolume = useRef(null);
+  const Volume = useRef(null);
   const [songPlayCount, setSongPlayCount] = useState(0);
   const [isPlayingAd, setIsPlayingAd] = useState(false);
   const [favoriteSongs, setFavoriteSongs] = useState([]);
@@ -453,7 +459,7 @@ const Footer = React.memo(function FooterComponent() {
       await handleFetchSongs("rank");
       setIsLoading(false);
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
-      
+
     };
 
     // Gọi hàm fetchData
@@ -471,6 +477,30 @@ const Footer = React.memo(function FooterComponent() {
         !Divlist.current.contains(event.target)
       ) {
         setIsAlbum(false);
+      }
+      if (
+        QualityList.current &&
+        DivQuality.current &&
+        !QualityList.current.contains(event.target) &&
+        !DivQuality.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+      if (
+        DownloadList.current &&
+        DivDownload.current &&
+        !DownloadList.current.contains(event.target) &&
+        !DivDownload.current.contains(event.target)
+      ) {
+        setIsOpenDownload(false);
+      }
+      if (
+        DivVolume.current &&
+        Volume.current &&
+        !DivVolume.current.contains(event.target) &&
+        !Volume.current.contains(event.target)
+      ) {
+        setIsVolumeVisible(false);
       }
     };
 
@@ -563,10 +593,10 @@ const Footer = React.memo(function FooterComponent() {
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 h-[80px] lg:h-[100px]">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white w-[200px] md:w-[350px] rounded-r-lg h-full">
-            <div className="flex items-center h-full justify-between w-full cursor-pointer" 
-            onClick={() => {
-                  setIsModal(!isModal);
-                }} >
+            <div className="flex items-center h-full justify-between w-full cursor-pointer"
+              onClick={() => {
+                setIsModal(!isModal);
+              }} >
               <div className="relative h-full  flex-none ">
                 <img
                   className="inline-block rounded size-14 xl:size-20 "
@@ -677,7 +707,16 @@ const Footer = React.memo(function FooterComponent() {
                 <div className="flex items-center space-x-3">
                   <button
                     className="p-3 md:block hidden rounded-full relative"
-                    onClick={toggleVolume}
+                    onClick={(e) => {
+                      if (DivVolume.current && DivVolume.current.contains(e.target)) {
+                        if (isVolumeVisible) {
+                          setIsVolumeVisible(false);
+                        } else {
+                          setIsVolumeVisible(true);
+                        }
+                      }
+                    }}
+                    ref={DivVolume}
                   >
                     <svg
                       className="w-12 h-12 transform -rotate-90 cursor-pointer" // Giảm từ w-16 h-16 xuống w-12 h-12
@@ -709,6 +748,8 @@ const Footer = React.memo(function FooterComponent() {
                     </svg>
                     {isVolumeVisible && (
                       <input
+                        onClick={(e) => e.stopPropagation()}
+                        ref={Volume}
                         type="range"
                         min="0"
                         max="1"
@@ -721,27 +762,24 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
-                      isShuffling ? "text-blue-500" : ""
-                    }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isShuffling ? "text-blue-500" : ""
+                      }`}
                     onClick={toggleShuffle}
                   >
                     <Shuffle size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full xl:block hidden ${
-                      isLooping ? "text-green-500" : ""
-                    }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full xl:block hidden ${isLooping ? "text-green-500" : ""
+                      }`}
                     onClick={toggleLoop}
                   >
                     <Repeat size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
-                      isTimerActive ? "text-yellow-500" : ""
-                    }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isTimerActive ? "text-yellow-500" : ""
+                      }`}
                     onClick={
                       isTimerActive ? handleCancelTimer : toggleTimerModal
                     }
@@ -750,44 +788,60 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
                   {(isAccountType === "Premium" ||
                     isAccountType === "Plus") && (
-                    <button
-                      className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
-                 text-white
-                `}
-                      onClick={() => setIsOpenDownload(!isOpenDownload)}
-                    >
-                      <CloudDownload size={20} />
-                      {isOpenDownload && (
-                        <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
-                          {getAvailableQualities().map((quality) => (
-                            <button
-                              key={quality.value}
-                              onClick={() => handleDownload(quality.value)}
-                              className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
-                            >
-                              <div className="flex items-center space-x-2 py-0.5">
-                                <span>{quality.name}</span>
-                                {quality.value && (
-                                  <span
-                                    className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
-                                  >
-                                    {quality.value}
-                                  </span>
-                                )}
-                              </div>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </button>
-                  )}
+                      <button
+                        onClick={(e) => {
+                          if (DivDownload.current && DivDownload.current.contains(e.target)) {
+                            if (isOpenDownload) {
+                              setIsOpenDownload(false);
+                            } else {
+                              setIsOpenDownload(true);
+                            }
+                          }
+                        }}
+                        ref={DivDownload}
+                        className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
+                     text-white
+                    `}
+                      >
+                        <CloudDownload size={20} />
+                        {isOpenDownload && (
+                          <div
+                            onClick={(e) => e.stopPropagation()}
+                            ref={DownloadList}
+                            className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                            {getAvailableQualities().map((quality) => (
+                              <button
+                                key={quality.value}
+                                onClick={() => handleDownload(quality.value)}
+                                className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
+                              >
+                                <div className="flex items-center space-x-2 py-0.5">
+                                  <span>{quality.name}</span>
+                                  {quality.value && (
+                                    <span
+                                      className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
+                                    >
+                                      {quality.value}
+                                    </span>
+                                  )}
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+                      </button>
+                    )}
                 </div>
               </div>
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <div className="bg-white rounded-lg p-6 w-80 text-center">
+                <div
+                  onClick={toggleTimerModal}
+                  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white rounded-lg p-6 w-80 text-center">
                     <h2 className="text-lg font-bold mb-4">
                       Chọn thời gian hẹn giờ
                     </h2>
@@ -867,7 +921,7 @@ const Footer = React.memo(function FooterComponent() {
 
             <p className="truncate lg:block hidden min-h-fit ">Danh Sách</p>
             <AlignLeft size={20} className=" lg:hidden block text-white"
-                         />
+            />
             {isAlbum && (
               <div
                 ref={Playlist}
@@ -928,7 +982,7 @@ const Footer = React.memo(function FooterComponent() {
                   {listsongs.slice(0, visibleCount).map((song, index) => (
                     <li
                       key={index}
-                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`} 
+                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`}
                       onClick={() => {
                         setCurrentSongIndex(index);
                         setPlaySong(song);
@@ -1000,7 +1054,7 @@ const Footer = React.memo(function FooterComponent() {
                 className="p-3 bg-gray-800 rounded-full"
                 onClick={handleNextSong}
               >
-                <SkipForward  className="md:size-[24px] size-[12px]" />
+                <SkipForward className="md:size-[24px] size-[12px]" />
               </button>
             </div>
           </div>
@@ -1029,8 +1083,12 @@ const Footer = React.memo(function FooterComponent() {
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <div className="bg-white rounded-lg p-6 w-80 text-center">
+                <div
+                  onClick={toggleTimerModal}
+                  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white rounded-lg p-6 w-80 text-center">
                     <h2 className="text-lg font-bold mb-4">
                       Chọn thời gian hẹn giờ
                     </h2>
@@ -1081,7 +1139,16 @@ const Footer = React.memo(function FooterComponent() {
             <div className="flex mr-5 items-center space-x-3">
               <button
                 className="md:p-3 p-1  rounded-full relative"
-                onClick={toggleVolume}
+                onClick={(e) => {
+                  if (DivVolume.current && DivVolume.current.contains(e.target)) {
+                    if (isVolumeVisible) {
+                      setIsVolumeVisible(false);
+                    } else {
+                      setIsVolumeVisible(true);
+                    }
+                  }
+                }}
+                ref={DivVolume}
               >
                 <svg
                   className="w-12 h-12 transform -rotate-90 cursor-pointer" // Giảm từ w-16 h-16 xuống w-12 h-12
@@ -1113,6 +1180,8 @@ const Footer = React.memo(function FooterComponent() {
                 </svg>
                 {isVolumeVisible && (
                   <input
+                    onClick={(e) => e.stopPropagation()}
+                    ref={Volume}
                     type="range"
                     min="0"
                     max="1"
@@ -1125,41 +1194,50 @@ const Footer = React.memo(function FooterComponent() {
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
-                  isShuffling ? "text-blue-500" : "text-white"
-                }`}
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${isShuffling ? "text-blue-500" : "text-white"
+                  }`}
                 onClick={toggleShuffle}
               >
                 <Shuffle size={20} />
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
-                  isLooping ? "text-green-500" : "text-white"
-                }`}
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${isLooping ? "text-green-500" : "text-white"
+                  }`}
                 onClick={toggleLoop}
               >
                 <Repeat size={20} />
               </button>
 
               <button
-                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${
-                  isTimerActive ? "text-yellow-500" : "text-white"
-                }`}
+                className={`p-3  hover:bg-gray-800 rounded-full lg:block hidden ${isTimerActive ? "text-yellow-500" : "text-white"
+                  }`}
                 onClick={isTimerActive ? handleCancelTimer : toggleTimerModal}
               >
                 <Clock size={20} />
               </button>
               {(isAccountType === "Premium" || isAccountType === "Plus") && (
                 <button
+                  onClick={(e) => {
+                    if (DivDownload.current && DivDownload.current.contains(e.target)) {
+                      if (isOpenDownload) {
+                        setIsOpenDownload(false);
+                      } else {
+                        setIsOpenDownload(true);
+                      }
+                    }
+                  }}
+                  ref={DivDownload}
                   className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
                  text-white
                 `}
-                  onClick={() => setIsOpenDownload(!isOpenDownload)}
                 >
                   <CloudDownload size={20} />
                   {isOpenDownload && (
-                    <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      ref={DownloadList}
+                      className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
                       {getAvailableQualities().map((quality) => (
                         <button
                           key={quality.value}
@@ -1184,14 +1262,22 @@ const Footer = React.memo(function FooterComponent() {
               )}
             </div>
             <div
-              onClick={() => setIsOpen(!isOpen)}
+              onClick={(e) => {
+                if (DivQuality.current && DivQuality.current.contains(e.target)) {
+                  if (isOpen) {
+                    setIsOpen(false);
+                  } else {
+                    setIsOpen(true);
+                  }
+                }
+              }}
+              ref={DivQuality}
               className="bg-gradient-to-r cursor-pointer from-[#FF553E] to-[#FF0065] text-white w-[110px]  h-[40px] px-3 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
             >
               <p>{selectedQualityLabel}</p>
               <div
-                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${
-                  !isOpen ? "rotate-90" : " rotate-[270deg]"
-                } `}
+                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${!isOpen ? "rotate-90" : " rotate-[270deg]"
+                  } `}
               >
                 {" "}
                 <svg
@@ -1210,7 +1296,10 @@ const Footer = React.memo(function FooterComponent() {
                 </svg>
               </div>
               {isOpen && (
-                <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-gray-900 rounded-lg shadow-2xl overflow-hidden">
+                <div
+                  ref={QualityList}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-gray-900 rounded-lg shadow-2xl overflow-hidden">
                   {getAvailableQualities().map((quality) => {
                     // Kiểm tra xem nút có được phép chọn hay không
                     const isDisabled =
@@ -1228,11 +1317,10 @@ const Footer = React.memo(function FooterComponent() {
                           }
                         }}
                         disabled={isDisabled}
-                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${
-                          isDisabled
-                            ? "text-gray-500 cursor-not-allowed bg-gray-800"
-                            : "text-white hover:bg-gray-800"
-                        }`}
+                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${isDisabled
+                          ? "text-gray-500 cursor-not-allowed bg-gray-800"
+                          : "text-white hover:bg-gray-800"
+                          }`}
                       >
                         <div className="flex items-center space-x-2 py-0.5">
                           <span>{quality.name}</span>
@@ -1246,11 +1334,10 @@ const Footer = React.memo(function FooterComponent() {
                         </div>
 
                         <span
-                          className={`w-2 h-2 rounded-full ${
-                            selectedQuality === quality.value
-                              ? "bg-pink-500"
-                              : ""
-                          }`}
+                          className={`w-2 h-2 rounded-full ${selectedQuality === quality.value
+                            ? "bg-pink-500"
+                            : ""
+                            }`}
                         ></span>
                       </button>
                     );

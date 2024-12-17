@@ -96,7 +96,7 @@ function Nav() {
       document.removeEventListener("mousedown", handleClickOutside);
     };
 
-   
+
   }, []);
 
   useEffect(() => {
@@ -115,103 +115,106 @@ function Nav() {
 
   return (
     <>
+
       <div className="fixed top-0 left-0 lg:pl-60 flex justify-between w-full h-auto flex-shrink py-4 h-[90px] px-1 lg:px-10 bg-medium text-zinc-700 items-center justify-center z-30 ">
-        <button
-          className={`fixed z-50 bg-red-600 text-white transition-transform duration-300 ease-in-out p-2 rounded-md lg:hidden ${isSidebar ? 'translate-x-40' : ''}`}
-          onClick={() => setIsSidebar(!isSidebar)}
-        >
-          {isSidebar ? <CloseIcon /> : <MenuIcon />}
-        </button>
-        <div className="relative w-[80%] ml-12 lg:ml-0 md:w-auto" ref={searchRef}>
-          <InputSearch
-            onSearch={fetchSearchResults}
-            onFocus={() => setIsFocused(true)}
-            onQueryChange={setQuery}
-          />
 
-          {isFocused && (
-            <div className="results mt-10 z-50 absolute top-3 bg-[#172533] rounded-xl p-5 w-full ">
-              {loading ? (
-                <p className="text-center text-gray-400">Đang tìm kiếm...</p>
-              ) : songs.length === 0 && singers.length === 0 ? (
-                <p className="text-center text-gray-400 mt-3">
-                  Không tìm thấy kết quả.
-                </p>
-              ) : (
-                <>
-                  {/* Hiển thị danh sách bài hát nếu có */}
-                  {songs.length > 0 && (
-                    <div className="songs mt-6">
-                      <h2 className="text-base text-slate-400 font-semibold mb-4">
-                        🎵 Danh sách bài hát:
-                      </h2>
-                      <ul className=" gap-6">
-                        {songs.map((song, index) => (
-                          <li
-                            key={index}
-                            className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
-                          >
-                            <Link to={`/SongDetail/${song.id}`} >
-                              <div className="flex items-center">
-                                <img
-                                  src={song.song_image}
-                                  alt={song.song_name}
-                                  className="size-12 rounded-lg"
-                                />
-                                <div className="ml-5 w-full flex-1">
-                                  <h3 className="font-bold text-base truncate text-slate-300 w-[80%]">
-                                    {song.song_name}
-                                  </h3>
-                                  <p className="text-gray-400 text-sm">
-                                    {song.singer_name}
-                                  </p>
+        <div className="relative w-[80%]  lg:ml-0 md:w-auto flex box-border" ref={searchRef}>
+          <button
+            className={`  text-white transition-transform duration-300 ease-in-out p-2 rounded-md lg:hidden mx-2 ${isSidebar ? 'translate-x-40' : ''}`}
+            onClick={() => setIsSidebar(!isSidebar)}
+          >
+            <MenuIcon />
+          </button>
+          <div className="relative flex items-center bg-[#172533] py-2 px-3 h-[40px] rounded-3xl w-full box-border">
+            <InputSearch
+              onSearch={fetchSearchResults}
+              onFocus={() => setIsFocused(true)}
+              onQueryChange={setQuery}
+            />
+            {isFocused && (
+              <div className="results mt-10 z-50 absolute top-3 bg-[#172533] rounded-xl p-5 w-full -translate-x-[15px]">
+                {loading ? (
+                  <p className="text-center text-gray-400">Đang tìm kiếm...</p>
+                ) : songs.length === 0 && singers.length === 0 ? (
+                  <p className="text-center text-gray-400 mt-3">
+                    Không tìm thấy kết quả.
+                  </p>
+                ) : (
+                  <>
+                    {/* Hiển thị danh sách bài hát nếu có */}
+                    {songs.length > 0 && (
+                      <div className="songs mt-6">
+                        <h2 className="text-base text-slate-400 font-semibold mb-4">
+                          🎵 Danh sách bài hát:
+                        </h2>
+                        <ul className=" gap-6">
+                          {songs.map((song, index) => (
+                            <li
+                              key={index}
+                              className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
+                            >
+                              <Link to={`/SongDetail/${song.id}`} >
+                                <div className="flex items-center">
+                                  <img
+                                    src={song.song_image}
+                                    alt={song.song_name}
+                                    className="size-12 rounded-lg"
+                                  />
+                                  <div className="ml-5 w-full flex-1">
+                                    <h3 className="font-bold text-base truncate text-slate-300 w-[80%]">
+                                      {song.song_name}
+                                    </h3>
+                                    <p className="text-gray-400 text-sm">
+                                      {song.singer_name}
+                                    </p>
+                                  </div>
                                 </div>
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
 
-                  {/* Hiển thị danh sách ca sĩ nếu có */}
-                  {singers.length > 0 && (
-                    <div className="singers mt-8">
-                      <h2 className="text-base text-slate-400 font-semibold mb-4">
-                        🎤 Danh sách ca sĩ:
-                      </h2>
-                      <ul className="gap-6">
-                        {singers.map((singer) => (
-                          <li
-                            key={singer.id}
-                            className="rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
-                          >
-                            <Link to={`/ProfileArtist/${singer.id}`}>
-                              <div className="flex items-center">
-                                <img
-                                  src={singer.singer_image}
-                                  alt={singer.singer_name}
-                                  className="size-12 rounded-lg"
-                                />
-                                <div className="ml-5">
-                                  <h3 className="font-bold text-base truncate text-slate-300 ">
-                                    {singer.singer_name}
-                                  </h3>
+                    {/* Hiển thị danh sách ca sĩ nếu có */}
+                    {singers.length > 0 && (
+                      <div className="singers mt-8">
+                        <h2 className="text-base text-slate-400 font-semibold mb-4">
+                          🎤 Danh sách ca sĩ:
+                        </h2>
+                        <ul className="gap-6">
+                          {singers.map((singer) => (
+                            <li
+                              key={singer.id}
+                              className="rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
+                            >
+                              <Link to={`/ProfileArtist/${singer.id}`}>
+                                <div className="flex items-center">
+                                  <img
+                                    src={singer.singer_image}
+                                    alt={singer.singer_name}
+                                    className="size-12 rounded-lg"
+                                  />
+                                  <div className="ml-5">
+                                    <h3 className="font-bold text-base truncate text-slate-300 ">
+                                      {singer.singer_name}
+                                    </h3>
+                                  </div>
                                 </div>
-                              </div>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
-                </>
-              )}
-              <div className="text-left text-gray-300 mt-5 text-sm">
-                      Tìm kiếm  <strong>&quot;{query}&quot;</strong>
-                    </div>
-            </div>
-          )}
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                  </>
+                )}
+                <div className="text-left text-gray-300 mt-5 text-sm">
+                  Tìm kiếm  <strong>&quot;{query}&quot;</strong>
+                </div>
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="flex text-left items-center">
@@ -270,9 +273,8 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform hidden md:block duration-300 ${
-                      isProfileOpen ? "rotate-180" : ""
-                    }`}
+                    className={`transform transition-transform hidden md:block duration-300 ${isProfileOpen ? "rotate-180" : ""
+                      }`}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
@@ -357,11 +359,10 @@ function Nav() {
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${
-                                    index === 0
-                                      ? "text-yellow-500"
-                                      : "text-gray-400"
-                                  }`}
+                                  className={`w-5 h-5 mr-4 ${index === 0
+                                    ? "text-yellow-500"
+                                    : "text-gray-400"
+                                    }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
@@ -379,11 +380,10 @@ function Nav() {
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${
-                                    index === 0
-                                      ? "text-yellow-500"
-                                      : "text-gray-400"
-                                  }`}
+                                  className={`w-5 h-5 mr-4 ${index === 0
+                                    ? "text-yellow-500"
+                                    : "text-gray-400"
+                                    }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
@@ -425,7 +425,7 @@ function Nav() {
           )}
         </div>
       </div>
-    
+
     </>
   );
 }
