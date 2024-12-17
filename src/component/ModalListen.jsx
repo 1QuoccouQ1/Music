@@ -124,26 +124,26 @@ function ModalListen() {
               ></div>
             </div>
           </div>
-          <div className="w-full md:w-3/4 xl:w-2/4  flex items-center justify-center h-[80%] ">
+          <div className="w-full md:w-3/4 xl:w-2/4  flex items-center justify-center h-[70%] ">
             <div
               style={{
                 backgroundImage: `url("../imgs/Red And Black Modern Live Music Podcast Instagram Post (2) 3 (1).png")`,
                 backgroundPosition: "center",
                 backgroundSize: "cover",
               }}
-              className="relative size-[250px] md:size-[550px]  "
+              className="relative size-[270px] sm:size-[500px] 2xl:size-[560px] -translate-y-1/3 sm:translate-y-0"
             >
               <div className="absolute top-1/2 right-1/2 translate-x-1/2 -translate-y-1/2">
                 <img
                   style={{
                     animationPlayState: isPlay ? "running" : "paused",
                   }}
-                  className={` size-24 md:size-44  rounded-full animate-[spin_8s_linear_infinite]`}
+                  className={`size-24 sm:size-44 md:size-48 xl:size-48 2xl:size-56  rounded-full animate-[spin_8s_linear_infinite]`}
                   src={currentSong.song_image}
                 />
               </div>
               <img
-                className={`absolute md:w-60 md:h-96 w-[120px] h-[180px]   top-0 right-0  -translate-y-1/2  ${
+                className={`absolute w-[120px] h-[180px] sm:w-[230px] sm:h-[330px] 2xl:w-[260px] 2xl:h-[350px]  top-0 right-0  -translate-y-1/2  ${
                   isPlay ? "" : "rotate-90"
                 } duration-700  `}
                 src="../imgs/Turntable (4) 1.png"

@@ -109,14 +109,14 @@ function ListSongs({ songs, start }) {
 
     return (
         <>
-        <table className='min-w-full text-white text-xs sm:text-sm md:text-base mt-8'>
+        <table className='min-w-full text-white text-xs sm:text-sm md:text-base '>
             <thead>
                 <tr className='text-left border-b border-gray-600'>
-                    <th className='py-2 w-2 text-center'>#</th>
-                    <th className='py-2 px-2 sm:px-4'>Bài hát</th>
-                    <th className='py-2 px-4 hidden md:table-cell'>Tên Ca Sĩ</th>
-                    <th className='py-2 px-4 text-center hidden md:table-cell'>Lượt nghe</th>
-                    <th className='py-2 px-4 text-right hidden md:table-cell'>Thời lượng</th>
+                    <th className='py-3 w-2 text-center'>#</th>
+                    <th className='py-3 px-2 sm:px-4'>Bài hát</th>
+                    <th className='py-3 px-4 hidden md:table-cell'>Tên Ca Sĩ</th>
+                    <th className='py-3 px-4 text-center hidden md:table-cell'>Lượt nghe</th>
+                    <th className='py-3 px-4 text-right hidden md:table-cell'>Thời lượng</th>
                 </tr>
             </thead>
             <tbody>
@@ -125,7 +125,7 @@ function ListSongs({ songs, start }) {
                         onClick={() => handleClick(song.id)}
                         onDoubleClick={() => handleAddSong("song", song.id)}
                         key={song.id}
-                        className='group border-b-[10px] border-transparent hover:bg-slate-800 cursor-pointer duration-300'
+                        className='group border-transparent hover:bg-slate-800 cursor-pointer duration-300'
                     >
                         <td className='py-2 md:px-4 text-center'>
                             <Play
@@ -136,7 +136,7 @@ function ListSongs({ songs, start }) {
                                 {index + start}
                             </p>
                         </td>
-                        <td className='flex items-center space-x-4 px-1 md:px-4 ' >
+                        <td className='flex items-center py-[8px] space-x-4 px-1 md:px-4 ' >
                             <img
                                 src={song.song_image}
                                 alt={song.song_name}
