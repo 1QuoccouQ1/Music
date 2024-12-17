@@ -109,17 +109,35 @@ function Register() {
 
     // Kiểm tra mật khẩu
     if (!formData.password) {
-      newErrors.password = language === "vi" ? "Mật khẩu không được để trống." : "Password cannot be empty.";
+      newErrors.password =
+        language === "vi"
+          ? "Mật khẩu không được để trống."
+          : "Password cannot be empty.";
     } else if (formData.password.length < 8) {
-      newErrors.password = language === "vi" ? "Mật khẩu phải có ít nhất 8 ký tự." : "Password must be at least 8 characters long.";
-    } else if (!/[A-Z]/.test(formData.password)) { // Check for uppercase letters
-      newErrors.password = language === "vi" ? "Mật khẩu phải chứa ít nhất một ký tự viết hoa." : "Password must contain at least one uppercase letter.";
-    } else if (!/[0-9]/.test(formData.password)) { // Check for numbers
-      newErrors.password = language === "vi" ? "Mật khẩu phải chứa ít nhất một số." : "Password must contain at least one number.";
-    } else if (!/[^A-Za-z0-9]/.test(formData.password)) { // Check for special characters
-      newErrors.password = language === "vi" ? "Mật khẩu phải chứa ít nhất một ký tự đặc biệt." : "Password must contain at least one special character.";
+      newErrors.password =
+        language === "vi"
+          ? "Mật khẩu phải có ít nhất 8 ký tự."
+          : "Password must be at least 8 characters long.";
+    } else if (!/[A-Z]/.test(formData.password)) {
+      // Check for uppercase letters
+      newErrors.password =
+        language === "vi"
+          ? "Mật khẩu phải chứa ít nhất một ký tự viết hoa."
+          : "Password must contain at least one uppercase letter.";
+    } else if (!/[0-9]/.test(formData.password)) {
+      // Check for numbers
+      newErrors.password =
+        language === "vi"
+          ? "Mật khẩu phải chứa ít nhất một số."
+          : "Password must contain at least one number.";
+    } else if (!/[^A-Za-z0-9]/.test(formData.password)) {
+      // Check for special characters
+      newErrors.password =
+        language === "vi"
+          ? "Mật khẩu phải chứa ít nhất một ký tự đặc biệt."
+          : "Password must contain at least one special character.";
     }
-    
+
     // Kiểm tra họ và tên
     if (!formData.fullname) {
       newErrors.fullname =
@@ -173,6 +191,7 @@ function Register() {
             birthday: `${dateOfBirth.year}-${dateOfBirth.month}-${dateOfBirth.day}`,
           }),
         });
+        const data = await response.json();
 
         // Kiểm tra trạng thái của phản hồi
         if (response.status === 200 || response.status === 201) {
@@ -184,11 +203,11 @@ function Register() {
         } else {
           setErrors({
             form:
-              language === "vi"
-                ? "Đăng ký thất bại. Vui lòng kiểm tra lại."
-                : "Login failed. Please try again.",
+              data.message ||
+              (language === "vi"
+                ? "Đăng nhập ký bại. Vui lòng kiểm tra lại."
+                : "Register failed. Please try again."),
           });
-          console.log(errors);
         }
       } catch (error) {
         console.error("Error logging in:", error);

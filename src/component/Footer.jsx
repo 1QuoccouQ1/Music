@@ -1,4 +1,11 @@
-import { Heart, MoreHorizontal, Play, AlignLeft, Download } from "lucide-react";
+import {
+  Heart,
+  MoreHorizontal,
+  Play,
+  AlignLeft,
+  Download,
+  VolumeX,
+} from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
@@ -41,6 +48,7 @@ const Footer = React.memo(function FooterComponent() {
     isAccountType,
     isUpdate,
     setIsUpdate,
+    handleClick
   } = useContext(UserContext);
   const [isAlbum, setIsAlbum] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -761,7 +769,17 @@ const Footer = React.memo(function FooterComponent() {
                       />
                       <foreignObject x="12" y="12" width="24" height="24">
                         <div className="flex items-center justify-center w-full h-full">
-                          <Volume2 size={12} className="text-white rotate-90" />
+                          {volume > 0 ? (
+                            <Volume2
+                              size={12}
+                              className="text-white rotate-90"
+                            />
+                          ) : (
+                            <VolumeX
+                              size={12}
+                              className="text-white rotate-90"
+                            />
+                          )}
                         </div>
                       </foreignObject>
                     </svg>
@@ -775,30 +793,38 @@ const Footer = React.memo(function FooterComponent() {
                         step="0.01"
                         value={volume}
                         onChange={handleVolumeChange}
-                        className="w-[100px] absolute -top-16 left-1/2 transform -translate-x-1/2 rotate-[-90deg] bg-gray-700"
+                        className="volume-slider w-[100px] absolute -top-16 left-1/2 transform -translate-x-1/2 rotate-[-90deg] bg-gray-700"
+                        style={{
+                          background: `linear-gradient(to right, #EF4444 0%, #EF4444 ${
+                            volume * 100
+                          }%, #4B5563 ${volume * 100}%, #4B5563 100%)`,
+                        }}
                       />
                     )}
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isShuffling ? "text-blue-500" : ""
-                      }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
+                      isShuffling ? "text-blue-500" : ""
+                    }`}
                     onClick={toggleShuffle}
                   >
                     <Shuffle size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full xl:block hidden ${isLooping ? "text-green-500" : ""
-                      }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full xl:block hidden ${
+                      isLooping ? "text-green-500" : ""
+                    }`}
                     onClick={toggleLoop}
                   >
                     <Repeat size={20} />
                   </button>
 
                   <button
-                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${isTimerActive ? "text-yellow-500" : ""
-                      }`}
+                    className={`p-3 hover:bg-gray-800 rounded-full lg:block hidden ${
+                      isTimerActive ? "text-yellow-500" : ""
+                    }`}
                     onClick={
                       isTimerActive ? handleCancelTimer : toggleTimerModal
                     }
@@ -998,7 +1024,9 @@ const Footer = React.memo(function FooterComponent() {
                         onClick={() => toggleFavorite(playSong.id, false)}
                       />
                     )}
-                    <MoreHorizontal className="w-4 h-4 cursor-pointer" />
+                    <MoreHorizontal className="w-4 h-4 cursor-pointer" 
+                      onClick={() => handleClick(playSong.id)}
+                    />
                   </div>
                 </div>
 
@@ -1056,7 +1084,9 @@ const Footer = React.memo(function FooterComponent() {
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 md:py-3 sm:py-1 py-3 flex-col sm:flex-row ">
           <div className="flex items-center justify-between  p-3 text-white  sm:max-w-[350px] sm:w-[350px] w-full w-fit  rounded-r-lg">
             <button
-              className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full block sm:hidden ${isShuffling ? "text-blue-500" : "text-white"}`}
+              className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full block sm:hidden ${
+                isShuffling ? "text-blue-500" : "text-white"
+              }`}
               onClick={toggleShuffle}
             >
               <Shuffle size={20} />
@@ -1099,12 +1129,13 @@ const Footer = React.memo(function FooterComponent() {
               </button>
             </div>
             <button
-                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full block sm:hidden ${isLooping ? "text-green-500" : "text-white"
-                  }`}
-                onClick={toggleLoop}
-              >
-                <Repeat size={20} />
-              </button>
+              className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full block sm:hidden ${
+                isLooping ? "text-green-500" : "text-white"
+              }`}
+              onClick={toggleLoop}
+            >
+              <Repeat size={20} />
+            </button>
           </div>
           <div className="flex items-center justify-center pb-3 sm:pb-0 w-full ">
             <div className="relative lg:p-4 rounded-lg w-full max-w-5xl">
@@ -1203,9 +1234,7 @@ const Footer = React.memo(function FooterComponent() {
                 }}
                 ref={DivVolume}
               >
-                <svg
-                  className="w-10 h-10 transform -rotate-90 cursor-pointer block sm:hidden"
-                >
+                <svg className="w-10 h-10 transform -rotate-90 cursor-pointer block sm:hidden">
                   <circle
                     cx="24"
                     cy="20"
@@ -1227,13 +1256,15 @@ const Footer = React.memo(function FooterComponent() {
                   />
                   <foreignObject x="12" y="9" width="24" height="24">
                     <div className="flex items-center justify-center w-full h-full">
-                      <Volume2 size={12} className="text-white rotate-90" />
+                      {volume > 0 ? (
+                        <Volume2 size={12} className="text-white rotate-90" />
+                      ) : (
+                        <VolumeX size={12} className="text-white rotate-90" />
+                      )}
                     </div>
                   </foreignObject>
                 </svg>
-                <svg
-                  className="w-12 h-12 transform -rotate-90 cursor-pointer hidden sm:block"
-                >
+                <svg className="w-12 h-12 transform -rotate-90 cursor-pointer hidden sm:block">
                   <circle
                     cx="24"
                     cy="24"
@@ -1255,7 +1286,11 @@ const Footer = React.memo(function FooterComponent() {
                   />
                   <foreignObject x="12" y="12" width="24" height="24">
                     <div className="flex items-center justify-center w-full h-full">
-                      <Volume2 size={12} className="text-white rotate-90" />
+                      {volume > 0 ? (
+                        <Volume2 size={12} className="text-white rotate-90" />
+                      ) : (
+                        <VolumeX size={12} className="text-white rotate-90" />
+                      )}
                     </div>
                   </foreignObject>
                 </svg>
@@ -1269,30 +1304,38 @@ const Footer = React.memo(function FooterComponent() {
                     step="0.01"
                     value={volume}
                     onChange={handleVolumeChange}
-                    className="w-[100px] absolute -top-16 sm:left-1/2 left-2/4 transform -translate-x-1/2 rotate-[-90deg] bg-gray-700"
+                    className="volume-slider w-[100px] absolute -top-16 sm:left-1/2 left-2/4 transform -translate-x-1/2 rotate-[-90deg] bg-gray-700"
+                    style={{
+                      background: `linear-gradient(to right, #EF4444 0%, #EF4444 ${
+                        volume * 100
+                      }%, #4B5563 ${volume * 100}%, #4B5563 100%)`,
+                    }}
                   />
                 )}
               </button>
 
               <button
-                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full hidden sm:block  ${isShuffling ? "text-blue-500" : "text-white"
-                  }`}
+                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full hidden sm:block  ${
+                  isShuffling ? "text-blue-500" : "text-white"
+                }`}
                 onClick={toggleShuffle}
               >
                 <Shuffle size={20} />
               </button>
 
               <button
-                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full hidden sm:block ${isLooping ? "text-green-500" : "text-white"
-                  }`}
+                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full hidden sm:block ${
+                  isLooping ? "text-green-500" : "text-white"
+                }`}
                 onClick={toggleLoop}
               >
                 <Repeat size={20} />
               </button>
 
               <button
-                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full ${isTimerActive ? "text-yellow-500" : "text-white"
-                  }`}
+                className={`lg:p-3 p-2  hover:bg-gray-800 rounded-full ${
+                  isTimerActive ? "text-yellow-500" : "text-white"
+                }`}
                 onClick={isTimerActive ? handleCancelTimer : toggleTimerModal}
               >
                 <Clock size={20} />
@@ -1364,8 +1407,9 @@ const Footer = React.memo(function FooterComponent() {
             >
               <p>{selectedQualityLabel}</p>
               <div
-                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${!isOpen ? "rotate-90" : " rotate-[270deg]"
-                  } `}
+                className={` ml-2 size-4 flex items-center justify-center rounded-full  ${
+                  !isOpen ? "rotate-90" : " rotate-[270deg]"
+                } `}
               >
                 {" "}
                 <svg
@@ -1406,10 +1450,11 @@ const Footer = React.memo(function FooterComponent() {
                           }
                         }}
                         disabled={isDisabled}
-                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${isDisabled
+                        className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between ${
+                          isDisabled
                             ? "text-gray-500 cursor-not-allowed bg-gray-800"
                             : "text-white hover:bg-gray-800"
-                          }`}
+                        }`}
                       >
                         <div className="flex items-center space-x-2 py-0.5">
                           <span>{quality.name}</span>
@@ -1423,10 +1468,11 @@ const Footer = React.memo(function FooterComponent() {
                         </div>
 
                         <span
-                          className={`w-2 h-2 rounded-full ${selectedQuality === quality.value
+                          className={`w-2 h-2 rounded-full ${
+                            selectedQuality === quality.value
                               ? "bg-pink-500"
                               : ""
-                            }`}
+                          }`}
                         ></span>
                       </button>
                     );
