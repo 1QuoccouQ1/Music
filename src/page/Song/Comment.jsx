@@ -116,7 +116,7 @@ function Comment({ id, setIsTotal, setAverageRating }) {
 
     return (
         <>
-            <div className='md:flex gap-4 mt-10'>
+            <div className='md:flex gap-4 mt-10 xl:mx-0 mx-4'>
                 {/* Form đánh giá */}
                 <form
                     onSubmit={handleSubmit}
