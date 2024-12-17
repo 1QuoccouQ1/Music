@@ -170,7 +170,7 @@ function Register() {
             password: formData.password,
             name: formData.fullname,
             gender: formData.gender,
-            birthday: `${dateOfBirth.day}-${dateOfBirth.month}-${dateOfBirth.year}`,
+            birthday: `${dateOfBirth.year}-${dateOfBirth.month}-${dateOfBirth.day}`,
           }),
         });
 

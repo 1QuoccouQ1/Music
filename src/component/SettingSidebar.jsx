@@ -56,9 +56,12 @@ function SettingSidebar() {
 
   return (
     <>
-      {/* Nút mở sidebar trên mobile */}
-
-      {/* Sidebar */}
+      {isSidebar && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-50 z-40"
+          onClick={() => setIsSidebar(false)} // Đóng Sidebar khi click ra ngoài
+        ></div>
+      )}
       <aside
         ref={sidebarSettingRef}
         className={`fixed top-0 left-0 h-full bg-sidebar px-1 lg:px-6 py-3 z-40 transition-transform duration-300   ${
@@ -146,7 +149,7 @@ function SettingSidebar() {
                 </Link> */}
                 <div
                   onClick={handleLogout}
-                  className="text-red-600 border-red-600 border rounded-full py-1 px-5 mx-auto  cursor-pointer text-center mt-6 hover:opacity-90 "
+                  className="text-red-600 border-red-600 border rounded-full py-1 px-5 mx-auto  cursor-pointer text-center mt-6 hover:opacity-90 w-max "
                 >
                   Đăng Xuất
                 </div>

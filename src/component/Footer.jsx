@@ -1,4 +1,4 @@
-import { Heart, MoreHorizontal, Play, AlignLeft } from "lucide-react";
+import { Heart, MoreHorizontal, Play, AlignLeft, Download } from "lucide-react";
 import PlayArrowIcon from "@mui/icons-material/PlayArrow";
 import { useState } from "react";
 import { useRef, useEffect } from "react";
@@ -78,7 +78,10 @@ const Footer = React.memo(function FooterComponent() {
   ];
   const [isOpen, setIsOpen] = useState(false);
   const [isOpenDownload, setIsOpenDownload] = useState(false);
-  const [selectedQuality, setSelectedQuality] = useState("basic");
+  const [selectedQuality, setSelectedQuality] = useState(() => {
+    const savedSong = localStorage.getItem("isQuality"); // Lấy giá trị từ localStorage
+    return savedSong ? savedSong : "basic";
+  });
   const [selectedQualityLabel, setSelectedQualityLabel] = useState("128kbps");
 
   const [duration, setDuration] = useState(0);
@@ -92,6 +95,12 @@ const Footer = React.memo(function FooterComponent() {
   const [optionSongIndex, setOptionSongIndex] = useState(null);
   const Playlist = useRef(null);
   const Divlist = useRef(null);
+  const DivQuality = useRef(null);
+  const QualityList = useRef(null);
+  const DivDownload = useRef(null);
+  const DownloadList = useRef(null);
+  const DivVolume = useRef(null);
+  const Volume = useRef(null);
   const [songPlayCount, setSongPlayCount] = useState(0);
   const [isPlayingAd, setIsPlayingAd] = useState(false);
   const [favoriteSongs, setFavoriteSongs] = useState([]);
@@ -414,9 +423,6 @@ const Footer = React.memo(function FooterComponent() {
     setIsShuffling(!isShuffling);
   };
 
-  const toggleVolume = () => {
-    setIsVolumeVisible(!isVolumeVisible);
-  };
   const handleDownload = (qualityValue) => {
     if (isAccountType === "Basic" && qualityValue !== "basic") {
       toast.error(
@@ -453,7 +459,6 @@ const Footer = React.memo(function FooterComponent() {
       await handleFetchSongs("rank");
       setIsLoading(false);
       // Sau khi danh sách bài hát đã được tải, kiểm tra `currentSong`
-
     };
 
     // Gọi hàm fetchData
@@ -461,7 +466,6 @@ const Footer = React.memo(function FooterComponent() {
     if (JSON.parse(localStorage.getItem("user"))) {
       fetchFavoriteSongs();
     }
-
 
     const handleClickOutside = (event) => {
       if (
@@ -471,6 +475,30 @@ const Footer = React.memo(function FooterComponent() {
         !Divlist.current.contains(event.target)
       ) {
         setIsAlbum(false);
+      }
+      if (
+        QualityList.current &&
+        DivQuality.current &&
+        !QualityList.current.contains(event.target) &&
+        !DivQuality.current.contains(event.target)
+      ) {
+        setIsOpen(false);
+      }
+      if (
+        DownloadList.current &&
+        DivDownload.current &&
+        !DownloadList.current.contains(event.target) &&
+        !DivDownload.current.contains(event.target)
+      ) {
+        setIsOpenDownload(false);
+      }
+      if (
+        DivVolume.current &&
+        Volume.current &&
+        !DivVolume.current.contains(event.target) &&
+        !Volume.current.contains(event.target)
+      ) {
+        setIsVolumeVisible(false);
       }
     };
 
@@ -538,6 +566,22 @@ const Footer = React.memo(function FooterComponent() {
     }
   }, [currentSongIndex, selectedQuality, playSong]);
 
+  useEffect(() => {
+    switch (selectedQuality) {
+      case "basic":
+        setSelectedQualityLabel("128kbps");
+        break;
+      case "plus":
+        setSelectedQualityLabel("320kbps");
+        break;
+      case "premium":
+        setSelectedQualityLabel("Lossless");
+        break;
+      default:
+        setSelectedQualityLabel("128kbps");
+    }
+  }, [selectedQuality]);
+
   if (isLoading) {
     return null;
   }
@@ -563,10 +607,12 @@ const Footer = React.memo(function FooterComponent() {
       {!isModal ? (
         <div className="fixed bottom-0 right-0 left-0 flex justify-between items-center bg-sidebar z-50 h-[80px] lg:h-[100px]">
           <div className="flex items-center justify-between bg-gradient-to-r from-[#FF553E] to-[#FF0065] p-3 text-white w-[200px] md:w-[350px] rounded-r-lg h-full">
-            <div className="flex items-center h-full justify-between w-full cursor-pointer"
+            <div
+              className="flex items-center h-full justify-between w-full cursor-pointer"
               onClick={() => {
                 setIsModal(!isModal);
-              }} >
+              }}
+            >
               <div className="relative h-full  flex-none ">
                 <img
                   className="inline-block rounded size-14 xl:size-20 "
@@ -677,7 +723,19 @@ const Footer = React.memo(function FooterComponent() {
                 <div className="flex items-center space-x-3">
                   <button
                     className="p-3 md:block hidden rounded-full relative"
-                    onClick={toggleVolume}
+                    onClick={(e) => {
+                      if (
+                        DivVolume.current &&
+                        DivVolume.current.contains(e.target)
+                      ) {
+                        if (isVolumeVisible) {
+                          setIsVolumeVisible(false);
+                        } else {
+                          setIsVolumeVisible(true);
+                        }
+                      }
+                    }}
+                    ref={DivVolume}
                   >
                     <svg
                       className="w-12 h-12 transform -rotate-90 cursor-pointer" // Giảm từ w-16 h-16 xuống w-12 h-12
@@ -709,6 +767,8 @@ const Footer = React.memo(function FooterComponent() {
                     </svg>
                     {isVolumeVisible && (
                       <input
+                        onClick={(e) => e.stopPropagation()}
+                        ref={Volume}
                         type="range"
                         min="0"
                         max="1"
@@ -747,44 +807,66 @@ const Footer = React.memo(function FooterComponent() {
                   </button>
                   {(isAccountType === "Premium" ||
                     isAccountType === "Plus") && (
-                      <button
-                        className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
-                 text-white
-                `}
-                        onClick={() => setIsOpenDownload(!isOpenDownload)}
-                      >
-                        <CloudDownload size={20} />
-                        {isOpenDownload && (
-                          <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
-                            {getAvailableQualities().map((quality) => (
-                              <button
-                                key={quality.value}
-                                onClick={() => handleDownload(quality.value)}
-                                className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
-                              >
-                                <div className="flex items-center space-x-2 py-0.5">
-                                  <span>{quality.name}</span>
-                                  {quality.value && (
-                                    <span
-                                      className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
-                                    >
-                                      {quality.value}
-                                    </span>
-                                  )}
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        )}
-                      </button>
-                    )}
+                    <button
+                      onClick={(e) => {
+                        if (
+                          DivDownload.current &&
+                          DivDownload.current.contains(e.target)
+                        ) {
+                          if (isOpenDownload) {
+                            setIsOpenDownload(false);
+                          } else {
+                            setIsOpenDownload(true);
+                          }
+                        }
+                      }}
+                      ref={DivDownload}
+                      className={`p-3 relative hover:bg-gray-800 rounded-full lg:block hidden
+                      text-white
+                    `}
+                    >
+                      <CloudDownload size={20} />
+                      {isOpenDownload && (
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          ref={DownloadList}
+                          className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden"
+                        >
+                          {getAvailableQualities().map((quality) => (
+                            <button
+                              key={quality.value}
+                              onClick={() => handleDownload(quality.value)}
+                              className={`w-full px-4 py-2 text-left text-sm flex items-center justify-between text-black hover:bg-slate-300`}
+                            >
+                              <div className="flex items-center space-x-2 py-0.5">
+                                <span>{quality.name}</span>
+                                {quality.value && (
+                                  <span
+                                    className={`text-[8px] px-1 rounded ${quality.labelColor} text-black`}
+                                  >
+                                    {quality.value}
+                                  </span>
+                                )}
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </button>
+                  )}
                 </div>
               </div>
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <div className="bg-white rounded-lg p-6 w-80 text-center">
+                <div
+                  onClick={toggleTimerModal}
+                  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                >
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white rounded-lg p-6 w-80 text-center"
+                  >
                     <h2 className="text-lg font-bold mb-4">
                       Chọn thời gian hẹn giờ
                     </h2>
@@ -863,21 +945,21 @@ const Footer = React.memo(function FooterComponent() {
             </div>
 
             <p className="truncate lg:block hidden min-h-fit ">Danh Sách</p>
-            <AlignLeft size={20} className=" lg:hidden block text-white"
-            />
+            <AlignLeft size={20} className=" lg:hidden block text-white" />
             {isAlbum && (
               <div
                 ref={Playlist}
                 onClick={(e) => e.stopPropagation()}
-                className="bg-[#1a1b26] text-white md:p-4 rounded-lg w-[300px]  lg:w-[380px]  max-w-[450px] h-[584px] md:mx-auto absolute -bottom-3 -translate-y-[15%] right-0 overflow-hidden"
+                className="bg-[#1a1b26] text-white md:p-4 rounded-lg w-[300px] lg:w-[380px] max-w-[450px] md:h-[584px] h-[450px] md:mx-auto absolute -bottom-3 -translate-y-[15%] right-0 overflow-hidden flex flex-col"
               >
                 <h2 className="text-lg ml-2 mb-4">Danh sách phát</h2>
-                <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4">
+
+                <div className="bg-[#f04b4b] p-2 rounded-md flex items-center mb-4 md:mx-0 mx-3">
                   <div className="w-12 h-12 mr-3 relative flex-none">
                     <img
                       src={playSong.song_image}
                       alt="Song thumbnail"
-                      className="w-full h-full rounded  "
+                      className="w-full h-full rounded"
                     />
                     {isPlaying ? (
                       <i
@@ -886,10 +968,8 @@ const Footer = React.memo(function FooterComponent() {
                           backgroundPosition: "center",
                           backgroundSize: "cover",
                         }}
-                        className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 size-5 "
-                      >
-                        {" "}
-                      </i>
+                        className="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 size-5"
+                      />
                     ) : (
                       <PlayArrowIcon
                         className="w-7 h-7 mr-3 text-white absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2"
@@ -897,9 +977,11 @@ const Footer = React.memo(function FooterComponent() {
                       />
                     )}
                   </div>
-                  <div className=" w-[60%]">
-                    <h3 className="font-medium truncate w-[80%]">{playSong.song_name}</h3>
-                    <p className="text-[11px] opacity-60 mt-1 truncate w-[80%]" >
+                  <div className="w-[60%]">
+                    <h3 className="font-medium truncate w-[80%]">
+                      {playSong.song_name}
+                    </h3>
+                    <p className="text-[11px] opacity-60 mt-1 truncate w-[80%]">
                       {playSong.composer}
                     </p>
                   </div>
@@ -907,45 +989,55 @@ const Footer = React.memo(function FooterComponent() {
                     {favoriteSongs.includes(playSong.id) ? (
                       <Heart
                         fill="white"
-                        className={`size-5 cursor-pointer `}
+                        className="size-5 cursor-pointer"
                         onClick={() => toggleFavorite(playSong.id, true)}
                       />
                     ) : (
                       <Heart
-                        className={`size-5 cursor-pointer`}
+                        className="size-5 cursor-pointer"
                         onClick={() => toggleFavorite(playSong.id, false)}
                       />
                     )}
-
                     <MoreHorizontal className="w-4 h-4 cursor-pointer" />
                   </div>
                 </div>
-                <h3 className=" ml-2text-sm font-medium mb-2">Tiếp theo</h3>
-                <ul className="ml-2 space-y-2  h-[328px] overflow-y-auto no-scrollbar">
-                  {listsongs.slice(0, visibleCount).map((song, index) => (
-                    <li
-                      key={index}
-                      className={`flex items-center p-1 rounded space-x-3 ${currentSongIndex === index ? 'bg-slate-800' : ''}`}
-                      onClick={() => {
-                        setCurrentSongIndex(index);
-                        setPlaySong(song);
-                        setIsPlaying(true);
-                      }}
-                    >
-                      <img
-                        src={song.song_image}
-                        alt="Song thumbnail"
-                        className="w-10 h-10 rounded object-cover"
-                      />
-                      <div>
-                        <h4 className="font-medium truncate w-full">{song.song_name}</h4>
-                        <p className="text-xs text-gray-400 mt-2">
-                          {song.composer}
-                        </p>
-                      </div>
-                    </li>
-                  ))}
-                </ul>
+
+                <h3 className="ml-2 text-sm font-medium mb-2">Tiếp theo</h3>
+
+                {/* Thẻ ul sẽ lấp đầy khoảng trống còn lại */}
+                <div className="flex-1 overflow-hidden">
+                  <ul className="ml-2 space-y-2 h-full overflow-y-auto no-scrollbar">
+                    {listsongs.slice(0, visibleCount).map((song, index) => (
+                      <li
+                        key={index}
+                        className={`flex items-center p-1 rounded space-x-3 ${
+                          currentSongIndex === index ? "bg-slate-800" : ""
+                        }`}
+                        onClick={() => {
+                          setCurrentSongIndex(index);
+                          setPlaySong(song);
+                          setIsPlaying(true);
+                        }}
+                      >
+                        <img
+                          src={song.song_image}
+                          alt="Song thumbnail"
+                          className="w-10 h-10 rounded object-cover"
+                        />
+                        <div>
+                          <h4 className="font-medium truncate w-full">
+                            {song.song_name}
+                          </h4>
+                          <p className="text-xs text-gray-400 mt-2">
+                            {song.composer}
+                          </p>
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Nút Xem thêm */}
                 {visibleCount < listsongs.length && (
                   <div className="flex justify-center mt-4">
                     <button
@@ -1039,8 +1131,14 @@ const Footer = React.memo(function FooterComponent() {
 
               {/* Modal Hẹn Giờ */}
               {isTimerModalVisible && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-                  <div className="bg-white rounded-lg p-6 w-80 text-center">
+                <div
+                  onClick={toggleTimerModal}
+                  className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center"
+                >
+                  <div
+                    onClick={(e) => e.stopPropagation()}
+                    className="bg-white rounded-lg p-6 w-80 text-center"
+                  >
                     <h2 className="text-lg font-bold mb-4">
                       Chọn thời gian hẹn giờ
                     </h2>
@@ -1091,7 +1189,19 @@ const Footer = React.memo(function FooterComponent() {
             <div className="flex md:mr-3 lg:mr-5 mr-3 items-center space-x-3">
               <button
                 className="lg:p-3 md:p-1  rounded-full relative"
-                onClick={toggleVolume}
+                onClick={(e) => {
+                  if (
+                    DivVolume.current &&
+                    DivVolume.current.contains(e.target)
+                  ) {
+                    if (isVolumeVisible) {
+                      setIsVolumeVisible(false);
+                    } else {
+                      setIsVolumeVisible(true);
+                    }
+                  }
+                }}
+                ref={DivVolume}
               >
                 <svg
                   className="w-10 h-10 transform -rotate-90 cursor-pointer block sm:hidden"
@@ -1151,6 +1261,8 @@ const Footer = React.memo(function FooterComponent() {
                 </svg>
                 {isVolumeVisible && (
                   <input
+                    onClick={(e) => e.stopPropagation()}
+                    ref={Volume}
                     type="range"
                     min="0"
                     max="1"
@@ -1187,14 +1299,30 @@ const Footer = React.memo(function FooterComponent() {
               </button>
               {(isAccountType === "Premium" || isAccountType === "Plus") && (
                 <button
+                  onClick={(e) => {
+                    if (
+                      DivDownload.current &&
+                      DivDownload.current.contains(e.target)
+                    ) {
+                      if (isOpenDownload) {
+                        setIsOpenDownload(false);
+                      } else {
+                        setIsOpenDownload(true);
+                      }
+                    }
+                  }}
+                  ref={DivDownload}
                   className={`p-3 relative hover:bg-gray-800 rounded-full md:block sm:hidden block
                  text-white
                 `}
-                  onClick={() => setIsOpenDownload(!isOpenDownload)}
                 >
                   <CloudDownload size={20} />
                   {isOpenDownload && (
-                    <div className="absolute bottom-0 sm:right-0 -right-20 -translate-y-[90px] mt-2 w-48 md:w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden">
+                    <div
+                      onClick={(e) => e.stopPropagation()}
+                      ref={DownloadList}
+                      className="absolute bottom-0 sm:right-0 -right-20 -translate-y-[90px] mt-2 w-48 md:w-56 bg-white text-black rounded-xl shadow-2xl overflow-hidden"
+                    >
                       {getAvailableQualities().map((quality) => (
                         <button
                           key={quality.value}
@@ -1219,8 +1347,20 @@ const Footer = React.memo(function FooterComponent() {
               )}
             </div>
             <div
-              onClick={() => setIsOpen(!isOpen)}
-              className="bg-gradient-to-r cursor-pointer from-[#FF553E] to-[#FF0065] text-white lg:w-[110px] w-[90px] lg:h-[40px] h-[28px] px-3 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer "
+              onClick={(e) => {
+                if (
+                  DivQuality.current &&
+                  DivQuality.current.contains(e.target)
+                ) {
+                  if (isOpen) {
+                    setIsOpen(false);
+                  } else {
+                    setIsOpen(true);
+                  }
+                }
+              }}
+              ref={DivQuality}
+              className="bg-gradient-to-r cursor-pointer from-[#FF553E] to-[#FF0065] text-white lg:w-[110px] w-[90px] lg:h-[40px] h-[28px] px-3 py-2 rounded-full text-sm  flex items-center justify-center mr-5 relative cursor-pointer"
             >
               <p>{selectedQualityLabel}</p>
               <div
@@ -1244,7 +1384,11 @@ const Footer = React.memo(function FooterComponent() {
                 </svg>
               </div>
               {isOpen && (
-                <div className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-gray-900 rounded-lg shadow-2xl overflow-hidden">
+                <div
+                  ref={QualityList}
+                  onClick={(e) => e.stopPropagation()}
+                  className="absolute bottom-0 right-0 -translate-y-[90px] mt-2 w-56 bg-gray-900 rounded-lg shadow-2xl overflow-hidden"
+                >
                   {getAvailableQualities().map((quality) => {
                     // Kiểm tra xem nút có được phép chọn hay không
                     const isDisabled =

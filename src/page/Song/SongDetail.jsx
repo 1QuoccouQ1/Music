@@ -1,4 +1,4 @@
-import { Heart, Play, Ellipsis } from "lucide-react";
+import { Heart, Play, Plus } from "lucide-react";
 import ProfileArtistSong from "../BXH/ProfileArtistSong";
 import { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
@@ -9,6 +9,7 @@ import Comment from "./Comment.jsx";
 import React from "react";
 import ReactStars from "react-stars";
 import { useLocation } from "react-router-dom";
+import PlaylistDiv from "../Play-list/PlayList.jsx";
 
 function SongDetail() {
   const { handleAddSong } = useContext(UserContext);
@@ -21,7 +22,18 @@ function SongDetail() {
   const [averageRating, setAverageRating] = useState(0);
   const [isTotal, setIsTotal] = useState(0);
   const location = useLocation();
+  const [showModal, setShowModal] = useState(false); // Quản lý trạng thái hiển thị Modal
+  const [selectedSongId, setSelectedSongId] = useState(null); // Lưu songId được chọn
 
+  const openModal = (songId) => {
+    setSelectedSongId(songId);
+    setShowModal(true);
+  };
+
+  const closeModal = () => {
+    setShowModal(false);
+    setSelectedSongId(null);
+  };
   const handleSongFavourite = (song_id, check) => {
     if (!user) {
       // Kiểm tra đã đăng nhập chưa
@@ -202,7 +214,19 @@ function SongDetail() {
                   )}
 
                   <div className="p-2 bg-slate-800 rounded-full cursor-pointer">
-                    <Ellipsis size={18} />
+                    <Plus size={18}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (JSON.parse(localStorage.getItem("user"))) {
+                          openModal(song.id)
+                        } else {
+                          toast.error(
+                            "Bạn chưa đăng nhập, vui lòng đăng nhập để thêm vào playlist."
+                          );
+                        }
+                      }}
+
+                    />
                   </div>
                 </div>
               </>
@@ -230,13 +254,19 @@ function SongDetail() {
             </div>
           </div>
         </div>
-        <hr className="border-pink-500 mt-10" />
+        <hr className="border-pink-500 mt-10 xl:mx-0 mx-4" />
         <Comment
           id={id}
           setIsTotal={setIsTotal}
           setAverageRating={setAverageRating}
         />
       </section>
+      {showModal && (
+        <PlaylistDiv
+          songId={selectedSongId} // Truyền songId vào PlaylistDiv
+          onClose={closeModal} // Truyền hàm đóng Modal
+        />
+      )}
     </>
   );
 }

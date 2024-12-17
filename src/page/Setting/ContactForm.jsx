@@ -120,7 +120,7 @@ const ContactForm = () => {
                   type="email"
                   name="email"
                   value={formData.email}
-                  onChange={handleInputChange}
+                  readOnly
                   className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
                     errors.email ? "border-red-500" : "border-pink-500"
                   }`}
@@ -139,7 +139,7 @@ const ContactForm = () => {
                   type="text"
                   name="username"
                   value={formData.username}
-                  onChange={handleInputChange}
+                  readOnly
                   className="w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500"
                 />
                 <p className="text-sm text-gray-400 mt-2">

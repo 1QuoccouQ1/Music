@@ -9,15 +9,17 @@ import { API_URL } from '../../services/apiService';
 
 const SettingsPage = () => {
     const navigate = useNavigate();
-    const [quality, setQuality] = useState('128kbps');
+    const [quality, setQuality] = useState('basic');
     const [isQualityOpen, setIsQualityOpen] = useState(false);
     const [data, setData] = useState({
         email: '',
         users_type: ''
     });
 
+    // Khi người dùng thay đổi chất lượng nhạc
     const handleQualityChange = value => {
         setQuality(value);
+        localStorage.setItem('isQuality', value); // Lưu vào Local Storage
         setIsQualityOpen(false);
     };
 
@@ -56,6 +58,12 @@ const SettingsPage = () => {
                 console.error('Error fetching user data:', error);
             }
         };
+
+        // Khôi phục chất lượng nhạc từ Local Storage
+        const savedQuality = localStorage.getItem('isQuality');
+        if (savedQuality) {
+            setQuality(savedQuality);
+        }
         fetchUserData();
     }, []);
 
@@ -70,93 +78,52 @@ const SettingsPage = () => {
                     </h2>
                     <div className='space-y-5 text-sm'>
                         {/* Chất lượng nhạc */}
-                        <div className='flex flex-col md:flex-row md:items-center md:justify-between mb-6 relative'>
-                            <label className='text-lg font-bold mb-2 md:mb-0'>
-                                Chất lượng nhạc
-                            </label>
-                            <div className='relative w-full md:w-64 text-left'>
-                                <div
-                                    onClick={() =>
-                                        setIsQualityOpen(!isQualityOpen)
-                                    }
-                                    className='cursor-pointer bg-gray-800 text-white px-4 py-2 rounded-lg flex justify-between items-center'
-                                >
-                                    <span>
-                                        {quality === '128kbps' &&
-                                            'Thường (128kbps)'}
-                                        {quality === '320kbps' &&
-                                            'Cao (320kbps)'}
-                                        {quality === 'lossless' && 'Lossless'}
-                                    </span>
-                                    <span className='ml-2'>&#x25BC;</span>
-                                </div>
-                                {isQualityOpen && (
-                                    <div className='absolute left-0 mt-2 w-full bg-gray-900 text-white rounded-lg shadow-lg z-20'>
-                                        <ul className='py-2'>
-                                            {/* Basic: Only 128kbps */}
-                                            <li
-                                                onClick={() =>
-                                                    handleQualityChange(
-                                                        '128kbps'
-                                                    )
-                                                }
-                                                className='flex justify-between items-center px-4 py-2 hover:bg-gray-700 cursor-pointer'
-                                            >
-                                                <span>Thường (128kbps)</span>
-                                                {quality === '128kbps' && (
-                                                    <span className='ml-2 w-2 h-2 bg-pink-500 rounded-full'></span>
-                                                )}
-                                            </li>
-                                            {/* Plus or Premium: Show 320kbps */}
-                                            {(users_type === 'Plus' ||
-                                                users_type === 'Premium') && (
-                                                <li
-                                                    onClick={() =>
-                                                        handleQualityChange(
-                                                            '320kbps'
-                                                        )
-                                                    }
-                                                    className='flex justify-between items-center px-4 py-2 hover:bg-gray-700 cursor-pointer'
-                                                >
-                                                    <span>
-                                                        Cao (320kbps){' '}
-                                                        <span className='text-yellow-500'>
-                                                            PLUS
-                                                        </span>
-                                                    </span>
-                                                    {quality === '320kbps' && (
-                                                        <span className='ml-2 w-2 h-2 bg-pink-500 rounded-full'></span>
-                                                    )}
-                                                </li>
-                                            )}
-                                            {/* Premium: Show Lossless */}
-                                            {users_type === 'Premium' && (
-                                                <li
-                                                    onClick={() =>
-                                                        handleQualityChange(
-                                                            'lossless'
-                                                        )
-                                                    }
-                                                    className='flex justify-between items-center px-4 py-2 hover:bg-gray-700 cursor-pointer'
-                                                >
-                                                    <span>
-                                                        Lossless{' '}
-                                                        <span className='text-red-500'>
-                                                            PREMIUM
-                                                        </span>
-                                                    </span>
-                                                    {quality === 'lossless' && (
-                                                        <span className='ml-2 w-2 h-2 bg-pink-500 rounded-full'></span>
-                                                    )}
-                                                </li>
-                                            )}
-                                        </ul>
-                                    </div>
-                                )}
+                        <div className="flex flex-col md:flex-row md:items-center md:justify-between relative">
+                        <label className="text-lg font-bold mb-2 md:mb-0">
+                            Chất lượng nhạc
+                        </label>
+                        <div className="relative w-full md:w-64">
+                            <div
+                                onClick={() => setIsQualityOpen(!isQualityOpen)}
+                                className="cursor-pointer bg-gray-800 px-4 py-2 rounded-lg flex justify-between items-center"
+                            >
+                                <span>
+                                    {quality === 'basic' && ' 128kbps'}
+                                    {quality === 'plus' && ' 320kbps'}
+                                    {quality === 'premium' && 'LossLess'}
+                                </span>
+                                <span>&#x25BC;</span>
                             </div>
+                            {isQualityOpen && (
+                                <ul className="absolute left-0 mt-2 w-full bg-gray-900 rounded-lg shadow-lg z-20">
+                                    <li
+                                        onClick={() => handleQualityChange('basic')}
+                                        className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                                    >
+                                            128kbps <span className="text-silver-500">Basic</span>
+                                    </li>
+                                    {['Plus', 'Premium'].includes(users_type) && (
+                                        <li
+                                            onClick={() => handleQualityChange('plus')}
+                                            className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                                        >
+                                            320kbps <span className="text-yellow-500">PLUS</span>
+                                        </li>
+                                    )}
+                                    {users_type === 'Premium' && (
+                                        <li
+                                            onClick={() => handleQualityChange('premium')}
+                                            className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
+                                        >
+                                             LossLess <span className="text-red-500">PREMIUM</span>
+                                        </li>
+                                    )}
+                                </ul>
+                            )}
                         </div>
                     </div>
                 </div>
+            </div>
             </div>
 
             {/* Quản lý tài khoản */}

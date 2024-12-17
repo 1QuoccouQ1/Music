@@ -140,7 +140,7 @@ function ListSongs({ songs, start }) {
                             <img
                                 src={song.song_image}
                                 alt={song.song_name}
-                                className='w-10 h-10 sm:w-12 sm:h-12 rounded-md'
+                                className='w-10 h-10 sm:w-12 sm:h-12 rounded-md mt-1'
                             />
                             <div className='w-[200px] md:w-[200px] xl:w-full truncate'>
                                 <p className='font-semibold cursor-pointer truncate' >
