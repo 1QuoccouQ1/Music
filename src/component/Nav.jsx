@@ -95,8 +95,6 @@ function Nav() {
     return () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
-
-
   }, []);
 
   useEffect(() => {
@@ -115,12 +113,15 @@ function Nav() {
 
   return (
     <>
-
       <div className="fixed top-0 left-0 lg:pl-60 flex justify-between w-full h-auto flex-shrink py-4 h-[90px] px-1 lg:px-10 bg-medium text-zinc-700 items-center justify-center z-30 ">
-
-        <div className="relative w-[80%]  lg:ml-0 md:w-auto flex box-border" ref={searchRef}>
+        <div
+          className="relative w-[80%]  lg:ml-0 md:w-auto flex box-border"
+          ref={searchRef}
+        >
           <button
-            className={`  text-white transition-transform duration-300 ease-in-out p-2 rounded-md lg:hidden mx-2 ${isSidebar ? 'translate-x-40' : ''}`}
+            className={`  text-white transition-transform duration-300 ease-in-out p-2 rounded-md lg:hidden mx-2 ${
+              isSidebar ? "translate-x-40" : ""
+            }`}
             onClick={() => setIsSidebar(!isSidebar)}
           >
             <MenuIcon />
@@ -153,7 +154,7 @@ function Nav() {
                               key={index}
                               className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
                             >
-                              <Link to={`/SongDetail/${song.id}`} >
+                              <Link to={`/SongDetail/${song.id}`}>
                                 <div className="flex items-center">
                                   <img
                                     src={song.song_image}
@@ -210,7 +211,7 @@ function Nav() {
                   </>
                 )}
                 <div className="text-left text-gray-300 mt-5 text-sm">
-                  Tìm kiếm  <strong>&quot;{query}&quot;</strong>
+                  Tìm kiếm <strong>&quot;{query}&quot;</strong>
                 </div>
               </div>
             )}
@@ -273,8 +274,9 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform hidden md:block duration-300 ${isProfileOpen ? "rotate-180" : ""
-                      }`}
+                    className={`transform transition-transform hidden md:block duration-300 ${
+                      isProfileOpen ? "rotate-180" : ""
+                    }`}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
@@ -331,38 +333,41 @@ function Nav() {
                             icon: Sparkles,
                             href: "/Upgrade",
                             label: "Nâng cấp tài khoản",
+                            type: "Link",
                           },
                           {
                             icon: LockKeyhole,
                             href: "Privacy",
                             label: "Quyền riêng tư",
+                            type: "a",
                           },
                           {
                             icon: Settings,
                             href: "SettingsPage",
                             label: "Cài đặt",
+                            type: "a",
                           },
                           {
                             icon: Headset,
                             href: "ContactForm",
                             label: "Liên hệ",
+                            type: "a",
                           },
                         ].map((item, index) => {
-                          const isInternalLink = item.href.startsWith("/"); // Kiểm tra xem liên kết là nội bộ hay ngoại vi
-
-                          return isInternalLink ? (
-                            // Nếu là liên kết nội bộ, dùng Link
+                          return item.type === "Link" ? (
+                            // Sử dụng Link nếu type là "Link"
                             <Link
                               to={item.href}
                               key={index}
-                              className="block w-full" // Block để bao bọc toàn bộ button
+                              className="block w-full"
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${index === 0
-                                    ? "text-yellow-500"
-                                    : "text-gray-400"
-                                    }`}
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
+                                      ? "text-yellow-500"
+                                      : "text-gray-400"
+                                  }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
@@ -371,19 +376,19 @@ function Nav() {
                               </button>
                             </Link>
                           ) : (
-                            // Nếu là liên kết ngoại vi, dùng thẻ a
+                            // Sử dụng thẻ a nếu type là "a"
                             <a
-                              href={item.href}
+                               href={`/${item.href}`} // Thêm dấu "/" để đảm bảo href là đường dẫn tuyệt đối
                               key={index}
-                              rel="noopener noreferrer"
-                              className="block w-full" // Block để bao bọc toàn bộ button
+                              className="block w-full"
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${index === 0
-                                    ? "text-yellow-500"
-                                    : "text-gray-400"
-                                    }`}
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
+                                      ? "text-yellow-500"
+                                      : "text-gray-400"
+                                  }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
@@ -425,7 +430,6 @@ function Nav() {
           )}
         </div>
       </div>
-
     </>
   );
 }

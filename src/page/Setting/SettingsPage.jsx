@@ -9,7 +9,7 @@ import { API_URL } from '../../services/apiService';
 
 const SettingsPage = () => {
     const navigate = useNavigate();
-    const [quality, setQuality] = useState('128kbps');
+    const [quality, setQuality] = useState('basic');
     const [isQualityOpen, setIsQualityOpen] = useState(false);
     const [data, setData] = useState({
         email: '',
@@ -88,9 +88,9 @@ const SettingsPage = () => {
                                 className="cursor-pointer bg-gray-800 px-4 py-2 rounded-lg flex justify-between items-center"
                             >
                                 <span>
-                                    {quality === 'basic' && 'Basic 128kbps'}
-                                    {quality === 'plus' && 'Plus 256kbps'}
-                                    {quality === 'premium' && 'Premium 720kbps'}
+                                    {quality === 'basic' && ' 128kbps'}
+                                    {quality === 'plus' && ' 320kbps'}
+                                    {quality === 'premium' && 'LossLess'}
                                 </span>
                                 <span>&#x25BC;</span>
                             </div>
@@ -107,7 +107,7 @@ const SettingsPage = () => {
                                             onClick={() => handleQualityChange('plus')}
                                             className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
                                         >
-                                            256kbps <span className="text-yellow-500">PLUS</span>
+                                            320kbps <span className="text-yellow-500">PLUS</span>
                                         </li>
                                     )}
                                     {users_type === 'Premium' && (
@@ -115,7 +115,7 @@ const SettingsPage = () => {
                                             onClick={() => handleQualityChange('premium')}
                                             className="px-4 py-2 hover:bg-gray-700 cursor-pointer"
                                         >
-                                             720kbps <span className="text-red-500">PREMIUM</span>
+                                             LossLess <span className="text-red-500">PREMIUM</span>
                                         </li>
                                     )}
                                 </ul>

@@ -3,6 +3,7 @@ import { useState, useRef, useEffect } from "react";
 import { useLocation, useNavigate, Link } from "react-router-dom";
 import { Globe, ChevronDown } from "lucide-react";
 import { API_URL } from "../services/apiService";
+import { toast } from "react-toastify";
 
 function NewPassword() {
   const [showPassword, setShowPassword] = useState(false);
@@ -64,7 +65,10 @@ function NewPassword() {
 
       if (response.ok) {
         // Nếu thành công, chuyển hướng về trang đăng nhập
-        navigate("/login");
+        toast.success("Mật khẩu đã được cập nhật. Vui lòng đăng nhập.");
+        setTimeout(() => {
+          navigate("/login");
+        }, 3000);
       } else {
         const errorData = await response.json();
         setError(errorData.message || "Đã có lỗi xảy ra. Vui lòng thử lại.");

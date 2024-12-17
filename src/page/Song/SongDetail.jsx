@@ -254,7 +254,7 @@ function SongDetail() {
             </div>
           </div>
         </div>
-        <hr className="border-pink-500 mt-10" />
+        <hr className="border-pink-500 mt-10 xl:mx-0 mx-4" />
         <Comment
           id={id}
           setIsTotal={setIsTotal}
