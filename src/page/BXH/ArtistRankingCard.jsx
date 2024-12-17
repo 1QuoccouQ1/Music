@@ -6,7 +6,7 @@ import { UserContext } from "../../ContextAPI/UserContext";
 import { useNavigate } from "react-router-dom";
 
 function ArtistRankingCard({ rank, artist, song }) {
-    const { handleAddSong } = useContext(UserContext);
+    const { handleAddSong, handleClick  } = useContext(UserContext);
     const navigate = useNavigate();
 
     const rankClasses = {
@@ -26,11 +26,14 @@ function ArtistRankingCard({ rank, artist, song }) {
 
     return (
         <div
-            className={`relative border-t-4 ${
+            className={`relative border-t-4 cursor-pointer hover:shadow-rose-600 hover:shadow-lg ${
                 rankClasses[rank]
             } rounded-lg p-4 bg-gray-800 w-full sm:max-w-[27.1875rem] ${
                 rank === 2 || rank === 3 ? 'mt-8' : '' // Đẩy Top 2 và Top 3 xuống
             }`}
+            onDoubleClick={() => handleAddSong("song", song.id)}
+            onClick={() => handleClick(song.id)}
+            
         >
             {/* Huy chương nằm ở góc phải bên dưới border */}
             <div className='absolute top-0 right-2'>{rankIcons[rank]}</div>
@@ -45,7 +48,6 @@ function ArtistRankingCard({ rank, artist, song }) {
 
                     {/* Nút Play chỉ hiện khi hover */}
                     <button 
-                    onClick={() => handleAddSong("song", song.id)}
                     className='absolute inset-0 flex items-center justify-center text-white bg-black bg-opacity-60 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 transform group-hover:scale-125'>
                         <svg
                             className='w-6 h-6 sm:w-8 sm:h-8'
