@@ -2,7 +2,14 @@
 import { useState, useCallback, useRef } from "react";
 import { debounce } from "lodash";
 
-function InputSearch({ onSearch, onFocus, onBlur , onQueryChange }) {
+function InputSearch({
+  onSearch,
+  onFocus,
+  onBlur,
+  onQueryChange,
+  onSetIsSearch,
+  onSetLoading,
+}) {
   const [query, setQuery] = useState("");
   const [lastQuery, setLastQuery] = useState("");
 
@@ -34,8 +41,15 @@ function InputSearch({ onSearch, onFocus, onBlur , onQueryChange }) {
   }
 
   const handleChange = (e) => {
+    if (e.target.value !== "") {
+      onSetIsSearch(true);
+      onSetLoading(true);
+    } else {
+      onSetIsSearch(false);
+      onSetLoading(false);
+    }
     setQuery(e.target.value);
-    debouncedSearch(e.target.value); 
+    debouncedSearch(e.target.value);
     onQueryChange(e.target.value);
   };
 
