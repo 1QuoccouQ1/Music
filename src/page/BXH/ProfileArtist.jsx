@@ -25,9 +25,8 @@ function ProfileArtist() {
     const [albumSinger, setAlbumSinger] = useState([]);
     const navigate = useNavigate();
     const [albumFavorite, setAlbumFavorite] = useState([]);
-
     const user = JSON.parse(localStorage.getItem('user'));
-    // console.log(user_id.id);
+
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' }); // Cuộn lên đầu trang
         const fetchArtistData = async () => {
@@ -369,7 +368,7 @@ function ProfileArtist() {
                 <div className='flex py-4 w-full justify-center gap-10 rounded-b-xl shadow-medium-xl  bg-slate-900'>
                     <p onClick={() => handleSelect("1")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "1" ? "text-red-500" : " text-white"} `}>Nổi Bật</p>
                     <p onClick={() => handleSelect("2")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "2" ? "text-red-500" : " text-white"} `}>Bài hát</p>
-                    <p onClick={() => handleSelect("3")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "3" ? "text-red-500" : " text-white"} `}>Single & EP</p>
+                    {/* <p onClick={() => handleSelect("3")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "3" ? "text-red-500" : " text-white"} `}>Single & EP</p> */}
                     {/* <p onClick={() => handleSelect("4")} className={`font-medium hover:text-red-500 cursor-pointer text-sm duration-300  ${isSelect === "4" ? "text-red-500" : " text-white"} `}>Album</p> */}
                 </div>
             </section>
@@ -395,60 +394,10 @@ function ProfileArtist() {
                     </div>
                 </div>
             </section>
-                <section className="bg-medium pt-10 text-white  px-1 lg:px-5 h-auto tracking-wide">
-                    <div className="flex items-center justify-between">
-                        <h1 className="text-xl font-medium mb-16">Single & EP</h1>
-                        <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
-                            <p className="text-sm text-red-600 ">Xem Thêm </p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
-
-                        </div>
-                    </div>
-                    <Swiper
-                        spaceBetween={20}
-                        slidesPerView="auto" // Số item hiện trong 1 lần
-                        className="mySwiper "
-
-                    >
-                        {artistSong && artistSong.length > 0 ? (
-                            artistSong.map((song, index) => (
-
-                                <SwiperSlide key={(song.id)} style={{ width: '200px' }} >
-
-                                    <div className="text-center flex flex-col w-full items-start ">
-                                        <img src={song.song_image} className=" mb-3 " style={{
-                                            width: '160px',
-                                            height: '160px',
-                                            borderRadius: '15px',
-
-                                        }} />
-                                        <p className='flex '>{song.song_name}</p>
-                                        <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất.</p>
-                                        <p className='flex text-sm text-slate-600 mt-1'>Đĩa đơn </p>
-                                    </div>
-                                </SwiperSlide>
-                            ))) : (
-                            <SwiperSlide style={{ width: 'auto' }} >
-                                <div className="text-center flex flex-col  items-start ">
-                                    Không có bài hát nào.
-                                </div>
-                            </SwiperSlide>
-                        )}
-                    </Swiper>
-                </section>
+               
                 <section className="bg-medium pt-10 text-white px-1 lg:px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">Album Hot</h1>
-                        <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
-                            <p className="text-sm text-red-600 ">Xem Thêm </p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
-
-                        </div>
-
                     </div>
 
                     <Swiper
@@ -513,13 +462,6 @@ function ProfileArtist() {
                 <section className="bg-medium pt-10 text-white px-1 lg:px-5 h-auto tracking-wide">
                     <div className="flex items-center justify-between">
                         <h1 className="text-xl font-medium mb-16">{artist.singer_name} trong loạt hit nổi bật</h1>
-                        <div className="flex items-center text-red-600 hover:text-red-600  cursor-pointer duration-300">
-                            <p className="text-sm text-red-600 ">Xem Thêm </p>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-4">
-                                <path strokeLinecap="round" strokeLinejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
-                            </svg>
-
-                        </div>
                     </div>
                     <Swiper
                         spaceBetween={20}
@@ -650,7 +592,7 @@ function ProfileArtist() {
                     </Swiper>
 
                 </section></>}
-            {isSelect === "3" && <> <section className="bg-medium text-white w-full h-auto pb-32 pt-5 px-1 lg:px-5 ">
+            {/* {isSelect === "3" && <> <section className="bg-medium text-white w-full h-auto pb-32 pt-5 px-1 lg:px-5 ">
                 <div className="">
                     <div className='flex items-center justify-between border-b border-slate-500 pb-2'>
                         <h3 className='text-base font-medium'>Tất Cả Bài Hát</h3>
@@ -666,16 +608,8 @@ function ProfileArtist() {
                             <p>Không có bài hát</p>
                         </div>
                     )}
-                    {/* <div className="w-1/6 px-2 mb-7  cursor-pointer">
-                        <div className="text-center flex flex-col  items-start ">
-                            <img src="../imgs/412544823_377358094767954_6428436036322132060_n 2.png" className=" mb-3 " />
-                            <p className=''>Đừng Làm Trái Tim Anh đau</p>
-                            <p className='flex text-sm text-slate-600 mt-1'>Bản Phát hành Mới nhất <Dot />  Đĩa đơn </p>
-                        </div>
-                    </div>
-                   */}
                 </div>
-            </section></>}
+            </section></>} */}
             {/* {isSelect === "4" && <>
                 <section className='w-full flex gap-10 items-center text-white px-7 pt-10 '>
                     <div className='size-60 rounded-lg'>

@@ -55,7 +55,7 @@ function Albums() {
     if (user) {
       fetchAlbumFAvorite(user.id);
     }
-  }, [user.id]);
+  }, [user?.id]);
 
   const handleAlbumFavourite = (albumId, like) => {
     if (!user) {
