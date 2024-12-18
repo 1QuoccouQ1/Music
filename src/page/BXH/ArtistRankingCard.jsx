@@ -31,8 +31,6 @@ function ArtistRankingCard({ rank, artist, song }) {
             } rounded-lg p-4 bg-gray-800 w-full sm:max-w-[27.1875rem] ${
                 rank === 2 || rank === 3 ? 'mt-8' : '' // Đẩy Top 2 và Top 3 xuống
             }`}
-            onDoubleClick={() => handleAddSong("song", song.id)}
-            onClick={() => handleClick(song.id)}
             
         >
             {/* Huy chương nằm ở góc phải bên dưới border */}
@@ -72,7 +70,10 @@ function ArtistRankingCard({ rank, artist, song }) {
                 </h3>
             </Link>
 
-            <div className='flex items-center bg-gray-700 w-full p-3 sm:p-4 rounded-lg border cursor-pointer border-blue-500' onClick={() => navigate(`/SongDetail/${song.id}`)}>
+            <div className='flex items-center bg-gray-700 w-full p-3 sm:p-4 rounded-lg border cursor-pointer border-blue-500'
+            onDoubleClick={() => handleAddSong("song", song.id)}
+            onClick={() => handleClick(song.id)}
+            >
                 {/* Ảnh bài hát */}
                 <img
                     src={song.coverImageUrl}

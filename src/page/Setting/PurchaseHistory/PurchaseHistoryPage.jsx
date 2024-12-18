@@ -44,6 +44,7 @@ const PurchaseHistoryPage = () => {
                     {
                         method: 'GET',
                         headers: {
+                            'content-type': 'application/json',
                             Authorization: `Bearer ${token}`
                         }
                     }
