@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
+import { API_URL } from "../services/apiService";
 
 function AuthChecker() {
     const location = useLocation(); // Lấy thông tin route hiện tại
@@ -29,8 +30,34 @@ function AuthChecker() {
         return JSON.parse(jsonPayload);
     }
 
+    const resetAccount = async () => {
+        const user = JSON.parse(localStorage.getItem('user'));
+        if (user) {
+            try {
+                const response = await fetch(API_URL + `/user-reset/`+ user.id,{
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer'+ localStorage.getItem('access_token')
+                    }
+                });
+                const data = await response.json();
+
+                if (response.status == false) {
+                    console.error("Error fetching artist data:", data.message);
+                } else {
+                    // console.log(data);
+                    localStorage.setItem("user", JSON.stringify(data));
+                }
+            } catch (error) {
+                console.error("Error fetching artist data:", error.message);
+            }
+        }
+    }
+
     useEffect(() => {
         checkAuth();
+        resetAccount();
     }, [location]);
 
     return null;
