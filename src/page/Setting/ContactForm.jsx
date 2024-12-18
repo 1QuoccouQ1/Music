@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { API_URL } from "../../services/apiService";
 
 const ContactForm = () => {
   const user = JSON.parse(localStorage.getItem('user'));
@@ -48,10 +49,11 @@ const ContactForm = () => {
     if (!validateForm()) return;
 
     try {
-      const response = await fetch("/Contact", {
+      const response = await fetch(API_URL + "/lien-he", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": "Bearer " + localStorage.getItem("access_token")
         },
         body: JSON.stringify(formData),
       });
@@ -60,9 +62,9 @@ const ContactForm = () => {
         toast.success("Thành công! Dữ liệu đã được gửi.");
         setFormData({
           topic: "",
-          email: "",
-          username: "",
           message: "",
+          email: user.email || "",
+          username: user.name || "",
           acknowledge: false,
           dataProcessing: false,
         });
@@ -77,7 +79,6 @@ const ContactForm = () => {
 
   return (
     <>
-      <ToastContainer position="top-right" autoClose={3000} />
       <div className="bg-gray-900 min-h-screen flex items-center justify-center px-4 sm:px-6 pt-3">
         <div className="w-full max-w-3xl">
           <h1 className="text-4xl font-semibold text-white mb-6 mt-8 text-center">
@@ -98,14 +99,13 @@ const ContactForm = () => {
                   name="topic"
                   value={formData.topic}
                   onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
-                    errors.topic ? "border-red-500" : "border-pink-500"
-                  }`}
+                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${errors.topic ? "border-red-500" : "border-pink-500"
+                    }`}
                 >
                   <option value="">-- Chọn vấn đề --</option>
-                  <option value="technical" selected>Hỗ trợ kỹ thuật</option>
-                  <option value="billing">Hóa đơn</option>
-                  <option value="general">Câu hỏi chung</option>
+                  <option value="Hỗ trợ kỹ thuật" selected>Hỗ trợ kỹ thuật</option>
+                  <option value="Hóa đơn">Hóa đơn</option>
+                  <option value="Câu hỏi chung">Câu hỏi chung</option>
                 </select>
                 {errors.topic && (
                   <p className="text-red-500 text-sm">{errors.topic}</p>
@@ -121,10 +121,9 @@ const ContactForm = () => {
                   name="email"
                   value={formData.email}
                   readOnly
-                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
-                    errors.email ? "border-red-500" : "border-pink-500"
-                  }`}
-                  
+                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${errors.email ? "border-red-500" : "border-pink-500"
+                    }`}
+
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm">{errors.email}</p>
@@ -155,9 +154,8 @@ const ContactForm = () => {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
-                    errors.message ? "border-red-500" : "border-pink-500"
-                  }`}
+                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${errors.message ? "border-red-500" : "border-pink-500"
+                    }`}
                   rows="4"
                 />
                 {errors.message && (
@@ -173,11 +171,11 @@ const ContactForm = () => {
                   <input
                     type="checkbox"
                     name="acknowledge"
-                    id ="acknowledge"
+                    id="acknowledge"
                     checked={formData.acknowledge}
                     onChange={handleInputChange}
                     className="mr-2 border border-pink-500"
-                    
+
                   />
                   <label className="text-gray-400 text-sm" htmlFor="acknowledge">
                     Tôi đảm bảo rằng tất cả thông tin là đúng và chính xác.
@@ -193,7 +191,7 @@ const ContactForm = () => {
                     checked={formData.dataProcessing}
                     onChange={handleInputChange}
                     className="mr-2 border border-pink-500"
-                    id = "dataProcessing"
+                    id="dataProcessing"
                   />
                   <label className="text-gray-400 text-sm" htmlFor="dataProcessing">
                     Tôi đồng ý với chính sách xử lý dữ liệu của SoundWave.

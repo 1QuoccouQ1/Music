@@ -710,7 +710,7 @@ const Footer = React.memo(function FooterComponent() {
                     <SkipForward size={24} />
                   </button>
                 </div>
-                <div className="mx-4 xl:w-[450px] hidden md:block w-full">
+                <div className="mx-4 xl:w-[360px] 2xl:w-[500px] hidden md:block w-full">
                   <div className="relative">
                     <input
                       type="range"
