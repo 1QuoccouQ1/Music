@@ -17,7 +17,8 @@ import { UserContext } from "../ContextAPI/UserContext";
 
 function Nav() {
   const navigate = useNavigate();
-  const { isSidebar, setIsSidebar, handleAddSong, handleClick  } = useContext(UserContext);
+  const { isSidebar, setIsSidebar, handleAddSong, handleClick } =
+    useContext(UserContext);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const user = JSON.parse(localStorage.getItem("user"));
   const isProfile = user ? true : false;
@@ -30,17 +31,22 @@ function Nav() {
   const [isFocused, setIsFocused] = useState(false);
   const [query, setQuery] = useState("");
   const location = useLocation();
+  const [isSearch, setIsSearch] = useState(false);
+
   useEffect(() => {
     setIsFocused(false);
   }, [location]);
   const fetchSearchResults = async (query) => {
+    console.log(query);
     if (!query) {
       setSongs([]);
       setSingers([]);
+      setIsSearch(false);
       return;
     }
     setLoading(true);
     setError("");
+    setIsSearch(true);
     try {
       const response = await fetch(`${API_URL}/tim-kiem`, {
         method: "POST",
@@ -61,6 +67,7 @@ function Nav() {
       setError("Lỗi khi tìm kiếm. Vui lòng thử lại.");
       setSongs([]); // Đảm bảo làm trống dữ liệu khi lỗi
       setSingers([]); // Đảm bảo làm trống dữ liệu khi lỗi
+      setIsSearch(true);
     } finally {
       setLoading(false);
     }
@@ -119,8 +126,9 @@ function Nav() {
           ref={searchRef}
         >
           <button
-            className={`  text-white transition-transform duration-300 ease-in-out p-2 rounded-md lg:hidden mx-2 ${isSidebar ? "translate-x-40" : ""
-              }`}
+            className={`  text-white transition-transform duration-300 ease-in-out p-2 rounded-md lg:hidden mx-2 ${
+              isSidebar ? "translate-x-40" : ""
+            }`}
             onClick={() => setIsSidebar(!isSidebar)}
           >
             <MenuIcon />
@@ -130,15 +138,21 @@ function Nav() {
               onSearch={fetchSearchResults}
               onFocus={() => setIsFocused(true)}
               onQueryChange={setQuery}
+              onSetIsSearch={setIsSearch}
+              onSetLoading={setLoading}
             />
             {isFocused && (
               <div className="results mt-10 z-50 absolute top-3 bg-[#172533] rounded-xl p-5 w-full -translate-x-[15px] lg:max-h-[500px] max-h-[350px] overflow-y-auto no-scrollbar">
                 {loading ? (
-                  <p className="text-center text-gray-400">Đang tìm kiếm...</p>
-                ) : songs.length === 0 && singers.length === 0 ? (
-                  <p className="text-center text-gray-400 mt-3">
-                    Không tìm thấy kết quả.
+                  <p className="text-center text-gray-400 mb-5">
+                    Đang tìm kiếm...
                   </p>
+                ) : songs.length === 0 && singers.length === 0 ? (
+                  !isSearch ? null : (
+                    <p className="text-center text-gray-400 mt-3 mb-5">
+                      Không tìm thấy kết quả.
+                    </p>
+                  )
                 ) : (
                   <>
                     {/* Hiển thị danh sách bài hát nếu có */}
@@ -154,8 +168,10 @@ function Nav() {
                               className=" rounded-lg p-2 hover:shadow-lg transition-shadow cursor-pointer w-full"
                             >
                               <div
-                                 onDoubleClick={() => handleAddSong("song", song.id)}
-                                 onClick={() => handleClick(song.id)}
+                                onDoubleClick={() =>
+                                  handleAddSong("song", song.id)
+                                }
+                                onClick={() => handleClick(song.id)}
                               >
                                 <div className="flex items-center">
                                   <img
@@ -212,11 +228,11 @@ function Nav() {
                     )}
                   </>
                 )}
-                <div className="text-left text-gray-300 mt-5 text-sm">
+                <div className="text-left text-gray-300  text-sm">
                   Tìm kiếm <strong>&quot;{query}&quot;</strong>
                 </div>
               </div>
-            )}                                  
+            )}
           </div>
         </div>
 
@@ -276,8 +292,9 @@ function Nav() {
                     strokeWidth="2"
                     strokeLinecap="round"
                     strokeLinejoin="round"
-                    className={`transform transition-transform hidden md:block duration-300 ${isProfileOpen ? "rotate-180" : ""
-                      }`}
+                    className={`transform transition-transform hidden md:block duration-300 ${
+                      isProfileOpen ? "rotate-180" : ""
+                    }`}
                   >
                     <polyline points="6 9 12 15 18 9" />
                   </svg>
@@ -364,10 +381,11 @@ function Nav() {
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${index === 0
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
                                       ? "text-yellow-500"
                                       : "text-gray-400"
-                                    }`}
+                                  }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
@@ -384,10 +402,11 @@ function Nav() {
                             >
                               <button className="flex items-center p-4 hover:bg-gray-800 transition-colors last:rounded-b-xl w-full">
                                 <item.icon
-                                  className={`w-5 h-5 mr-4 ${index === 0
+                                  className={`w-5 h-5 mr-4 ${
+                                    index === 0
                                       ? "text-yellow-500"
                                       : "text-gray-400"
-                                    }`}
+                                  }`}
                                 />
                                 <span className="flex-grow text-left text-sm">
                                   {item.label}
