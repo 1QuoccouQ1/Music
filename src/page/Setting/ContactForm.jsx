@@ -4,7 +4,7 @@ import "react-toastify/dist/ReactToastify.css";
 import { API_URL } from "../../services/apiService";
 
 const ContactForm = () => {
-  const user = JSON.parse(localStorage.getItem('user'));
+  const user = JSON.parse(localStorage.getItem("user"));
   const [formData, setFormData] = useState({
     topic: "",
     email: user.email || "",
@@ -15,6 +15,7 @@ const ContactForm = () => {
   });
 
   const [errors, setErrors] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleInputChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -47,13 +48,13 @@ const ContactForm = () => {
     e.preventDefault();
 
     if (!validateForm()) return;
-
+    setIsLoading(true);
     try {
       const response = await fetch(API_URL + "/lien-he", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "Authorization": "Bearer " + localStorage.getItem("access_token")
+          Authorization: "Bearer " + localStorage.getItem("access_token"),
         },
         body: JSON.stringify(formData),
       });
@@ -74,6 +75,8 @@ const ContactForm = () => {
       }
     } catch (error) {
       toast.error("Lỗi kết nối. Vui lòng thử lại sau.");
+    } finally {
+      setIsLoading(false); // Kết thúc trạng thái loading
     }
   };
 
@@ -99,11 +102,14 @@ const ContactForm = () => {
                   name="topic"
                   value={formData.topic}
                   onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${errors.topic ? "border-red-500" : "border-pink-500"
-                    }`}
+                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
+                    errors.topic ? "border-red-500" : "border-pink-500"
+                  }`}
                 >
                   <option value="">-- Chọn vấn đề --</option>
-                  <option value="Hỗ trợ kỹ thuật" selected>Hỗ trợ kỹ thuật</option>
+                  <option value="Hỗ trợ kỹ thuật" selected>
+                    Hỗ trợ kỹ thuật
+                  </option>
                   <option value="Hóa đơn">Hóa đơn</option>
                   <option value="Câu hỏi chung">Câu hỏi chung</option>
                 </select>
@@ -121,9 +127,9 @@ const ContactForm = () => {
                   name="email"
                   value={formData.email}
                   readOnly
-                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${errors.email ? "border-red-500" : "border-pink-500"
-                    }`}
-
+                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
+                    errors.email ? "border-red-500" : "border-pink-500"
+                  }`}
                 />
                 {errors.email && (
                   <p className="text-red-500 text-sm">{errors.email}</p>
@@ -142,7 +148,8 @@ const ContactForm = () => {
                   className="w-full p-3 bg-gray-900 text-gray-200 rounded border border-pink-500"
                 />
                 <p className="text-sm text-gray-400 mt-2">
-                  Có thể tìm thấy tên người dùng trên hồ sơ SoundWave của tài khoản.
+                  Có thể tìm thấy tên người dùng trên hồ sơ SoundWave của tài
+                  khoản.
                 </p>
               </div>
 
@@ -154,8 +161,9 @@ const ContactForm = () => {
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
-                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${errors.message ? "border-red-500" : "border-pink-500"
-                    }`}
+                  className={`w-full p-3 bg-gray-900 text-gray-200 rounded border ${
+                    errors.message ? "border-red-500" : "border-pink-500"
+                  }`}
                   rows="4"
                 />
                 {errors.message && (
@@ -175,9 +183,11 @@ const ContactForm = () => {
                     checked={formData.acknowledge}
                     onChange={handleInputChange}
                     className="mr-2 border border-pink-500"
-
                   />
-                  <label className="text-gray-400 text-sm" htmlFor="acknowledge">
+                  <label
+                    className="text-gray-400 text-sm"
+                    htmlFor="acknowledge"
+                  >
                     Tôi đảm bảo rằng tất cả thông tin là đúng và chính xác.
                   </label>
                 </div>
@@ -193,20 +203,29 @@ const ContactForm = () => {
                     className="mr-2 border border-pink-500"
                     id="dataProcessing"
                   />
-                  <label className="text-gray-400 text-sm" htmlFor="dataProcessing">
+                  <label
+                    className="text-gray-400 text-sm"
+                    htmlFor="dataProcessing"
+                  >
                     Tôi đồng ý với chính sách xử lý dữ liệu của SoundWave.
                   </label>
                 </div>
                 {errors.dataProcessing && (
-                  <p className="text-red-500 text-sm">{errors.dataProcessing}</p>
+                  <p className="text-red-500 text-sm">
+                    {errors.dataProcessing}
+                  </p>
                 )}
               </div>
-
               <button
                 type="submit"
-                className="w-full bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-500 text-white py-3 rounded-lg font-semibold text-center"
+                className={`w-full py-3 rounded-lg font-semibold text-center ${
+                  isLoading
+                    ? "bg-gray-500 cursor-not-allowed"
+                    : "bg-gradient-to-r from-[#FF553E] to-[#FF0065] hover:bg-pink-500 text-white"
+                }`}
+                disabled={isLoading} // Disable khi đang loading
               >
-                Xác Nhận
+                {isLoading ? "Đang gửi..." : "Xác Nhận"}
               </button>
             </form>
           </div>
