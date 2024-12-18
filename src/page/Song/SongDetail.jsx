@@ -8,7 +8,7 @@ import { toast } from "react-toastify";
 import Comment from "./Comment.jsx";
 import React from "react";
 import ReactStars from "react-stars";
-import { useLocation } from "react-router-dom";
+import { useLocation,Link } from "react-router-dom";
 import PlaylistDiv from "../Play-list/PlayList.jsx";
 
 function SongDetail() {
@@ -157,7 +157,7 @@ function SongDetail() {
                 <h1 className="text-3xl font-bold mt-6 text-center">
                   {song.song_name}
                 </h1>
-                <p className="text-xl mt-2">{song.singer_name}</p>
+                <Link to={`/ProfileArtist/${song.singer_id}`} className="text-xl mt-2 hover:underline">{song.singer_name}</Link>
                 <div className="flex items-center justify-center space-x-4">
                   <p className="text-sm mt-2 text-slate-400">
                     {song.country_name}
