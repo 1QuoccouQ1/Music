@@ -20,9 +20,18 @@ function ProfileEditPage() {
 
     useEffect(() => {
         try {
-            const user = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : null;
+            const user = localStorage.getItem('user')
+                ? JSON.parse(localStorage.getItem('user'))
+                : null;
             if (user) {
-                const { birthday = '0000-00-00', image, name, email, gender, phone } = user;
+                const {
+                    birthday = '0000-00-00',
+                    image,
+                    name,
+                    email,
+                    gender,
+                    phone
+                } = user;
                 const [year = '', month = '', day = ''] = birthday.split('-');
                 setProfileData({
                     name: name || '',
@@ -52,7 +61,6 @@ function ProfileEditPage() {
             }));
             setIsImageChanged(URL.createObjectURL(file));
         }
-        
     };
 
     const handleChange = e => {
@@ -88,21 +96,21 @@ function ProfileEditPage() {
 
     const handleSubmit = async event => {
         event.preventDefault();
-    
+
         const validationErrors = validateForm();
         if (validationErrors.length > 0) {
             validationErrors.forEach(error => toast.error(error));
             return;
         }
-    
+
         const user = JSON.parse(localStorage.getItem('user'));
         const userId = user ? user.id : null;
-    
+
         if (!userId) {
             toast.error('User ID không tồn tại!');
             return;
         }
-    
+
         const updatedProfileData = {
             ...profileData,
             birthday: `${
@@ -112,38 +120,40 @@ function ProfileEditPage() {
                 '0'
             )}-${profileData.birthDay.padStart(2, '0')}`
         };
-    
+
         const formData = new FormData();
         formData.append('name', updatedProfileData.name);
         formData.append('email', updatedProfileData.email);
         formData.append('birthday', updatedProfileData.birthday);
         formData.append('gender', updatedProfileData.gender);
         formData.append('phone', updatedProfileData.phone);
-    
+
         if (profileData.image instanceof File) {
             formData.append('image', profileData.image);
         }
         console.log('formData:', formData);
-    
+
         formData.append('_method', 'PUT');
-    
+
         setIsSubmitting(true);
-    
+
         try {
             const response = await fetch(`${API_URL}/${userId}/update-member`, {
                 method: 'POST', // Đặt POST thay vì PUT
                 headers: {
-                    Authorization: `Bearer ${localStorage.getItem('access_token')}`
+                    Authorization: `Bearer ${localStorage.getItem(
+                        'access_token'
+                    )}`
                 },
                 body: formData
             });
-    
+
             if (!response.ok) {
                 const errorData = await response.text();
                 toast.error(`API error: ${response.status} - ${errorData}`);
                 return;
             }
-    
+
             const data = await response.json();
             toast.success('Hồ sơ đã được lưu thành công!');
             localStorage.setItem('user', JSON.stringify(data.user));
@@ -155,14 +165,14 @@ function ProfileEditPage() {
             setIsSubmitting(false);
         }
     };
-    
+
     return (
         <div className='bg-gray-900 min-h-screen flex justify-center pt-6 pb-10 px-4 sm:px-6'>
             <div className='bg-gray-900 p-6 sm:p-8 rounded-lg w-full max-w-[777px] shadow-lg'>
                 <h1 className='text-2xl sm:text-3xl font-semibold text-white mb-6 sm:mb-9'>
                     Chỉnh Sửa Hồ Sơ
                 </h1>
-                <form onSubmit={handleSubmit} enctype="multipart/form-data">
+                <form onSubmit={handleSubmit} enctype='multipart/form-data'>
                     <div className='mb-4'>
                         <div className='flex flex-col items-center'>
                             <div className='relative'>
@@ -211,6 +221,7 @@ function ProfileEditPage() {
                             value={profileData.email}
                             name='email'
                             onChange={handleChange}
+                            readOnly
                         />
                     </div>
 

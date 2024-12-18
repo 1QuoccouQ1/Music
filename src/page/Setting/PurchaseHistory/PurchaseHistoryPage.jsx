@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import InvoiceDetail from './InvoiceDetail';
+import { API_URL } from "../../../services/apiService";
+
+
 
 const PurchaseHistoryPage = () => {
     const [purchases, setPurchases] = useState([]);
@@ -40,7 +43,7 @@ const PurchaseHistoryPage = () => {
                 }
 
                 const response = await fetch(
-                    `https://admin.soundwave.io.vn/api/${userId}/history`,
+                    `${API_URL}/${userId}/history`,
                     {
                         method: 'GET',
                         headers: {
@@ -196,7 +199,7 @@ const PurchaseHistoryPage = () => {
                     </div>
                 </div>
             ) : (
-                <div className='bg-zinc-800 text-gray-300 p-4 rounded-lg flex items-center'>
+                <div className='bg-zinc-800 text-gray-300 p-4 rounded-lg flex items-center w-20 h-2 '>
                     <svg
                         xmlns='http://www.w3.org/2000/svg'
                         fill='none'

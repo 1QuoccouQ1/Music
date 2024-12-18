@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { API_URL } from "../../services/apiService";
+
 
 function ChangePasswordPage() {
     const [currentPassword, setCurrentPassword] = useState('');
@@ -50,7 +52,7 @@ function ChangePasswordPage() {
 
         try {
             const response = await fetch(
-                `https://admin.soundwave.io.vn/api/${id}/newpass-member`,
+                `${API_URL}/${id}/newpass-member`,
                 {
                     method: 'PUT',
                     headers: {
